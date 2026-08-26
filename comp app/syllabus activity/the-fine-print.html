@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fine Print — Computer Applications Day One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;
+    --navy-deep:#0b1740;
+    --gold:#F3B700;
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;
+    --green:#0F6E56;
+    --paper:#EDF1FA;
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);
+    line-height:1.62;font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Cover ---------- */
+  .cover{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 14% 22%, rgba(243,183,0,.18), transparent 44%),
+      radial-gradient(circle at 86% 78%, rgba(14,124,139,.30), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;padding:58px 20px 78px;text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 15px);
+    pointer-events:none;
+  }
+  .cover-frame{
+    position:relative;max-width:660px;margin:0 auto;
+    border:3px solid var(--gold);border-radius:14px;
+    padding:44px 26px 36px;background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";position:absolute;inset:8px;
+    border:1.5px dashed rgba(243,183,0,.40);border-radius:8px;pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(42px,8.6vw,74px);font-weight:600;
+    letter-spacing:-.02em;line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:block;color:var(--gold)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;font-weight:400;
+    font-size:clamp(17px,3vw,24px);color:#fff;opacity:.92;margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65);
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  .silk{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--navy);border:2px solid var(--navy);border-radius:4px;
+    padding:8px 16px;margin-bottom:22px;
+  }
+  .silk::before{
+    content:attr(data-ref);font-size:11px;letter-spacing:.1em;
+    color:var(--surface);background:var(--navy);border-radius:2px;padding:2px 6px;
+  }
+  .silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}
+  .silk.red::before{background:var(--stamp-red)}
+  .silk.gold{color:var(--teal);border-color:var(--teal)}
+  .silk.gold::before{background:var(--teal)}
+
+  h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:23px;letter-spacing:-.01em;margin:26px 0 8px}
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+
+  /* ---------- Today card ---------- */
+  .today{background:var(--panel);color:#fff;border-radius:12px;padding:26px 26px 20px;margin:34px 0 10px}
+  .today .tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}
+  .today h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:29px;letter-spacing:-.01em;margin:8px 0 12px}
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Hunt list ---------- */
+  .hunt{list-style:none;margin:14px 0 24px}
+  .hunt li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:13px 4px;border-bottom:1px solid var(--line);font-size:18px;
+  }
+  .hunt li:last-child{border-bottom:none}
+  .hunt .num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);min-width:38px;font-size:15px}
+  .hunt .where{display:block;font-size:14.5px;color:var(--muted);line-height:1.4;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+
+  /* ---------- Scenario cards ---------- */
+  .scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0 24px}
+  .sc{
+    background:var(--surface);border:1.5px solid var(--line);
+    border-left:5px solid var(--teal);border-radius:12px;padding:16px 18px 14px;
+  }
+  .sc .n{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+    letter-spacing:.14em;color:var(--gold);display:block;margin-bottom:6px;
+  }
+  .sc p{font-size:16px;margin-bottom:10px;line-height:1.5}
+  .sc .ask{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    border-top:1px dashed var(--line);padding-top:9px;display:block;
+  }
+
+  /* ---------- Units grid ---------- */
+  .units{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 24px}
+  .unit{
+    background:var(--surface);border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px 12px;
+  }
+  .unit .u{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--navy);display:block;margin-bottom:4px;
+  }
+  .unit h4{font-family:'Fredoka',sans-serif;font-weight:500;font-size:17.5px;line-height:1.25;margin-bottom:8px}
+  .unit .blank{
+    display:block;border-bottom:2px dotted var(--line);height:22px;
+  }
+
+  /* ---------- Steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{counter-increment:step;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--gold);
+  }
+  .note{border-left:4px solid var(--gold);background:var(--surface);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+  .note p{margin-bottom:0}
+  .play{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;
+    background:var(--gold);color:var(--navy-deep);text-decoration:none;
+    padding:14px 26px;border-radius:999px;margin-top:6px;
+    box-shadow:0 4px 0 rgba(0,0,0,.22);transition:transform .12s ease,box-shadow .12s ease;
+  }
+  .play:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.22)}
+  .play:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+  .play .arrow{font-family:'JetBrains Mono',monospace;font-weight:700}
+
+  /* ---------- Footer ---------- */
+  footer{margin-top:56px;background:var(--panel-2);color:rgba(255,255,255,.85);padding:26px 24px 30px;text-align:center}
+  footer .sig{
+    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em;
+    color:var(--gold-soft);max-width:760px;margin:0 auto 10px;opacity:.9;
+  }
+  footer .note-f{font-size:14px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){ .silk{font-size:12.5px;padding:7px 12px} }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+  @media print{ .cover{padding:24px 12px} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Day One</p>
+    <h1>The fine <span class="pop">print</span></h1>
+    <p class="subtitle">Everyone says they read the syllabus. Today you actually do.</p>
+    <div class="chips">
+      <span>Work on your own</span>
+      <span>Ten facts to find</span>
+      <span>Then we play together</span>
+    </div>
+    <p class="meta">COURSE 712-715 · ROOM LB6 · 9TH GRADE · 2026–2027</p>
+  </div>
+</header>
+
+<main>
+
+  <section id="why">
+    <span class="silk" data-ref="A1">Why bother</span>
+    <p class="lead">The syllabus is the only document in this class that can cost you credit. Not a project, not an exam, this one.</p>
+    <p>It says how many absences you get, what happens when you're late, how your grade is split, and what counts as cheating. </p>
+    <p>So today, before anything else: open the syllabus and work through it on your own. All the answers are in the document. Don't guess and don't ask me, find them.</p>
+
+    <div class="today">
+      <p class="tag">Today · Class 1</p>
+      <h2>What we're doing right now</h2>
+      <ol>
+        <li><strong>Syllabus Facts</strong> — Find ten facts in the syllabus, on your own. You write these down.</li>
+        <li><strong>Games</strong> — we play these together on the projector.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="find">
+    <span class="silk" data-ref="P1">Syllabus Facts</span>
+    <p>Ten facts. Write the answer and, next to it, the section of the syllabus where you found it.</p>
+    <ul class="hunt">
+      <li><span class="num">01</span><span>How many credits is this course worth?</span></li>
+      <li><span class="num">02</span><span>What percent of your quarter grade is formative work? What percent is summative?</span></li>
+      <li><span class="num">03</span><span>What is the lowest final grade that still passes?</span></li>
+      <li><span class="num">04</span><span>How many total absences are allowed in a semester before you lose credit?</span></li>
+      <li><span class="num">05</span><span>How many tardies add up to one unexcused absence?</span></li>
+      <li><span class="num">06</span><span>How many minutes of tolerance do you get after the second bell before it counts as a tardy?</span></li>
+      <li><span class="num">07</span><span>What is the highest grade possible on work turned in one day late? And two days late?</span></li>
+      <li><span class="num">08</span><span>What is the one material every student must bring?</span></li>
+      <li><span class="num">09</span><span>Who is the final arbiter when there's a question of academic dishonesty?</span></li>
+      <li><span class="num">10</span><span>How many units are there in this course, and which two name a specific software program?</span></li>
+    </ul>
+  </section>
+
+  <section id="game">
+    <span class="silk gold" data-ref="P2">Games</span>
+    <p>Click the button to play!</p>
+    <p><a class="play" href="fine-print-game.html">Open the game <span class="arrow">→</span></a></p>
+  </section>
+
+</main>
+
+<footer>
+  <p class="sig">Computer Applications 712-715 · Ms. Ma. Elena Montes · mechavez@ats.edu.mx</p>
+  <p class="note-f">The American School of Tampico · Room LB6</p>
+</footer>
+
+</body>
+</html>

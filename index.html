@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ms. Ma. Elena Montes (Ms. Pelen) — Class Hub · The American School of Tampico</title>
+<meta name="description" content="Every project we build this year — logged, dated, and linked in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy   */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent — "coming up" */
+    --green:#0F6E56;       /* "finished" */
+    --paper:#EDF1FA;       /* cool paper, not cream */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --line-soft:rgba(18,39,92,.09);
+    --shadow:0 10px 34px rgba(11,23,64,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --line-soft:rgba(130,160,230,.13);
+      --shadow:0 10px 34px rgba(0,0,0,.45);
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);
+    font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+  /* ---------- animations ---------- */
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes entryIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes ping{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+  .r{animation:rise .6s cubic-bezier(.22,.61,.36,1) both}
+
+  /* ---------- header ---------- */
+  header{background:var(--navy);color:#fff;border-bottom:2px solid var(--gold)}
+  .head-in{max-width:940px;margin:0 auto;padding:52px 24px 40px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);
+  }
+  header h1{
+    font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;
+    font-size:clamp(44px,9vw,86px);line-height:.98;letter-spacing:-.015em;margin:14px 0 0;
+  }
+  header h1 .dot{color:var(--gold)}
+  .thesis{
+    max-width:44ch;margin-top:20px;font-size:17px;color:rgba(255,255,255,.82);
+  }
+  .thesis em{font-family:'Fraunces',serif;font-style:italic;color:#fff}
+  /* locked (single-subject) view — shown only with ?class=… */
+  .subject-line{
+    display:none;margin-top:12px;font-family:'JetBrains Mono',monospace;
+    font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);
+  }
+  body.locked .subject-line{display:inline-block;border:1px solid var(--gold);border-radius:2px;padding:6px 12px}
+  body.locked .tabs{display:none}
+  body.locked .controls{padding-top:8px}
+  .stamps{
+    display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:26px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .stamps span{
+    padding:5px 11px;border:1px solid rgba(255,255,255,.24);border-radius:2px;
+    color:rgba(255,255,255,.75);
+  }
+  .stamps span.mark{border-color:var(--gold);color:var(--gold-soft)}
+
+  /* ---------- controls ---------- */
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  .controls{padding-top:30px}
+  .tabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1.5px solid var(--line)}
+  .tabs button{
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:500;letter-spacing:.01em;
+    background:none;border:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;
+    color:var(--muted);padding:11px 16px;cursor:pointer;transition:color .18s,border-color .18s;
+    display:inline-flex;align-items:baseline;gap:7px;
+  }
+  .tabs button:hover:not(.active){color:var(--ink)}
+  .tabs button.active{color:var(--navy);border-bottom-color:var(--gold)}
+  .tabs button .count{font-size:11px;color:var(--muted);font-weight:400}
+  .tabs button.active .count{color:var(--gold)}
+
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;margin-top:22px}
+  .search{position:relative;flex:1 1 260px;max-width:380px}
+  .search input{
+    width:100%;font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);
+    background:var(--surface);border:1.5px solid var(--line);border-radius:8px;
+    padding:10px 14px 10px 40px;outline:none;transition:border-color .18s;
+  }
+  .search input:focus{border-color:var(--navy)}
+  .search input::placeholder{color:var(--muted)}
+  .search .icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .filters button{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;letter-spacing:.04em;
+    text-transform:uppercase;background:transparent;color:var(--muted);
+    border:1.5px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer;transition:all .16s;
+  }
+  .filters button:hover{color:var(--navy);border-color:var(--navy)}
+  .filters button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  /* ---------- the log (signature: vertical timeline) ---------- */
+  main{max-width:940px;margin:0 auto;padding:26px 24px 90px}
+  .group-note{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+    letter-spacing:.02em;margin-bottom:30px;padding-left:2px;
+  }
+  .log{position:relative}
+  .log.has-entries::before{
+    content:"";position:absolute;left:128px;top:6px;bottom:10px;width:2px;
+    background:linear-gradient(var(--line) 82%,transparent);
+  }
+  .entry{
+    position:relative;display:grid;grid-template-columns:112px 1fr;gap:32px;
+    padding:6px 0 34px;animation:entryIn .55s cubic-bezier(.22,.61,.36,1) both;
+    animation-delay:calc(var(--i,0) * .07s);
+  }
+  .rail{text-align:right;padding-top:3px}
+  .wk{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.5;
+    color:var(--muted);letter-spacing:.02em;
+  }
+  .node{
+    position:absolute;left:128px;top:6px;transform:translateX(-50%);
+    width:15px;height:15px;border-radius:50%;background:var(--navy);
+    border:3px solid var(--paper);box-shadow:0 0 0 1.5px var(--line);
+  }
+  .entry.st-now .node{background:var(--gold);box-shadow:0 0 0 1.5px var(--gold)}
+  .entry.st-soon .node{background:var(--teal);box-shadow:0 0 0 1.5px var(--teal)}
+  .entry.st-done .node{background:var(--green);box-shadow:0 0 0 1.5px var(--green)}
+  .entry.st-now .node::after{
+    content:"";position:absolute;inset:-3px;border-radius:50%;background:var(--gold);
+    animation:ping 1.9s ease-out infinite;
+  }
+  .body{min-width:0}
+  .badge{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;
+    letter-spacing:.11em;text-transform:uppercase;margin-bottom:8px;
+  }
+  .badge.now{color:var(--navy);background:var(--gold);padding:3px 9px;border-radius:3px}
+  .badge.soon{color:var(--teal)}
+  .badge.done{color:var(--green)}
+  .body h3{
+    font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;
+    font-size:24px;line-height:1.18;letter-spacing:-.01em;color:var(--ink);
+  }
+  .entry.st-done .body h3{color:var(--muted)}
+  .desc{margin-top:8px;font-size:15.5px;color:var(--ink);max-width:60ch}
+  .entry.st-done .desc{color:var(--muted)}
+  .go{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s,color .18s;
+  }
+  .go:hover{gap:13px}
+  .go.disabled{color:var(--muted);border-bottom-color:var(--line);pointer-events:none}
+
+  .empty{
+    border:1.5px dashed var(--line);border-radius:12px;background:var(--surface);
+    padding:52px 24px;text-align:center;color:var(--muted);
+  }
+  .empty .big{font-family:'Fraunces',serif;font-size:26px;color:var(--ink);margin-bottom:6px}
+  .empty p{font-size:14.5px}
+  .empty strong{color:var(--ink)}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1.5px solid var(--line);background:var(--surface)}
+  .foot-in{
+    max-width:940px;margin:0 auto;padding:26px 24px;
+    display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between;
+  }
+  .foot-in .who{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink)}
+  .foot-in .meta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .foot-in a{color:var(--navy);text-decoration:none;border-bottom:1.5px solid var(--gold)}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:600px){
+    .log.has-entries::before{left:7px}
+    .entry{grid-template-columns:1fr;gap:0;padding-left:26px}
+    .rail{text-align:left;padding-top:0;margin-bottom:6px}
+    .node{left:7px;top:4px}
+  }
+
+  /* ---------- admin panel (only on your master view) ---------- */
+  #adminZone{display:none}
+  body.admin #adminZone{display:block;margin-top:22px}
+  .admin-bar{
+    display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:space-between;
+    background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;
+  }
+  .btn-add{
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.02em;
+    background:var(--navy);color:#fff;border:none;border-radius:7px;padding:9px 16px;cursor:pointer;transition:opacity .15s;
+  }
+  .btn-add:hover{opacity:.9}
+  .publish{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+  .btn-pub{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;
+    background:var(--gold);color:var(--navy-deep);border:none;border-radius:7px;padding:9px 14px;cursor:pointer;transition:filter .15s;
+  }
+  .btn-pub:hover{filter:brightness(1.06)}
+  .pub-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.02em}
+  .btn-link{
+    background:none;border:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    color:var(--muted);text-decoration:underline;cursor:pointer;
+  }
+  .btn-link:hover{color:var(--navy)}
+  .pform{margin-top:12px;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:16px}
+  .pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+  .pform label{
+    display:flex;flex-direction:column;gap:5px;
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  }
+  .pform label.wide{grid-column:1/-1}
+  .pform input,.pform select,.pform textarea{
+    font-family:'Inter',sans-serif;font-size:14.5px;font-weight:400;color:var(--ink);background:var(--paper);
+    border:1.5px solid var(--line);border-radius:7px;padding:9px 11px;outline:none;transition:border-color .15s;
+  }
+  .pform input:focus,.pform select:focus,.pform textarea:focus{border-color:var(--navy)}
+  .pform textarea{resize:vertical}
+  .pf-actions{display:flex;gap:12px;align-items:center;margin-top:14px}
+  .rm{
+    display:inline-flex;align-items:center;margin:12px 0 0 14px;background:none;
+    border:1px solid var(--line);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--muted);padding:5px 10px;cursor:pointer;transition:all .15s;vertical-align:middle;
+  }
+  .rm:hover{border-color:#c0392b;color:#c0392b}
+  @media(max-width:600px){.pf-grid{grid-template-columns:1fr}}
+
+  /* ---------- accessibility: honor reduced-motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <p class="eyebrow r">Ms. Ma. Elena Montes (Ms. Pelen) · Comp Apps, MakerSpace &amp; AP Computer Principles</p>
+    <h1 class="r" style="animation-delay:.08s">Class Hub<span class="dot">.</span></h1>
+    <p class="subject-line" id="subjectLine"></p>
+    <p class="thesis r" style="animation-delay:.18s">This is our <em>course log</em>.
+    <div class="stamps r" style="animation-delay:.28s">
+      <span>The American School of Tampico</span>
+      <span>Room LB6</span>
+      <span>2026–2027</span>
+      <span class="mark">Go Marlins</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input type="search" id="search" placeholder="Search the log…" autocomplete="off" aria-label="Search activities">
+      </div>
+      <div class="filters" id="filters">
+        <button data-f="all" class="active">All</button>
+        <button data-f="now">Now</button>
+        <button data-f="soon">Coming up</button>
+        <button data-f="done">Finished</button>
+      </div>
+    </div>
+
+    <div id="adminZone">
+      <div class="admin-bar">
+        <button class="btn-add" id="addBtn">+ Add project</button>
+        <div class="publish">
+          <button class="btn-pub" id="downloadBtn">⬇ Download updated hub</button>
+          <span class="pub-hint">Re-upload this file to publish for students</span>
+          <button class="btn-link" id="discardBtn">Discard local drafts</button>
+        </div>
+      </div>
+      <form class="pform" id="pform" hidden>
+        <div class="pf-grid">
+          <label>Subject<select id="f-subject"></select></label>
+          <label>Status
+            <select id="f-status">
+              <option value="now">Now — happening now</option>
+              <option value="soon">Coming up</option>
+              <option value="done">Finished</option>
+            </select>
+          </label>
+          <label class="wide">Title<input id="f-title" type="text" placeholder="Project title" required></label>
+          <label class="wide">Description<textarea id="f-desc" rows="2" placeholder="One or two lines about the project (optional)"></textarea></label>
+          <label>Date / Week<input id="f-date" type="text" placeholder="Week 3 · Sep 2026"></label>
+          <label>Link<input id="f-link" type="url" placeholder="https://… (optional)"></label>
+        </div>
+        <div class="pf-actions">
+          <button type="submit" class="btn-add">Add to hub</button>
+          <button type="button" class="btn-link" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<main>
+  <p class="group-note" id="groupNote"></p>
+  <div class="log" id="cards"></div>
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span class="who">Ms. Ma. Elena Montes (Ms. Pelen) · <a href="https://pelen13.com/">pelen13.com</a></span>
+    <span class="meta">The American School of Tampico</span>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================
+   HOW TO ADD A PROJECT (the easy way — no code):
+   1. Open this file normally (your master view).
+   2. Click "+ Add project", fill the form, click "Add to hub".
+      It appears instantly and is saved in your browser.
+   3. When you're done, click "Download updated hub" and
+      RE-UPLOAD that file wherever you host it. Now students
+      see it too. (Until you re-upload, changes are only on
+      your computer.)  "Discard local drafts" undoes local edits.
+
+   You can still edit the GROUPS list below by hand if you like.
+   If you do, also bump GROUPS_VERSION (further down) so the
+   browser drops its old draft and shows your edits.
+   status can be:  "now"  (current activity, gold node)
+                   "soon" (coming up, no link needed yet)
+                   "done" (finished, stays as archive)
+
+   ── SHARING WITH STUDENTS ──────────────────────────────
+   This master hub (plain link) shows ALL subjects — keep it
+   for yourself. To share ONE subject so its students see only
+   their own work, add ?class=<subject> to the link:
+
+     .../class-hub.html?class=comp-apps
+     .../class-hub.html?class=makerspace
+     .../class-hub.html?class=ap-cs-principles
+
+   That view hides the other subjects and the subject tabs.
+   (The <subject> tag is the subject name in lowercase with
+    dashes — it updates automatically if you rename a subject.)
+   ========================================================== */
+
+/*__GROUPS_START__*/
+const GROUPS = {
+
+  "Comp Apps": {
+    note: "// The year runs top to bottom. Gold = happening now.",
+    activities: [
+      {
+        title: "The Fine Print — Syllabus Activity",
+        date: "Day One · Aug 2026",
+        description: "Everyone says they read the syllabus. Today you actually do: hunt down ten facts with a partner, then we play Parts 2 and 3 together on the projector.",
+        status: "now",
+        link: "comp app/syllabus activity/the-fine-print.html"
+      },
+      {
+        title: "Digital Passport — Build Your Academic Portfolio",
+        date: "Week 1 · Aug 2026",
+        description: "Create your own academic website in Wix: Home, My Tech Story, and your Travel Log. AI is only allowed to make images, every other choice is yours.",
+        status: "soon",
+        link: "comp app/Week1 Digital Passport (Portfolio)/digital-passport.html"
+      },
+      {
+        title: "Applied AI Unit — coming later this year",
+        date: "TBA",
+        description: "We'll return to your Digital Passport and ask: now that you know how to use AI responsibly, how could it improve your site?",
+        status: "soon",
+        link: ""
+      }
+    ]
+  },
+
+  "MakerSpace": {
+    note: "// The year runs top to bottom. Gold = happening now.",
+    activities: [
+      {
+        title: "Arduino First Blink",
+        date: "Week 1 · Aug 2026",
+        description: "Find out what an Arduino is and get the software running. Research it, put it on one page in Genially \u2014 150 words max \u2014 and install the Arduino IDE.",
+        status: "now",
+        link: "makerspace/week 1 Arduino First Blink/first-blink.html"
+      }
+    ]
+  },
+
+  "AP CS Principles": {
+    note: "// Activities for AP Computer Science Principles will appear here soon.",
+    activities: []
+  }
+
+};
+/*__GROUPS_END__*/
+
+/* ---------- rendering (no need to touch below) ---------- */
+const tabsEl=document.getElementById('tabs');
+const cardsEl=document.getElementById('cards');
+const noteEl=document.getElementById('groupNote');
+const searchEl=document.getElementById('search');
+const filtersEl=document.getElementById('filters');
+const groupNames=Object.keys(GROUPS);
+
+let activeGroup=groupNames[0];
+let activeFilter='all';
+let query='';
+
+const slug=s=>s.toLowerCase().replace(/·/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const groupFromHash=()=>groupNames.find(n=>slug(n)===location.hash.slice(1));
+
+/* ?class=<subject> locks the page to ONE subject (for sharing with students) */
+const lockedGroup=(()=>{
+  const p=new URLSearchParams(location.search).get('class');
+  return p ? groupNames.find(n=>slug(n)===p) : null;
+})();
+
+/* working data — GROUPS is the published seed; your added/removed projects
+   live in this working copy (saved in your browser) until you Download & re-upload */
+const clone=o=>JSON.parse(JSON.stringify(o));
+const LS_DATA='classhub-data';
+const LS_VER='classhub-data-version';
+/* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
+   Any old draft saved in the browser is thrown away and the file wins. */
+const GROUPS_VERSION='2026-08-25-a';
+function loadLocal(){
+  try{
+    if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){
+      localStorage.removeItem(LS_DATA);
+      localStorage.setItem(LS_VER,GROUPS_VERSION);
+      return null;
+    }
+    const s=localStorage.getItem(LS_DATA);
+    return s?JSON.parse(s):null;
+  }catch(e){return null;}
+}
+function saveLocal(){
+  try{
+    localStorage.setItem(LS_DATA,JSON.stringify(DATA));
+    localStorage.setItem(LS_VER,GROUPS_VERSION);
+  }catch(e){}
+}
+let DATA = loadLocal() || clone(GROUPS);
+
+function badge(s){
+  if(s==="now") return '<span class="badge now">Now</span>';
+  if(s==="done") return '<span class="badge done">✓ Finished</span>';
+  return '<span class="badge soon">Coming up</span>';
+}
+function label(f){
+  return {all:'activities',now:'happening now',soon:'coming up',done:'finished'}[f];
+}
+
+function visibleActivities(name){
+  const q=query.trim().toLowerCase();
+  return DATA[name].activities.filter(a=>{
+    const okFilter = activeFilter==='all' || a.status===activeFilter;
+    const okQuery  = !q || (a.title+' '+a.description+' '+a.date).toLowerCase().includes(q);
+    return okFilter && okQuery;
+  });
+}
+
+function render(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.g===activeGroup));
+  filtersEl.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.f===activeFilter));
+
+  const g=DATA[activeGroup];
+  const list=visibleActivities(activeGroup);
+  noteEl.textContent=g.note||'';
+  cardsEl.classList.toggle('has-entries', list.length>0);
+  tabsEl.querySelectorAll('button').forEach(b=>{
+    const c=b.querySelector('.count'); if(c) c.textContent=DATA[b.dataset.g].activities.length;
+  });
+
+  if(!g.activities.length){
+    cardsEl.innerHTML='<div class="empty"><div class="big">Nothing logged yet</div><p>The first project for this group will show up here. Check back soon.</p></div>';
+    return;
+  }
+  if(!list.length){
+    const reason = query.trim()
+      ? `No entries match “<strong>${query.trim()}</strong>”.`
+      : `Nothing <strong>${label(activeFilter)}</strong> right now.`;
+    cardsEl.innerHTML=`<div class="empty"><div class="big">No matches</div><p>${reason}</p></div>`;
+    return;
+  }
+  cardsEl.innerHTML=list.map((a,i)=>`
+    <article class="entry st-${a.status}" style="--i:${i}">
+      <div class="rail"><span class="wk">${a.date}</span></div>
+      <span class="node" aria-hidden="true"></span>
+      <div class="body">
+        ${badge(a.status)}
+        <h3>${a.title}</h3>
+        <p class="desc">${a.description}</p>
+        ${a.link
+          ? `<a class="go" href="${a.link}" target="_blank" rel="noopener">Open activity →</a>`
+          : `<a class="go disabled">Link coming soon</a>`}
+        ${document.body.classList.contains('admin')
+          ? `<button class="rm" data-i="${DATA[activeGroup].activities.indexOf(a)}">Remove</button>` : ''}
+      </div>
+    </article>`).join('');
+}
+
+function selectGroup(name,updateHash=true){
+  if(!DATA[name]) return;
+  activeGroup=name;
+  if(updateHash) history.replaceState(null,'', '#'+slug(name));
+  if(!lockedGroup){ try{ localStorage.setItem('classhub-group', name); }catch(e){} }
+  render();
+}
+
+/* build subject tabs with entry counts */
+tabsEl.innerHTML='';
+groupNames.forEach(name=>{
+  const b=document.createElement('button');
+  b.dataset.g=name;
+  b.setAttribute('role','tab');
+  b.innerHTML=`${name} <span class="count">${DATA[name].activities.length}</span>`;
+  b.onclick=()=>selectGroup(name);
+  tabsEl.appendChild(b);
+});
+
+/* filters + search */
+filtersEl.querySelectorAll('button').forEach(b=>{
+  b.onclick=()=>{ activeFilter=b.dataset.f; render(); };
+});
+searchEl.addEventListener('input',()=>{ query=searchEl.value; render(); });
+
+/* ---------- admin: add / remove / publish (your master view only) ---------- */
+const pform=document.getElementById('pform');
+const fSubject=document.getElementById('f-subject');
+function populateSubjects(){
+  fSubject.innerHTML='';
+  groupNames.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;fSubject.appendChild(o);});
+}
+document.getElementById('addBtn').onclick=()=>{
+  populateSubjects(); fSubject.value=activeGroup;
+  pform.hidden=!pform.hidden;
+  if(!pform.hidden) document.getElementById('f-title').focus();
+};
+document.getElementById('cancelBtn').onclick=()=>{ pform.hidden=true; pform.reset(); };
+pform.addEventListener('submit',e=>{
+  e.preventDefault();
+  const g=fSubject.value;
+  const proj={
+    title:document.getElementById('f-title').value.trim(),
+    date:document.getElementById('f-date').value.trim()||'TBA',
+    description:document.getElementById('f-desc').value.trim(),
+    status:document.getElementById('f-status').value,
+    link:document.getElementById('f-link').value.trim()
+  };
+  if(!proj.title) return;
+  DATA[g].activities.unshift(proj);
+  saveLocal();
+  pform.reset(); pform.hidden=true;
+  activeGroup=g; activeFilter='all'; query=''; searchEl.value='';
+  render();
+});
+cardsEl.addEventListener('click',e=>{
+  const b=e.target.closest('.rm'); if(!b) return;
+  if(confirm('Remove this project from the hub?')){
+    DATA[activeGroup].activities.splice(+b.dataset.i,1);
+    saveLocal(); render();
+  }
+});
+document.getElementById('downloadBtn').onclick=()=>{
+  const json=JSON.stringify(DATA,null,2);
+  const cls=document.body.className;
+  document.body.className='';                       // don't bake admin/locked state into the file
+  let src='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  document.body.className=cls;
+  src=src.replace(/\/\*__GROUPS_START__\*\/[\s\S]*?\/\*__GROUPS_END__\*\//,
+    '/*__GROUPS_START__*/\nconst GROUPS = '+json+';\n/*__GROUPS_END__*/');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([src],{type:'text/html'}));
+  a.download='class-hub.html'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+document.getElementById('discardBtn').onclick=()=>{
+  if(confirm('Discard your local drafts and reload the published version?')){
+    try{localStorage.removeItem(LS_DATA);}catch(e){}
+    location.reload();
+  }
+};
+
+/* pick initial group: locked subject > URL hash > last used > first */
+(function init(){
+  if(lockedGroup){
+    document.body.classList.add('locked');
+    document.getElementById('subjectLine').textContent=lockedGroup;
+    selectGroup(lockedGroup,false);
+    return;
+  }
+  document.body.classList.add('admin');
+  const fromHash=groupFromHash();
+  let saved=null; try{ saved=localStorage.getItem('classhub-group'); }catch(e){}
+  const start = fromHash || (groupNames.includes(saved)?saved:groupNames[0]);
+  selectGroup(start, !fromHash);
+})();
+
+window.addEventListener('hashchange',()=>{
+  if(lockedGroup) return;
+  const n=groupFromHash();
+  if(n) selectGroup(n,false);
+});
+</script>
+
+</body>
+</html>
