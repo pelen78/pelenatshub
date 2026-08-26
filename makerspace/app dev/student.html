@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MakeSpace Project — Student Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        :root {
+            --ink: #0f0e17;
+            --paper: #fafaf8;
+            --cream: #f3f2ee;
+            --accent: #ff5733;
+            --accent2: #3a86ff;
+            --accent3: #06d6a0;
+            --muted: #6b6a72;
+            --border: #e2e1db;
+            --card-bg: #ffffff;
+            --shadow: 0 2px 16px rgba(15, 14, 23, 0.08);
+            --shadow-lg: 0 8px 40px rgba(15, 14, 23, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            f
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 248, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 max(24px, 5vw);
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            gap: 16px;
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: var(--ink);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 5px 11px;
+            border-radius: 99px;
+            transition: background 0.18s, color 0.18s;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            background: var(--cream);
+            color: var(--ink);
+            outline: none;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 80px max(24px, 5vw);
+        }
+
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--font-head);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        h2 {
+            font-family: var(--font-head);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: var(--ink);
+        }
+
+        .section-desc {
+            color: var(--muted);
+            max-width: 580px;
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+        }
+
+        /* ── HERO ── */
+        #hero {
+            background: var(--ink);
+            padding: 100px max(24px, 5vw) 90px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 80% 30%, rgba(255, 87, 51, 0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 10% 80%, rgba(58, 134, 255, 0.14) 0%, transparent 70%);
+        }
+
+        .hero-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 99px;
+            padding: 5px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 28px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent3);
+            box-shadow: 0 0 8px var(--accent3);
+            flex-shrink: 0;
+        }
+
+        #hero h1 {
+            font-family: var(--font-head);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        #hero h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--accent), #ff9466);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.22rem);
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 640px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 600px;
+            margin-bottom: 36px;
+            line-height: 1.75;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 99px;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-outline {
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            background: transparent;
+        }
+
+        .hero-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            font-weight: 600;
+            padding: 13px 26px;
+            border-radius: 99px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(255, 87, 51, 0.35);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 28px rgba(255, 87, 51, 0.45);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.13);
+        }
+
+        /* ── CARDS / GRID ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 28px;
+        }
+
+        .card-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* ── LEARNING GOALS ── */
+        #goals {
+            background: var(--cream);
+        }
+
+        .goal-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .goal-list li {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .goal-list li .icon {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        /* ── MILESTONE CALLOUT IN GOAL 01 ── */
+        .goal-item-01 {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+        }
+
+        .goal-item-01 > .icon {
+            align-self: flex-start;
+        }
+
+        .goal-01-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .goal-item-01 > .icon {
+            margin-top: 2px;
+        }
+
+        /* re-align icon + first line horizontally */
+        .goal-item-01 {
+            display: flex;
+            flex-direction: row !important;
+            align-items: flex-start !important;
+        }
+
+        .milestone-callout {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            background: linear-gradient(135deg, #fff8f0 0%, #fff3ff 100%);
+            border: 1.5px solid #ffd5c2;
+            border-radius: 10px;
+            padding: 14px 18px;
+            flex-wrap: wrap;
+        }
+
+        .milestone-callout-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .milestone-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-family: var(--font-head);
+        }
+
+        .milestone-callout-left p {
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .milestone-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--font-body);
+            font-size: 0.84rem;
+            font-weight: 600;
+            padding: 9px 18px;
+            border-radius: 99px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 0 3px 14px rgba(255, 87, 51, 0.32);
+            transition: transform 0.15s, box-shadow 0.15s;
+            flex-shrink: 0;
+        }
+
+        .milestone-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 87, 51, 0.42);
+        }
+
+        .goal-item-side {
+            flex-direction: row !important;
+            align-items: flex-start !important;
+        }
+
+        .goal-side-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .manual-note-compact {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: #f5f0ff;
+            border: 1.5px solid #d4b8ff;
+            border-radius: 8px;
+            padding: 11px 15px;
+            font-size: 0.87rem;
+            color: var(--ink);
+        }
+
+        .manual-guide-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            background: #9B5DE5;
+            text-decoration: none;
+            border-radius: 99px;
+            padding: 6px 14px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .manual-guide-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: #f0f7ff;
+            border: 1.5px solid #c2deff;
+            border-radius: 8px;
+            padding: 11px 15px;
+            font-size: 0.87rem;
+            color: var(--ink);
+        }
+
+        .github-guide-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent2);
+            text-decoration: none;
+            border-radius: 99px;
+            padding: 6px 14px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .github-guide-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* ── APP ── */
+        #mvp ol {
+            list-style: none;
+            counter-reset: mvp;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        #mvp ol li {
+            counter-increment: mvp;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+        }
+
+        #mvp ol li::before {
+            content: counter(mvp);
+            min-width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 0.82rem;
+            flex-shrink: 0;
+        }
+
+        .callout {
+            background: #fff8f0;
+            border: 1.5px solid #ffd5c2;
+            border-radius: var(--radius-sm);
+            padding: 18px 22px;
+            margin-top: 28px;
+            font-size: 0.95rem;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .callout .callout-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── PHASES TIMELINE ── */
+        #phases {
+            background: var(--cream);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .phase-item {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 0 24px;
+            position: relative;
+        }
+
+        .phase-spine {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .phase-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            z-index: 1;
+            border: 3px solid var(--cream);
+            box-shadow: var(--shadow);
+        }
+
+        .phase-line {
+            flex: 1;
+            width: 2px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        .phase-item:last-child .phase-line {
+            display: none;
+        }
+
+        .phase-body {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .phase-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .phase-number {
+            font-family: var(--font-head);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(255, 87, 51, 0.08);
+            padding: 3px 10px;
+            border-radius: 99px;
+        }
+
+        .phase-body h3 {
+            font-family: var(--font-head);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+
+
+        .phase-body ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .phase-body ul li {
+            padding-left: 18px;
+            position: relative;
+            color: #3a3945;
+        }
+
+        .phase-body ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.8rem;
+            top: 3px;
+        }
+
+
+
+
+
+        /* ── QA CHECKLIST ── */
+        #qa {
+            background: var(--cream);
+        }
+
+        .checklist-wrap {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .checklist-header {
+            background: var(--ink);
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .checklist-header h3 {
+            font-family: var(--font-head);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .progress-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar-outer {
+            width: 120px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: var(--accent3);
+            border-radius: 99px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .progress-pct {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .checklist-body {
+            padding: 8px 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 28px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+            user-select: none;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item:hover {
+            background: var(--cream);
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent3);
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .check-item label {
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: var(--ink);
+            transition: color 0.15s;
+        }
+
+        .check-item.checked label {
+            color: var(--muted);
+            text-decoration: line-through;
+        }
+
+        .checklist-done {
+            display: none;
+            padding: 22px 28px;
+            background: rgba(6, 214, 160, 0.08);
+            border-top: 2px solid var(--accent3);
+            text-align: center;
+            font-weight: 600;
+            color: #059669;
+            font-family: var(--font-head);
+            font-size: 1rem;
+        }
+
+        /* ── SUBMISSION ── */
+        #submission ol {
+            list-style: none;
+            counter-reset: sub;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #submission ol li {
+            counter-increment: sub;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+        }
+
+        #submission ol li::before {
+            content: counter(sub);
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* ── AI GUIDELINES ── */
+        #ai-guidelines {
+            background: var(--cream);
+        }
+
+        .ai-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .ai-card {
+            border-radius: var(--radius);
+            padding: 28px;
+        }
+
+        .ai-card.allowed {
+            background: rgba(6, 214, 160, 0.07);
+            border: 1.5px solid rgba(6, 214, 160, 0.3);
+        }
+
+        .ai-card.required {
+            background: rgba(58, 134, 255, 0.07);
+            border: 1.5px solid rgba(58, 134, 255, 0.3);
+        }
+
+        .ai-card h3 {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .ai-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ai-card ul li {
+            font-size: 0.9rem;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .ai-card.allowed ul li::before {
+            content: '✓';
+            color: #059669;
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .ai-card.required ul li::before {
+            content: '→';
+            color: var(--accent2);
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 680px) {
+            .ai-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .phase-item {
+                grid-template-columns: 36px 1fr;
+                gap: 0 14px;
+            }
+
+            .phase-dot {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+
+            .checklist-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .progress-bar-outer {
+                width: 160px;
+            }
+        }
+
+        /* ── BACK TO TOP ── */
+        #back-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.2s;
+            transform: translateY(10px);
+        }
+
+        #back-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        #back-top:hover {
+            background: #333;
+        }
+
+        footer {
+            background: var(--ink);
+            color: rgba(255, 255, 255, 0.45);
+            text-align: center;
+            padding: 28px 24px;
+            font-size: 0.83rem;
+        }
+
+        footer strong {
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo"><em>Make</em><span>Space</span></a>
+            <ul class="nav-links">
+                <li><a href="#goals">Goals</a></li>
+                <li><a href="#mvp">Requirements</a></li>
+                <li><a href="#phases">Phases</a></li>
+                <li><a href="#qa">Checklist</a></li>
+                <li><a href="#submission">Submit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" aria-labelledby="hero-title">
+        <div class="hero-inner">
+            <h1 id="hero-title"><em>MakeSpace</em><br>Project</h1>
+            <p class="hero-subtitle">Build &amp; Launch a Web App from Scratch<br>(AI + GitHub + Cloudflare)</p>
+            <p class="hero-desc">In this project, you will build a web app from zero
+                You will use an AI design/editor tool to create branding and UI ideas,
+                then code the app, document it on GitHub, and deploy it with Cloudflare Pages.</p>
+            <div class="badge-row" aria-label="Project tags">
+                <span class="badge badge-outline">Public Launch</span>
+                <span class="badge badge-outline">AI + Coding</span>
+                <span class="badge badge-outline">GitHub</span>
+                <span class="badge badge-outline">Cloudflare</span>
+            </div>
+            <div class="hero-btns">
+                <a href="checklist.html" target="_blank" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                    </svg>
+                    Download Checklist
+                </a>
+                <a href="#phases" class="btn btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    Start Here
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEARNING GOALS -->
+    <section id="goals" aria-labelledby="goals-title">
+        <div class="section-inner">
+            <span class="section-label">What You'll Learn</span>
+            <h2 id="goals-title">Learning Goals</h2>
+            <p class="section-desc">By the end of this project, you'll have real skills that actual developers use every
+                day.
+            </p>
+            <ul class="goal-list">
+                <li class="goal-item-01">
+                    <div class="icon" aria-hidden="true">01</div>
+                    <div class="goal-01-content">
+                        <span>Design a basic brand identity using an AI tool: name, logo, colors, and UI ideas</span>
+                        <div class="milestone-callout">
+                            <div class="milestone-callout-left">
+                                <span class="milestone-tag">📋 Milestone #1</span>
+                                <p>Submit your first logo &amp; interface screenshots using the template below.</p>
+                            </div>
+                            <a href="https://docs.google.com/document/d/1RxuZmSz8QqlbCK0d57-KtRr68VEIcmLGDO9EHWP_TMM/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="milestone-btn">
+                                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                                Download Template
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon" aria-hidden="true">02</div>
+                    <span>Build a functional web app using HTML, CSS, and JavaScript</span>
+                </li>
+                <li class="goal-item-side">
+                    <div class="icon" aria-hidden="true">03</div>
+                    <div class="goal-side-content">
+                        <span>Use GitHub to manage a repository and publish your code</span>
+                        <div class="github-note-compact">
+                            <span>📌 <strong>Before next class:</strong> upload your files and pick a short repo name.</span>
+                            <a href="github-guide.html" class="github-guide-btn">
+                                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                How to set up GitHub
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon" aria-hidden="true">04</div>
+                    <span>Deploy a live site using Cloudflare Pages</span>
+                </li>
+                <li class="goal-item-side">
+                    <div class="icon" aria-hidden="true">05</div>
+                    <div class="goal-side-content">
+                        <span>Document your app like a real developer: read me, screenshots, changelog</span>
+                        <div class="manual-note-compact">
+                            <span>📄 <strong>Deliverable:</strong> your app must include an <strong>About</strong> section with 6 required elements.</span>
+                            <a href="about-guide.html" class="manual-guide-btn">
+                                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                See the checklist
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- APP -->
+    <section id="mvp" aria-labelledby="mvp-title">
+        <div class="section-inner">
+            <span class="section-label">What's Required</span>
+            <h2 id="mvp-title">Minimum Requirements</h2>
+            <p class="section-desc">Your app must meet all 7 of these requirements to be considered complete.</p>
+            <ol>
+                <li>A clear purpose: solve a small problem or provide a useful tool</li>
+                <li>A homepage with a title, 1–2 sentence description, and navigation buttons</li>
+                <li>One main feature that <strong>fully works</strong></li>
+                <li>A clean UI: consistent colors, readable text, good spacing and alignment</li>
+                <li>Responsive layout that looks okay on a phone-sized screen</li>
+                <li>At least 2 empty/error states (ex: "No results yet", "Please enter a value", "Something went
+                    wrong")</li>
+                <li>Public deployment using Cloudflare Pages</li>
+            </ol>
+            <div class="callout" role="note">
+                <div class="callout-icon">💡</div>
+                <div><strong>Keep scope realistic.</strong> One strong feature is better than five broken features.
+                    Focus on
+                    doing one thing well before adding extras.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHASES -->
+    <section id="phases" aria-labelledby="phases-title">
+        <div class="section-inner">
+            <span class="section-label">Step by Step</span>
+            <h2 id="phases-title">Project Phases &amp; Deliverables</h2>
+            <p class="section-desc">Follow these phases in order. Each one builds on the last.</p>
+            <div class="timeline" role="list">
+
+                <!-- Phase 1 -->
+                <div class="phase-item" role="listitem">
+                    <div class="phase-spine" aria-hidden="true">
+                        <div class="phase-dot">1</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 1</span>
+                            <h3>App Concept + Plan</h3>
+
+                        </div>
+                        <ul>
+                            <li>Write a 1-page <strong>App Brief</strong> including: app name, problem it solves, target
+                                user, main
+                                feature, and success criteria</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-item" role="listitem">
+                    <div class="phase-spine" aria-hidden="true">
+                        <div class="phase-dot">2</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 2</span>
+                            <h3>Branding + UI Design Using AI</h3>
+
+                        </div>
+                        <ul>
+                            <li>App name + tagline</li>
+                            <li>Logo in 2 versions (light and dark or full/icon)</li>
+                            <li>Color palette with 5 hex codes</li>
+                            <li>Font selection (1–2 fonts)</li>
+                            <li>2 UI mockups: Home screen and Main Feature screen</li>
+                            <li>Short copy: About section and button/label text</li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-item" role="listitem">
+                    <div class="phase-spine" aria-hidden="true">
+                        <div class="phase-dot">3</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 3</span>
+                            <h3>Build the APP</h3>
+
+                        </div>
+                        <ul>
+                            <li>Required files: <code>index.html</code>, <code>styles.css</code>, <code>app.js</code>,
+                                <code>assets/</code>
+                            </li>
+                            <li>Homepage and navigation are complete</li>
+                            <li>Main feature is fully working</li>
+                            <li>Layout is responsive on mobile</li>
+                            <li>At least 2 empty/error states are handled</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-item" role="listitem">
+                    <div class="phase-spine" aria-hidden="true">
+                        <div class="phase-dot">4</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 4</span>
+                            <h3>GitHub Repo + Documentation</h3>
+
+                        </div>
+                        <ul>
+                            <li>GitHub repository with multiple commits (showing your work over time)</li>
+                            <li>README includes: purpose, features, 2–4 screenshots, live link, and "run locally" steps
+                            </li>
+                            <li>Changelog with versions: v0.1, v0.2, v1.0</li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div class="phase-item" role="listitem">
+                    <div class="phase-spine" aria-hidden="true">
+                        <div class="phase-dot">5</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-header">
+                            <span class="phase-number">Phase 5</span>
+                            <h3>Deploy on Cloudflare Pages</h3>
+
+                        </div>
+                        <ul>
+                            <li>Cloudflare Pages connected to your GitHub repo</li>
+                            <li>Live public URL generated and working</li>
+                            <li>Checklist fully completed</li>
+                            <li>Final polish pass done</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- QA CHECKLIST -->
+    <section id="qa" aria-labelledby="qa-title">
+        <div class="section-inner">
+            <span class="section-label">Before You Submit</span>
+            <h2 id="qa-title">Checklist</h2>
+            <p class="section-desc">Run through every item. You must hit 100% before submitting.</p>
+            <div class="checklist-wrap">
+                <div class="checklist-header">
+                    <h3>Launch Readiness</h3>
+                    <div class="progress-pill" aria-live="polite" aria-atomic="true">
+                        <div class="progress-bar-outer" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                            id="progress-bar-role">
+                            <div class="progress-bar-inner" id="qa-bar"></div>
+                        </div>
+                        <span class="progress-pct" id="qa-pct">0%</span>
+                    </div>
+                </div>
+                <div class="checklist-body" id="checklist-body">
+                    <!-- items injected by JS -->
+                </div>
+                <div class="checklist-done" id="checklist-done" role="status">
+                    🎉 All checks passed — you're ready to submit!
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUBMISSION -->
+    <section id="submission" aria-labelledby="submission-title">
+        <div class="section-inner">
+            <span class="section-label">Hand It In</span>
+            <h2 id="submission-title">Submission Requirements</h2>
+            <p class="section-desc">Submit all required links and screenshots when you're done.</p>
+            <ol>
+                <li>GitHub repository link</li>
+                <li>Cloudflare live link</li>
+                <li>Screenshots — Homepage and Main Feature in action</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- AI GUIDELINES -->
+    <section id="ai-guidelines" aria-labelledby="ai-title">
+        <div class="section-inner">
+            <span class="section-label">Using AI Responsibly</span>
+            <h2 id="ai-title">AI Tool Guidelines</h2>
+            <p class="section-desc">AI is a tool, not a shortcut. Use it to level up your work—not replace your
+                thinking.</p>
+            <div class="ai-cols">
+                <div class="ai-card allowed">
+                    <h3>
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        What AI Can Help With
+                    </h3>
+                    <ul>
+                        <li>Branding ideas — name, tagline, mood</li>
+                        <li>UI concepts and layout directions</li>
+                        <li>Logos and icons</li>
+                        <li>Short copy — About section, labels, button text</li>
+                        <li>Code suggestions — as long as you understand what it does</li>
+                    </ul>
+                </div>
+                <div class="ai-card required">
+                    <h3>
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                        </svg>
+                        What You Must Do
+                    </h3>
+                    <ul>
+                        <li>Mention AI use in your README — be specific</li>
+                        <li>Be able to explain any code in your project</li>
+                        <li>Never submit AI-generated code you don't understand</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <strong>MakeSpace</strong> • Student Edition
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button id="back-top" aria-label="Back to top" title="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
+    <script>
+        /* ── CHECKLIST ── */
+        const QA_ITEMS = [
+            "App loads with no broken layout",
+            "Main feature works correctly",
+            "Buttons and links work — no dead ends",
+            "Mobile view is readable (no overflow or tiny text)",
+            "At least 2 empty/error states exist",
+            "No placeholder text (no \"lorem ipsum\")",
+            "Logo/favicon shows correctly (if used)",
+            "Repo has multiple commits",
+            "README has screenshots and a live link",
+            "Live URL works on another device or computer"
+        ];
+
+        const body = document.getElementById('checklist-body');
+        const bar = document.getElementById('qa-bar');
+        const pct = document.getElementById('qa-pct');
+        const done = document.getElementById('checklist-done');
+        const barRole = document.getElementById('progress-bar-role');
+
+        function updateProgress() {
+            const total = QA_ITEMS.length;
+            const checked = document.querySelectorAll('#checklist-body input[type="checkbox"]:checked').length;
+            const p = Math.round((checked / total) * 100);
+            bar.style.width = p + '%';
+            pct.textContent = p + '%';
+            barRole.setAttribute('aria-valuenow', p);
+            done.style.display = p === 100 ? 'block' : 'none';
+        }
+
+        QA_ITEMS.forEach((text, i) => {
+            const id = 'qa-' + i;
+            const div = document.createElement('div');
+            div.className = 'check-item';
+            div.innerHTML = `
+    <input type="checkbox" id="${id}" aria-label="${text}">
+    <label for="${id}">${text}</label>
+  `;
+            div.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    const cb = div.querySelector('input');
+                    cb.checked = !cb.checked;
+                }
+                div.classList.toggle('checked', div.querySelector('input').checked);
+                updateProgress();
+            });
+            div.querySelector('input').addEventListener('change', () => {
+                div.classList.toggle('checked', div.querySelector('input').checked);
+                updateProgress();
+            });
+            body.appendChild(div);
+        });
+
+        /* ── BACK TO TOP ── */
+        const topBtn = document.getElementById('back-top');
+        window.addEventListener('scroll', () => {
+            topBtn.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    </script>
+</body>
+
+</html>

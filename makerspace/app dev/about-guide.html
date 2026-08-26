@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Section Guide — MakeSpace</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+      --ink: #0f0e17;
+      --paper: #fafaf8;
+      --cream: #f3f2ee;
+      --accent: #ff5733;
+      --purple: #9B5DE5;
+      --purple-light: #f3ecff;
+      --purple-mid: #d4b8ff;
+      --muted: #6b6a72;
+      --border: #e2e1db;
+      --card: #ffffff;
+      --shadow: 0 2px 16px rgba(15,14,23,0.07);
+      --radius: 14px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--paper); color: var(--ink); line-height: 1.7; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 max(24px, 5vw);
+    }
+    .nav-inner {
+      max-width: 800px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; gap: 12px;
+    }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.84rem; font-weight: 600; color: var(--muted);
+      text-decoration: none; padding: 5px 12px; border-radius: 99px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-back:hover { background: var(--cream); color: var(--ink); }
+    .nav-title { font-family: var(--font-head); font-size: 0.92rem; font-weight: 700; }
+    .nav-title span { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      padding: 64px max(24px, 5vw) 56px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 60% at 85% 15%, rgba(155,93,229,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 5% 85%, rgba(255,87,51,0.1) 0%, transparent 70%);
+    }
+    .hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 99px; padding: 4px 14px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--purple); box-shadow: 0 0 8px var(--purple);
+    }
+    .hero h1 {
+      font-family: var(--font-head); font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800; color: #fff; line-height: 1.1;
+      margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--purple), #c89cff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub { color: rgba(255,255,255,0.58); font-size: 1rem; max-width: 520px; }
+
+    /* ── MAIN ── */
+    main { max-width: 800px; margin: 0 auto; padding: 52px max(24px, 5vw) 80px; }
+
+    /* ── CHECKLIST CARD ── */
+    .checklist-card {
+      background: var(--card);
+      border: 1.5px solid var(--purple-mid);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .checklist-card-header {
+      background: var(--purple-light);
+      padding: 18px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      border-bottom: 1.5px solid var(--purple-mid);
+    }
+    .checklist-card-header h2 {
+      font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: var(--purple);
+    }
+    .progress-wrap { display: flex; align-items: center; gap: 10px; }
+    .progress-track {
+      width: 120px; height: 6px; background: var(--purple-mid);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; background: var(--purple);
+      border-radius: 99px; transition: width 0.3s ease;
+    }
+    .progress-label { font-size: 0.8rem; font-weight: 600; color: var(--purple); min-width: 30px; }
+
+    .checklist-items { padding: 8px 0; }
+    .check-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 24px; cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+    .check-row:last-child { border-bottom: none; }
+    .check-row:hover { background: #faf9ff; }
+    .check-row.done { background: #f8f5ff; }
+
+    .check-row input[type="checkbox"] { display: none; }
+
+    .custom-check {
+      width: 22px; height: 22px; min-width: 22px;
+      border: 2px solid var(--purple-mid);
+      border-radius: 6px; margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .check-row.done .custom-check {
+      background: var(--purple); border-color: var(--purple);
+    }
+    .custom-check svg { display: none; }
+    .check-row.done .custom-check svg { display: block; }
+
+    .check-content { flex: 1; }
+    .check-title {
+      font-size: 0.95rem; font-weight: 600; color: var(--ink);
+      transition: color 0.15s;
+    }
+    .check-row.done .check-title { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--purple-mid); }
+    .check-desc { font-size: 0.84rem; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+
+    .done-banner {
+      display: none; text-align: center;
+      background: var(--purple); color: #fff;
+      padding: 14px; font-weight: 700; font-size: 0.95rem;
+      font-family: var(--font-head);
+    }
+
+    /* ── DETAIL SECTIONS ── */
+    .detail-section { margin-bottom: 40px; }
+    .detail-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--purple);
+      font-family: var(--font-head); margin-bottom: 10px;
+    }
+    .detail-label::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--purple); flex-shrink: 0;
+    }
+    .detail-section h3 {
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 800;
+      color: var(--ink); margin-bottom: 8px;
+    }
+    .detail-section p { font-size: 0.93rem; color: var(--muted); margin-bottom: 10px; }
+
+    /* example box */
+    .example-box {
+      background: var(--ink); border-radius: 10px;
+      padding: 18px 20px; margin-top: 12px;
+    }
+    .example-box .ex-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      font-family: var(--font-head); margin-bottom: 8px;
+    }
+    .example-box p {
+      font-size: 0.88rem; color: rgba(255,255,255,0.75);
+      margin: 0; line-height: 1.6;
+    }
+    .example-box code {
+      background: rgba(155,93,229,0.25); color: #c89cff;
+      padding: 1px 6px; border-radius: 4px; font-size: 0.85em;
+    }
+
+    /* tip */
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #fffbf0; border: 1.5px solid #ffe4b5;
+      border-radius: 8px; padding: 11px 14px;
+      font-size: 0.87rem; color: var(--ink); margin-top: 10px;
+    }
+
+    /* divider */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    /* ── PREVIEW MOCKUP ── */
+    .mockup-wrap { margin: 40px 0; }
+    .mockup-wrap h2 {
+      font-family: var(--font-head); font-size: 1rem; font-weight: 800;
+      color: var(--ink); margin-bottom: 16px;
+    }
+    .mockup {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow);
+      font-family: var(--font-body);
+    }
+    .mockup-bar {
+      background: #e8e8e8; padding: 8px 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mockup-body { padding: 28px 24px; background: #fff; }
+    .mockup-nav {
+      display: flex; gap: 20px; font-size: 0.78rem; font-weight: 600;
+      color: #888; margin-bottom: 28px; border-bottom: 1px solid #eee; padding-bottom: 10px;
+    }
+    .mockup-nav span:last-child { color: #9B5DE5; border-bottom: 2px solid #9B5DE5; padding-bottom: 10px; }
+    .mockup-about-grid { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
+    .mockup-logo {
+      width: 64px; height: 64px; border-radius: 12px;
+      background: linear-gradient(135deg, #9B5DE5, #3a86ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; flex-shrink: 0;
+    }
+    .mockup-app-name { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; color: #0f0e17; }
+    .mockup-app-desc { font-size: 0.82rem; color: #888; margin-top: 4px; line-height: 1.5; }
+    .mockup-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .mockup-tag {
+      font-size: 0.73rem; font-weight: 600; padding: 3px 10px;
+      border-radius: 99px; border: 1.5px solid #e2e1db; color: #555;
+    }
+    .mockup-dev { margin-top: 18px; font-size: 0.82rem; color: #888; }
+    .mockup-dev strong { color: #0f0e17; }
+    .mockup-links { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .mockup-link {
+      font-size: 0.78rem; font-weight: 600; color: #9B5DE5;
+      border: 1.5px solid #d4b8ff; border-radius: 99px; padding: 4px 12px;
+      text-decoration: none;
+    }
+    .mockup-credits { margin-top: 18px; padding-top: 14px; border-top: 1px solid #eee; font-size: 0.8rem; color: #888; }
+    .mockup-credits strong { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; margin-bottom: 4px; }
+
+    /* ── PAGE BREAKDOWN ── */
+    .breakdown-wrap { margin: 48px 0 0; }
+    .breakdown-wrap > .section-intro {
+      margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .breakdown-wrap > .section-intro h2 {
+      font-family: var(--font-head); font-size: 1.3rem; font-weight: 800;
+      color: var(--ink); margin-bottom: 6px;
+    }
+    .breakdown-wrap > .section-intro p {
+      font-size: 0.93rem; color: var(--muted);
+    }
+
+    .breakdown-tabs {
+      display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .tab-btn {
+      font-family: var(--font-body); font-size: 0.84rem; font-weight: 600;
+      padding: 7px 18px; border-radius: 99px; border: 1.5px solid var(--border);
+      background: var(--card); color: var(--muted); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover { border-color: var(--purple); color: var(--purple); }
+    .tab-btn.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* visual sections grid */
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .section-card {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .section-card-top {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .section-card-top h4 {
+      font-family: var(--font-head); font-size: 0.95rem; font-weight: 800; color: var(--ink);
+    }
+    .section-card-top .section-tag {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-top: 1px;
+    }
+    .section-card-body { padding: 14px 18px; }
+    .section-card-body p { font-size: 0.87rem; color: var(--muted); margin-bottom: 10px; }
+    .section-card-body p:last-child { margin-bottom: 0; }
+    .section-card-body strong { color: var(--ink); }
+
+
+    .download-doc-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      align-self: flex-start;
+      font-size: 0.86rem; font-weight: 600;
+      background: var(--purple); color: #fff;
+      text-decoration: none; border-radius: 99px;
+      padding: 9px 18px;
+      box-shadow: 0 3px 14px rgba(155,93,229,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .download-doc-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(155,93,229,0.42);
+    }
+
+    /* question prompts (read-only) */
+    .question-prompt {
+      margin-top: 10px;
+      background: var(--purple-light);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 13px;
+      font-size: 0.86rem;
+      color: #5a3a9a;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* CTA ── */
+    .files-grid {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .file-card {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    }
+    .file-card-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    .file-badge {
+      font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 6px; flex-shrink: 0;
+    }
+    .file-badge.html { background: #fff0eb; color: #c63d00; }
+    .file-badge.css  { background: #ebf0ff; color: #1a3fa8; }
+    .file-badge.js   { background: #fffbeb; color: #8a6000; }
+    .file-card-header p { font-size: 0.86rem; color: var(--muted); }
+    .file-card-body { padding: 14px 18px; }
+    .file-row { margin-bottom: 14px; }
+    .file-row:last-child { margin-bottom: 0; }
+    .file-row-label {
+      font-size: 0.78rem; font-weight: 600; color: var(--ink);
+      margin-bottom: 5px; display: flex; align-items: center; gap: 6px;
+    }
+    .file-row-label code {
+      background: var(--cream); color: var(--purple);
+      padding: 1px 7px; border-radius: 4px; font-size: 0.8em;
+    }
+
+    /* CTA ── */
+    .cta-box {
+      background: var(--ink); border-radius: var(--radius);
+      padding: 28px 24px; display: flex;
+      align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-top: 48px;
+    }
+    .cta-box h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .cta-box p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin: 0; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--purple); color: #fff;
+      font-size: 0.88rem; font-weight: 600;
+      padding: 10px 20px; border-radius: 99px; text-decoration: none;
+      white-space: nowrap; box-shadow: 0 4px 16px rgba(155,93,229,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(155,93,229,0.5); }
+
+    footer {
+      text-align: center; padding: 24px;
+      font-size: 0.82rem; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="student.html" class="nav-back">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      Back to Project
+    </a>
+    <span class="nav-title">Make<span>Space</span></span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Goal 5 — Documentation</div>
+    <h1>Build your<br><em>About</em> section</h1>
+    <p class="hero-sub">Every real app has an About page. Here's exactly what yours needs to include.</p>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── INTERACTIVE CHECKLIST ── -->
+  <div class="checklist-card">
+    <div class="checklist-card-header">
+      <h2>✅ About Section Checklist</h2>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+        <span class="progress-label" id="prog-label">0 / 6</span>
+      </div>
+    </div>
+    <div class="checklist-items" id="checklist"></div>
+    <div class="done-banner" id="done-banner">🎉 About section complete — your app is documented like a pro!</div>
+  </div>
+
+  <!-- ── DETAIL: App name & description ── -->
+  <div class="detail-section" id="detail-0">
+    <div class="detail-label">Item 1</div>
+    <h3>App Name &amp; Description</h3>
+    <p>Include your app's name and a short paragraph (2–4 sentences) explaining what it does and who it's for. Avoid technical jargon — write as if explaining it to a friend.</p>
+    <div class="example-box">
+      <div class="ex-label">Example</div>
+      <p><strong style="color:#fff;">WeatherNow</strong> — <em>"WeatherNow gives you a clean, fast forecast for any city in the world. Just type a location and get the current temperature, humidity, and a 3-day outlook — no account needed."</em></p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DETAIL: Screenshot or logo ── -->
+  <div class="detail-section" id="detail-1">
+    <div class="detail-label">Item 2</div>
+    <h3>Screenshot or Logo</h3>
+    <p>Show at least one visual — your app logo, an icon, or a screenshot of the main screen. This gives the About section personality and helps users recognize your app at a glance.</p>
+    <div class="tip">
+      <span>💡</span>
+      <span>If you have a logo, use it here. If not, a clean screenshot of your home screen works perfectly. Size it so it doesn't overwhelm the text.</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DETAIL: Technologies ── -->
+  <div class="detail-section" id="detail-2">
+    <div class="detail-label">Item 3</div>
+    <h3>Technologies &amp; Tools Used</h3>
+    <p>List the languages, libraries, and APIs your app is built with. You can display these as tags, a simple list, or inline text. Be specific — don't just write "JavaScript", mention what you used it for.</p>
+    <div class="example-box">
+      <div class="ex-label">Example</div>
+      <p>Built with <code>HTML5</code> · <code>CSS3</code> · <code>JavaScript</code> · <code>OpenWeatherMap API</code></p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DETAIL: Developer name ── -->
+  <div class="detail-section" id="detail-3">
+    <div class="detail-label">Item 4</div>
+    <h3>Developer Name</h3>
+    <p>Add your name (and your teammates' names if it's a group project). This is your work — own it. You can also add a short bio or your grade/class.</p>
+    <div class="example-box">
+      <div class="ex-label">Example</div>
+      <p>Made by <strong style="color:#fff;">Sofia Martínez</strong> — 10th Grade, Applied Computing · ATS 2025</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DETAIL: GitHub link ── -->
+  <div class="detail-section" id="detail-4">
+    <div class="detail-label">Item 5</div>
+    <h3>Link to GitHub Repository</h3>
+    <p>Add a visible link to your GitHub repo. This lets anyone browse your source code, see your commit history, and verify your work. Use a button or styled anchor — don't just paste a raw URL.</p>
+    <div class="tip">
+      <span>💡</span>
+      <span>Label it clearly: <strong>"View Source on GitHub"</strong> or <strong>"GitHub Repo"</strong>. Open it in a new tab using <code>target="_blank"</code>.</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DETAIL: AI credits ── -->
+  <div class="detail-section" id="detail-5">
+    <div class="detail-label">Item 6</div>
+    <h3>AI Tools Credits</h3>
+    <p>Be transparent about which AI tools you used and exactly how. This is a professional practice — real developers do this. Don't just write "used AI" — be specific about what task it helped with.</p>
+    <div class="example-box">
+      <div class="ex-label">Example</div>
+      <p>
+        🤖 <strong style="color:#fff;">ChatGPT</strong> — generated initial logo concepts and color palette ideas.<br>
+        🤖 <strong style="color:#fff;">Claude</strong> — helped debug the fetch() function and suggested the card layout.<br>
+        🤖 <strong style="color:#fff;">Canva AI</strong> — used to refine the final logo icon.
+      </p>
+    </div>
+    <div class="tip">
+      <span>⚠️</span>
+      <span>If you used AI to write code, you must be able to explain every line. Never submit code you don't understand.</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── MOCKUP PREVIEW ── -->
+  <div class="mockup-wrap">
+    <h2>What it could look like 👇</h2>
+    <div class="mockup">
+      <div class="mockup-bar">
+        <div class="mockup-dot" style="background:#ff5f57;"></div>
+        <div class="mockup-dot" style="background:#febc2e;"></div>
+        <div class="mockup-dot" style="background:#28c840;"></div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-nav">
+          <span>Home</span><span>Features</span><span>About</span>
+        </div>
+        <div class="mockup-about-grid">
+          <div class="mockup-logo">🌤</div>
+          <div>
+            <div class="mockup-app-name">WeatherNow</div>
+            <div class="mockup-app-desc">A fast, clean weather forecast for any city in the world. No account needed.</div>
+          </div>
+        </div>
+        <div class="mockup-tags">
+          <span class="mockup-tag">HTML5</span>
+          <span class="mockup-tag">CSS3</span>
+          <span class="mockup-tag">JavaScript</span>
+          <span class="mockup-tag">OpenWeatherMap API</span>
+        </div>
+        <div class="mockup-dev">Made by <strong>Sofia Martínez</strong> · 10th Grade, Applied Computing · ATS 2025</div>
+        <div class="mockup-links">
+          <a class="mockup-link" href="#">View Source on GitHub →</a>
+        </div>
+        <div class="mockup-credits">
+          <strong>AI Tools Used</strong>
+          ChatGPT — logo concepts &amp; color palette &nbsp;·&nbsp; Claude — debugging fetch() &nbsp;·&nbsp; Canva AI — logo refinement
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── PAGE BREAKDOWN ── -->
+  <div class="breakdown-wrap">
+    <div class="section-intro">
+      <h2>📝 Explain Your App</h2>
+      <p>For each visual section and each code file, answer the questions below <strong>in your document</strong>. This shows you understand your own project.</p>
+      <a href="https://docs.google.com/document/d/1VHD1TfyGEcbw-J9FjOi1Vpp5tKH4pK96/edit?usp=sharing&ouid=110726650883416419639&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="download-doc-btn">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+        Download the template to fill out
+      </a>
+    </div>
+
+    <div class="breakdown-tabs">
+      <button class="tab-btn active" onclick="switchTab('visual', this)">🖥 Visual Sections</button>
+      <button class="tab-btn" onclick="switchTab('code', this)">💻 Code Files</button>
+    </div>
+
+    <!-- VISUAL SECTIONS tab -->
+    <div class="tab-panel active" id="tab-visual">
+      <div class="sections-grid">
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#fff0eb;">🧭</div>
+            <div>
+              <h4>Navigation Bar</h4>
+              <div class="section-tag">Every page needs one</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>The nav lets users move between sections or pages. It usually contains your app name/logo and links.</p>
+            <div class="question-prompt">✏️ Describe YOUR nav — what links does it have? How did you style it?</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#ebf0ff;">🦸</div>
+            <div>
+              <h4>Hero / Header Section</h4>
+              <div class="section-tag">First thing the user sees</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>The hero is your app's first impression — usually a headline, short description, and a call-to-action button.</p>
+            <div class="question-prompt">✏️ What does your hero say? What action do you want the user to take?</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#f0fff6;">⚡</div>
+            <div>
+              <h4>Main Feature Section</h4>
+              <div class="section-tag">The core of your app</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>This is where your app does its main job — the thing that makes it useful. It's the most important section.</p>
+            <div class="question-prompt">✏️ What is your main feature? How does the user interact with it?</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#f3ecff;">🙋</div>
+            <div>
+              <h4>About Section</h4>
+              <div class="section-tag">Required for this project</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>Your About section introduces the app, the developer, the tools used, and links to the repo. See the checklist above.</p>
+            <div class="question-prompt">✏️ What did you include in your About? What was the hardest part to write?</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#fff8eb;">🦶</div>
+            <div>
+              <h4>Footer</h4>
+              <div class="section-tag">Closes the page</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>The footer wraps up the page. It can include your name, copyright, links, or a short tagline.</p>
+            <div class="question-prompt">✏️ What's in your footer? Why did you choose to include those elements?</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-top">
+            <div class="section-icon" style="background:#fff0eb;">⚠️</div>
+            <div>
+              <h4>Empty / Error States</h4>
+              <div class="section-tag">Required — at least 2</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <p>What does your app show when there's no data, a bad input, or something goes wrong? These states are required.</p>
+            <div class="question-prompt">✏️ List your 2+ error/empty states and when each one appears.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CODE FILES tab -->
+    <div class="tab-panel" id="tab-code">
+      <div class="files-grid">
+
+        <div class="file-card">
+          <div class="file-card-header">
+            <span class="file-badge html">index.html</span>
+            <p>The structure and content of your app — every element the user sees lives here.</p>
+          </div>
+          <div class="file-card-body">
+            <div class="file-row">
+              <div class="file-row-label">What sections does your HTML contain? <code>&lt;nav&gt;</code> <code>&lt;section&gt;</code> <code>&lt;footer&gt;</code></div>
+              <div class="question-prompt">✏️ List every section tag you used and what content goes inside each one.</div>
+            </div>
+            <div class="file-row">
+              <div class="file-row-label">What HTML element are you most proud of or found most interesting?</div>
+              <div class="question-prompt">✏️ Name the element and explain what it does in your app.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-card">
+          <div class="file-card-header">
+            <span class="file-badge css">styles.css</span>
+            <p>All the visual styling — colors, fonts, spacing, layout, and responsiveness.</p>
+          </div>
+          <div class="file-card-body">
+            <div class="file-row">
+              <div class="file-row-label">What layout technique did you use? <code>flexbox</code> <code>grid</code> <code>both</code></div>
+              <div class="question-prompt">✏️ Explain where and why you used each layout method.</div>
+            </div>
+            <div class="file-row">
+              <div class="file-row-label">How did you make your app responsive?</div>
+              <div class="question-prompt">✏️ Describe your media query — at what screen size and what changes.</div>
+            </div>
+            <div class="file-row">
+              <div class="file-row-label">Describe your color palette and font choices.</div>
+              <div class="question-prompt">✏️ List your main colors (hex codes) and fonts, and explain why you chose them.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-card">
+          <div class="file-card-header">
+            <span class="file-badge js">app.js</span>
+            <p>The logic and behavior — everything that happens when the user interacts with your app.</p>
+          </div>
+          <div class="file-card-body">
+            <div class="file-row">
+              <div class="file-row-label">What does your JavaScript do?</div>
+              <div class="question-prompt">✏️ List the main things your JS handles (events, DOM updates, calculations, etc.).</div>
+            </div>
+            <div class="file-row">
+              <div class="file-row-label">Did you use any APIs, libraries, or <code>localStorage</code>?</div>
+              <div class="question-prompt">✏️ Name them and explain exactly how you used each one.</div>
+            </div>
+            <div class="file-row">
+              <div class="file-row-label">What was the hardest function to write?</div>
+              <div class="question-prompt">✏️ Name the function and explain what it does and why it was challenging.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── CTA ── -->
+  <div class="cta-box">
+    <div>
+      <h3>Need inspiration for your layout?</h3>
+      <p>Check out real About pages from apps you use every day.</p>
+    </div>
+    <a href="student.html" class="cta-btn">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      Back to Project
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <strong>MakeSpace</strong> • Student Edition &nbsp;·&nbsp; <a href="student.html">← Back to project page</a>
+</footer>
+
+<script>
+  const ITEMS = [
+    { title: "App name & description", desc: "Your app's name + 2–4 sentences explaining what it does and who it's for." },
+    { title: "Screenshot or logo",     desc: "At least one visual — your logo, icon, or a screenshot of the main screen." },
+    { title: "Technologies & tools",   desc: "Languages, libraries, and APIs used (e.g. HTML, CSS, JavaScript, OpenWeatherMap)." },
+    { title: "Developer name",         desc: "Your name and teammates (if any). Own your work." },
+    { title: "Link to GitHub repo",    desc: "A visible, labeled button or link to your source code on GitHub." },
+    { title: "AI tools credits",       desc: "Which AI tools you used and specifically what each one helped with." },
+  ];
+
+  const list    = document.getElementById('checklist');
+  const fill    = document.getElementById('prog-fill');
+  const label   = document.getElementById('prog-label');
+  const banner  = document.getElementById('done-banner');
+
+  function updateProgress() {
+    const checked = document.querySelectorAll('.check-row.done').length;
+    const pct = Math.round((checked / ITEMS.length) * 100);
+    fill.style.width = pct + '%';
+    label.textContent = checked + ' / ' + ITEMS.length;
+    banner.style.display = checked === ITEMS.length ? 'block' : 'none';
+  }
+
+  ITEMS.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'check-row';
+    row.innerHTML = `
+      <div class="custom-check">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <div class="check-content">
+        <div class="check-title">${item.title}</div>
+        <div class="check-desc">${item.desc}</div>
+      </div>
+    `;
+    row.addEventListener('click', () => {
+      row.classList.toggle('done');
+      // scroll to detail
+      const detail = document.getElementById('detail-' + i);
+      if (detail && row.classList.contains('done')) {
+        setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+      }
+      updateProgress();
+    });
+    list.appendChild(row);
+  });
+
+  updateProgress();
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+</script>
+
+</body>
+</html>

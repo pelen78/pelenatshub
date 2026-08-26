@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Lightbox Design — Makerspace Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', 'Varela Round', 'Comic Sans MS', Tahoma, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    padding: 2rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* HERO */
+  .hero {
+    background: #1e1b4b;
+    border-radius: 16px;
+    padding: 2rem 2.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.1);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 80px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.06);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(251,191,36,0.2);
+    color: #fbbf24;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(251,191,36,0.35);
+    margin-bottom: 0.85rem;
+  }
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+  }
+  .meta-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #fbbf24;
+    flex-shrink: 0;
+  }
+
+  /* SECTION */
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #888;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e3de;
+  }
+
+  /* TOOLS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+  }
+  .tool-card {
+    background: #fff;
+    border: 1px solid #e5e3de;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tool-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .tool-name { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .tool-sub { font-size: 13px; color: #888; margin-top: 1px; }
+
+  /* REQUIREMENTS */
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .req-card {
+    background: #fff;
+    border: 1px solid #e5e3de;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .req-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .req-list { list-style: none; }
+  .req-list li {
+    font-size: 14px;
+    color: #1a1a1a;
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .req-list li::before {
+    content: '▸';
+    color: #fbbf24;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* STEPS */
+  .steps-list { display: flex; flex-direction: column; gap: 10px; }
+  .step {
+    background: #fff;
+    border: 1px solid #e5e3de;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    min-width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #fbbf24;
+    color: #1e1b4b;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: #666; line-height: 1.55; }
+
+  /* DELIVERABLE */
+  .deliverable-card {
+    background: #fff;
+    border: 1px solid #e5e3de;
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .deliverable-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+  .slide-list { display: flex; flex-direction: column; gap: 9px; }
+  .slide-item { display: flex; gap: 12px; align-items: flex-start; }
+  .slide-num { font-size: 13px; font-weight: 700; color: #fbbf24; min-width: 22px; }
+  .slide-text { font-size: 14px; color: #555; line-height: 1.45; }
+
+  /* VIDEO */
+  .video-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid #e5e3de;
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .video-link:hover { border-color: #fbbf24; }
+  .play-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #ef4444;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .play-icon {
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 13px solid #fff;
+    margin-left: 3px;
+  }
+  .video-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .video-sub { font-size: 13px; color: #888; margin-top: 2px; }
+
+  /* DUE DATE */
+  .due-banner {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 10px;
+    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .due-dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; flex-shrink: 0; }
+  .due-text { font-size: 15px; color: #1a1a1a; }
+  .due-text strong { color: #d97706; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div class="badge">Makerspace Project</div>
+    <h1>3D Lightbox Design</h1>
+    <div class="hero-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Fusion 360 + 3D Printing</div>
+      <div class="meta-item"><div class="meta-dot"></div>Individual project</div>
+      <div class="meta-item"><div class="meta-dot"></div>Grades 10–12</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Tools &amp; materials</div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-icon" style="background:#e0f2fe;">🧊</div>
+        <div><div class="tool-name">Fusion 360</div><div class="tool-sub">3D design</div></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon" style="background:#fef3c7;">🖨️</div>
+        <div><div class="tool-name">3D Printer</div><div class="tool-sub">PLA filament</div></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon" style="background:#fce7f3;">💡</div>
+        <div><div class="tool-name">LED strip</div><div class="tool-sub">USB powered</div></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon" style="background:#d1fae5;">🔧</div>
+        <div><div class="tool-name">Assembly tools</div><div class="tool-sub">Glue, wire</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Design requirements</div>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-label">Must include</div>
+        <ul class="req-list">
+          <li>Custom image or illustration</li>
+          <li>Text or name</li>
+          <li>Frame / box structure</li>
+          <li>LED diffusion layer</li>
+        </ul>
+      </div>
+      <div class="req-card">
+        <div class="req-label">Technical specs</div>
+        <ul class="req-list">
+          <li>Wall thickness ≥ 2 mm</li>
+          <li>Correct STL export</li>
+          <li>Verified measurements</li>
+          <li>Fits build plate</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Project phases</div>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Research &amp; inspiration</div><div class="step-desc">Look for lightbox ideas online. Download SVG/vector files if needed for your design.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Design in Fusion 360</div><div class="step-desc">Model the full lightbox: frame, back panel with engraved design, and LED channel. Double-check all measurements.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><div class="step-title">Export &amp; slice STL files</div><div class="step-desc">Export each component as STL. Review in slicer software and adjust supports or infill as needed.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><div class="step-title">Print &amp; assemble</div><div class="step-desc">Print all parts. Install LED strip, connect wiring, and assemble the final lightbox.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div><div class="step-title">Document &amp; present</div><div class="step-desc">Photograph your process and final result. Build your slide presentation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Deliverable — slide presentation</div>
+    <div class="deliverable-card">
+      <div class="deliverable-title">Your presentation must cover:</div>
+      <div class="slide-list">
+        <div class="slide-item"><div class="slide-num">01</div><div class="slide-text">Concept &amp; inspiration — where did your idea come from?</div></div>
+        <div class="slide-item"><div class="slide-num">02</div><div class="slide-text">Design process in Fusion 360 — screenshots of key steps and dimensions</div></div>
+        <div class="slide-item"><div class="slide-num">03</div><div class="slide-text">STL files and slicer settings used</div></div>
+        <div class="slide-item"><div class="slide-num">04</div><div class="slide-text">LED wiring — diagram or photos explaining how you attached the lights</div></div>
+        <div class="slide-item"><div class="slide-num">05</div><div class="slide-text">Final result — photos of the assembled, lit lightbox</div></div>
+        <div class="slide-item"><div class="slide-num">06</div><div class="slide-text">Reflection — what worked, what you would change</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Reference video</div>
+    <a class="video-link" href="https://www.youtube.com/watch?v=10IDgu_E75I" target="_blank">
+      <div class="play-btn"><div class="play-icon"></div></div>
+      <div>
+        <div class="video-title">3D Printed Lightbox — YouTube tutorial</div>
+        <div class="video-sub">Watch before starting your design</div>
+      </div>
+    </a>
+  </div>
+
+
+
+</div>
+</body>
+</html>

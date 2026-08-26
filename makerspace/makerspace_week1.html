@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MakerSpace — Week 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+
+  :root {
+    --blue: #003DA5;
+    --red: #CC2229;
+    --gold: #F5C400;
+    --white: #ffffff;
+    --light: #F2F5FB;
+    --gray: #6B7280;
+    --dark: #111827;
+    --border: #E5E7EB;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--blue);
+    position: relative;
+    overflow: hidden;
+    padding: 48px 40px 40px;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: -60px;
+    width: 260px; height: 100%;
+    background: var(--red);
+    transform: skewX(-12deg);
+    opacity: .85;
+  }
+
+  .header-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+  }
+
+  .course-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  header h1 span { color: var(--gold); }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+  }
+
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+
+  /* ── ABOUT BOX ── */
+  .about-box {
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 44px;
+  }
+
+  .about-box h2 {
+    font-size: 13px;
+    font-family: 'Space Grotesk', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+
+  .about-box p {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.6;
+    max-width: 680px;
+    color: var(--white);
+  }
+
+  .about-box p strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ── WEEK TIMELINE ── */
+  .timeline { margin-bottom: 48px; }
+
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .day-card {
+    background: var(--light);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform .18s, box-shadow .18s;
+  }
+
+  .day-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,61,165,.1);
+  }
+
+  .day-header {
+    background: var(--light);
+    color: var(--blue);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 12px 14px 10px;
+    border-bottom: 2.5px solid var(--blue);
+  }
+
+  .day-body {
+    padding: 14px;
+    background: var(--light);
+  }
+
+  .day-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .day-body ul li {
+    font-size: .8rem;
+    color: #374151;
+    line-height: 1.4;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .day-body ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .day-body ul li strong {
+    display: block;
+    font-weight: 700;
+    color: var(--dark);
+    font-style: italic;
+  }
+
+  /* ── REQUIREMENTS ── */
+  .requirements {
+    margin-bottom: 48px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .req-header {
+    background: var(--red);
+    color: var(--white);
+    padding: 20px 28px;
+  }
+
+  .req-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .req-header p {
+    font-size: .85rem;
+    opacity: .85;
+  }
+
+  .req-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 24px 28px;
+    background: var(--white);
+    row-gap: 20px;
+    column-gap: 32px;
+  }
+
+  .req-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .req-num {
+    background: #EBF0FB;
+    color: var(--blue);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .78rem;
+    font-weight: 700;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .req-text {
+    font-size: .9rem;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+
+  .req-text strong {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .req-text span {
+    font-size: .82rem;
+    color: var(--gray);
+  }
+
+  /* ── MAKER PROFILE EXAMPLES ── */
+  .examples { margin-bottom: 48px; }
+
+  .example-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .example-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+
+  .example-label {
+    padding: 8px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .example-card.good .example-label { background: #DCFCE7; color: #166534; }
+  .example-card.bad .example-label { background: #FEE2E2; color: #991B1B; }
+
+  /* Slides mockup */
+  .slides-mock {
+    background: #f8f9fa;
+    padding: 0;
+  }
+
+  .slides-chrome {
+    background: #e8eaed;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #dadce0;
+  }
+
+  .chrome-dots { display: flex; gap: 4px; }
+  .chrome-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chrome-dot.red { background: #EA4335; }
+  .chrome-dot.yellow { background: #FBBC04; }
+  .chrome-dot.green { background: #34A853; }
+
+  .chrome-title {
+    font-size: 9px;
+    color: #5f6368;
+    font-family: 'Inter', sans-serif;
+    flex: 1;
+    text-align: center;
+  }
+
+  .slides-toolbar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 4px 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .toolbar-btn {
+    font-size: 8px;
+    color: #5f6368;
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: transparent;
+    cursor: default;
+  }
+
+  .toolbar-divider {
+    width: 1px; height: 14px;
+    background: #e0e0e0;
+  }
+
+  .slide-canvas {
+    background: white;
+    margin: 10px 14px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    min-height: 130px;
+    padding: 14px 16px;
+    position: relative;
+  }
+
+  .slide-canvas.good-slide {
+    background: linear-gradient(135deg, #003DA5 0%, #0052CC 100%);
+    color: white;
+  }
+
+  .slide-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .slide-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: #111;
+    font-size: 7px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 8px;
+  }
+
+  .slide-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .slide-chip {
+    background: rgba(255,255,255,.2);
+    color: white;
+    font-size: 7.5px;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .slide-img-placeholder {
+    position: absolute;
+    right: 14px; top: 14px;
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  /* BAD slide */
+  .slide-canvas.bad-slide {
+    background: #fff9c4;
+  }
+
+  .bad-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  .bad-text {
+    font-size: 8px;
+    color: #555;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+
+  .error-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #FEE2E2;
+    color: #991B1B;
+    font-size: 7px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 20px;
+    margin: 2px 2px 2px 0;
+  }
+
+  .decorations {
+    font-size: 16px;
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* ── GRADING ── */
+  .grading { margin-bottom: 16px; }
+
+  .grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+  }
+
+  .grade-table thead tr {
+    background: var(--blue);
+    color: white;
+  }
+
+  .grade-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+
+  .grade-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .12s;
+  }
+
+  .grade-table tbody tr:hover { background: var(--light); }
+
+  .grade-table tbody td {
+    padding: 11px 16px;
+    color: #374151;
+    line-height: 1.45;
+  }
+
+  .grade-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .friday-row td { background: #FFFBEB; }
+
+  .reflection-q {
+    display: block;
+    margin-top: 4px;
+    font-style: italic;
+    font-size: .82rem;
+    color: var(--blue);
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="course-tag">MakerSpace · Week 1</div>
+    <h1>What Can <span>You</span> Make?</h1>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Course</span>
+        <span class="meta-value">MakerSpace</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Grade</span>
+        <span class="meta-value">10th – 12th</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value">Full Week</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Teacher</span>
+        <span class="meta-value">Ms. Montes</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ABOUT -->
+  <div class="about-box">
+    <h2>What's This About?</h2>
+    <p>This week you're not building anything yet.  You're exploring your playground. You'll watch maker projects, tour the space, and keep a Google Doc where you record ideas and inspiration as you go. By Friday, you'll use everything you collected to build your own Maker Profile.</p>
+  </div>
+
+  <!-- WEEK AT A GLANCE -->
+  <p class="section-title">Your Week</p>
+  <div class="timeline">
+    <div class="day-grid">
+      <div class="day-card">
+        <div class="day-header">Monday</div>
+        <div class="day-body">
+          <ul>
+            <li>Watch maker projects in youtube</li>
+            <li>Record at least 5 that catch your attention in a Google Doc: what it is and why it interests you</li>
+            <li>Mark your favorite and say why</li>
+            <li>Assignment walkthrough</li>
+          </ul>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header">Tuesday</div>
+        <div class="day-body">
+          <ul>
+            <li>Tools and reources around the classroom: 3D printer, Arduino, design software</li>
+            <li>Add what you discover to your Inspiration Doc</li>
+          </ul>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header">Wednesday</div>
+        <div class="day-body">
+          <ul>
+            <li>Build your Maker Profile</li>
+            <li>Include all 6 required elements.  You can use Googel Slides, Capcut, Canva or any other tool to make your profile</li>
+            <li>Submit to Google Classroom</li>
+          </ul>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header">Thursday</div>
+        <div class="day-body">
+          <ul>
+            <li>Show your profile</li>
+            <li>Vote for most creative dream project</li>
+            <li><strong>What surprised you most about this space, and what are you most excited to learn this year?</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="requirements">
+    <div class="req-header">
+      <h2>Your Maker Profile Must Include These 6 Elements</h2>
+      <p>All five are required. Everything else is your creative choice.</p>
+    </div>
+    <div class="req-list">
+      <div class="req-item">
+        <span class="req-num">01</span>
+        <div class="req-text">
+          <strong>Your Name</strong>
+          <span>Something that makes it yours: play with fonts, colors, layout.</span>
+        </div>
+      </div>
+      <div class="req-item">
+        <span class="req-num">02</span>
+        <div class="req-text">
+          <strong>3 Words That Describe You as a Maker</strong>
+          <span>Think: curious, builder, problem-solver...</span>
+        </div>
+      </div>
+      <div class="req-item">
+        <span class="req-num">03</span>
+        <div class="req-text">
+          <strong>Your Dream Project</strong>
+          <span>If you had all the tools and time, what would you build?</span>
+        </div>
+      </div>
+      <div class="req-item">
+        <span class="req-num">04</span>
+        <div class="req-text">
+          <strong>The Unit You're Most Excited About</strong>
+          <span>Arduino, 3D Design, Fusion 360, Blender, or Java: pick one and say why.</span>
+        </div>
+      </div>
+      <div class="req-item">
+        <span class="req-num">05</span>
+        <div class="req-text">
+          <strong>At Least One Image</strong>
+          <span>A photo of yourself, something you've made, or inspiration for your dream project.</span>
+        </div>
+      </div>
+      <div class="req-item">
+        <span class="req-num">06</span>
+        <div class="req-text">
+          <strong>Your Inspiration Doc</strong>
+          <span>List at least 5 maker projects that caught your attention. For each one, write what it is and why it interests you. Mark which one is your favorite and explain why.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div>
+    <p class="section-title">Examples</p>
+    <p class="section-sub">Here's what a strong Maker Profile looks like and what to avoid.</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+      <!-- GOOD -->
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="background:#16a34a; color:white; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:700; padding:4px 12px; border-radius:99px; letter-spacing:0.08em;">✓ DO THIS</span>
+          <span style="font-size:12px; color:#6B7280;">Clear, complete, personal</span>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid #D1D9E6; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+          <div style="background:#f1f3f4; padding:6px 10px; display:flex; align-items:center; gap:6px; border-bottom:1px solid #dadce0;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ea4335;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#fbbc04;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#34a853;"></div>
+            <span style="font-size:10px;color:#5f6368;margin-left:6px;font-family:sans-serif;">Maker Profile – Carlos R. – Google Slides</span>
+          </div>
+          <div style="background:#fff; padding:4px 10px; border-bottom:1px solid #e0e0e0; display:flex; gap:10px; align-items:center;">
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">File</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">Edit</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">View</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">Insert</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+            </div>
+          </div>
+          <div style="background:#e8eaed; padding:10px; display:flex; justify-content:center;">
+            <div style="width:100%; aspect-ratio:16/9; background:white; border-radius:2px; overflow:hidden; position:relative; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+              <!-- Left blue panel -->
+              <div style="position:absolute;top:0;left:0;width:30%;height:100%;background:#003DA5;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:10px;">
+                <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:6px;">
+                  <span style="font-size:10px;color:white;font-weight:bold;">📸</span>
+                </div>
+                <span style="font-size:8px;color:white;font-weight:bold;text-align:center;line-height:1.3;">Carlos R.</span>
+                <span style="font-size:6px;color:rgba(255,255,255,0.7);text-align:center;margin-top:2px;">10th Grade</span>
+              </div>
+              <!-- Right content -->
+              <div style="position:absolute;top:0;left:30%;right:0;height:100%;padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                  <div style="font-size:7px;color:#CC2229;font-weight:bold;letter-spacing:0.5px;margin-bottom:4px;">3 WORDS THAT DESCRIBE ME</div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <div style="background:#EBF0FB;border-radius:3px;padding:2px 6px;font-size:7px;color:#003DA5;">🔧 Builder</div>
+                    <div style="background:#EBF0FB;border-radius:3px;padding:2px 6px;font-size:7px;color:#003DA5;">💡 Curious</div>
+                    <div style="background:#EBF0FB;border-radius:3px;padding:2px 6px;font-size:7px;color:#003DA5;">🤖 Problem-solver</div>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:7px;color:#CC2229;font-weight:bold;letter-spacing:0.5px;margin-bottom:3px;">DREAM PROJECT</div>
+                  <div style="background:#FFF4F4;border-radius:3px;padding:3px 6px;font-size:7px;color:#CC2229;">A robotic arm that sorts recycling automatically</div>
+                </div>
+                <div>
+                  <div style="font-size:7px;color:#6B7280;font-weight:bold;letter-spacing:0.5px;margin-bottom:3px;">MOST EXCITED ABOUT</div>
+                  <div style="font-size:7px;color:#374151;line-height:1.4;">Arduino — I love electronics and want to build things that move.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAD -->
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="background:#dc2626; color:white; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:700; padding:4px 12px; border-radius:99px; letter-spacing:0.08em;">✗ AVOID</span>
+          <span style="font-size:12px; color:#6B7280;">Vague, incomplete, no effort</span>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid #D1D9E6; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+          <div style="background:#f1f3f4; padding:6px 10px; display:flex; align-items:center; gap:6px; border-bottom:1px solid #dadce0;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ea4335;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#fbbc04;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#34a853;"></div>
+            <span style="font-size:10px;color:#5f6368;margin-left:6px;font-family:sans-serif;">Untitled presentation</span>
+          </div>
+          <div style="background:#fff; padding:4px 10px; border-bottom:1px solid #e0e0e0; display:flex; gap:10px; align-items:center;">
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">File</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">Edit</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">View</span>
+            <span style="font-size:10px;color:#3c4043;font-family:sans-serif;">Insert</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+              <div style="width:16px;height:16px;background:#e8eaed;border-radius:3px;"></div>
+            </div>
+          </div>
+          <div style="background:#e8eaed; padding:10px; display:flex; justify-content:center; position:relative;">
+            <div style="width:100%; aspect-ratio:16/9; background:white; border-radius:2px; overflow:hidden; position:relative; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+              <div style="background:#ff9999;width:100%;height:45%;display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:20px;color:white;letter-spacing:4px;">★ ★ ★ ★ ★ ★</span>
+              </div>
+              <div style="padding:8px 10px;">
+                <div style="font-size:7px;color:#999;margin-bottom:4px;">name: alex</div>
+                <div style="font-size:7px;color:#555;">words: idk</div>
+                <div style="font-size:7px;color:#555;">project: something cool</div>
+              </div>
+              <div style="position:absolute;bottom:6px;right:6px;display:flex;flex-direction:column;gap:3px;">
+                <div style="background:#fee2e2;border-radius:3px;padding:2px 6px;font-size:6.5px;color:#dc2626;font-weight:bold;">✗ No image</div>
+                <div style="background:#fee2e2;border-radius:3px;padding:2px 6px;font-size:6.5px;color:#dc2626;font-weight:bold;">✗ Vague dream project</div>
+                <div style="background:#fee2e2;border-radius:3px;padding:2px 6px;font-size:6.5px;color:#dc2626;font-weight:bold;">✗ Missing excited unit</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GRADING -->
+   
+  <p class="section-title">Grading Criteria</p>
+  <div class="grading">
+    <table class="grade-table">
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>What We're Looking For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>All 6 Elements Present</td>
+          <td>Name, 3 words, dream project, favorite unit, at least one image, and your Inspiration Doc.</td>
+        </tr>
+        <tr>
+          <td>Effort & Creativity</td>
+          <td>The profile feels personal and intentional — not rushed or generic.</td>
+        </tr>
+        <tr>
+          <td>Participation</td>
+          <td>Actively engaged during the tour, demos, and exploration days.</td>
+        </tr>
+        <tr class="friday-row">
+          <td>Friday Reflection</td>
+          <td>Submitted on Google Classroom.
+            <span class="reflection-q">"What surprised you most about this space, and what are you most excited to learn this year?"</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</body>
+</html>
