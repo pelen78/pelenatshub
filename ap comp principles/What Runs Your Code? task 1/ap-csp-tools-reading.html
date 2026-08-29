@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Are the Tools We Use? — AP CSP Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;
+  --teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;
+  --ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px}
+a{color:var(--teal)}
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow,.meta,.label,.silk,.source-date{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em}
+.eyebrow{font-size:12px;color:var(--gold-soft);margin-bottom:12px}
+h1,h2,h3,h4{font-family:'Fredoka',sans-serif}
+h1{font-size:clamp(42px,8vw,72px);line-height:1;font-weight:600}h1 .pop{display:block;color:var(--gold)}
+.subtitle{font-family:'Fredoka',sans-serif;font-size:clamp(18px,3vw,24px);margin-top:12px}.meta{font-size:11.5px;margin-top:18px;color:rgba(255,255,255,.65)}
+main{max-width:880px;margin:auto;padding:24px 24px 44px}
+section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}
+.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:7px 14px;margin-bottom:18px}.silk:before{content:attr(data-ref);font-size:10px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}
+.lead{font-size:20px}.card,.note,.source{background:var(--surface);border:1.5px solid var(--line);border-radius:12px}.card{padding:20px 20px 16px;margin:14px 0;border-top:4px solid var(--gold)}
+.card h3{font-size:24px;margin-bottom:8px}.card ul{margin:8px 0 0 22px}.card li{margin:5px 0}
+.note{border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:15px 18px;margin:16px 0}.note strong{color:var(--navy)}
+.compare{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;margin:16px 0 20px}.compare th{background:var(--navy);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.compare th,.compare td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.compare tr:last-child td{border-bottom:none}.compare td:first-child{font-weight:800;color:var(--navy);width:23%}
+.codebox{background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin:14px 0;overflow-x:auto}.codebox .label{font-size:11px;color:var(--gold-soft);margin-bottom:10px}.codebox pre{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.8;white-space:pre-wrap}.cmd{color:var(--gold-soft)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch;margin:18px 0}.flow .box{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:14px 10px;text-align:center}.flow .box strong{display:block;color:var(--navy);font-family:'Fredoka',sans-serif;font-size:18px}.arrow{text-align:center;font-size:26px;color:var(--gold);align-self:center}
+.memory{background:var(--navy);color:#fff;border-radius:12px;padding:22px;margin:18px 0}.memory h3{color:var(--gold-soft);font-size:24px;margin-bottom:10px}.memory p{margin:4px 0}
+.sources{display:grid;gap:12px;margin-top:14px}.source{padding:14px 16px}.source a{word-break:break-all;font-family:'JetBrains Mono',monospace;font-size:13px}.source-date{font-size:10px;color:var(--muted);margin-top:5px}
+.back{display:inline-block;margin-top:20px;background:var(--gold);color:var(--navy-deep);font-family:'JetBrains Mono',monospace;font-weight:700;text-decoration:none;border-radius:8px;padding:9px 14px}
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+@media(max-width:720px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.compare{font-size:15px}.compare td:first-child{width:auto}}
+</style>
+
+<style>
+  /* ============================================================
+     ATS handout typography — matched to the Maker Space system
+     Loaded last so it overrides the values above.
+     ============================================================ */
+  body{font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  strong{font-weight:700}
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+  /* paragraph rhythm */
+  p{margin-bottom:14px}
+  section > p{max-width:68ch}
+  .note p:last-child,.stop p:last-child,.card p:last-child,
+  .verify p:last-child,.turnin p:last-child,.start p:last-child{margin-bottom:0}
+
+  /* cover */
+  .cover .eyebrow,.eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1,h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;letter-spacing:-.02em;line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  h1 .pop{display:block;color:var(--gold)}
+  .subtitle{
+    font-family:'Fredoka',sans-serif;font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;margin-top:10px;
+  }
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    padding:6px 13px;
+  }
+  .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+
+  /* section labels */
+  .silk{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+    padding:8px 16px;margin-bottom:22px;
+  }
+  .silk:before{font-size:11px;letter-spacing:.1em;padding:2px 6px}
+
+  /* headings + body scale */
+  h2{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em}
+  h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:23px;letter-spacing:-.01em}
+  h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em}
+  .lead{font-size:19.5px}
+
+  /* monospace scale */
+  .label,.codebox .label,.source-date{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  }
+  .codebox pre{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.9}
+  .inline,code,.cmd{font-family:'JetBrains Mono',monospace;font-size:14.5px}
+  .readbtn,.back{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:13.5px;letter-spacing:.06em;padding:9px 16px;
+  }
+  footer{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em}
+</style>
+
+<style>
+  .card h3{font-size:23px}
+  .card p{font-size:16px}
+  .card ul li{font-size:15.5px;margin:5px 0}
+  .compare{font-size:16px}
+  .compare th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  }
+  .memory h3{font-size:23px}
+  .memory p{margin:4px 0;font-size:16.5px}
+  .flow .box{font-size:15.5px;line-height:1.45}
+  .flow .box strong{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;letter-spacing:-.01em;margin-bottom:4px}
+  .source strong{font-size:16px}
+  .source a{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0;text-transform:none}
+  .source-date{color:var(--muted);letter-spacing:.18em;margin-top:6px}
+  .arrow{font-size:26px}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">AP Computer Science Principles · Student Reading</p>
+    <h1>What Are the <span class="pop">Tools We Use?</span></h1>
+    <p class="subtitle">VS Code · Terminal · Node.js</p>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
+  </div>
+</header>
+<main>
+  <section>
+    <span class="silk" data-ref="R0">Why this reading?</span>
+    <p class="lead">Last year, you used Visual Studio Code and installed Node.js while building an app. You followed the steps and got the project working. This time, the goal is to understand what each tool actually does.</p>
+    <div class="note"><strong>Use this page for Task 1.</strong> Read it first, then answer the task questions in your own words. This page is the information source. It is not a worksheet.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="U1">Visual Studio Code</span>
+    <div class="card">
+      <h3>VS Code is a code editor.</h3>
+      <p>A <strong>code editor</strong> is a program made for writing and organizing computer code. Think of VS Code as a text editor built especially for programmers.</p>
+      <ul>
+        <li>It recognizes programming languages and colors the code so it is easier to read.</li>
+        <li>It helps organize files and folders in a project.</li>
+        <li>It can warn you about some mistakes while you type.</li>
+        <li>It can add extra features through extensions.</li>
+        <li>It can show a Terminal inside the same window.</li>
+      </ul>
+    </div>
+    <div class="note"><strong>Important idea:</strong> VS Code helps you <strong>write and edit</strong> code. Opening a JavaScript file in VS Code does not automatically run the program.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="U2">What is an IDE?</span>
+    <p>An <strong>IDE</strong> means <strong>Integrated Development Environment</strong>. It includes a code editor plus more development tools that are already built into the same program.</p>
+    <table class="compare">
+      <tr><th></th><th>Code Editor</th><th>IDE</th></tr>
+      <tr><td>Main job</td><td>Write and edit code</td><td>Write code + more development tools</td></tr>
+      <tr><td>Example</td><td>Visual Studio Code</td><td>Visual Studio</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="U3">Visual Studio vs VS Code</span>
+    <p>The names are very similar, but they are <strong>different Microsoft products</strong>.</p>
+    <table class="compare">
+      <tr><th></th><th>Visual Studio Code</th><th>Visual Studio</th></tr>
+      <tr><td>Type</td><td>Code editor</td><td>IDE</td></tr>
+      <tr><td>Common use</td><td>Many languages through extensions</td><td>Especially .NET, C#, C++ and Microsoft development</td></tr>
+      <tr><td>Mac today</td><td>Yes</td><td>The current supported Visual Studio IDE is for Windows</td></tr>
+      <tr><td>Important note</td><td>Works on macOS, Windows and Linux</td><td>Visual Studio for Mac was retired on August 31, 2024</td></tr>
+    </table>
+    <div class="note"><strong>Do not mix up the names.</strong> Visual Studio Code = VS Code = the editor you have used. Visual Studio = a different, larger IDE. Microsoft retired Visual Studio for Mac in 2024 and recommends VS Code as an option for development on Mac.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="J1">Node.js</span>
+    <p><strong>Node.js is a JavaScript runtime.</strong> In simple words, it gives your computer a way to run JavaScript outside a web browser.</p>
+    <p>Imagine that you create this file in VS Code:</p>
+    <div class="codebox"><p class="label">hello.js</p><pre>let name = "Alex";
+console.log("Hello, " + name);</pre></div>
+    <p>VS Code can show and edit the file, but <strong>Node.js is the tool that can execute the JavaScript instructions</strong> in that file.</p>
+    <div class="memory"><h3>Easy way to remember</h3><p><strong>VS Code</strong> = write the JavaScript.</p><p><strong>Node.js</strong> = run the JavaScript.</p></div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="T1">The Terminal</span>
+    <p>The <strong>Terminal</strong> is a way to give instructions to the computer by typing <strong>commands</strong> instead of clicking buttons and menus.</p>
+    <p>VS Code can display a Terminal inside its window, but the Terminal and VS Code are not the same thing. On a Mac, you could also open the Terminal app separately.</p>
+    <div class="card">
+      <h3>Three commands you will use</h3>
+      <p><code class="cmd">node --version</code>: asks Node.js to show its installed version.</p>
+      <p><code class="cmd">ls</code>: lists the files and folders in your current location on a Mac.</p>
+      <p><code class="cmd">node hello.js</code>: tells the computer to use Node.js to run the file named <strong>hello.js</strong>.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="U4">How the pieces work together</span>
+    <p>These tools have different jobs, but they can work together in the same project.</p>
+    <div class="flow">
+      <div class="box"><strong>You</strong>decide what the program should do</div><div class="arrow">→</div>
+      <div class="box"><strong>VS Code</strong>write and edit <code>hello.js</code></div><div class="arrow">→</div>
+      <div class="box"><strong>Terminal</strong>type a command</div>
+    </div>
+    <div class="flow" style="grid-template-columns:1fr auto 1fr">
+      <div class="box"><strong>Node.js</strong>reads and runs the JavaScript</div><div class="arrow">→</div>
+      <div class="box"><strong>Result</strong>the program produces output</div>
+    </div>
+    <div class="codebox"><p class="label">Simple example</p><pre>1. In VS Code:
+   console.log("Hello!");
+
+2. In the Terminal:
+   <span class="cmd">node hello.js</span>
+
+3. Result:
+   Hello!</pre></div>
+    <div class="note"><strong>The big idea:</strong> The file is the same file the whole time. VS Code helps you edit it. The Terminal lets you give a command. Node.js executes the JavaScript.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="S1">Official sources</span>
+    <p>These are the official pages used to verify the information in this reading. For the Mac question in Task 1, open the Microsoft source yourself and record the URL and the date you checked it.</p>
+    <div class="sources">
+      <div class="source"><strong>Microsoft Learn: Visual Studio for Mac retired August 31, 2024</strong><br><a href="https://learn.microsoft.com/en-us/lifecycle/announcements/visual-studio-mac-end-of-servicing" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/lifecycle/announcements/visual-studio-mac-end-of-servicing</a><div class="source-date">Information rechecked August 29, 2026</div></div>
+      <div class="source"><strong>Visual Studio: Official Downloads</strong><br><a href="https://visualstudio.microsoft.com/downloads/" target="_blank" rel="noopener">https://visualstudio.microsoft.com/downloads/</a><div class="source-date">Information rechecked August 29, 2026</div></div>
+      <div class="source"><strong>Visual Studio Code: Official Site</strong><br><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">https://code.visualstudio.com/</a><div class="source-date">Information rechecked August 29, 2026</div></div>
+      <div class="source"><strong>Node.js: Official Site</strong><br><a href="https://nodejs.org/en" target="_blank" rel="noopener">https://nodejs.org/en</a><div class="source-date">Information rechecked August 29, 2026</div></div>
+    </div>
+    <a class="back" href="ap-csp-task-1-tools-clean.html">← Back to Task 1</a>
+  </section>
+</main>
+<footer>// AP CSP · ROOM LB6 · 2026–2027</footer>
+</body>
+</html>

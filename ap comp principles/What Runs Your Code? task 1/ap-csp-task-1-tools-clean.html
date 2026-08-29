@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Runs Your Code? — AP CSP Task 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;--teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;--ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px}
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow,.meta,.label,.silk{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em}.eyebrow{font-size:12px;color:var(--gold-soft);margin-bottom:12px}h1,h2,h3,h4{font-family:'Fredoka',sans-serif}h1{font-size:clamp(42px,8vw,72px);line-height:1;font-weight:600}h1 .pop{display:block;color:var(--gold)}.subtitle{font-family:'Fredoka',sans-serif;font-size:clamp(18px,3vw,24px);margin-top:12px}.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}.chips span{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;border:1.5px solid rgba(243,183,0,.55);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.08)}.meta{font-size:11.5px;margin-top:16px;color:rgba(255,255,255,.65)}
+main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:7px 14px;margin-bottom:18px}.silk:before{content:attr(data-ref);font-size:10px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}.lead{font-size:20px}
+.start{background:var(--navy);color:#fff;border-radius:14px;padding:24px;margin:18px 0}.start .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}.start h2{font-size:28px;margin:6px 0 10px}.start p{margin-bottom:12px}.readbtn{display:inline-block;background:var(--gold);color:var(--navy-deep);font-family:'JetBrains Mono',monospace;font-weight:700;text-decoration:none;border-radius:8px;padding:10px 16px}
+.question{display:grid;grid-template-columns:54px 1fr;gap:14px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:17px 18px;margin:12px 0}.num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:16px;padding-top:3px}.question h3{font-size:22px;margin-bottom:6px}.question ul{margin-left:20px}.question li{margin:4px 0}.hint{display:block;margin-top:8px;color:var(--muted);font-size:15px}.verify{border-left:4px solid var(--teal);background:#fff;border-radius:0 10px 10px 0;padding:12px 15px;margin-top:10px;font-size:15px}
+.steps{list-style:none;counter-reset:s;margin-top:12px}.steps>li{counter-increment:s;position:relative;padding:14px 0 14px 48px;border-bottom:1px solid var(--line)}.steps>li:last-child{border-bottom:none}.steps>li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:14px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold)}
+.codebox{background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin:14px 0;overflow-x:auto}.codebox .label{font-size:11px;color:var(--gold-soft);margin-bottom:10px}.codebox pre{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.8;white-space:pre-wrap}.inline{font-family:'JetBrains Mono',monospace;background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--teal);white-space:nowrap}.stop,.note{background:#fff;border-radius:0 10px 10px 0;padding:14px 17px;margin:16px 0}.stop{border-left:4px solid var(--teal)}.note{border-left:4px solid var(--gold)}
+.final{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.final div{background:#fff;border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:17px}.final strong{display:block;font-family:'Fredoka',sans-serif;color:var(--navy);font-size:20px;margin-bottom:4px}.blank{display:block;border-bottom:2px dashed var(--line);height:28px;margin-top:8px}
+.turnin{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:12px}.turnin ol{margin-left:22px}.turnin li{margin:7px 0}footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+@media(max-width:650px){.question{grid-template-columns:1fr}.final{grid-template-columns:1fr}}
+</style>
+
+<style>
+  /* ============================================================
+     ATS handout typography — matched to the Maker Space system
+     Loaded last so it overrides the values above.
+     ============================================================ */
+  body{font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  strong{font-weight:700}
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+  /* paragraph rhythm */
+  p{margin-bottom:14px}
+  section > p{max-width:68ch}
+  .note p:last-child,.stop p:last-child,.card p:last-child,
+  .verify p:last-child,.turnin p:last-child,.start p:last-child{margin-bottom:0}
+
+  /* cover */
+  .cover .eyebrow,.eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1,h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;letter-spacing:-.02em;line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  h1 .pop{display:block;color:var(--gold)}
+  .subtitle{
+    font-family:'Fredoka',sans-serif;font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;margin-top:10px;
+  }
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    padding:6px 13px;
+  }
+  .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+
+  /* section labels */
+  .silk{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+    padding:8px 16px;margin-bottom:22px;
+  }
+  .silk:before{font-size:11px;letter-spacing:.1em;padding:2px 6px}
+
+  /* headings + body scale */
+  h2{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em}
+  h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:23px;letter-spacing:-.01em}
+  h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em}
+  .lead{font-size:19.5px}
+
+  /* monospace scale */
+  .label,.codebox .label,.source-date{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  }
+  .codebox pre{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.9}
+  .inline,code,.cmd{font-family:'JetBrains Mono',monospace;font-size:14.5px}
+  .readbtn,.back{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:13.5px;letter-spacing:.06em;padding:9px 16px;
+  }
+  footer{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em}
+</style>
+
+<style>
+  .start .tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+  .start h2{font-size:29px;margin:8px 0 12px}
+  .question h3{font-size:23px}
+  .question li{font-size:16px;margin:5px 0}
+  .hint,.verify{font-size:15.5px}
+  .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.06em}
+  .steps > li:before{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px}
+  .steps > li{font-size:16.5px}
+  .final div{font-size:16px}
+  .final strong{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em}
+  .turnin li{font-size:16.5px}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">AP Computer Science Principles · Task 1</p>
+    <h1>What Runs <span class="pop">Your Code?</span></h1>
+    <p class="subtitle">Understand the tools you already used.</p>
+    <div class="chips"><span>2 sessions</span><span>Formative</span><span>Bring your MacBook</span></div>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
+  </div>
+</header>
+<main>
+  <section>
+    <span class="silk" data-ref="01">Start Here</span>
+    <p class="lead">Last year, you used VS Code and installed Node.js while building an app. This time, you are going to understand what each tool was actually doing.</p>
+    <div class="start">
+      <p class="tag">First step</p>
+      <h2>Read the class guide</h2>
+      <p>The answers to Part 1 are in this reading. Read it first, then explain the ideas in your own words.</p>
+      <a class="readbtn" href="ap-csp-tools-reading.html">Open “What Are the Tools We Use?” →</a>
+    </div>
+    <div class="start">
+      <p class="tag">Second step</p>
+      <h2>Get your answer sheet</h2>
+      <p>All of your answers go in this template. Open it and click <strong>File → Make a copy</strong> before you write anything. Rename your copy <span class="inline" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#FFD23D">Lastname_Task1</span></p>
+      <a class="readbtn" href="https://docs.google.com/document/d/125JSGl4UTrvxUsFMO1WkdPSg8xoteAl7Ttj78ItFukw/copy" target="_blank" rel="noopener">Open the answer sheet template →</a>
+    </div>
+    <div class="note"><strong>For Part 1:</strong> use the class reading as your main source. Do not copy sentences word for word.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="02">Part 1 · Understand the Tools</span>
+
+    <div class="question"><div class="num">01</div><div><h3>Visual Studio Code</h3><ul><li>What is a code editor?</li><li>What does VS Code help a programmer do?</li><li>How is it different from a regular text editor like TextEdit?</li></ul></div></div>
+
+    <div class="question"><div class="num">02</div><div><h3>IDE</h3><ul><li>What is an IDE?</li><li>How is an IDE different from a code editor?</li></ul></div></div>
+
+    <div class="question"><div class="num">03</div><div><h3>Visual Studio vs Visual Studio Code</h3><ul><li>Which one is a code editor?</li><li>Which one is an IDE?</li><li>What languages are they mainly used for?</li><li>Can you install the current supported Visual Studio IDE on your MacBook today?</li></ul><div class="verify"><strong>Verify this one.</strong> Open the official Microsoft link at the bottom of the reading. Under your answer, write the <strong>full URL</strong> and the <strong>date you checked it</strong>.</div></div></div>
+
+    <div class="question"><div class="num">04</div><div><h3>Node.js</h3><ul><li>What is Node.js?</li><li>Why would you need Node.js if you already have VS Code?</li><li>What happens when Node.js runs a JavaScript file?</li></ul></div></div>
+
+    <div class="question"><div class="num">05</div><div><h3>The Terminal</h3><ul><li>What is the Terminal?</li><li>What is a command?</li><li>Why do programmers use the Terminal?</li></ul></div></div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="03">Part 2 · Try the Tools</span>
+    <p>Now use <strong>VS Code</strong>, the <strong>Terminal</strong>, and <strong>Node.js</strong> on the same file.</p>
+    <ol class="steps">
+      <li><strong>Create the file in VS Code.</strong> On your Desktop, create a folder called <span class="inline">ap-csp</span>. Open that folder in VS Code. Create a file called <span class="inline">hello.js</span> and save it.</li>
+    </ol>
+    <div class="codebox"><p class="label">hello.js</p><pre>let name = "your name";
+console.log("Hello, " + name);</pre></div>
+    <div class="stop"><strong>Stop:</strong> Has the program run yet? <strong>No.</strong> So far, VS Code has only helped you create and edit the file.</div>
+
+    <ol class="steps" start="2">
+      <li><strong>Now open the Terminal.</strong> In VS Code, go to <strong>Terminal → New Terminal</strong>. Use the Terminal only after your file has been created and saved.</li>
+      <li><strong>Check that Node.js is installed.</strong> Type the command below and press Enter.</li>
+    </ol>
+    <div class="codebox"><p class="label">Terminal</p><pre>node --version</pre></div>
+    <p>If you see a version number, Node.js is installed.</p>
+
+    <ol class="steps" start="4">
+      <li><strong>Check that the Terminal can see your file.</strong> Type:</li>
+    </ol>
+    <div class="codebox"><p class="label">Terminal</p><pre>ls</pre></div>
+    <p>You should see <span class="inline">hello.js</span> in the list.</p>
+
+    <ol class="steps" start="5">
+      <li><strong>Run the JavaScript file with Node.js.</strong> Type:</li>
+    </ol>
+    <div class="codebox"><p class="label">Terminal</p><pre>node hello.js
+Hello, your name</pre></div>
+    <div class="note"><strong>Take one screenshot</strong> that clearly shows <span class="inline">node hello.js</span> and the result underneath it. Paste it into your answer sheet under Part 2: <strong>Insert → Image → Upload from computer</strong>. A screenshot that is not in the document will not be graded.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="04">Final Connection</span>
+    <p>In your own words, finish these three ideas. Keep each answer short and clear. <strong>Write your answers in your copy of the answer sheet</strong>, in the Final Connection section, not on this page.</p>
+    <div class="final"><div><strong>VS Code</strong>Its job was to…<span class="blank"></span></div><div><strong>Terminal</strong>Its job was to…<span class="blank"></span></div><div><strong>Node.js</strong>Its job was to…<span class="blank"></span></div></div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="05">Turn In</span>
+    <p>Everything goes in <strong>one document</strong>: your copy of the answer sheet. Nothing is turned in separately.</p>
+    <div class="turnin">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Before you export</p>
+      <ol>
+        <li>Your answers to <strong>Questions 1–5</strong>.</li>
+        <li>For Question 3, the <strong>Microsoft URL + the date you checked it</strong>.</li>
+        <li>Your screenshot showing <span class="inline">node hello.js</span> running, pasted into the document.</li>
+        <li>Your three short answers from <strong>Final Connection</strong>.</li>
+      </ol>
+    </div>
+    <ol class="steps">
+      <li><strong>Make your copy.</strong> Open the answer sheet and click <strong>File → Make a copy</strong>. Rename it <span class="inline">Lastname_Task1</span>. Write all your answers in your copy.</li>
+      <li><strong>Export it as a PDF.</strong> In your document, go to <strong>File → Download → PDF Document (.pdf)</strong>.</li>
+      <li><strong>Upload it to Google Classroom.</strong> Open this assignment, click <strong>Add or create → File</strong>, upload your PDF, and press <strong>Turn in</strong>.</li>
+    </ol>
+    <div class="note"><strong>PDF only.</strong> Do not submit a link to your Google Doc, and do not send answers by email or in the Classroom comments. Answers turned in any other way will not be graded.</div>
+  </section>
+</main>
+<footer>// end of task · ATS AP Computer Science Principles · ROOM LB6 · 2026–2027</footer>
+</body>
+</html>
