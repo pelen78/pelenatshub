@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What Are the Tools We Use? — AP CSP Reading</title>
+<title>What Are the Tools We Use? (AP CSP Reading)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;
 
 <style>
   /* ============================================================
-     ATS handout typography — matched to the Maker Space system
+     ATS handout typography: matched to the Maker Space system
      Loaded last so it overrides the values above.
      ============================================================ */
   body{font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
@@ -138,15 +138,46 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;
   <div class="cover-frame">
     <p class="eyebrow">AP Computer Science Principles · Student Reading</p>
     <h1>What Are the <span class="pop">Tools We Use?</span></h1>
-    <p class="subtitle">VS Code · Terminal · Node.js</p>
+    <p class="subtitle">Editors · Compilers · Interpreters · Tools You Already Use</p>
     <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
   </div>
 </header>
 <main>
   <section>
     <span class="silk" data-ref="R0">Why this reading?</span>
-    <p class="lead">Last year, you used Visual Studio Code and installed Node.js while building an app. You followed the steps and got the project working. This time, the goal is to understand what each tool actually does.</p>
+    <p class="lead">Last year, you used Visual Studio Code and installed Node.js while building an app. You already know how to follow the steps. This time, the main goal is to recognize the <strong>job</strong> a programming tool is doing: <strong>editor</strong>, <strong>compiler</strong>, <strong>interpreter</strong>, or something else.</p>
+    <div class="note"><strong>Big idea:</strong> Program names change, but these jobs appear again and again in programming. If you understand the job, you can make sense of new tools later.</div>
     <div class="note"><strong>Use this page for Task 1.</strong> Read it first, then answer the task questions in your own words. This page is the information source. It is not a worksheet.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="G1">The Three Jobs</span>
+    <p>Before you memorize program names, learn the jobs. An <strong>editor</strong>, a <strong>compiler</strong>, and an <strong>interpreter</strong> do different things with source code.</p>
+
+    <div class="card">
+      <h3>1 · Editor</h3>
+      <p>An <strong>editor</strong> is where you <strong>write and change source code</strong>. A code editor adds features that make programming easier, but the editor does not have to be the tool that runs the program.</p>
+    </div>
+
+    <div class="card">
+      <h3>2 · Compiler</h3>
+      <p>A <strong>compiler</strong> translates source code <strong>before the program runs</strong>. In the simple model we will use in this course, the compiler processes the program and produces translated code that can be run afterward.</p>
+    </div>
+
+    <div class="card">
+      <h3>3 · Interpreter</h3>
+      <p>An <strong>interpreter</strong> reads and executes the program <strong>as it runs</strong>, instead of requiring you to create a separate executable program first.</p>
+    </div>
+
+    <table class="compare">
+      <tr><th></th><th>Compiler</th><th>Interpreter</th></tr>
+      <tr><td>Main idea</td><td>Translate first, then run</td><td>Read and execute while running</td></tr>
+      <tr><td>Separate compile step?</td><td>Yes, in our introductory model</td><td>No separate compile-first step for the user</td></tr>
+      <tr><td>Common examples</td><td>C and C++ are commonly compiled</td><td>Python and JavaScript are often taught with an interpreter/runtime model</td></tr>
+    </table>
+
+    <div class="note"><strong>Important:</strong> Real programming systems can combine compilation and interpretation internally. For Task 1, focus on the <strong>role you see in the workflow</strong>: where you write code, whether there is a separate compile step, and what tool actually executes the code.</div>
+    <div class="memory"><h3>Easy way to remember</h3><p><strong>Editor</strong> = write it.</p><p><strong>Compiler</strong> = translate it before running.</p><p><strong>Interpreter</strong> = read and execute it as it runs.</p></div>
   </section>
 
   <section>
@@ -162,17 +193,18 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;
         <li>It can show a Terminal inside the same window.</li>
       </ul>
     </div>
-    <div class="note"><strong>Important idea:</strong> VS Code helps you <strong>write and edit</strong> code. Opening a JavaScript file in VS Code does not automatically run the program.</div>
+    <div class="note"><strong>Classification → EDITOR.</strong> VS Code helps you <strong>write and edit</strong> code. Opening a JavaScript file in VS Code does not automatically run the program.</div>
   </section>
 
   <section>
     <span class="silk" data-ref="U2">What is an IDE?</span>
-    <p>An <strong>IDE</strong> means <strong>Integrated Development Environment</strong>. It includes a code editor plus more development tools that are already built into the same program.</p>
+    <p>An <strong>IDE</strong> means <strong>Integrated Development Environment</strong>. It combines a code editor with other development tools in one program. Depending on the language and IDE, those tools may include a compiler or interpreter, debugger, project manager, and other features.</p>
     <table class="compare">
       <tr><th></th><th>Code Editor</th><th>IDE</th></tr>
-      <tr><td>Main job</td><td>Write and edit code</td><td>Write code + more development tools</td></tr>
+      <tr><td>Main idea</td><td>Focused on writing and editing code</td><td>Combines several development tools</td></tr>
       <tr><td>Example</td><td>Visual Studio Code</td><td>Visual Studio</td></tr>
     </table>
+    <div class="note"><strong>Do not confuse the categories.</strong> An IDE is not another word for compiler or interpreter. It is an environment that can contain several tools, including an editor and tools that build or run code.</div>
   </section>
 
   <section>
@@ -190,12 +222,12 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;
 
   <section>
     <span class="silk gold" data-ref="J1">Node.js</span>
-    <p><strong>Node.js is a JavaScript runtime.</strong> In simple words, it gives your computer a way to run JavaScript outside a web browser.</p>
+    <p><strong>Node.js is a JavaScript runtime.</strong> In simple words, it gives your computer a way to execute JavaScript outside a web browser.</p>
     <p>Imagine that you create this file in VS Code:</p>
     <div class="codebox"><p class="label">hello.js</p><pre>let name = "Alex";
 console.log("Hello, " + name);</pre></div>
-    <p>VS Code can show and edit the file, but <strong>Node.js is the tool that can execute the JavaScript instructions</strong> in that file.</p>
-    <div class="memory"><h3>Easy way to remember</h3><p><strong>VS Code</strong> = write the JavaScript.</p><p><strong>Node.js</strong> = run the JavaScript.</p></div>
+    <p>VS Code can show and edit the file, but it does not execute the JavaScript by itself. When you type <code class="cmd">node hello.js</code>, Node.js is the tool that executes the instructions.</p>
+    <div class="note"><strong>Classification for Task 1 → INTERPRETER ROLE.</strong> Node.js is technically a JavaScript runtime, and modern JavaScript engines use several techniques internally. For this introductory workflow, treat Node.js as the <strong>interpreter/runtime</strong> because it reads and executes your <code class="cmd">.js</code> program without you first creating a separate executable file.</div>
   </section>
 
   <section>
@@ -208,6 +240,7 @@ console.log("Hello, " + name);</pre></div>
       <p><code class="cmd">ls</code>: lists the files and folders in your current location on a Mac.</p>
       <p><code class="cmd">node hello.js</code>: tells the computer to use Node.js to run the file named <strong>hello.js</strong>.</p>
     </div>
+    <div class="note"><strong>Classification → OTHER.</strong> The Terminal is <strong>not</strong> the editor, compiler, or interpreter in this activity. It is the command-line interface you use to tell tools such as Node.js what to do.</div>
   </section>
 
   <section>
@@ -215,34 +248,58 @@ console.log("Hello, " + name);</pre></div>
     <p>These tools have different jobs, but they can work together in the same project.</p>
     <div class="flow">
       <div class="box"><strong>You</strong>decide what the program should do</div><div class="arrow">→</div>
-      <div class="box"><strong>VS Code</strong>write and edit <code>hello.js</code></div><div class="arrow">→</div>
+      <div class="box"><strong>VS Code</strong>EDITOR: write and edit <code>hello.js</code></div><div class="arrow">→</div>
       <div class="box"><strong>Terminal</strong>type a command</div>
     </div>
     <div class="flow" style="grid-template-columns:1fr auto 1fr">
-      <div class="box"><strong>Node.js</strong>reads and runs the JavaScript</div><div class="arrow">→</div>
+      <div class="box"><strong>Node.js</strong>INTERPRETER ROLE: execute the JavaScript</div><div class="arrow">→</div>
       <div class="box"><strong>Result</strong>the program produces output</div>
     </div>
-    <div class="codebox"><p class="label">Simple example</p><pre>1. In VS Code:
+    <div class="codebox"><p class="label">Your JavaScript workflow</p><pre>1. In VS Code (EDITOR):
    console.log("Hello!");
 
-2. In the Terminal:
+2. In the Terminal (COMMAND):
    <span class="cmd">node hello.js</span>
 
-3. Result:
+3. Node.js (INTERPRETER/RUNTIME):
+   reads and executes hello.js
+
+4. Result:
    Hello!</pre></div>
-    <div class="note"><strong>The big idea:</strong> The file is the same file the whole time. VS Code helps you edit it. The Terminal lets you give a command. Node.js executes the JavaScript.</div>
+
+    <h3>What would a compiler workflow look like?</h3>
+    <p>In a compiled workflow, there is a separate step before running the program:</p>
+    <div class="flow">
+      <div class="box"><strong>Editor</strong>write source code</div><div class="arrow">→</div>
+      <div class="box"><strong>Compiler</strong>translate the program</div><div class="arrow">→</div>
+      <div class="box"><strong>Translated program</strong>run the result</div>
+    </div>
+    <div class="note"><strong>The big idea:</strong> Do not ask only, “What is the name of this program?” Ask, <strong>“What job is this tool doing?”</strong> That is how you distinguish an editor, compiler, interpreter, IDE, and Terminal.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="C1">Classify the Tools</span>
+    <p>Use this chart as a final check before you start the assignment.</p>
+    <table class="compare">
+      <tr><th>Tool</th><th>Type / role in this task</th><th>Main job</th></tr>
+      <tr><td>VS Code</td><td>Editor</td><td>Write and edit the source code</td></tr>
+      <tr><td>Node.js</td><td>JavaScript runtime; interpreter role for this activity</td><td>Execute the JavaScript program</td></tr>
+      <tr><td>Terminal</td><td>Other: command-line interface</td><td>Let you type commands that tell tools what to do</td></tr>
+      <tr><td>Visual Studio</td><td>IDE</td><td>Combine an editor and other development tools in one environment</td></tr>
+    </table>
+    <div class="memory"><h3>One sentence to remember</h3><p><strong>VS Code is where you write it; Node.js is what runs it; the Terminal is how you tell Node.js to run it.</strong></p></div>
   </section>
 
   <section>
     <span class="silk gold" data-ref="S1">Official sources</span>
-    <p>These are the official pages used to verify the information in this reading. For the Mac question in Task 1, open the Microsoft source yourself and record the URL and the date you checked it.</p>
+    <p>These are the official pages used to verify the information in this reading. You may use them if you want to learn more about any of the tools.</p>
     <div class="sources">
       <div class="source"><strong>Microsoft Learn: Visual Studio for Mac retired August 31, 2024</strong><br><a href="https://learn.microsoft.com/en-us/lifecycle/announcements/visual-studio-mac-end-of-servicing" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/lifecycle/announcements/visual-studio-mac-end-of-servicing</a><div class="source-date">Information rechecked August 29, 2026</div></div>
       <div class="source"><strong>Visual Studio: Official Downloads</strong><br><a href="https://visualstudio.microsoft.com/downloads/" target="_blank" rel="noopener">https://visualstudio.microsoft.com/downloads/</a><div class="source-date">Information rechecked August 29, 2026</div></div>
       <div class="source"><strong>Visual Studio Code: Official Site</strong><br><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">https://code.visualstudio.com/</a><div class="source-date">Information rechecked August 29, 2026</div></div>
       <div class="source"><strong>Node.js: Official Site</strong><br><a href="https://nodejs.org/en" target="_blank" rel="noopener">https://nodejs.org/en</a><div class="source-date">Information rechecked August 29, 2026</div></div>
     </div>
-    <a class="back" href="ap-csp-task-1-tools-clean.html">← Back to Task 1</a>
+    <a class="back" href="task.html">← Back to Task 1</a>
   </section>
 </main>
 <footer>// AP CSP · ROOM LB6 · 2026–2027</footer>

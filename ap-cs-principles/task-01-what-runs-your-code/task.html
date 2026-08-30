@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What Runs Your Code? — AP CSP Task 1</title>
+<title>What Runs Your Code? (AP CSP Task 1)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@ main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 1
 
 <style>
   /* ============================================================
-     ATS handout typography — matched to the Maker Space system
+     ATS handout typography: matched to the Maker Space system
      Loaded last so it overrides the values above.
      ============================================================ */
   body{font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
@@ -115,7 +115,7 @@ main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 1
   <div class="cover-frame">
     <p class="eyebrow">AP Computer Science Principles · Task 1</p>
     <h1>What Runs <span class="pop">Your Code?</span></h1>
-    <p class="subtitle">Understand the tools you already used.</p>
+    <p class="subtitle">Editors · Compilers · Interpreters · Tools in Practice</p>
     <div class="chips"><span>2 sessions</span><span>Formative</span><span>Bring your MacBook</span></div>
     <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
   </div>
@@ -123,12 +123,13 @@ main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 1
 <main>
   <section>
     <span class="silk" data-ref="01">Start Here</span>
-    <p class="lead">Last year, you used VS Code and installed Node.js while building an app. This time, you are going to understand what each tool was actually doing.</p>
+    <p class="lead">Last year, you used VS Code and installed Node.js while building an app. This time, the goal is bigger: learn to recognize the <strong>job</strong> a programming tool is doing.</p>
+    <div class="note"><strong>Main objective:</strong> Learn the difference between an <strong>editor</strong>, a <strong>compiler</strong>, and an <strong>interpreter</strong>, then use the programs you already know as real examples of those roles.</div>
     <div class="start">
       <p class="tag">First step</p>
       <h2>Read the class guide</h2>
       <p>The answers to Part 1 are in this reading. Read it first, then explain the ideas in your own words.</p>
-      <a class="readbtn" href="ap-csp-tools-reading.html">Open “What Are the Tools We Use?” →</a>
+      <a class="readbtn" href="reading.html">Open “What Are the Tools We Use?” →</a>
     </div>
     <div class="start">
       <p class="tag">Second step</p>
@@ -140,17 +141,19 @@ main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 1
   </section>
 
   <section>
-    <span class="silk" data-ref="02">Part 1 · Understand the Tools</span>
+    <span class="silk" data-ref="02">Part 1 · Understand the Jobs</span>
 
-    <div class="question"><div class="num">01</div><div><h3>Visual Studio Code</h3><ul><li>What is a code editor?</li><li>What does VS Code help a programmer do?</li><li>How is it different from a regular text editor like TextEdit?</li></ul></div></div>
+    <div class="question"><div class="num">01</div><div><h3>Editor, Compiler, Interpreter</h3><ul><li>In your own words, what is an <strong>editor</strong>?</li><li>What is a <strong>compiler</strong>?</li><li>What is an <strong>interpreter</strong>?</li><li>What is the main difference between a compiler and an interpreter?</li><li>Why is an editor by itself not enough to run a program?</li></ul><span class="hint">These three words describe jobs. The program names you use are examples of tools that perform those jobs.</span></div></div>
 
-    <div class="question"><div class="num">02</div><div><h3>IDE</h3><ul><li>What is an IDE?</li><li>How is an IDE different from a code editor?</li></ul></div></div>
+    <div class="question"><div class="num">02</div><div><h3>Visual Studio Code</h3><ul><li>Which of the three jobs best describes VS Code: editor, compiler, or interpreter?</li><li>What does VS Code help a programmer do?</li><li>How is it different from a regular text editor like TextEdit?</li></ul></div></div>
 
-    <div class="question"><div class="num">03</div><div><h3>Visual Studio vs Visual Studio Code</h3><ul><li>Which one is a code editor?</li><li>Which one is an IDE?</li><li>What languages are they mainly used for?</li><li>Can you install the current supported Visual Studio IDE on your MacBook today?</li></ul><div class="verify"><strong>Verify this one.</strong> Open the official Microsoft link at the bottom of the reading. Under your answer, write the <strong>full URL</strong> and the <strong>date you checked it</strong>.</div></div></div>
+    <div class="question"><div class="num">03</div><div><h3>IDE</h3><ul><li>What is an IDE?</li><li>How is an IDE different from a code editor?</li><li>Is <strong>IDE</strong> another word for compiler or interpreter? Explain.</li></ul></div></div>
 
-    <div class="question"><div class="num">04</div><div><h3>Node.js</h3><ul><li>What is Node.js?</li><li>Why would you need Node.js if you already have VS Code?</li><li>What happens when Node.js runs a JavaScript file?</li></ul></div></div>
+    <div class="question"><div class="num">04</div><div><h3>Visual Studio vs Visual Studio Code</h3><ul><li>Which one is a code editor?</li><li>Which one is an IDE?</li><li>What languages are they mainly used for?</li><li>Can you install the current supported Visual Studio IDE on your MacBook today?</li></ul></div></div>
 
-    <div class="question"><div class="num">05</div><div><h3>The Terminal</h3><ul><li>What is the Terminal?</li><li>What is a command?</li><li>Why do programmers use the Terminal?</li></ul></div></div>
+    <div class="question"><div class="num">05</div><div><h3>Node.js</h3><ul><li>What is Node.js?</li><li>Why would you need Node.js if you already have VS Code?</li><li>For this activity, which job does Node.js perform when it runs <span class="inline">hello.js</span>: editor, compiler, or interpreter?</li><li>What happens when Node.js runs the JavaScript file?</li></ul></div></div>
+
+    <div class="question"><div class="num">06</div><div><h3>The Terminal</h3><ul><li>What is the Terminal?</li><li>What is a command?</li><li>Why do programmers use the Terminal?</li><li>Is the Terminal an editor, compiler, or interpreter? If not, what is its job in this activity?</li></ul></div></div>
   </section>
 
   <section>
@@ -161,12 +164,13 @@ main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 1
     </ol>
     <div class="codebox"><p class="label">hello.js</p><pre>let name = "your name";
 console.log("Hello, " + name);</pre></div>
-    <div class="stop"><strong>Stop:</strong> Has the program run yet? <strong>No.</strong> So far, VS Code has only helped you create and edit the file.</div>
+    <div class="stop"><strong>Role check → VS Code = EDITOR.</strong> Has the program run yet? <strong>No.</strong> VS Code helped you write and save the source code, but it did not execute it.</div>
 
     <ol class="steps" start="2">
       <li><strong>Now open the Terminal.</strong> In VS Code, go to <strong>Terminal → New Terminal</strong>. Use the Terminal only after your file has been created and saved.</li>
       <li><strong>Check that Node.js is installed.</strong> Type the command below and press Enter.</li>
     </ol>
+    <div class="note"><strong>Role check → Terminal = OTHER.</strong> The Terminal is not the editor, compiler, or interpreter in this activity. It gives you a place to type the command that tells another tool what to do.</div>
     <div class="codebox"><p class="label">Terminal</p><pre>node --version</pre></div>
     <p>If you see a version number, Node.js is installed.</p>
 
@@ -181,13 +185,16 @@ console.log("Hello, " + name);</pre></div>
     </ol>
     <div class="codebox"><p class="label">Terminal</p><pre>node hello.js
 Hello, your name</pre></div>
+    <div class="stop"><strong>Role check → Node.js = INTERPRETER ROLE for this activity.</strong> Node.js reads and executes the JavaScript in <span class="inline">hello.js</span>. You did not create a separate executable file first.</div>
+    <div class="note"><strong>Where is the compiler?</strong> In this activity, you do not use a separate compile-first step that creates an executable program for you. That difference is part of what you are learning to recognize.</div>
     <div class="note"><strong>Take one screenshot</strong> that clearly shows <span class="inline">node hello.js</span> and the result underneath it. Paste it into your answer sheet under Part 2: <strong>Insert → Image → Upload from computer</strong>. A screenshot that is not in the document will not be graded.</div>
   </section>
 
   <section>
-    <span class="silk" data-ref="04">Final Connection</span>
-    <p>In your own words, finish these three ideas. Keep each answer short and clear. <strong>Write your answers in your copy of the answer sheet</strong>, in the Final Connection section, not on this page.</p>
-    <div class="final"><div><strong>VS Code</strong>Its job was to…<span class="blank"></span></div><div><strong>Terminal</strong>Its job was to…<span class="blank"></span></div><div><strong>Node.js</strong>Its job was to…<span class="blank"></span></div></div>
+    <span class="silk" data-ref="04">Final Connection · Name the Job</span>
+    <p>Do not only name the program. Identify its <strong>type or role</strong> and explain what it did in your workflow. <strong>Write your answers in your copy of the answer sheet</strong>.</p>
+    <div class="final"><div><strong>VS Code</strong>Type/role: ______<br>Its job was to…<span class="blank"></span></div><div><strong>Terminal</strong>Type/role: ______<br>Its job was to…<span class="blank"></span></div><div><strong>Node.js</strong>Type/role: ______<br>Its job was to…<span class="blank"></span></div></div>
+    <div class="note"><strong>One more question:</strong> Where was the compiler in this activity? Explain whether you used a separate compiler step and how you know.</div>
   </section>
 
   <section>
@@ -196,10 +203,9 @@ Hello, your name</pre></div>
     <div class="turnin">
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Before you export</p>
       <ol>
-        <li>Your answers to <strong>Questions 1–5</strong>.</li>
-        <li>For Question 3, the <strong>Microsoft URL + the date you checked it</strong>.</li>
+        <li>Your answers to <strong>Questions 1–6</strong>.</li>
         <li>Your screenshot showing <span class="inline">node hello.js</span> running, pasted into the document.</li>
-        <li>Your three short answers from <strong>Final Connection</strong>.</li>
+        <li>Your <strong>Final Connection</strong>: classify VS Code, Terminal, and Node.js, explain each job, and answer the compiler question.</li>
       </ol>
     </div>
     <ol class="steps">

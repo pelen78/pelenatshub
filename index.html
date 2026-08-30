@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ms. Ma. Elena Montes (Ms. Pelen) — Class Hub · The American School of Tampico</title>
-<meta name="description" content="Every project we build this year — logged, dated, and linked in one place.">
+<title>Ms. Ma. Elena Montes (Ms. Pelen): Class Hub · The American School of Tampico</title>
+<meta name="description" content="Every project we build this year, logged, dated, and linked in one place.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     --navy-deep:#0b1740;
     --gold:#F3B700;        /* ATS signal gold */
     --gold-soft:#FFD23D;
-    --teal:#0E7C8B;        /* Gulf accent — "coming up" */
+    --teal:#0E7C8B;        /* Gulf accent, "coming up" */
     --green:#0F6E56;       /* "finished" */
     --paper:#EDF1FA;       /* cool paper, not cream */
     --surface:#ffffff;
@@ -73,7 +73,7 @@
     max-width:44ch;margin-top:20px;font-size:17px;color:rgba(255,255,255,.82);
   }
   .thesis em{font-family:'Fraunces',serif;font-style:italic;color:#fff}
-  /* locked (single-subject) view — shown only with ?class=… */
+  /* locked (single-subject) view: shown only with ?class=… */
   .subject-line{
     display:none;margin-top:12px;font-family:'JetBrains Mono',monospace;
     font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);
@@ -307,7 +307,7 @@
           <label>Subject<select id="f-subject"></select></label>
           <label>Status
             <select id="f-status">
-              <option value="now">Now — happening now</option>
+              <option value="now">Now, happening now</option>
               <option value="soon">Coming up</option>
               <option value="done">Finished</option>
             </select>
@@ -340,7 +340,7 @@
 
 <script>
 /* ==========================================================
-   HOW TO ADD A PROJECT (the easy way — no code):
+   HOW TO ADD A PROJECT (the easy way, no code):
    1. Open this file normally (your master view).
    2. Click "+ Add project", fill the form, click "Add to hub".
       It appears instantly and is saved in your browser.
@@ -357,7 +357,7 @@
                    "done" (finished, stays as archive)
 
    ── SHARING WITH STUDENTS ──────────────────────────────
-   This master hub (plain link) shows ALL subjects — keep it
+   This master hub (plain link) shows ALL subjects; keep it
    for yourself. To share ONE subject so its students see only
    their own work, add ?class=<subject> to the link:
 
@@ -367,7 +367,7 @@
 
    That view hides the other subjects and the subject tabs.
    (The <subject> tag is the subject name in lowercase with
-    dashes — it updates automatically if you rename a subject.)
+    dashes; it updates automatically if you rename a subject.)
    ========================================================== */
 
 /*__GROUPS_START__*/
@@ -377,18 +377,18 @@ const GROUPS = {
     note: "// The year runs top to bottom. Gold = happening now.",
     activities: [
       {
-        title: "Digital Passport — Build Your Academic Portfolio",
+        title: "Digital Passport: Build Your Academic Portfolio",
         date: "Task 1 · Aug 2026",
         description: "Create your own academic website in Wix: Home, My Tech Story, and your Travel Log. AI is only allowed to make images, every other choice is yours.",
         status: "now",
-        link: "comp app/Week1 Digital Passport (Portfolio)/digital-passport.html"
+        link: "comp-apps/task-01-digital-portfolio/task.html"
       },
       {
-        title: "The Fine Print — Syllabus Activity",
+        title: "The Fine Print: Syllabus Activity",
         date: "Syllabus · Aug 2026",
         description: "Everyone says they read the syllabus. Today you actually do: hunt down ten facts on your own, answer them by hand and sign the sheet, then we play the game together on the projector.",
         status: "done",
-        link: "comp app/syllabus activity/the-fine-print.html"
+        link: "comp-apps/syllabus-activity/fine-print.html"
       }
     ]
   },
@@ -399,16 +399,16 @@ const GROUPS = {
       {
         title: "Arduino Research Project",
         date: "Task 1 · Aug 2026",
-        description: "Find out what an Arduino is and get the software running. Research it, put it on one page in Genially \u2014 150 words max \u2014 and install the Arduino IDE.",
+        description: "Find out what an Arduino is and get the software running. Research it, put it on one page in Genially (150 words max), and install the Arduino IDE.",
         status: "now",
-        link: "makerspace/week 1 Arduino First Blink/first-blink.html"
+        link: "makerspace/task-01-arduino-research/task.html"
       },
       {
-        title: "The Fine Print — Syllabus Activity",
+        title: "The Fine Print: Syllabus Activity",
         date: "Syllabus · Aug 2026",
         description: "Everyone says they read the syllabus. Today you actually do: hunt down ten facts on your own, answer them by hand and sign the sheet, then we play the game together on the projector.",
         status: "done",
-        link: "makerspace/Syllabus Activity/maker-fine-print.html"
+        link: "makerspace/syllabus-activity/fine-print.html"
       }
     ]
   },
@@ -421,14 +421,14 @@ const GROUPS = {
         date: "Task 1 · Aug 2026",
         description: "Understand the tools you already use to write and run code. Start with the reading on our everyday tools, then work through the task page and fill out the response template.",
         status: "now",
-        link: "ap comp principles/What Runs Your Code%3F task 1/ap-csp-task-1-tools-clean.html"
+        link: "ap-cs-principles/task-01-what-runs-your-code/task.html"
       },
       {
         title: "Course Overview: Syllabus & the AP Exam",
         date: "Syllabus · Aug 2026",
         description: "We go through the syllabus together: what this class is, the Big Ideas we will study, how you are graded, and how the AP exam works. Nothing to turn in today. Just listen, ask questions, and keep the syllabus.",
         status: "done",
-        link: "ap comp principles/Syllabus_2026-2027_AP_Computer_Science_Principles.pdf"
+        link: "ap-cs-principles/syllabus.pdf"
       }
     ]
   }
@@ -457,14 +457,14 @@ const lockedGroup=(()=>{
   return p ? groupNames.find(n=>slug(n)===p) : null;
 })();
 
-/* working data — GROUPS is the published seed; your added/removed projects
+/* working data: GROUPS is the published seed; your added/removed projects
    live in this working copy (saved in your browser) until you Download & re-upload */
 const clone=o=>JSON.parse(JSON.stringify(o));
 const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-08-29-e';
+const GROUPS_VERSION='2026-08-30-a';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){

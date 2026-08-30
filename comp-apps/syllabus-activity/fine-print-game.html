@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Fine Print — Class Game</title>
+<title>The Fine Print: Class Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -279,15 +279,15 @@
    --------------------------------------------------------------- */
 const UNITS = [
   ["Google Workspace and Digital Productivity","You'll make a video tutorial teaching someone how to use the main Google Workspace apps. Teaching it is how you find out whether you actually know it."],
-  ["File Management and Cloud Organization","A short one. Folders, file names, and sharing in Google Drive — the basics almost everyone thinks they already know."],
-  ["Introduction to Programming","Karel on CodeHS — you give a robot instructions and watch exactly how literally a computer takes them. Split in two: the basics now, the rest later in the year."],
-  ["Digital Image Editing (GIMP)","GIMP, the free image editor — layers and selections. The project is a multiplicity photo: the same person appearing several times in one shot."],
-  ["Digital Animation and Multimedia","Animatron — the basics of animation, plus how to find and download material online to build with. The project is a karaoke video, and if there's time, an interactive Three Little Pigs story."],
-  ["Internet, Digital Citizenship and AI Literacy","First the CodeHS unit on how the internet actually works — addresses, DNS, routing, cybersecurity, copyright. Then the project: build your own online store in Wix, pick what you sell, design the logo, and source the images legally."],
+  ["File Management and Cloud Organization","A short one. Folders, file names, and sharing in Google Drive: the basics almost everyone thinks they already know."],
+  ["Introduction to Programming","Karel on CodeHS: you give a robot instructions and watch exactly how literally a computer takes them. Split in two: the basics now, the rest later in the year."],
+  ["Digital Image Editing (GIMP)","GIMP, the free image editor: layers and selections. The project is a multiplicity photo: the same person appearing several times in one shot."],
+  ["Digital Animation and Multimedia","Animatron: the basics of animation, plus how to find and download material online to build with. The project is a karaoke video, and if there's time, an interactive Three Little Pigs story."],
+  ["Internet, Digital Citizenship and AI Literacy","First the CodeHS unit on how the internet actually works: addresses, DNS, routing, cybersecurity, copyright. Then the project: build your own online store in Wix, pick what you sell, design the logo, and source the images legally."],
   ["Web Design and Development","You'll have spent the semester building sites in Wix by dragging things around. This is the unit where you find out what was underneath the whole time: real HTML, written by hand. Then games that run in the browser with JavaScript."],
-  ["Introduction to 3D Design and CAD","Tinkercad. Some of you saw the basics in middle school — here you go past them, with harder models and real design decisions."],
-  ["Interactive Programming and App Development","Scratch — and you build games. Pong, a catch game with a working menu, and an animation of your own."],
-  ["Video Editing (DaVinci Resolve)","A mini documentary — you shoot it, you cut it. Edited in DaVinci Resolve, one of the most powerful video editors there is, and the same one used on real films."]
+  ["Introduction to 3D Design and CAD","Tinkercad. Some of you saw the basics in middle school; here you go past them, with harder models and real design decisions."],
+  ["Interactive Programming and App Development","Scratch, and you build games. Pong, a catch game with a working menu, and an animation of your own."],
+  ["Video Editing (DaVinci Resolve)","A mini documentary: you shoot it, you cut it. Edited in DaVinci Resolve, one of the most powerful video editors there is, and the same one used on real films."]
 ];
 
 const QS = [
@@ -300,7 +300,7 @@ const QS = [
   {q:"You've been late three times. You have never missed a whole class.",
    o:["Still zero absences","One unexcused absence","Three absences"],a:1,
    t:"Three tardies add up to one unexcused absence. Being late is not free.",r:"Rule 3"},
-  {q:"Your best project all year — turned in two days late.",
+  {q:"Your best project all year, turned in two days late.",
    o:["100%","70%","60%"],a:2,
    t:"Two days late caps you at 60%, no matter how good the work is. One day late caps you at 70%.",r:"Rule 4"},
   {q:"You were sick on Monday. Whose job is it to find out what you missed?",
@@ -310,10 +310,10 @@ const QS = [
    o:["Use your laptop","Use the free computer","Wait it out"],a:1,
    t:"Your laptop is allowed only when no other classroom computer is available. A free computer means you take the free computer.",r:"Rule 10"},
   {q:"You finish the year with a final grade of 59%.",
-   o:["Pass","Fail — by half a point","Fail — by a full point"],a:1,
+   o:["Pass","Fail (by half a point)","Fail (by a full point)"],a:1,
    t:"Passing starts at 59.5%. Half a point is the difference between credit and no credit.",r:"Pass or Fail"},
   {q:"You used an AI tool. You think it was fine. Your teacher disagrees.",
-   o:["Split the difference","Teacher decides — zero on that assignment","Appeal to the principal"],a:1,
+   o:["Split the difference","Teacher decides: zero on that assignment","Appeal to the principal"],a:1,
    t:"The teacher is the final arbiter, and unauthorized AI use is a zero for that assignment. Ask before, not after.",r:"Rule 8"}
 ];
 
@@ -390,7 +390,7 @@ function endRound1(){
   $("scoremsg").textContent = score === QS.length
     ? "Every single one. You actually read it."
     : score >= 6 ? "Solid. The ones you missed are the ones that cost people credit."
-    : "Worth a second look — these are the rules with numbers attached.";
+    : "Worth a second look: these are the rules with numbers attached.";
   $("barlabel").textContent = "Round 1 complete";
   $("dots").innerHTML = "";
   show("s-score");
