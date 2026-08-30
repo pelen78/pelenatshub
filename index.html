@@ -191,14 +191,9 @@
   .empty strong{color:var(--ink)}
 
   /* ---------- footer ---------- */
-  footer{border-top:1.5px solid var(--line);background:var(--surface)}
-  .foot-in{
-    max-width:940px;margin:0 auto;padding:26px 24px;
-    display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between;
-  }
-  .foot-in .who{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink)}
-  .foot-in .meta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .foot-in a{color:var(--navy);text-decoration:none;border-bottom:1.5px solid var(--gold)}
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+  footer .who a{color:rgba(255,255,255,.6);text-decoration:underline;text-underline-offset:2px}
 
   /* ---------- responsive ---------- */
   @media(max-width:600px){
@@ -331,12 +326,7 @@
   <div class="log" id="cards"></div>
 </main>
 
-<footer>
-  <div class="foot-in">
-    <span class="who">Ms. Ma. Elena Montes (Ms. Pelen) · <a href="https://pelen13.com/">pelen13.com</a></span>
-    <span class="meta">The American School of Tampico</span>
-  </div>
-</footer>
+<footer>// Class Hub · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen) · <a href="https://pelen13.com/">pelen13.com</a></span></footer>
 
 <script>
 /* ==========================================================
@@ -403,6 +393,13 @@ const GROUPS = {
   "MakerSpace": {
     note: "// The year runs top to bottom. Gold = happening now.",
     activities: [
+      {
+        title: "Teach the Class: Arduino Basics",
+        date: "Task 2 · TBA",
+        description: "Get assigned one Arduino topic, research it from at least two reliable sources (no AI research), and teach a short 5-minute mini lesson to the class.",
+        status: "soon",
+        link: "makerspace/task-02-arduino-mini-lesson/task.html"
+      },
       {
         title: "Arduino Research Project",
         date: "Task 1 · Aug 2026",
@@ -471,7 +468,7 @@ const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-08-30-b';
+const GROUPS_VERSION='2026-08-30-c';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){
