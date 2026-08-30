@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Tools: Video Tutorial Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;--teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;--ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C;--stamp-red:#9F1239}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px;-webkit-font-smoothing:antialiased}
+strong{font-weight:700}::selection{background:var(--gold);color:var(--navy-deep)}:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:14px}
+h1{font-family:'Fredoka',sans-serif;font-size:clamp(44px,9vw,78px);font-weight:600;letter-spacing:-.02em;line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.22)}
+h1 .pop{display:block;color:var(--gold)}
+.subtitle{font-family:'Fredoka',sans-serif;font-weight:400;font-size:clamp(17px,3vw,24px);color:#fff;opacity:.92;margin-top:10px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chips span{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid rgba(243,183,0,.55);border-radius:999px;padding:6px 13px;background:rgba(255,255,255,.08)}
+.meta{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65)}
+
+main{max-width:880px;margin:auto;padding:24px 24px 44px}
+section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}
+.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:8px 16px;margin-bottom:22px;font-family:'JetBrains Mono',monospace}
+.silk:before{content:attr(data-ref);font-size:11px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}
+.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}
+.silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}.silk.red:before{background:var(--stamp-red)}
+h2{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em;font-size:26px;margin-bottom:8px}
+h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em}
+p{margin-bottom:14px;max-width:68ch}
+.lead{font-size:19.5px}
+
+.note,.stop{background:#fff;border-radius:0 10px 10px 0;padding:15px 18px;margin:16px 0}
+.note{border-left:4px solid var(--gold)}
+.stop{border-left:4px solid var(--stamp-red)}
+.note p:last-child,.stop p:last-child{margin-bottom:0}
+
+/* checklist */
+.checklist{list-style:none;margin:14px 0 22px}
+.checklist li{position:relative;padding:9px 0 9px 32px;border-bottom:1px solid var(--line);font-size:16.5px}
+.checklist li:last-child{border-bottom:none}
+.checklist li:before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:2px solid var(--teal);border-radius:4px}
+.checklist li.key{font-weight:700}
+
+/* accordion (one per Google tool) */
+.tools{margin:18px 0 8px;display:grid;gap:14px}
+details.tool{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+details.tool[open]{border-color:var(--navy)}
+details.tool summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:16px 20px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:var(--navy)}
+details.tool summary::-webkit-details-marker{display:none}
+details.tool summary .tnum{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#fff;background:var(--navy);border-radius:6px;padding:4px 9px;flex-shrink:0}
+details.tool summary::after{content:"+";margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--gold);font-weight:700}
+details.tool[open] summary::after{content:"–"}
+details.tool .tbody{padding:0 20px 20px}
+details.tool .prompt{color:var(--muted);font-style:italic;margin-bottom:10px}
+details.tool ul{margin:0 0 6px 20px}
+details.tool ul ul{margin-top:2px;margin-bottom:6px}
+details.tool li{margin:5px 0;font-size:15.5px}
+
+.turnin{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:12px}
+.turnin ol{margin-left:22px}
+.turnin li{margin:7px 0}
+
+.example-mail{font-family:'JetBrains Mono',monospace;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:2px 8px;color:var(--teal)}
+
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+
+@media(max-width:650px){details.tool summary{font-size:17px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Task 2</p>
+    <h1>Google Tools<span class="pop">Video Tutorial</span></h1>
+    <p class="subtitle">Screen recording · Subtitles · YouTube submission</p>
+    <div class="chips"><span>1 assigned tool</span><span>3+ minutes</span><span>Unlisted upload</span></div>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <span class="silk" data-ref="01">Project Goal</span>
+    <p class="lead">You are going to create a screen-recorded video tutorial that proves you know how to use an important Google tool.</p>
+    <p>Your tutorial must clearly show every step on the screen while you explain what you are doing using <strong>subtitles</strong>, not your voice.</p>
+    <div class="note"><strong>Your assigned tool:</strong> I will assign you <strong>one</strong> of the six Google tools below. You only need to complete that one section. Check with me if you're not sure which one is yours.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="02">General Video Requirements</span>
+    <p>These rules apply no matter which tool you were assigned.</p>
+    <ul class="checklist">
+      <li>Be a screen recording.</li>
+      <li class="key">Be at least 3 minutes long.</li>
+      <li>Be saved as a video file before uploading it to YouTube.</li>
+      <li class="key">Use subtitles to explain every step.</li>
+      <li class="key">Have NO voice narration.</li>
+      <li>Music is optional.</li>
+      <li>Be uploaded to YouTube using your personal Gmail account.</li>
+      <li class="key">Be submitted as an UNLISTED YouTube video.</li>
+    </ul>
+    <div class="stop"><strong>Before you record:</strong> close personal tabs and make sure you do not show passwords, private messages, or other personal information.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="03">Your Tool</span>
+    <p>Open only the section your teacher assigned you. Your video needs to show and explain everything listed inside it.</p>
+
+    <div class="tools">
+      <details class="tool">
+        <summary><span class="tnum">1</span>YouTube</summary>
+        <div class="tbody">
+          <p class="prompt">Create a tutorial showing how to upload and manage a video on YouTube.</p>
+          <ul>
+            <li>How to upload a video to YouTube.</li>
+            <li>How to add a title and description.</li>
+            <li>The difference between these visibility options:
+              <ul><li>Public</li><li>Private</li><li>Unlisted</li><li>Scheduled</li></ul>
+            </li>
+            <li>When each visibility option should be used.</li>
+            <li>How to add and edit subtitles.</li>
+            <li>How to copy and share the video link.</li>
+          </ul>
+          <div class="note" style="margin:12px 0 0"><strong>Your final tutorial video must be set to UNLISTED.</strong></div>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tnum">2</span>Gmail</summary>
+        <div class="tbody">
+          <p class="prompt">Create a tutorial showing how to use and organize Gmail.</p>
+          <ul>
+            <li>How to compose and send an email.</li>
+            <li>How to correctly use:
+              <ul><li>To</li><li>CC</li><li>BCC</li><li>Subject</li></ul>
+            </li>
+            <li>How to attach a file to an email.</li>
+            <li>How to create and use labels.</li>
+            <li>What labels are used for.</li>
+            <li>How to create a contact group.</li>
+            <li>How to send an email to a group.</li>
+            <li>How to create an email signature with:
+              <ul><li>Text</li><li>An image</li></ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tnum">3</span>Google Forms</summary>
+        <div class="tbody">
+          <p class="prompt">Create a sample survey while explaining how Google Forms works.</p>
+          <ul>
+            <li>How to create a new Google Form.</li>
+            <li>How to add different types of questions.</li>
+            <li>When to use different question types, such as:
+              <ul><li>Short answer</li><li>Paragraph</li><li>Multiple choice</li><li>Checkboxes</li><li>Dropdown</li><li>Linear scale</li><li>Date</li><li>Time</li></ul>
+            </li>
+            <li>How to duplicate a question.</li>
+            <li>How to make a question Required.</li>
+            <li>How to change important Form settings.</li>
+            <li>How to preview your form.</li>
+            <li>How to publish and share your form.</li>
+            <li>The difference between sharing the form with someone who will answer it and someone who can edit it.</li>
+            <li>How to view responses.</li>
+            <li>How to send responses to a Google Sheet.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tnum">4</span>Google Calendar</summary>
+        <div class="tbody">
+          <p class="prompt">Use part of your school schedule to demonstrate how Google Calendar works. Create at least 3 different school events.</p>
+          <ul>
+            <li>How to create an event.</li>
+            <li>How to add:
+              <ul><li>Title</li><li>Date</li><li>Start and end time</li><li>Location</li><li>Description</li></ul>
+            </li>
+            <li>How to invite a guest.</li>
+            <li>How to add a Google Meet link.</li>
+            <li>How to add or change a notification.</li>
+            <li>How to create a repeating event.</li>
+            <li>How to edit an existing event.</li>
+            <li>How to change the Calendar view:
+              <ul><li>Day</li><li>Week</li><li>Month</li></ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tnum">5</span>Google Sites</summary>
+        <div class="tbody">
+          <p class="prompt">Create a sample Google Site. Your site must include 3 main pages and at least 2 subpages.</p>
+          <ul>
+            <li>How to create a Google Site.</li>
+            <li>How to create pages and subpages.</li>
+            <li>How to organize the navigation menu.</li>
+            <li>How to add and edit text.</li>
+            <li>How to change:
+              <ul><li>Themes</li><li>Colors</li><li>Fonts</li></ul>
+            </li>
+            <li>How to find an image on the internet.</li>
+            <li>How to download the image correctly to your computer.</li>
+            <li>How to insert the downloaded image into your Google Site.</li>
+            <li>How to insert a YouTube video.</li>
+            <li>How to insert content from Google Drive.</li>
+            <li>How to preview your site.</li>
+            <li>How to publish your site.</li>
+            <li>How to copy and share the published website link.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tnum">6</span>Google Drive</summary>
+        <div class="tbody">
+          <p class="prompt">Create and organize files using Google Drive. Start by creating a main folder using your name.</p>
+          <ul>
+            <li>Inside your main folder, create these two subfolders:
+              <ul><li>Images</li><li>Audio</li></ul>
+            </li>
+            <li>How to create a folder.</li>
+            <li>How to create subfolders.</li>
+            <li>How to upload a file from your computer.</li>
+            <li>How to move a file into the correct folder.</li>
+            <li>How to rename a file.</li>
+            <li>How to create a Google Sheet from Drive.</li>
+            <li>How to rename the Google Sheet.</li>
+            <li>How to share a file or folder with another person.</li>
+            <li>The difference between:
+              <ul><li>Viewer</li><li>Commenter</li><li>Editor</li></ul>
+            </li>
+            <li>How to copy a shareable link.</li>
+            <li>How to find a file using Google Drive search.</li>
+            <li>How to find an image on the internet and download it correctly to your computer.</li>
+            <li>How to upload the downloaded image to your Images folder.</li>
+          </ul>
+          <p style="margin-top:10px">Sharing example: <span class="example-mail">mechavez@ats.edu.mx</span></p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <span class="silk red" data-ref="04">Before You Submit</span>
+    <ul class="checklist">
+      <li>My video is at least 3 minutes long.</li>
+      <li>I demonstrated all the required skills for my assigned Google tool.</li>
+      <li>I explained the steps using subtitles.</li>
+      <li>I did not use voice narration.</li>
+      <li>My YouTube video is set to UNLISTED.</li>
+      <li>I tested the video link before submitting it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="05">Turn In</span>
+    <div class="turnin">
+      <ol>
+        <li>Upload your finished video to <strong>YouTube</strong>, set to <strong>Unlisted</strong>.</li>
+        <li><strong>Test your own link</strong> in a private window before submitting it.</li>
+        <li>Open <strong>Google Classroom</strong> and find this assignment.</li>
+        <li>Click <strong>Add or create &rarr; Link</strong>, paste your YouTube video link, and click <strong>Add</strong>.</li>
+        <li>Click <strong>Turn in</strong>.</li>
+      </ol>
+    </div>
+    <div class="note"><strong>Submit your YouTube video link in Google Classroom.</strong> A link that doesn't open, or a video that isn't Unlisted, counts as not turned in.</div>
+  </section>
+
+</main>
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027</footer>
+</body>
+</html>
