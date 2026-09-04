@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeHS Unit 1: Programming Foundations (AP CSP Task 2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;--teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;--ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px;-webkit-font-smoothing:antialiased}
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow,.meta,.label,.silk{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em}.eyebrow{font-size:12px;letter-spacing:.26em;color:var(--gold-soft);margin-bottom:14px}h1,h2,h3,h4{font-family:'Fredoka',sans-serif}h1{font-size:clamp(44px,9vw,78px);line-height:.98;font-weight:600;letter-spacing:-.02em;text-shadow:0 4px 0 rgba(0,0,0,.22)}h1 .pop{display:block;color:var(--gold)}.subtitle{font-family:'Fredoka',sans-serif;font-weight:400;font-size:clamp(17px,3vw,24px);margin-top:10px;opacity:.92}.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}.chips span{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid rgba(243,183,0,.55);border-radius:999px;padding:6px 13px;background:rgba(255,255,255,.08)}.meta{font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65)}
+main{max-width:880px;margin:auto;padding:24px 24px 44px}section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:.16em;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:8px 16px;margin-bottom:22px}.silk:before{content:attr(data-ref);font-size:11px;letter-spacing:.1em;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}.lead{font-size:19.5px}
+p{margin-bottom:14px}section > p{max-width:68ch}strong{font-weight:700}::selection{background:var(--gold);color:var(--navy-deep)}:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+.note p:last-child,.stop p:last-child,.turnin p:last-child,.start p:last-child{margin-bottom:0}
+.start{background:var(--navy);color:#fff;border-radius:14px;padding:24px;margin:18px 0}.start .tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}.start h2{font-size:29px;margin:8px 0 12px;font-weight:600;letter-spacing:-.01em}.start p{margin-bottom:12px}
+.readbtn{display:inline-block;margin:6px 0 14px;background:var(--gold);color:var(--navy-deep);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;letter-spacing:.06em;text-decoration:none;border-radius:8px;padding:10px 16px;box-shadow:0 3px 0 rgba(0,0,0,.18)}.readbtn:hover{background:var(--gold-soft);transform:translateY(-1px)}
+.inline{font-family:'JetBrains Mono',monospace;font-size:14.5px;background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--teal);white-space:nowrap}
+.question{display:grid;grid-template-columns:54px 1fr;gap:14px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:17px 18px;margin:12px 0}.num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:14px;letter-spacing:.06em;padding-top:3px}.question h3{font-size:23px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}.question ul{margin-left:20px}.question li{font-size:16px;margin:5px 0}
+.note,.stop{background:#fff;border-radius:0 10px 10px 0;padding:14px 17px;margin:16px 0}.note{border-left:4px solid var(--gold)}.stop{border-left:4px solid var(--teal)}
+.final{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.final div{background:#fff;border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:17px;font-size:16px}.final strong{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;color:var(--navy);margin-bottom:4px}
+.turnin{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:12px}.turnin ol,.turnin ul{margin-left:22px}.turnin li{font-size:16.5px;margin:7px 0}
+.schedule{display:grid;grid-template-columns:1.3fr .8fr;gap:0;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}.schedule div{padding:14px 18px;border-bottom:1px solid var(--line)}.schedule div:nth-last-child(-n+2){border-bottom:none}.schedule .head{background:var(--navy);color:#fff;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}.schedule .date{font-family:'JetBrains Mono',monospace;color:var(--muted)}
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em}footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+@media(max-width:700px){.question{grid-template-columns:1fr}.final{grid-template-columns:1fr 1fr}.schedule{grid-template-columns:1fr}}
+@media(max-width:460px){.final{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">AP Computer Science Principles &middot; Task 2</p>
+    <h1>CodeHS <span class="pop">Unit 1</span></h1>
+    <p class="subtitle">Programming foundations &middot; Algorithms &middot; Debugging &middot; Study notes</p>
+    <div class="chips"><span>Lessons 1.1&ndash;1.21</span><span>3 checkpoints</span><span>Shared Google Doc</span></div>
+    <p class="meta">ROOM LB6 &middot; SCHOOL YEAR 2026&ndash;2027</p>
+  </div>
+</header>
+<main>
+  <section>
+    <span class="silk" data-ref="01">Start Here</span>
+    <p class="lead">You are now beginning <strong>Unit 1 in CodeHS</strong>. This unit introduces the foundations of programming and the way programmers use precise instructions and algorithms to solve problems.</p>
+
+    <div class="start">
+      <p class="tag">Begin Unit 1</p>
+      <h2>Start the Lessons</h2>
+      <p>Open <strong>CodeHS</strong> and begin with <strong>Lesson 1.1: Welcome to AP CSP</strong>. Continue through the assigned lessons and keep your notes updated as you work.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="02">What You Will Learn</span>
+    <p>Throughout Unit 1, you will learn how programming is used to create computational artifacts and solve problems. You will also practice designing algorithms, finding errors, comparing possible solutions, and thinking about how programmers work with others.</p>
+
+    <div class="question"><div class="num">01</div><div><h3>Programs &amp; Algorithms</h3><ul><li>Know what programs and algorithms are.</li><li>Understand how a sequence of instructions can solve a problem.</li></ul></div></div>
+    <div class="question"><div class="num">02</div><div><h3>Precise Instructions</h3><ul><li>Understand why computers need instructions that are clear and exact.</li><li>Recognize why small changes in instructions can change a program's result.</li></ul></div></div>
+    <div class="question"><div class="num">03</div><div><h3>Debugging</h3><ul><li>Be able to spot errors in a program.</li><li>Practice fixing bugs and testing whether a solution works.</li></ul></div></div>
+    <div class="question"><div class="num">04</div><div><h3>Problem-Solving &amp; Creativity</h3><ul><li>See programming as a tool for problem-solving and creativity.</li><li>Compare different ways to solve the same computational problem.</li></ul></div></div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="03">Your Notes</span>
+    <p>Use the class <strong>CodeHS Unit Notes template</strong> for all of your Unit 1 notes. You will make your own copy and keep working in the <strong>same document</strong> throughout the unit.</p>
+
+    <div class="start">
+      <p class="tag">Required template</p>
+      <h2>Make Your Own Copy</h2>
+      <p>Open the notes template below. In Google Docs, go to <strong>File &rarr; Make a copy</strong>. Rename your copy <span class="inline" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#FFD23D">Lastname_CodeHS_Unit1_Notes</span></p>
+      <a class="readbtn" href="https://docs.google.com/document/d/1BlBPRU0Qv5XWSWjYZ5RMntTScjqoeqBgL3xL0GSYb0w" target="_blank" rel="noopener">Open CodeHS Unit Notes Template &rarr;</a>
+      <p>Write the title of each lesson in the space provided and add short notes with the key ideas you want to remember.</p>
+    </div>
+
+    <div class="final">
+      <div><strong>One document</strong>Use the same notes file for Lessons 1.1&ndash;1.21.</div>
+      <div><strong>Lesson titles</strong>Add the title of each CodeHS lesson in the template.</div>
+      <div><strong>Keep it short</strong>Record the main ideas instead of copying the lesson.</div>
+      <div><strong>Update it</strong>Add notes as you finish each lesson, not at the end.</div>
+    </div>
+
+    <div class="stop"><strong>Share your document from Day 1.</strong> As soon as you make your copy, share it with your teacher so your progress can be viewed throughout the unit. Keep using that same shared document for every checkpoint.</div>
+    <div class="note"><strong>Do not copy entire lessons.</strong> The goal is to create useful study notes in your own words that will help you review later.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="04">Lesson Checkpoints</span>
+    <p>You will work through Unit 1 in three groups. Keep the same shared notes document updated as you complete each group of lessons.</p>
+
+    <div class="schedule">
+      <div class="head">Lessons</div><div class="head">Due date</div>
+      <div><strong>Lessons 1.1&ndash;1.6</strong></div><div class="date">September 11</div>
+      <div><strong>Lessons 1.7&ndash;1.14</strong></div><div class="date">September 18</div>
+      <div><strong>Lessons 1.15&ndash;1.21</strong></div><div class="date">September 25</div>
+    </div>
+
+    <div class="note"><strong>Stay current.</strong> Your teacher may check your shared document before each checkpoint. Add notes as you complete the lessons so your progress is visible.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="05">Turn In</span>
+    <p>Add your personal copy of the <strong>CodeHS Unit Notes</strong> document to this assignment in <strong>Google Classroom from Day 1</strong>. Do not wait until the first checkpoint.</p>
+    <div class="turnin">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Set it up on Day 1</p>
+      <ol>
+        <li>Make your own copy of the <strong>CodeHS Unit Notes template</strong>.</li>
+        <li>Add your <strong>name</strong> and begin with Lesson 1.1.</li>
+        <li><strong>Share your Google Doc with your teacher</strong> immediately so your progress can be checked while you work.</li>
+        <li><strong>Attach that same Google Doc to this Classroom assignment</strong> on Day 1.</li>
+        <li>Continue updating the same document through Lessons 1.1&ndash;1.21. <strong>Do not create a new document for each checkpoint.</strong></li>
+      </ol>
+    </div>
+    <div class="note"><strong>Progress will be checked.</strong> Your document should show steady work between checkpoints, not all of the notes added at the last minute.</div>
+  </section>
+</main>
+<footer>// AP Computer Science Principles &middot; The American School of Tampico &middot; ROOM LB6 &middot; 2026&ndash;2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+</body>
+</html>
