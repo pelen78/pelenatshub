@@ -154,6 +154,7 @@
   .entry.st-now .node{background:var(--gold);box-shadow:0 0 0 1.5px var(--gold)}
   .entry.st-soon .node{background:var(--teal);box-shadow:0 0 0 1.5px var(--teal)}
   .entry.st-done .node{background:var(--green);box-shadow:0 0 0 1.5px var(--green)}
+  .entry.st-ref .node{background:var(--navy);box-shadow:0 0 0 1.5px var(--navy)}
   .entry.st-now .node::after{
     content:"";position:absolute;inset:-3px;border-radius:50%;background:var(--gold);
     animation:ping 1.9s ease-out infinite;
@@ -166,6 +167,7 @@
   .badge.now{color:var(--navy);background:var(--gold);padding:3px 9px;border-radius:3px}
   .badge.soon{color:var(--teal)}
   .badge.done{color:var(--green)}
+  .badge.pinned{color:var(--navy);border:1.5px solid var(--navy);padding:2px 7.5px;border-radius:3px}
   .body h3{
     font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;
     font-size:24px;line-height:1.18;letter-spacing:-.01em;color:var(--ink);
@@ -421,6 +423,14 @@ const GROUPS = {
     note: "// The year runs top to bottom. Gold = happening now.",
     activities: [
       {
+        title: "Class Important Info",
+        date: "Reference",
+        description: "Everything about the course, the exam, and the Create performance task in one place: the rules, real College Board examples scored from 6 to 1, project ideas, and our class plan.",
+        status: "done",
+        pinned: true,
+        link: "ap-cs-principles/class-reference/reference.html"
+      },
+      {
         title: "CodeHS Unit 1: Programming Foundations",
         date: "Task 2 · Sep 2026",
         description: "Work through Lessons 1.1 to 1.21 in CodeHS, in three checkpoints. Keep all of your notes in one Google Doc made from the class template, and share it with your teacher on Day 1.",
@@ -475,7 +485,7 @@ const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-09-03-a';
+const GROUPS_VERSION='2026-09-05-b';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){
@@ -495,9 +505,10 @@ function saveLocal(){
 }
 let DATA = loadLocal() || clone(GROUPS);
 
-function badge(s){
-  if(s==="now") return '<span class="badge now">Now</span>';
-  if(s==="done") return '<span class="badge done">✓ Finished</span>';
+function badge(a){
+  if(a.pinned) return '<span class="badge pinned">📌 Reference</span>';
+  if(a.status==="now") return '<span class="badge now">Now</span>';
+  if(a.status==="done") return '<span class="badge done">✓ Finished</span>';
   return '<span class="badge soon">Coming up</span>';
 }
 function label(f){
@@ -507,7 +518,7 @@ function label(f){
 function visibleActivities(name){
   const q=query.trim().toLowerCase();
   return DATA[name].activities.filter(a=>{
-    const okFilter = activeFilter==='all' || a.status===activeFilter;
+    const okFilter = a.pinned || activeFilter==='all' || a.status===activeFilter;
     const okQuery  = !q || (a.title+' '+a.description+' '+a.date).toLowerCase().includes(q);
     return okFilter && okQuery;
   });
@@ -537,11 +548,11 @@ function render(){
     return;
   }
   cardsEl.innerHTML=list.map((a,i)=>`
-    <article class="entry st-${a.status}" style="--i:${i}">
+    <article class="entry st-${a.pinned ? 'ref' : a.status}" style="--i:${i}">
       <div class="rail"><span class="wk">${a.date}</span></div>
       <span class="node" aria-hidden="true"></span>
       <div class="body">
-        ${badge(a.status)}
+        ${badge(a)}
         <h3>${a.title}</h3>
         <p class="desc">${a.description}</p>
         ${a.link

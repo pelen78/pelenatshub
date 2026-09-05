@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP CSP Class Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;
+    --navy-deep:#0b1740;
+    --gold:#F3B700;
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;
+    --green:#0F6E56;
+    --paper:#EDF1FA;
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;
+    --panel-2:#0b1740;
+    --nav-h:56px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+
+  /* ---------- Cover ---------- */
+  .cover{
+    background:
+      radial-gradient(900px 420px at 88% -10%, rgba(14,124,139,.45), transparent 60%),
+      linear-gradient(160deg, var(--panel) 0%, var(--panel-2) 100%);
+    color:#fff;padding:60px 0 48px;position:relative;overflow:hidden;
+  }
+  .cover::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.13) 1px, transparent 1px);
+    background-size:22px 22px;opacity:.5;pointer-events:none;
+  }
+  .cover .wrap{position:relative;z-index:1}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.14em;
+    color:var(--gold-soft);text-transform:uppercase;margin-bottom:10px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(2rem,5.6vw,3.3rem);line-height:1.06;letter-spacing:-.5px;
+  }
+  .cover p.lede{margin-top:14px;max-width:58ch;color:#d7e0f7;font-size:1.05rem}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .chip{
+    background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+    padding:8px 14px;border-radius:999px;font-size:.9rem;font-weight:700;
+  }
+  .chip strong{color:var(--gold-soft)}
+
+  /* ---------- Sticky section nav ---------- */
+  nav.sections{
+    position:sticky;top:0;z-index:50;height:var(--nav-h);
+    background:var(--navy-deep);border-bottom:4px solid var(--gold);
+    display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;
+  }
+  nav.sections::-webkit-scrollbar{display:none}
+  nav.sections .inner{
+    max-width:1000px;margin:0 auto;padding:0 14px;display:flex;gap:4px;white-space:nowrap;width:100%;
+  }
+  nav.sections a,
+  nav.sections label{
+    cursor:pointer;
+    color:#c9d5f2;text-decoration:none;font-weight:700;font-size:.9rem;
+    padding:8px 13px;border-radius:8px;
+  }
+  nav.sections a:hover,
+  nav.sections label:hover{background:rgba(255,255,255,.10);color:#fff}
+
+  /* ---- Tabs: pure CSS, no JavaScript needed ---- */
+  .tabin{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .tab-panel{display:none}
+  #t-course:checked ~ main #course,
+  #t-exam:checked ~ main #exam,
+  #t-create:checked ~ main #create,
+  #t-examples:checked ~ main #examples,
+  #t-ideas:checked ~ main #ideas,
+  #t-plan:checked ~ main #plan,
+  #t-resources:checked ~ main #resources{display:block}
+  #t-course:checked ~ nav.sections label[for="t-course"],
+  #t-exam:checked ~ nav.sections label[for="t-exam"],
+  #t-create:checked ~ nav.sections label[for="t-create"],
+  #t-examples:checked ~ nav.sections label[for="t-examples"],
+  #t-ideas:checked ~ nav.sections label[for="t-ideas"],
+  #t-plan:checked ~ nav.sections label[for="t-plan"],
+  #t-resources:checked ~ nav.sections label[for="t-resources"]{background:var(--gold);color:var(--navy-deep)}
+
+  /* jump row inside a long tab */
+  .jump{
+    display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px;
+    padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  }
+  .jump span{font-weight:800;color:var(--muted);font-size:.85rem;align-self:center;margin-right:4px}
+  .jump a{
+    text-decoration:none;font-weight:700;font-size:.88rem;color:var(--navy);
+    background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 12px;
+  }
+  .jump a:hover{background:var(--gold);color:var(--navy-deep)}
+
+  /* ---------- Sections ---------- */
+  section{padding:56px 0 4px;scroll-margin-top:calc(var(--nav-h) + 12px)}
+  .stamp{
+    display:inline-block;font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:1.5rem;color:var(--navy);
+    border:3px solid var(--navy);border-radius:10px;
+    padding:6px 16px;transform:rotate(-1.4deg);
+    background:var(--surface);margin-bottom:8px;
+  }
+  .sub{color:var(--muted);max-width:68ch;margin:14px 0 24px}
+
+  /* subsection rule */
+  .band{
+    scroll-margin-top:calc(var(--nav-h) + 16px);
+    display:flex;align-items:center;gap:14px;margin:34px 0 16px;
+  }
+  .band h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.3rem;color:var(--navy);
+    white-space:nowrap;
+  }
+  .band::after{content:"";flex:1;height:2px;background:var(--line)}
+
+  h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin-bottom:8px}
+
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:24px;margin-bottom:16px;box-shadow:0 1px 0 var(--line);
+  }
+  .card.panel{background:var(--panel);color:#fff;border:none}
+  .card.panel h3{color:var(--gold-soft)}
+  .card.panel a{color:var(--gold-soft)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--teal);font-weight:700;display:block;margin-bottom:6px;
+  }
+  .card.panel .tag{color:var(--gold)}
+
+  ul.check{list-style:none;margin:10px 0 0}
+  ul.check li{position:relative;padding-left:30px;margin-bottom:9px}
+  ul.check li::before{
+    content:"";position:absolute;left:0;top:.45em;width:15px;height:15px;
+    border:2.5px solid var(--teal);border-radius:4px;
+  }
+  ul.skills{list-style:none;margin:6px 0 0}
+  ul.skills li{
+    position:relative;padding:11px 0 11px 32px;border-bottom:1px solid var(--line);font-weight:600;
+  }
+  ul.skills li:last-child{border-bottom:none}
+  ul.skills li::before{
+    content:"✓";position:absolute;left:4px;top:11px;color:var(--teal);font-weight:800;
+  }
+  ul.plain{margin:10px 0 0 20px}
+  ul.plain li{margin-bottom:8px}
+  ul.lo{list-style:none;margin:12px 0 0;padding-top:10px;border-top:1px dashed var(--line)}
+  ul.lo li{font-size:.85rem;color:var(--muted);margin-bottom:5px;line-height:1.45}
+  ul.lo b{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--teal);font-weight:700;margin-right:6px}
+
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.92em}
+  .specs{
+    font-family:'JetBrains Mono',monospace;font-size:.86rem;
+    background:var(--paper);border-left:4px solid var(--gold);
+    padding:12px 16px;border-radius:0 8px 8px 0;margin-top:14px;color:var(--ink);
+  }
+  .card.panel .specs{background:rgba(255,255,255,.07);color:#e7edff}
+
+  .warn{
+    background:rgba(159,18,57,.07);border:1.5px solid var(--stamp-red);
+    border-radius:12px;padding:18px 20px;margin-top:16px;margin-bottom:16px;
+  }
+  .warn h3{color:var(--stamp-red)}
+
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.95rem}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy);background:var(--paper)}
+  td.mono{white-space:nowrap;color:var(--teal);font-weight:700}
+
+  /* date cards */
+  .dates{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.dates{grid-template-columns:1fr}}
+  .date{
+    background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--gold);
+    border-radius:14px;padding:22px;
+  }
+  .date .when{
+    font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--teal);
+    font-weight:700;margin-bottom:8px;
+  }
+  .date h3{margin-bottom:6px}
+  .date p{font-size:.95rem;color:var(--muted)}
+
+  /* ---------- Student video gallery ---------- */
+  .vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+  .vid{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .vid .frame{position:relative;width:100%;aspect-ratio:16/9;background:var(--navy-deep)}
+  .vid .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid .body{padding:16px 18px}
+  .vid .yr{
+    font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.08em;
+    color:var(--teal);font-weight:700;text-transform:uppercase;
+  }
+  .vid h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);margin:4px 0 6px}
+  .vid p{font-size:.94rem;color:var(--muted)}
+
+  /* ---------- Examples ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .ex{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;
+    display:flex;flex-direction:column;
+  }
+  .ex .score{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;
+    align-self:flex-start;padding:4px 10px;border-radius:999px;margin-bottom:10px;
+    background:var(--paper);color:var(--navy);border:1.5px solid var(--line);
+  }
+  .ex .score.high{background:rgba(15,110,86,.12);color:var(--green);border-color:var(--green)}
+  .ex .score.mid{background:rgba(243,183,0,.16);color:#8a6a00;border-color:var(--gold)}
+  .ex .score.low{background:rgba(159,18,57,.09);color:var(--stamp-red);border-color:var(--stamp-red)}
+  @media (prefers-color-scheme: dark){ .ex .score.mid{color:var(--gold-soft)} }
+  .ex h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);margin-bottom:6px}
+  .ex p{font-size:.94rem;color:var(--muted);flex:1}
+  .ex .links{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:7px 13px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.86rem}
+  .btn.play{background:var(--navy);color:#fff}
+  .btn.doc{background:var(--paper);color:var(--navy);border:1.5px solid var(--line)}
+  @media (prefers-color-scheme: dark){ .btn.play{background:var(--gold);color:var(--navy-deep)} }
+
+  .links-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
+  .links-list a{
+    display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.95rem;
+  }
+  .links-list a span{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:3px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<!-- tab switches: keep these before the nav and the main content -->
+<input type="radio" name="aptab" class="tabin" id="t-course" checked>
+<input type="radio" name="aptab" class="tabin" id="t-exam">
+<input type="radio" name="aptab" class="tabin" id="t-create">
+<input type="radio" name="aptab" class="tabin" id="t-examples">
+<input type="radio" name="aptab" class="tabin" id="t-ideas">
+<input type="radio" name="aptab" class="tabin" id="t-plan">
+<input type="radio" name="aptab" class="tabin" id="t-resources">
+
+<!-- ============ COVER ============ -->
+<header class="cover">
+  <div class="wrap">
+    <p class="kicker">The American School of Tampico · Ms. Pelen · Room LB6</p>
+    <h1>AP Computer Science Principles</h1>
+    <p class="lede">Everything for this class lives on this page: what the course is, the dates that matter, how the Create performance task works, and the resources you will need all year.</p>
+    <div class="chips">
+      <span class="chip">College credit equivalent: <strong>first semester intro computing</strong></span>
+      <span class="chip">Exam: <strong>May 14, 2027</strong></span>
+      <span class="chip">Create task due: <strong>April 30, 2027</strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="sections">
+  <div class="inner">
+    <label for="t-course">The course</label>
+    <label for="t-exam">The exam</label>
+    <label for="t-create">Create task</label>
+    <label for="t-examples">Examples</label>
+    <label for="t-ideas">Ideas</label>
+    <label for="t-plan">Our plan</label>
+    <label for="t-resources">Resources</label>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ 1. THE COURSE ============ -->
+<section class="tab-panel" id="course">
+  <span class="stamp">The course</span>
+  <p class="sub">An introductory college level computing course. You do not need any coding background to do well here.</p>
+
+  <div class="card panel">
+    <span class="tag">What this class is about</span>
+    <h3>How the things you use every day actually work</h3>
+    <p>If you have ever wondered how the apps and websites you use are built, this is the course. We look at how computers and technology shape daily life: how the apps you use are put together, how your personal data gets collected, and the good and the damage that technology can cause. You will also build real programs of your own.</p>
+  </div>
+
+  <div class="band"><h3>Skills you will learn</h3></div>
+  <div class="card">
+    <ul class="skills">
+      <li>Making connections between concepts in computing</li>
+      <li>Designing a program to solve a problem or complete a task</li>
+      <li>Applying abstractions in computation and modeling</li>
+      <li>Analyzing computational work</li>
+      <li>Communicating ideas about technology and computation</li>
+      <li>Working collaboratively to solve problems</li>
+    </ul>
+  </div>
+
+  <div class="band"><h3>Equivalency and prerequisites</h3></div>
+  <div class="two">
+    <div class="card">
+      <span class="tag">College course equivalent</span>
+      <h3>A first semester introductory college course in computing</h3>
+      <p style="color:var(--muted)">A qualifying score can earn you credit or placement at many universities.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Recommended prerequisite</span>
+      <h3>A high school algebra course</h3>
+      <p style="color:var(--muted)">No programming experience is required.</p>
+    </div>
+  </div>
+
+  <!-- EDIT: your own class details go here -->
+  <div class="band"><h3>How we run it at ATS</h3></div>
+  <div class="card">
+    <ul class="plain">
+      <li>Platform: CodeHS, programming in JavaScript.</li>
+      <li>You work on your own MacBook. Bring it charged, every class.</li>
+      <li>Room LB6.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. THE EXAM ============ -->
+<section class="tab-panel" id="exam">
+  <span class="stamp">The exam</span>
+  <p class="sub">Your AP score comes from two places: the end of course exam in May, and the Create performance task you build during the year. Both count toward the same score of 1 to 5.</p>
+
+  <div class="band"><h3>Dates that cannot move</h3></div>
+  <div class="dates">
+    <div class="date">
+      <p class="when">Fri, Apr 30, 2027 · 11:59 PM ET</p>
+      <h3>Create performance task due</h3>
+      <p>Submit all three components as final in the AP Digital Portfolio by this date. Only work marked as final gets scored.</p>
+    </div>
+    <div class="date">
+      <p class="when">Fri, May 14, 2027 · Session 1</p>
+      <h3>AP Computer Science Principles Exam</h3>
+      <p>Your AP coordinator tells you when and where. Our class deadlines will always land earlier than the College Board ones.</p>
+    </div>
+  </div>
+
+  <div class="band"><h3>How exam day works</h3></div>
+  <div class="card panel">
+    <span class="tag">3 hours · fully digital</span>
+    <h3>You take it in Bluebook</h3>
+    <p>The end of course exam is fully digital and runs in the Bluebook testing app. It has multiple choice questions and two written response questions about your own Create performance task. Everything you type in Bluebook is submitted automatically when time runs out, so there is no upload to worry about at the end.</p>
+    <div class="specs">Reference materials are provided during the exam. Download Bluebook ahead of time and take the practice test so the app is not new to you in May.</div>
+  </div>
+
+  <div class="band"><h3>Section I: multiple choice</h3></div>
+  <div class="card">
+    <span class="tag">70 questions · 120 minutes · 70% of your score</span>
+    <h3>Four answer options per question</h3>
+    <ul class="plain">
+      <li>57 questions where you pick one answer.</li>
+      <li>5 questions where you pick one answer after reading a passage about a computing innovation.</li>
+      <li>8 questions where you pick two answers.</li>
+    </ul>
+    <div class="specs">The question types, the weighting and the scoring stay the same every year, so what you practice is exactly what you will see.</div>
+  </div>
+
+  <div class="band"><h3>Section II: Create performance task</h3></div>
+  <div class="card">
+    <span class="tag">30% of your score</span>
+    <h3>Built during the year, finished on exam day</h3>
+    <ul class="plain">
+      <li>Program code, video and Personalized Project Reference, with at least 9 hours of class time to make them.</li>
+      <li>Two written response questions, 60 minutes, on the end of course exam.</li>
+    </ul>
+    <p style="margin-top:12px"><label for="t-create" style="font-weight:700;color:var(--teal);cursor:pointer;text-decoration:underline">Everything about this task is in the Create task tab.</label></p>
+  </div>
+
+  <div class="band"><h3>How your work is scored</h3></div>
+  <div class="card">
+    <p>Both the Create performance task and the May exam are scored by AP readers: trained, experienced educators who score against the same published guidelines for everyone. Your teacher does not score your AP submission, and your classroom grade and your AP score are two different things.</p>
+  </div>
+</section>
+
+<!-- ============ 3. CREATE TASK ============ -->
+<section class="tab-panel" id="create">
+  <span class="stamp">Create performance task</span>
+  <p class="sub">You build a program of your own choice, record it running, and save the code you will need on exam day. It is worth 30% of your AP score and you get at least 9 hours of class time for it.</p>
+
+  <div class="jump">
+    <span>Jump to</span>
+    <a href="#c-a">Program code</a>
+    <a href="#c-b">Video</a>
+    <a href="#c-c">Project Reference</a>
+    <a href="#c-exam">Exam day</a>
+    <a href="#c-rules">The rules</a>
+  </div>
+
+  <div class="card panel">
+    <span class="tag">The short version</span>
+    <h3>What you are actually making</h3>
+    <p>You design and write a program that solves a problem, explores something you care about, or is just creative. Then you submit three things through the AP Digital Portfolio: your program code, a video of the program running, and a Personalized Project Reference. On exam day you answer written questions about your own code, and you get to look at your Personalized Project Reference while you do it.</p>
+    <div class="specs">Code + Video + Personalized Project Reference → submitted as final → questions about them on the exam.</div>
+  </div>
+
+  <div class="card">
+    <span class="tag">Non negotiable</span>
+    <h3>All three components must be submitted as final</h3>
+    <p>Only files marked as final get sent for scoring. If you upload a file but never hit "Submit Final" and attest that the work is yours, it does not count. And if your Personalized Project Reference is not final by the deadline, you will not have it in front of you during the exam, which makes the written questions much harder.</p>
+  </div>
+
+  <!-- ---- Component A ---- -->
+  <div class="band" id="c-a"><h3>Component A: Program code</h3></div>
+  <p class="sub">One PDF with all of your code, including your comments. You may write this with one or two partners.</p>
+
+  <div class="card">
+    <span class="tag">Your program must contain</span>
+    <h3>Six required elements</h3>
+    <ul class="check">
+      <li>Instructions for <strong>input</strong> from the user, a device, an online data stream, or a file. A user action that triggers an event counts as input.</li>
+      <li>At least one <strong>list</strong> (or other collection type) that stores data, manages complexity, and helps the program do its job.</li>
+      <li>At least one <strong>procedure you wrote yourself</strong>, where you defined the name, the return type if needed, and one or more parameters.</li>
+      <li>An <strong>algorithm inside that procedure</strong> that uses sequencing, selection, and iteration.</li>
+      <li>At least one <strong>call</strong> to your own procedure.</li>
+      <li>Instructions for <strong>output</strong> that comes from the input and the program's functionality. Output can be visual, textual, audible, or tactile.</li>
+    </ul>
+    <div class="specs">Event handlers and main methods are built in, so they do not count as your own procedure. Your parameter has to actually change what the procedure does.</div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <span class="tag">The list test</span>
+      <h3>Your list has to earn its place</h3>
+      <p>The list should make the program easier to write, or easier to maintain later. If someone could replace your list with two or three normal variables and lose nothing, it is not managing complexity. A one element list never counts. Ask yourself: if this list grew to 200 items tomorrow, would my code still work?</p>
+    </div>
+    <div class="card">
+      <span class="tag">Giving credit</span>
+      <h3>Anything you did not write gets a comment</h3>
+      <p>Starter code, an API, open source code, or code you built with an AI tool all need a comment saying where it came from. If you use existing code, you have to extend it with new functionality of your own.</p>
+      <div class="specs">// This code was provided as starter code by my teacher.<br>// This code was made freely available by [source].<br>// This code was generated using [AI tool name].</div>
+    </div>
+  </div>
+
+  <!-- ---- Component B ---- -->
+  <div class="band" id="c-b"><h3>Component B: Video</h3></div>
+  <p class="sub">One video of your program running. You make this alone. No help from your partner, no help from anyone.</p>
+
+  <div class="card">
+    <span class="tag">Must show</span>
+    <h3>Three things, in one minute or less</h3>
+    <ul class="check">
+      <li>Input going into your program</li>
+      <li>At least one piece of the functionality you built</li>
+      <li>Output that your program produces</li>
+    </ul>
+    <div class="specs">Format: .webm, .mp4, .wmv, .avi or .mov · Length: 60 seconds maximum · Size: 30 MB maximum</div>
+  </div>
+
+  <div class="warn">
+    <h3>Two things that will sink your video</h3>
+    <ul class="plain">
+      <li>Anything that identifies you. No name on screen, no face, no school.</li>
+      <li>Voice narration. Text captions are fine and encouraged, but nobody talks.</li>
+    </ul>
+    <p style="margin-top:10px">Screenshots and storyboards do not count. The program has to be running.</p>
+  </div>
+
+  <!-- ---- Component C ---- -->
+  <div class="band" id="c-c"><h3>Component C: Personalized Project Reference</h3></div>
+  <p class="sub">Four screen captures of your own code. This is the only thing you get to look at during the written section of the exam, so make it readable.</p>
+
+  <div class="two">
+    <div class="card">
+      <span class="tag">Procedure section</span>
+      <h3>Two code segments</h3>
+      <ul class="check">
+        <li>Your student developed procedure: it defines a name, a return type if needed, has one or more parameters that affect what it does, and implements an algorithm with sequencing, selection and iteration.</li>
+        <li>The place in your program where that procedure gets called.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag">List section</span>
+      <h3>Two more code segments</h3>
+      <ul class="check">
+        <li>How data gets stored in your list.</li>
+        <li>That same list being used, for example creating new data from existing data or accessing multiple elements, as part of the program's purpose.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn">
+    <h3>This one gives a zero</h3>
+    <p>Your Personalized Project Reference cannot include comments or course content. Take the comments out of your code before you make the screen captures. Leaving them in scores a 0 on the whole Create performance task, including your written responses on the exam.</p>
+    <div class="specs" style="border-left-color:var(--stamp-red)">Screen captures must not be blurry. Text must be at least 10 point.</div>
+  </div>
+
+  <!-- ---- Exam day ---- -->
+  <div class="band" id="c-exam"><h3>What happens on exam day</h3></div>
+  <p class="sub">You get 60 minutes for two questions about your own program, split into four prompts. Your Personalized Project Reference is on screen with you.</p>
+
+  <table>
+    <tr><th style="width:30%">Prompt</th><th>What you have to be able to do</th></tr>
+    <tr>
+      <td class="mono">Written Response 1<br><span style="color:var(--muted);font-weight:400">Program design,<br>function and purpose</span></td>
+      <td>Describe the purpose of your program, explain how a code segment functions, identify the input and the output, and talk about how you designed it.
+        <ul class="lo">
+          <li><b>CRD-2.A</b>Describe the purpose of a computing innovation.</li>
+          <li><b>CRD-2.B</b>Explain how a program or code segment functions.</li>
+          <li><b>CRD-2.C</b>Identify inputs to a program.</li>
+          <li><b>CRD-2.D</b>Identify outputs produced by a program.</li>
+          <li><b>CRD-2.E</b>Develop a program using a development process.</li>
+          <li><b>CRD-2.F</b>Design a program and its user interface.</li>
+          <li><b>CRD-2.G</b>Describe the purpose of a code segment or program by writing documentation.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="mono">Written Response 2(a)<br><span style="color:var(--muted);font-weight:400">Algorithm<br>development</span></td>
+      <td>Explain how your algorithm works step by step, evaluate conditions and loops, and compare algorithms that produce the same result.
+        <ul class="lo">
+          <li><b>CRD-2.B</b>Explain how a program or code segment functions.</li>
+          <li><b>AAP-2.E.b</b>Evaluate expressions that use relational operators.</li>
+          <li><b>AAP-2.F.b</b>Evaluate expressions that use logic operators.</li>
+          <li><b>AAP-2.H.b</b>Determine the result of conditional statements.</li>
+          <li><b>AAP-2.J</b>Express an algorithm that uses iteration without using a programming language.</li>
+          <li><b>AAP-2.K.b</b>Determine the result or side effect of iteration statements.</li>
+          <li><b>AAP-2.L</b>Compare algorithms to see if they give the same result or side effect.</li>
+          <li><b>AAP-2.M.a</b>Create algorithms.</li>
+          <li><b>AAP-2.M.b</b>Combine and modify existing algorithms.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="mono">Written Response 2(b)<br><span style="color:var(--muted);font-weight:400">Errors and<br>testing</span></td>
+      <td>Find an error, fix it, and name inputs with their expected outputs that would check whether your program is correct.
+        <ul class="lo">
+          <li><b>CRD-2.I.a</b>Identify the error.</li>
+          <li><b>CRD-2.I.b</b>Correct the error.</li>
+          <li><b>CRD-2.J</b>Identify inputs and their expected outputs or behaviors to check that an algorithm or program is correct.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="mono">Written Response 2(c)<br><span style="color:var(--muted);font-weight:400">Data and procedural<br>abstraction</span></td>
+      <td>Explain how your list manages complexity, how a list traversal works, and how your procedure keeps the program simpler.
+        <ul class="lo">
+          <li><b>AAP-1.D.a</b>Develop data abstraction using lists to store multiple elements.</li>
+          <li><b>AAP-1.D.b</b>Explain how data abstraction manages complexity in program code.</li>
+          <li><b>AAP-2.O.a</b>Write iteration statements to traverse a list.</li>
+          <li><b>AAP-2.O.b</b>Determine the result of an algorithm that includes list traversals.</li>
+          <li><b>AAP-3.B</b>Explain how procedural abstraction manages complexity in a program.</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+  <p class="sub" style="margin-top:12px">The exact prompts change from one version of the exam to another, but they always come from these four categories and these learning objectives.</p>
+
+  <div class="card panel" style="margin-top:20px">
+    <span class="tag">Why this matters now</span>
+    <h3>Pick a program you can explain out loud</h3>
+    <p>The exam does not ask you to write new code. It asks you to explain the code you already wrote, months later, without your computer. A flashy program you barely understand scores worse than a simple program you know line by line.</p>
+  </div>
+
+  <!-- ---- Rules ---- -->
+  <div class="band" id="c-rules"><h3>The rules</h3></div>
+  <p class="sub">Once the task is officially assigned, these apply. They come straight from the College Board task directions.</p>
+
+  <div class="two">
+    <div class="card">
+      <span class="tag">Allowed</span>
+      <h3>You may</h3>
+      <ul class="plain">
+        <li>Work with one or two partners on the ideas, the code, the debugging and the testing.</li>
+        <li>Use a generative AI tool as support while you learn, develop and debug, as long as you credit it and you understand every line.</li>
+        <li>Ask me to clarify the directions and the submission requirements.</li>
+        <li>Ask me for help with a broken computer, a network problem, or saving and exporting files.</li>
+        <li>Work on the task outside of class time.</li>
+        <li>Keep a programming journal of your design decisions. This is a very good idea.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag">Not allowed</span>
+      <h3>You may not</h3>
+      <ul class="plain">
+        <li>Get help writing, fixing, debugging or revising your program from anyone except your partners.</li>
+        <li>Collaborate on the video or on the Personalized Project Reference. Those two are individual, always.</li>
+        <li>Submit a practice task, a sample from AP Central, or a project from a curriculum provider.</li>
+        <li>Change anything after you submit as final.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn">
+    <h3>Plagiarism</h3>
+    <p>Using code, media, data or evidence made by someone else or by an AI tool without crediting it is plagiarism, and it scores a 0 on the Create performance task including the written responses on the exam. Crediting it takes one comment line. Do it.</p>
+  </div>
+</section>
+
+<!-- ============ 4. EXAMPLES ============ -->
+<section class="tab-panel" id="examples">
+  <span class="stamp">Examples</span>
+  <p class="sub">Two sets of examples. First, projects made right here in this classroom. Then the official College Board samples, so you can see how the scoring actually works.</p>
+
+  <div class="band"><h3>Projects from our own students</h3></div>
+  <p class="sub">Same course, same room, same amount of time you have. None of these were made by professional programmers.</p>
+
+  <div class="vids">
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/D_1XNfzJi68" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/YG6RkOvGgTg" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/lgHesi21MLI" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/PiIfEtUupPc" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/CyESVrfvNGw" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/tRAqWxyQTSw" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/S_bf-rBZWag" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+    <div class="vid">
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/SIRqkt2eEOQ" title="Student Create task project" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="body">
+        <!-- EDIT: year and description -->
+        <p class="yr">ATS student project</p>
+        <h4>Project title goes here</h4>
+        <p>One or two lines about what the program does.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="band"><h3>Official College Board samples</h3></div>
+  <p class="sub">Samples from the 2023 exam, with the score each one earned out of 6. Watch a few before you choose your idea. Notice how ordinary the programs are: a quiz, a clicking game, a recommender. The score comes from the explanation, not from how impressive the app looks.</p>
+
+  <div class="grid">
+
+    <div class="ex">
+      <span class="score high">Sample A · 6 / 6</span>
+      <h4>Projectile simulator</h4>
+      <p>The user sets an angle and a velocity with the arrow keys and watches a ball fly across the screen, leaving dots that trace its path. Written in Python.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-a-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-a-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score high">Sample B · 6 / 6</span>
+      <h4>Fruit clicking game</h4>
+      <p>You pick a difficulty, then click fruit before time runs out and lose a life for clicking a grape. A list holds the leaderboard of every score. Block based.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-b-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-b-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score mid">Sample C · 5 / 6</span>
+      <h4>Which pet suits you</h4>
+      <p>Four multiple choice questions about your interests, then the program adds up points and recommends a pet. Lost a point because the loop in the algorithm was not really needed.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-c-video.mov" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-c-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score mid">Sample D · 5 / 6</span>
+      <h4>Maze game for little kids</h4>
+      <p>Move with WASD, shoot water at obstacles, choose easy or hard. Lost a point because the explanation of why the list was needed was too generic.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-d-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-d-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score mid">Sample E · 4 / 6</span>
+      <h4>Click on me</h4>
+      <p>A monkey and an elephant jump around the screen and you click one of them. A list records the order you clicked. Lost points on the list explanation and on testing.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-e-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-e-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score mid">Sample F · 4 / 6</span>
+      <h4>Manga recommender</h4>
+      <p>Pick a genre and the program suggests titles you have not read yet. Lost points because the procedure's parameters were never actually used inside it.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-f-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-f-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score mid">Sample G · 4 / 6</span>
+      <h4>Sequence generator</h4>
+      <p>Builds arithmetic, geometric and Fibonacci sequences from values the user types and draws them on screen. Lost a point for describing what the program does instead of its purpose.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-g-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-g-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score low">Sample H · 3 / 6</span>
+      <h4>Choose your adventure</h4>
+      <p>Click through a story while strength, intelligence and harmony change. The list only held three values, so it was not managing complexity, and the procedure had no explicit parameter.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-h-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-h-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score low">Sample I · 2 / 6</span>
+      <h4>Jump over the obstacles</h4>
+      <p>Press space to jump over cactus and vultures until you score ten. The two element list was only a coin flip, and the two test calls produced the same result.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-i-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-i-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+    <div class="ex">
+      <span class="score low">Sample J · 1 / 6</span>
+      <h4>Text to binary translator</h4>
+      <p>Type a lowercase letter or word and get the binary version. The idea is fine, but the list could have been replaced by printing the strings directly and the procedure had no explicit parameter.</p>
+      <div class="links">
+        <a class="btn play" href="https://secure-media.collegeboard.org/apc/ap23-csp-create-sample-j-video.mp4" target="_blank" rel="noopener">Watch video</a>
+        <a class="btn doc" href="https://apcentral.collegeboard.org/media/pdf/ap23-csp-create-sample-j-written.pdf" target="_blank" rel="noopener">Read response</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <span class="tag">Read this before you copy the format</span>
+    <h3>The written responses look different now</h3>
+    <p>In 2023 students uploaded their written responses together with the program. Today you answer those questions on the exam instead, using your Personalized Project Reference. The videos and the programs are still exactly the kind of thing you should be making, and the graders' comments still tell you what earns points. You cannot submit any of this work as your own.</p>
+  </div>
+</section>
+
+<!-- ============ 5. IDEAS ============ -->
+<section class="tab-panel" id="ideas">
+  <span class="stamp">Ideas that work</span>
+  <p class="sub">Look at the samples above and you will notice a pattern: something takes input, a list holds the data, a procedure decides what happens. Start from something you actually care about.</p>
+
+  <div class="card">
+    <ul class="plain">
+      <li><strong>A recommender.</strong> Songs, movies, books, food in Tampico, a workout. Questions in, list of options filtered, one suggestion out.</li>
+      <li><strong>A quiz or study app.</strong> Flashcards for another class, a vocabulary trainer, a practice test with a score history.</li>
+      <li><strong>A tracker.</strong> Spending, habits, hours of sleep, homework. Store entries in a list, then calculate an average or a total.</li>
+      <li><strong>A game with a scoreboard.</strong> Any simple game, as long as a list stores the scores or the game state and a procedure sets the difficulty.</li>
+      <li><strong>A calculator for something real.</strong> Splitting a bill, the grade you need on the final, converting units, a training pace.</li>
+      <li><strong>A small simulation.</strong> Physics, population growth, a dice or card experiment run hundreds of times.</li>
+      <li><strong>A tool for our school.</strong> A club sign up, a schedule lookup, a random group generator, a lost and found log.</li>
+    </ul>
+    <div class="specs">Good sign: you can say the purpose in one sentence that starts with "so that". Bad sign: the only way to describe it is to list what happens on screen.</div>
+  </div>
+</section>
+
+<!-- ============ 6. PLAN ============ -->
+<!-- EDIT: change these stages and add real dates for your class calendar -->
+<section class="tab-panel" id="plan">
+  <span class="stamp">Our plan</span>
+  <p class="sub">The College Board gives you at least 9 hours of class time for the Create task. Here is how we will use it. Dates get confirmed in class.</p>
+
+  <table>
+    <tr><th style="width:22%">Stage</th><th>What you finish</th></tr>
+    <tr><td class="mono">Stage 1</td><td>Pick your idea and write the purpose in one sentence. Sketch the interface on paper.</td></tr>
+    <tr><td class="mono">Stage 2</td><td>Plan your list and your procedure before you code. What does the list hold, and what does the procedure decide?</td></tr>
+    <tr><td class="mono">Stage 3</td><td>Build the core functionality. Test it with different inputs as you go.</td></tr>
+    <tr><td class="mono">Stage 4</td><td>Finish, clean up and comment your code. Export the program code PDF.</td></tr>
+    <tr><td class="mono">Stage 5</td><td>Record the video. Under 60 seconds, under 30 MB, captions instead of narration.</td></tr>
+    <tr><td class="mono">Stage 6</td><td>Remove comments from your four code segments and build the Personalized Project Reference.</td></tr>
+    <tr><td class="mono">Stage 7</td><td>Upload all three components and submit each one as final in the AP Digital Portfolio.</td></tr>
+    <tr><td class="mono">Stage 8</td><td>Practice the four written response prompts using your own reference.</td></tr>
+  </table>
+</section>
+
+<!-- ============ 7. RESOURCES ============ -->
+<section class="tab-panel" id="resources">
+  <span class="stamp">Official resources</span>
+  <p class="sub">Everything here is from the College Board. If this page and one of these documents ever disagree, the College Board wins.</p>
+
+  <div class="card">
+    <span class="tag">Inside AP Classroom</span>
+    <h3>Four videos about the Create performance task</h3>
+    <p>Sign in to AP Classroom, open the Course Guide in the left menu, go to the Overview page, and expand the Student Resources header. You will find:</p>
+    <ul class="plain">
+      <li>Create Performance Task: Overview</li>
+      <li>Create Performance Task: Guidelines</li>
+      <li>Create Performance Task: Pacing Your Project</li>
+      <li>Create Performance Task: Categories and Questions</li>
+    </ul>
+    <div class="specs">AP Classroom also has the AP Videos for every topic in the course, plus the topic questions I assign.</div>
+  </div>
+
+  <ul class="links-list">
+    <li><a href="https://apcentral.collegeboard.org/pdf/ap-csp-student-task-directions.pdf" target="_blank" rel="noopener">Student Handouts<span>The full task directions and the exam reference sheet</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/media/pdf/ap-csp-personalized-project-reference-tip-sheet.pdf" target="_blank" rel="noopener">Personalized Project Reference tip sheet<span>How to make your screen captures readable</span></a></li>
+    <li><a href="https://digitalportfolio.collegeboard.org/" target="_blank" rel="noopener">AP Digital Portfolio<span>Where you upload and submit as final</span></a></li>
+    <li><a href="https://apstudents.collegeboard.org/digital-portfolios/submit-ap-csp-work" target="_blank" rel="noopener">How to submit your work<span>Step by step submission process</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/media/pdf/ap-digital-portfolio-student-user-guide.pdf" target="_blank" rel="noopener">Digital Portfolio student guide<span>Navigating the portfolio</span></a></li>
+    <li><a href="https://myap.collegeboard.org/login" target="_blank" rel="noopener">AP Classroom<span>Topic questions and the AP videos for every unit</span></a></li>
+    <li><a href="https://bluebook.collegeboard.org/students/practice" target="_blank" rel="noopener">Bluebook practice<span>The app you take the exam in</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/exam-administration-ordering-scores/administering-exams/subject-specific/reference-information" target="_blank" rel="noopener">Exam reference materials<span>The reference sheet you get on exam day</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/courses/ap-computer-science-principles/exam/past-exam-questions" target="_blank" rel="noopener">Past exam questions<span>Samples and scoring from recent years</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/pdf/ap-computer-science-principles-course-and-exam-description.pdf" target="_blank" rel="noopener">Course and Exam Description<span>The core document for the whole course</span></a></li>
+    <li><a href="https://apcentral.collegeboard.org/exam-administration-ordering-scores/administering-exams/exam-policies/artificial-intelligence-tools" target="_blank" rel="noopener">AI tools policy<span>What is allowed and what is plagiarism</span></a></li>
+  </ul>
+</section>
+
+</main>
+
+<footer>// AP Computer Science Principles &middot; The American School of Tampico &middot; ROOM LB6 &middot; 2026&ndash;2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+/* Optional extras only. The tabs above work with JavaScript turned off. */
+(function(){
+  var ids = ['course','exam','create','examples','ideas','plan','resources'];
+  var byHash = location.hash.slice(1);
+  var el = byHash && document.getElementById(byHash);
+  var tab = ids.indexOf(byHash) !== -1 ? byHash
+          : (el && el.closest('.tab-panel') ? el.closest('.tab-panel').id : null);
+  if (tab){
+    var r = document.getElementById('t-' + tab);
+    if (r) r.checked = true;
+    if (el && ids.indexOf(byHash) === -1) setTimeout(function(){ el.scrollIntoView(); }, 0);
+  }
+  ids.forEach(function(i){
+    var r = document.getElementById('t-' + i);
+    if (r) r.addEventListener('change', function(){
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + i); } catch(e){}
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
