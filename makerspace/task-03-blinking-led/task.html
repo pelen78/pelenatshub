@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice 1: Blinking LED</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;       /* LED on */
+    --copper:#B5763A;      /* trace copper */
+    --paper:#EDF1FA;
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --copper:#E0A567;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Board cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 14% 22%, rgba(243,183,0,.18), transparent 44%),
+      radial-gradient(circle at 86% 78%, rgba(14,124,139,.30), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px),
+      radial-gradient(rgba(243,183,0,.30) 2.2px, transparent 2.4px);
+    background-size:48px 48px, 48px 48px, 96px 96px;
+    opacity:.7;pointer-events:none;
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:14px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:1.5px dashed rgba(243,183,0,.40);
+    border-radius:8px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(40px,8.4vw,72px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:1.0;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:block;color:var(--gold)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  /* power LED badge */
+  .power{
+    position:absolute;right:-6px;bottom:-20px;
+    display:flex;align-items:center;gap:9px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:2px solid var(--gold-soft);
+    border-radius:8px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.92);
+  }
+  .power .led{
+    width:10px;height:10px;border-radius:50%;
+    background:#4bd6ab;
+    box-shadow:0 0 10px 2px rgba(75,214,171,.75);
+  }
+  @keyframes blink{0%,44%{opacity:1}50%,94%{opacity:.18}100%{opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .power .led{animation:blink 2s steps(1,end) infinite}
+  }
+  @media (max-width:560px){
+    .power{position:static;display:inline-flex;margin-top:20px}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* silkscreen section labels, aligned, not rotated */
+  .silk{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px solid var(--navy);
+    border-radius:4px;
+    padding:8px 16px;
+    margin-bottom:22px;
+  }
+  .silk::before{
+    content:attr(data-ref);
+    font-size:11px;
+    letter-spacing:.1em;
+    color:var(--surface);
+    background:var(--navy);
+    border-radius:2px;
+    padding:2px 6px;
+  }
+  .silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}
+  .silk.red::before{background:var(--stamp-red)}
+  .silk.gold{color:var(--copper);border-color:var(--copper)}
+  .silk.gold::before{background:var(--copper)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Blocks (requirements / topics) ---------- */
+  .blocks{list-style:none;margin:14px 0 24px}
+  .blocks li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .blocks li:last-child{border-bottom:none}
+  .blocks .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+  .blocks .hint{display:block;font-size:15px;color:var(--muted);line-height:1.45}
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  .note{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .note p{margin-bottom:0}
+
+  /* ---------- Bench check ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .silk{font-size:12.5px;padding:7px 12px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+
+
+  /* ---------- Locked phases ---------- */
+  .phase-gate{
+    margin:38px 0 12px;
+    border:2px solid var(--navy);
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--surface);
+    box-shadow:0 12px 30px rgba(18,39,92,.10);
+  }
+  .gate-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:18px 20px;
+    background:linear-gradient(135deg,var(--panel),var(--panel-2));
+    color:#fff;
+  }
+  .gate-lock{
+    width:42px;height:42px;
+    display:grid;place-items:center;
+    border:2px solid var(--gold);
+    border-radius:50%;
+    color:var(--gold-soft);
+    font-size:21px;
+    flex:0 0 auto;
+  }
+  .gate-head h2{
+    font-family:'Fredoka',sans-serif;
+    font-size:25px;
+    line-height:1.1;
+    margin:0;
+  }
+  .gate-head p{
+    margin:4px 0 0;
+    color:rgba(255,255,255,.76);
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .gate-body{padding:22px 20px 20px}
+  .gate-body > p{margin-bottom:12px}
+  .unlock-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .unlock-row input{
+    width:150px;
+    padding:11px 13px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'JetBrains Mono',monospace;
+    font-size:17px;
+    letter-spacing:.18em;
+  }
+  .unlock-row button{
+    border:0;
+    border-radius:8px;
+    padding:12px 18px;
+    background:var(--navy);
+    color:#fff;
+    font-family:'Nunito',sans-serif;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .unlock-row button:hover{filter:brightness(1.12)}
+  .gate-msg{
+    min-height:22px;
+    margin:10px 0 0!important;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--stamp-red);
+  }
+  .gate-msg.ok{color:var(--green)}
+  .locked-content{display:none}
+  .locked-content.unlocked{display:block}
+  .phase-gate.unlocked .gate-head{background:linear-gradient(135deg,var(--green),#095244)}
+  .phase-gate.unlocked .gate-lock{border-color:#fff;color:#fff}
+  .phase-gate.unlocked .gate-body{display:none}
+
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Maker Space · Practice 1</p>
+    <h1>Blinking LED<span class="pop">Arduino Challenge</span></h1>
+    <p class="subtitle">Tinkercad first. Real circuit second. Apply what you learn.</p>
+    <div class="chips">
+      <span>Arduino</span>
+      <span>Tinkercad</span>
+      <span>Breadboard</span>
+      <span>Challenge</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026&ndash;2027 · ROOM LB6</p>
+    <div class="power"><span class="led"></span>Build &amp; test</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="mission">
+    <span class="silk" data-ref="U1">Your Mission</span>
+    <p class="lead">In this practice, you will build your first Arduino circuit: <strong>How to Blink an LED</strong>.</p>
+    <p>This practice has <strong>3 stages</strong>. <strong>Every stage starts in Tinkercad.</strong> After your simulation works and the teacher checks it, you will receive the materials needed to build that stage using a real Arduino.</p>
+    <p>You must complete each stage in order before moving on to the next one.</p>
+
+    <div class="today">
+      <p class="tag">The Rule for Every Part</p>
+      <h2>Simulate first. Build second.</h2>
+      <ol>
+        <li><strong>Watch or read</strong> the instructions for the current part.</li>
+        <li><strong>Build and test it in Tinkercad.</strong></li>
+        <li><strong>Show the working simulation to the teacher.</strong></li>
+        <li><strong>Receive the physical materials</strong> for that part.</li>
+        <li><strong>Build and test it in real life.</strong></li>
+        <li><strong>Take pictures</strong> of the physical circuit and process with the classroom camera.</li>
+        <li>Only then move to the next part.</li>
+      </ol>
+    </div>
+
+    <div class="quest">
+      <p class="q">IMPORTANT &rarr; You will not receive the physical components for a part until the Tinkercad version is complete, working, and checked by the teacher.</p>
+    </div>
+  </section>
+
+  <section id="part-one">
+    <span class="silk gold" data-ref="P1">Part 1 &middot; One LED Without a Breadboard</span>
+    <p>Start with the basic circuit: one external LED connected directly to the Arduino.</p>
+
+    <div class="note"><p><strong>Tutorial 1:</strong> <a href="https://www.youtube.com/watch?v=33sNhlekRV8" target="_blank" rel="noopener">How to Blink an LED</a></p></div>
+
+    <ul class="blocks">
+      <li><span class="num">01</span><span><strong>Watch the tutorial.</strong><span class="hint">Pay attention to the LED polarity, resistor, Arduino pin, GND, and the Blink code.</span></span></li>
+      <li><span class="num">02</span><span><strong>Build the circuit in Tinkercad first.</strong><span class="hint">Use one Arduino, one LED, and one resistor.</span></span></li>
+      <li><span class="num">03</span><span><strong>Modify the example.</strong><span class="hint">Do not use pin 13. Choose another digital pin and change the delay value from the tutorial.</span></span></li>
+      <li><span class="num">04</span><span><strong>Run the simulation.</strong><span class="hint">Your LED must blink correctly before you continue.</span></span></li>
+      <li><span class="num">05</span><span><strong>Show your Tinkercad circuit to the teacher.</strong><span class="hint">After approval, you will receive the materials for the physical build.</span></span></li>
+      <li><span class="num">06</span><span><strong>Build the same circuit in real life.</strong><span class="hint">Use the same pin and delay values you already tested.</span></span></li>
+      <li><span class="num">07</span><span><strong>Document your work.</strong><span class="hint">The teacher will take pictures with the classroom camera. Keep your Tinkercad share link for the final presentation.</span></span></li>
+    </ul>
+
+    <div class="quest">
+      <p class="q">TEACHER CHECK &rarr; When Part 1 works in Tinkercad and in real life, ask the teacher for the code to unlock Part 2.</p>
+    </div>
+  </section>
+
+  <div class="phase-gate" id="gate-part-two">
+    <div class="gate-head">
+      <div class="gate-lock" aria-hidden="true">🔒</div>
+      <div><h2>Part 2 · Breadboard</h2><p>Complete Part 1 first</p></div>
+    </div>
+    <div class="gate-body">
+      <p>Enter the teacher code after Part 1 has been checked.</p>
+      <div class="unlock-row">
+        <input id="code-part-two" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Part 2 access code" placeholder="••••">
+        <button type="button" onclick="unlockPhase('part-two')">Unlock Part 2</button>
+      </div>
+      <p class="gate-msg" id="msg-part-two" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="locked-content" id="content-part-two">
+    <section id="part-two">
+      <span class="silk gold" data-ref="P2">Part 2 &middot; One LED With a Breadboard</span>
+      <p>Now rebuild the blinking LED using a <strong>breadboard</strong>. The goal is to understand how the same circuit can be organized differently using breadboard rows and power connections.</p>
+
+      <div class="note"><p><strong>Tutorial 2:</strong> <a href="https://www.youtube.com/watch?v=FKekzzj5844" target="_blank" rel="noopener">How to Blink an LED with Breadboard</a></p></div>
+
+      <ul class="blocks">
+        <li><span class="num">01</span><span><strong>Watch the breadboard tutorial.</strong><span class="hint">Focus on how the Arduino, LED, resistor, and ground connection move onto the breadboard.</span></span></li>
+        <li><span class="num">02</span><span><strong>Build the breadboard version in Tinkercad first.</strong><span class="hint">Use one LED and reproduce the circuit using the breadboard.</span></span></li>
+        <li><span class="num">03</span><span><strong>Test the simulation.</strong><span class="hint">Make sure the LED blinks correctly and verify every connection before asking for materials.</span></span></li>
+        <li><span class="num">04</span><span><strong>Show your Tinkercad circuit to the teacher.</strong><span class="hint">Once it is approved, you will receive the breadboard and the physical components.</span></span></li>
+        <li><span class="num">05</span><span><strong>Build the breadboard circuit in real life.</strong><span class="hint">Compare your physical connections with your working Tinkercad model.</span></span></li>
+        <li><span class="num">06</span><span><strong>Document your work.</strong><span class="hint">The teacher will take pictures. Save the Tinkercad share link for the presentation.</span></span></li>
+      </ul>
+
+      <div class="quest">
+        <p class="q">TEACHER CHECK &rarr; When the breadboard version works in Tinkercad and in real life, ask the teacher for the code to unlock Part 3.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="phase-gate" id="gate-part-three">
+    <div class="gate-head">
+      <div class="gate-lock" aria-hidden="true">🔒</div>
+      <div><h2>Part 3 · Add a Second LED</h2><p>No tutorial this time</p></div>
+    </div>
+    <div class="gate-body">
+      <p>Enter the teacher code after Part 2 has been checked.</p>
+      <div class="unlock-row">
+        <input id="code-part-three" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Part 3 access code" placeholder="••••">
+        <button type="button" onclick="unlockPhase('part-three')">Unlock Part 3</button>
+      </div>
+      <p class="gate-msg" id="msg-part-three" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="locked-content" id="content-part-three">
+    <section id="part-three">
+      <span class="silk red" data-ref="P3">Part 3 &middot; Challenge: Add a Second LED</span>
+      <p><strong>There is no tutorial for this part.</strong> Use what you learned in Parts 1 and 2 to figure out how to add a second LED to your breadboard circuit.</p>
+
+      <div class="quest">
+        <p class="q">YOUR CHALLENGE &rarr; How can you add another LED, give it the connections it needs, and control it from the Arduino without removing the first LED?</p>
+      </div>
+
+      <ul class="blocks">
+        <li><span class="num">01</span><span><strong>Plan before connecting.</strong><span class="hint">Think about what the second LED needs: a digital pin, resistor, correct polarity, and a path to ground.</span></span></li>
+        <li><span class="num">02</span><span><strong>Add the second LED in Tinkercad first.</strong><span class="hint">Use the breadboard and the buses/rails where appropriate.</span></span></li>
+        <li><span class="num">03</span><span><strong>Update the code.</strong><span class="hint">Choose how the second LED will behave and make sure the Arduino code matches your new connections.</span></span></li>
+        <li><span class="num">04</span><span><strong>Test and troubleshoot.</strong><span class="hint">Do not ask for the second LED until the Tinkercad version works.</span></span></li>
+        <li><span class="num">05</span><span><strong>Show the teacher.</strong><span class="hint">Explain what you changed and why you think it works.</span></span></li>
+        <li><span class="num">06</span><span><strong>Build the final circuit in real life.</strong><span class="hint">Add the second LED to the working breadboard circuit.</span></span></li>
+        <li><span class="num">07</span><span><strong>Document the final circuit.</strong><span class="hint">The teacher will take pictures of the two-LED circuit. Save the final Tinkercad share link.</span></span></li>
+      </ul>
+    </section>
+
+    <section id="presentation">
+      <span class="silk" data-ref="S1">Final Presentation &middot; 10 Slides</span>
+      <p>After you finish all three parts, create a presentation that follows the <strong>same order as the practice</strong>. Use your own explanations, the photos taken during class, screenshots from Tinkercad, and the share links for each Tinkercad circuit.</p>
+
+      <div class="note"><p><strong>Follow the project sequence:</strong> Slides 1&ndash;4 = Part 1 &middot; Slides 5&ndash;7 = Part 2 &middot; Slides 8&ndash;10 = Part 3.</p></div>
+
+      <h3>Part 1 &middot; One Blinking LED</h3>
+      <ul class="blocks">
+        <li><span class="num">01</span><span><strong>What is the purpose of this project?</strong><span class="hint">Explain what you are learning to make the Arduino do.</span></span></li>
+        <li><span class="num">02</span><span><strong>What elements do we need to complete Part 1?</strong><span class="hint">Name the components used for your first blinking LED circuit and explain what each one does.</span></span></li>
+        <li><span class="num">03</span><span><strong>Explain how to connect each element to the Arduino board.</strong><span class="hint">Explain the connections you used in Part 1, including the digital pin, resistor, LED polarity, and GND.</span></span></li>
+        <li><span class="num">04</span><span><strong>Add your Part 1 Tinkercad diagram and physical circuit.</strong><span class="hint">Include a Tinkercad screenshot, the clickable Tinkercad share link, your pin number, your delay value, and photos of the real circuit working.</span></span></li>
+      </ul>
+
+      <h3>Part 2 &middot; Blinking LED With a Breadboard</h3>
+      <ul class="blocks">
+        <li><span class="num">05</span><span><strong>What is the main difference between the first version of Blinking LED and this one?</strong><span class="hint">Compare the circuit from Part 1 with the breadboard circuit from Part 2.</span></span></li>
+        <li><span class="num">06</span><span><strong>What elements do we need to complete Part 2?</strong><span class="hint">Name the components used for the breadboard version and identify what was added or changed.</span></span></li>
+        <li><span class="num">07</span><span><strong>Explain how to connect this circuit using the breadboard.</strong><span class="hint">Show how you built Part 2. Include a Tinkercad screenshot, the clickable Tinkercad share link, and photos of your real breadboard circuit.</span></span></li>
+      </ul>
+
+      <h3>Part 3 &middot; Add a Second LED</h3>
+      <ul class="blocks">
+        <li><span class="num">08</span><span><strong>Explain how you added a second LED using the breadboard.</strong><span class="hint">Explain what you added and how you connected the second LED, including its pin, resistor, polarity, and ground connection.</span></span></li>
+        <li><span class="num">09</span><span><strong>What are breadboard buses/rails, and how did you use them to connect the second LED?</strong><span class="hint">Explain what the buses do and how they helped you complete the final circuit.</span></span></li>
+        <li><span class="num">10</span><span><strong>Add your final Tinkercad diagram and physical circuit.</strong><span class="hint">Include a screenshot and clickable Tinkercad share link to the final two-LED circuit, plus photos of the real final circuit. Briefly explain how both LEDs work.</span></span></li>
+      </ul>
+    </section>
+
+    <section id="submit">
+      <span class="silk" data-ref="T1">Before You Submit</span>
+      <ul class="rules">
+        <li class="ok">I completed Part 1 in Tinkercad before building it physically.</li>
+        <li class="ok">I completed Part 2 in Tinkercad before building it physically.</li>
+        <li class="ok">I solved Part 3 in Tinkercad before adding the second LED physically.</li>
+        <li class="ok">I used a digital pin other than pin 13 in Part 1.</li>
+        <li class="ok">I changed the delay time from the first tutorial.</li>
+        <li class="ok">My final circuit has two working LEDs.</li>
+        <li class="ok">I included photos from the physical building process.</li>
+        <li class="ok">I included Tinkercad screenshots and clickable share links.</li>
+        <li class="ok">I tested my Tinkercad links and they open correctly.</li>
+        <li class="ok">My presentation has all 10 slides and my explanations are in my own words.</li>
+      </ul>
+
+      <div class="quest">
+        <p class="q">FINAL CHECK &rarr; Can you explain why each LED works and what each connection is doing?</p>
+      </div>
+    </section>
+
+    <section id="submit-presentation">
+      <span class="silk gold" data-ref="T2">Submit Your Presentation</span>
+      <p>Create your final presentation in <strong>Google Slides</strong>. Before you start building your slides, find a <strong>presentation template online</strong> that fits your project and import it or make a copy of it in Google Slides.</p>
+
+      <div class="note"><p><strong>Do not use one of the basic Google Slides themes.</strong> Take a few minutes to find a template that looks organized, interesting, and appropriate for an Arduino project. The template gives you the design &mdash; <strong>you still create the presentation.</strong></p></div>
+
+      <h3>Where to find a template</h3>
+      <p>Choose a <strong>FREE</strong> template. You do not need to pay for anything.</p>
+      <ul class="blocks">
+        <li><span class="num">01</span><span><strong><a href="https://slidesgo.com/" target="_blank" rel="noopener">Slidesgo</a></strong><span class="hint">Free Google Slides templates are available. A free account is required, free users can download up to 3 templates per month, and you must keep the credits slide.</span></span></li>
+        <li><span class="num">02</span><span><strong><a href="https://www.slidescarnival.com/" target="_blank" rel="noopener">SlidesCarnival</a></strong><span class="hint">Free Google Slides templates with no sign-up or download limit. Keep the required credits or attribution included with the template.</span></span></li>
+        <li><span class="num">03</span><span><strong><a href="https://genially.com/templates/presentations/" target="_blank" rel="noopener">Genially</a></strong><span class="hint">Genially has free presentation templates, but they are designed to be edited and presented inside Genially, not imported directly into Google Slides. For this assignment, Slidesgo or SlidesCarnival are the recommended choices.</span></span></li>
+      </ul>
+
+      <ul class="rules">
+        <li><strong>Do not use the basic/default Google Slides themes.</strong></li>
+        <li class="ok"><strong>Find a template online</strong> from a presentation-template website and use it in Google Slides.</li>
+        <li class="ok">You may download/import a template or use a template that lets you <strong>make a copy in Google Slides</strong>.</li>
+        <li><strong>Do not use AI to create the presentation, write your explanations, summarize the project, or decide what to put on each slide.</strong></li>
+        <li class="ok"><strong>AI may be used only to generate images</strong> that you want to include in your presentation.</li>
+        <li class="ok">Use the <strong>photos taken during class</strong> and your own <strong>Tinkercad screenshots</strong> as evidence of your work.</li>
+        <li class="ok">Write all explanations <strong>in your own words</strong> based on what you built and learned.</li>
+        <li class="ok">Customize the template so the presentation is easy to read and looks consistent. Do not leave unused sample text or images from the original template.</li>
+      </ul>
+
+      <div class="today">
+        <p class="tag">Turn In</p>
+        <h2>Submit your Google Slides presentation</h2>
+        <ol>
+          <li>Make sure your presentation contains <strong>all 10 required slides</strong>.</li>
+          <li>Check that your <strong>Tinkercad links are clickable and work</strong>.</li>
+          <li>Remove any <strong>sample text, placeholder images, or extra slides</strong> that came with the template.</li>
+          <li>Submit your finished <strong>Google Slides presentation in Google Classroom</strong>.</li>
+        </ol>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer>// Maker Space · The American School of Tampico · ROOM LB6 · 2026&ndash;2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(function(){
+  const access = {
+    'part-two': '1234',
+    'part-three': '5678'
+  };
+
+  function setUnlocked(part){
+    const gate = document.getElementById('gate-' + part);
+    const content = document.getElementById('content-' + part);
+    const lock = gate ? gate.querySelector('.gate-lock') : null;
+    const sub = gate ? gate.querySelector('.gate-head p') : null;
+    if(gate) gate.classList.add('unlocked');
+    if(content) content.classList.add('unlocked');
+    if(lock) lock.textContent = '✓';
+    if(sub) sub.textContent = 'Unlocked';
+  }
+
+  window.unlockPhase = function(part){
+    const input = document.getElementById('code-' + part);
+    const msg = document.getElementById('msg-' + part);
+    if(!input || !msg) return;
+
+    if(part === 'part-three' && localStorage.getItem('maker-practice-1-part-two') !== 'unlocked'){
+      msg.textContent = 'Part 2 must be unlocked first.';
+      msg.classList.remove('ok');
+      return;
+    }
+
+    if(input.value.trim() === access[part]){
+      localStorage.setItem('maker-practice-1-' + part, 'unlocked');
+      msg.textContent = 'Access granted.';
+      msg.classList.add('ok');
+      setUnlocked(part);
+      const content = document.getElementById('content-' + part);
+      if(content) setTimeout(() => content.scrollIntoView({behavior:'smooth', block:'start'}), 80);
+    }else{
+      msg.textContent = 'Incorrect code. Ask your teacher.';
+      msg.classList.remove('ok');
+      input.select();
+    }
+  };
+
+  ['part-two','part-three'].forEach(function(part){
+    if(localStorage.getItem('maker-practice-1-' + part) === 'unlocked') setUnlocked(part);
+    const input = document.getElementById('code-' + part);
+    if(input){
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter') window.unlockPhase(part);
+      });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
