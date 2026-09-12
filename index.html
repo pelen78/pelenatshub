@@ -369,6 +369,13 @@ const GROUPS = {
     note: "// The year runs top to bottom. Gold = happening now.",
     activities: [
       {
+        title: "Files, Folders and Extensions",
+        date: "Task 3 · TBA",
+        description: "Watch a short video and read our drives-and-paths reference, then dig into a folder of mystery files: build a file table, fix two files that don't behave, and prove you can move a file to the right place.",
+        status: "soon",
+        link: "comp-apps/task-03-file-management/task.html"
+      },
+      {
         title: "Google Tools: Video Tutorial Project",
         date: "Task 2 · TBA",
         description: "Record a screen-captured tutorial for your assigned Google tool (YouTube, Gmail, Forms, Calendar, Sites, or Drive), explained with subtitles only, and submit it as an unlisted YouTube link.",
@@ -459,6 +466,20 @@ const GROUPS = {
         link: "ap-cs-principles/syllabus.pdf"
       }
     ]
+  },
+
+  "Resources": {
+    note: "// Tools for me to use in class, not tied to any one subject.",
+    activities: [
+      {
+        title: "Name Shuffle",
+        date: "Reference",
+        description: "Randomly shuffle and pick names from my class groups — for calling on students, making teams, or picking who goes first.",
+        status: "done",
+        pinned: true,
+        link: "resources/name_shuffle.html"
+      }
+    ]
   }
 
 };
@@ -492,7 +513,7 @@ const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-09-05-b';
+const GROUPS_VERSION='2026-09-12-a';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){

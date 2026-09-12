@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name Shuffle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  header{max-width:1120px;margin:0 auto 20px}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .layout{max-width:1120px;margin:0 auto;display:grid;gap:22px;grid-template-columns:1fr 380px;align-items:start}
+  @media (max-width:900px){.layout{grid-template-columns:1fr}}
+  .stack{display:grid;gap:22px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .card h2{font-size:16px;font-weight:800;margin:0 0 4px}
+  .card h2 + .hint{margin:0 0 14px}
+  .hint{color:var(--navy-soft);font-size:14px}
+
+  /* Draw panel */
+  .draw{text-align:center;padding:30px 24px 26px}
+  .progress{color:var(--navy-soft);font-size:15px;font-weight:600;margin:0 0 14px}
+  .student{font-size:clamp(24px,4.4vw,40px);font-weight:800;margin:0;line-height:1.15}
+  .slot{
+    margin:22px auto 20px;max-width:560px;
+    background:var(--navy);color:#fff;border-radius:14px;
+    padding:26px 20px;min-height:112px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .slot span{font-size:clamp(22px,4vw,36px);font-weight:800;line-height:1.2;word-break:break-word}
+  .slot.rolling span{opacity:.55}
+  .slot.landed{background:var(--gold);color:var(--navy)}
+  .slot.waiting span{color:#8FA0C4;font-weight:600;font-size:20px}
+
+  .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  button{
+    font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  button.big{background:var(--red);font-size:20px;padding:14px 40px;border-radius:999px}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+
+  /* Roster */
+  ol{list-style:none;counter-reset:n;margin:0;padding:0;max-height:430px;overflow-y:auto}
+  ol li{
+    counter-increment:n;
+    display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;
+    padding:7px 6px;border-bottom:1px solid var(--line);font-size:15px;
+  }
+  ol li::before{
+    content:counter(n);
+    background:var(--navy);color:#fff;border-radius:8px;
+    width:30px;height:30px;display:grid;place-items:center;
+    font-size:14px;font-weight:800;
+  }
+  ol li.current{background:#FFF6E0;border-radius:10px}
+  ol li.current::before{background:var(--gold);color:var(--navy)}
+  .name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  ol li select{
+    font:inherit;font-size:14px;font-weight:800;color:var(--navy);
+    background:transparent;border:1px solid transparent;border-radius:8px;
+    padding:3px 4px;max-width:150px;cursor:pointer;
+  }
+  ol li select:hover{border-color:var(--line);background:#FAFCFF}
+  ol li select.none{color:#A6B2CC;font-weight:600}
+  ol li select.skipped{color:var(--red)}
+
+  /* Topic editor */
+  .topic-row{
+    display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;
+    margin-bottom:8px;
+  }
+  .topic-row input{
+    font:inherit;font-size:15px;font-weight:600;color:var(--navy);
+    border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;
+    background:#FAFCFF;
+  }
+  .topic-row input:focus{outline:3px solid var(--gold);outline-offset:1px}
+  .tally{font-size:13px;font-weight:800;color:var(--navy-soft);min-width:56px;text-align:right}
+  .topic-row button{
+    background:transparent;color:#A6B2CC;border:none;
+    font-size:20px;line-height:1;padding:4px 8px;border-radius:8px;
+  }
+  .topic-row button:hover{background:var(--red);color:#fff;filter:none}
+
+  details{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+  summary{cursor:pointer;font-weight:800;font-size:15px}
+  summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px;color:var(--navy-soft)}
+  textarea{
+    width:100%;min-height:150px;resize:vertical;
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font:inherit;font-size:15px;color:var(--navy);background:#FAFCFF;
+  }
+  textarea:focus{outline:3px solid var(--gold);outline-offset:1px}
+  .check{display:flex;align-items:flex-start;gap:8px;margin:16px 0 0;font-size:14px;font-weight:600;color:var(--navy-soft)}
+  .check input{width:18px;height:18px;accent-color:var(--navy);margin-top:2px}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .msg{font-weight:700;font-size:15px;margin:12px 0 0;min-height:22px;color:var(--red)}
+  .msg.ok{color:var(--green)}
+
+  @media (prefers-reduced-motion:reduce){.slot.rolling span{opacity:1}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Name Shuffle</h1>
+  <p>Names come up in list order. Press the button and one item from your list is shuffled out to the name on screen.</p>
+</header>
+
+<div class="layout">
+
+  <div class="stack">
+    <section class="card draw">
+      <p class="progress" id="progress">Name 1 of 21</p>
+      <p class="student" id="student">Andres</p>
+      <div class="slot waiting" id="slot"><span id="slot-text">Ready to shuffle</span></div>
+      <div class="actions">
+        <button class="big" id="draw">Shuffle</button>
+        <button id="next" style="display:none">Next name</button>
+        <button class="quiet" id="redraw" disabled>Shuffle again</button>
+        <button class="quiet" id="skip">Skip, absent</button>
+      </div>
+      <p class="msg" id="msg"></p>
+    </section>
+
+    <section class="card">
+      <h2>List to shuffle</h2>
+      <p class="hint">Edit any item by typing in its box. The number on the right is how many names already have it.</p>
+      <div id="topics"></div>
+      <p class="hint" id="round" style="margin-top:12px"></p>
+      <div class="toolbar">
+        <button class="quiet" id="add-topic">Add item</button>
+        <button class="quiet" id="link">Copy link with lists</button>
+      </div>
+      <div class="check">
+        <input type="checkbox" id="balance" checked>
+        <label for="balance" style="margin:0">Reuse items evenly when there are more names than items</label>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Results</h2>
+    <p class="hint">Click any result in this list to change it by hand.</p>
+    <ol id="roster"></ol>
+
+    <div class="toolbar">
+      <button class="quiet" id="copy">Copy results</button>
+      <button class="quiet" id="reset">Clear all results</button>
+    </div>
+
+    <details>
+      <summary>Edit name list</summary>
+      <label for="names-input">One name per line, in the order they take their turn</label>
+      <textarea id="names-input"></textarea>
+      <div class="toolbar">
+        <button id="apply">Save name list</button>
+      </div>
+    </details>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const DEFAULT_NAMES = [
+    'Andres','Ana Lucia','Juan Carlos','Mariam','Paulina','Jesus Everardo',
+    'Manuel','Sebastian','Mariel','Mariano G.','Luis Emilio','Samuel',
+    'Nuria','Elsa Mariam','Jaqueline','Mariano N.','Miguel Angel',
+    'Arlette Alexandra','Sergio','Carlos Santiago','Jorge Adrian'
+  ];
+  const DEFAULT_TOPICS = [
+    'YouTube','Gmail','Google Forms','Google Calendar','Google Sites','Google Drive'
+  ];
+  const SKIPPED = '\u0000skip';
+
+  let names = DEFAULT_NAMES.slice();
+  let topics = DEFAULT_TOPICS.slice();
+  let results = [];
+  let at = 0;
+  let rolling = false;
+  let roundUsed = [];        // topics already handed out in the round in progress
+  let lastDrawn = null;
+
+  const $ = id => document.getElementById(id);
+
+  function parse(t){ return t.split('\n').map(s => s.trim()).filter(Boolean); }
+  function reduced(){ return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  function live(){ return topics.filter(Boolean); }
+
+  function counts(){
+    const used = {};
+    live().forEach(t => used[t] = 0);
+    results.forEach(r => { if(r && r !== SKIPPED && used[r] !== undefined) used[r]++; });
+    return used;
+  }
+
+  // Unbiased random integer in [0, max), from the browser's crypto source.
+  function randomInt(max){
+    if(max <= 1) return 0;
+    if(window.crypto && crypto.getRandomValues && max <= 65536){
+      const limit = Math.floor(65536 / max) * max;
+      const buf = new Uint16Array(1);
+      let v;
+      do { crypto.getRandomValues(buf); v = buf[0]; } while(v >= limit);
+      return v % max;
+    }
+    return Math.floor(Math.random() * max);
+  }
+
+  // Each round hands out every topic once. The next topic is picked at random
+  // from the ones still unused, which is the same as shuffling the whole list
+  // up front, except it also picks up topics added part way through a round.
+  function remaining(){
+    const list = live();
+    roundUsed = roundUsed.filter(t => list.indexOf(t) !== -1);
+    return list.filter(t => roundUsed.indexOf(t) === -1);
+  }
+
+  function pickTopic(){
+    const list = live();
+    if(!list.length) return null;
+
+    let left = remaining();
+    if(!left.length){
+      if(!$('balance').checked) return null;
+      roundUsed = [];                                   // start a fresh round
+      left = list.slice();
+      if(left.length > 1) left = left.filter(t => t !== lastDrawn);   // no repeat across the seam
+    }
+
+    const choice = left[randomInt(left.length)];
+    roundUsed.push(choice);
+    lastDrawn = choice;
+    return choice;
+  }
+
+  function updateRound(){
+    const list = live();
+    const el = $('round');
+    if(!list.length){ el.textContent = ''; return; }
+    const left = remaining().length;
+    if(!left){
+      el.textContent = 'Every item has been used the same number of times. The next shuffle starts a fresh round.';
+    } else {
+      el.textContent = left === 1
+        ? '1 item still unused in this round.'
+        : left + ' items still unused in this round.';
+    }
+  }
+
+  function draw(){
+    if(rolling || !names.length) return;
+    if(!live().length){ say('Add at least one item below.'); return; }
+
+    const winner = pickTopic();
+    if(!winner){ say('Every item is taken. Turn on reuse, or add more items.'); return; }
+    say('');
+
+    const list = live();
+    $('slot').className = 'slot rolling';
+    $('draw').disabled = true;
+    $('redraw').disabled = true;
+    $('skip').disabled = true;
+    rolling = true;
+
+    const total = reduced() ? 300 : 1700;
+    const tick = 70;
+    let elapsed = 0;
+    const spin = setInterval(() => {
+      $('slot-text').textContent = list[Math.floor(Math.random()*list.length)];
+      elapsed += tick;
+      if(elapsed >= total){ clearInterval(spin); land(winner); }
+    }, tick);
+  }
+
+  function land(topic){
+    rolling = false;
+    results[at] = topic;
+    $('slot').className = 'slot landed';
+    $('slot-text').textContent = topic;
+    $('draw').style.display = 'none';
+    $('next').style.display = at < names.length - 1 ? 'inline-block' : 'none';
+    $('redraw').disabled = false;
+    $('skip').disabled = false;
+    render();
+    renderTopics();
+    (at < names.length - 1 ? $('next') : $('redraw')).focus();
+  }
+
+  function redraw(){
+    if(rolling) return;
+    const prev = results[at];
+    if(prev && prev !== SKIPPED && live().indexOf(prev) !== -1){
+      const k = roundUsed.lastIndexOf(prev);     // put it back in the pool for this round
+      if(k !== -1) roundUsed.splice(k,1);
+      if(lastDrawn === prev) lastDrawn = null;
+    }
+    results[at] = null;
+    $('draw').style.display = 'inline-block';
+    $('draw').disabled = false;
+    $('next').style.display = 'none';
+    draw();
+  }
+
+  function next(){
+    if(rolling) return;
+    if(at < names.length - 1) at++;
+    resetSlot(); render();
+  }
+
+  function skip(){
+    if(rolling) return;
+    results[at] = SKIPPED;
+    if(at < names.length - 1) at++;
+    resetSlot(); render();
+  }
+
+  function resetSlot(){
+    $('slot').className = 'slot waiting';
+    $('slot-text').textContent = 'Ready to shuffle';
+    $('draw').style.display = 'inline-block';
+    $('draw').disabled = false;
+    $('next').style.display = 'none';
+    $('redraw').disabled = true;
+    $('skip').disabled = false;
+    say('');
+  }
+
+  function say(text, ok){
+    const m = $('msg');
+    m.textContent = text;
+    m.className = ok ? 'msg ok' : 'msg';
+  }
+
+  function render(){
+    $('progress').textContent = names.length ? 'Name ' + (at+1) + ' of ' + names.length : 'No names yet';
+    $('student').textContent = names[at] || '\u2014';
+
+    const ol = $('roster');
+    ol.innerHTML = '';
+    names.forEach((n,i) => {
+      const li = document.createElement('li');
+      if(i === at) li.className = 'current';
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = n;
+
+      const sel = document.createElement('select');
+      sel.setAttribute('aria-label','Result for ' + n);
+      const r = results[i];
+      const opts = [['','pending'], [SKIPPED,'absent']].concat(live().map(t => [t,t]));
+      if(r && r !== SKIPPED && !live().includes(r)) opts.push([r,r]);
+      opts.forEach(([v,label]) => {
+        const o = document.createElement('option');
+        o.value = v; o.textContent = label;
+        sel.appendChild(o);
+      });
+      sel.value = r || '';
+      sel.className = r === SKIPPED ? 'skipped' : (r ? '' : 'none');
+      sel.onchange = () => {
+        results[i] = sel.value || null;
+        render();
+        renderTopics();
+      };
+
+      li.append(name, sel);
+      ol.appendChild(li);
+    });
+
+    const done = results.filter(r => r && r !== SKIPPED).length;
+    const pending = names.length - results.filter(r => r).length;
+    if(names.length && pending === 0) say(done + ' names assigned.', true);
+  }
+
+  function renderTopics(){
+    const box = $('topics');
+    box.innerHTML = '';
+    const used = counts();
+    topics.forEach((t,i) => {
+      const row = document.createElement('div');
+      row.className = 'topic-row';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = t;
+      input.placeholder = 'Item name';
+      input.setAttribute('aria-label','Item ' + (i+1));
+      input.oninput = () => {
+        const old = topics[i];
+        const now = input.value.trim();
+        topics[i] = now;
+        if(old && now){
+          results = results.map(r => r === old ? now : r);
+          roundUsed = roundUsed.map(x => x === old ? now : x);
+          if(lastDrawn === old) lastDrawn = now;
+        }
+        render();
+      };
+      input.onblur = () => renderTopics();
+
+      const tally = document.createElement('span');
+      tally.className = 'tally';
+      const c = used[t] || 0;
+      tally.textContent = c === 1 ? '1 name' : c + ' names';
+
+      const del = document.createElement('button');
+      del.textContent = '\u00D7';
+      del.title = 'Delete this item';
+      del.setAttribute('aria-label','Delete item ' + (t || (i+1)));
+      del.onclick = () => { topics.splice(i,1); renderTopics(); render(); };
+
+      row.append(input, tally, del);
+      box.appendChild(row);
+    });
+    if(!topics.length){
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'No items yet. Add one to start.';
+      box.appendChild(p);
+    }
+    updateRound();
+  }
+
+  function addTopic(){
+    topics.push('');
+    renderTopics();
+    const inputs = $('topics').querySelectorAll('input');
+    if(inputs.length) inputs[inputs.length-1].focus();
+  }
+
+  function applyNames(){
+    const fresh = parse($('names-input').value);
+    if(!fresh.length){ say('The name list cannot be empty.'); return; }
+    const keep = {};
+    names.forEach((n,i) => { if(results[i]) keep[n] = results[i]; });
+    names = fresh;
+    results = names.map(n => keep[n] || null);
+    at = Math.min(at, names.length - 1);
+    resetSlot(); render(); renderTopics();
+    say('Name list saved.', true);
+  }
+
+  function copyResults(){
+    const rows = names.map((n,i) => {
+      const r = results[i];
+      return n + '\t' + (r === SKIPPED ? 'absent' : (r || ''));
+    }).join('\n');
+    navigator.clipboard.writeText(rows).then(() => flash('copy','Copied'), () => prompt('Copy this:', rows));
+  }
+
+  function copyLink(){
+    const base = location.href.split('#')[0];
+    const url = base + '#n=' + encodeURIComponent(names.join('\n')) +
+                       '&t=' + encodeURIComponent(live().join('\n'));
+    navigator.clipboard.writeText(url).then(() => flash('link','Link copied'), () => prompt('Copy this link:', url));
+  }
+
+  function flash(id, text){
+    const b = $(id), old = b.textContent;
+    b.textContent = text;
+    setTimeout(() => { b.textContent = old; }, 1800);
+  }
+
+  function loadFromLink(){
+    const h = location.hash.slice(1);
+    if(!h) return;
+    const parts = {};
+    h.split('&').forEach(p => {
+      const i = p.indexOf('=');
+      if(i > 0) parts[p.slice(0,i)] = p.slice(i+1);
+    });
+    try{
+      if(parts.n) names = parse(decodeURIComponent(parts.n));
+      if(parts.t) topics = parse(decodeURIComponent(parts.t));
+    }catch(e){}
+  }
+
+  $('draw').onclick = draw;
+  $('next').onclick = next;
+  $('redraw').onclick = redraw;
+  $('skip').onclick = skip;
+  $('add-topic').onclick = addTopic;
+  $('apply').onclick = applyNames;
+  $('copy').onclick = copyResults;
+  $('link').onclick = copyLink;
+  $('reset').onclick = () => {
+    if(!confirm('Clear every result so far?')) return;
+    results = []; at = 0; roundUsed = []; lastDrawn = null;
+    resetSlot(); render(); renderTopics();
+  };
+
+  document.addEventListener('keydown', e => {
+    if(e.key !== ' ' && e.key !== 'Enter') return;
+    const el = document.activeElement;
+    if(el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'BUTTON')) return;
+    e.preventDefault();
+    if($('next').style.display !== 'none') next(); else draw();
+  });
+
+  loadFromLink();
+  $('names-input').value = names.join('\n');
+  resetSlot();
+  renderTopics();
+  render();
+})();
+</script>
+</body>
+</html>

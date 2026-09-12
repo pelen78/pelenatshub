@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Files, Folders and Extensions: Unit 2 Day 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;--teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;--ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C;--stamp-red:#9F1239}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px;-webkit-font-smoothing:antialiased}
+strong{font-weight:700}::selection{background:var(--gold);color:var(--navy-deep)}:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:14px}
+h1{font-family:'Fredoka',sans-serif;font-size:clamp(40px,8vw,70px);font-weight:600;letter-spacing:-.02em;line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.22)}
+h1 .pop{display:block;color:var(--gold)}
+.subtitle{font-family:'Fredoka',sans-serif;font-weight:400;font-size:clamp(16px,2.6vw,21px);color:#fff;opacity:.92;margin-top:10px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chips span{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid rgba(243,183,0,.55);border-radius:999px;padding:6px 13px;background:rgba(255,255,255,.08)}
+.meta{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65)}
+
+main{max-width:880px;margin:auto;padding:24px 24px 44px}
+section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}
+.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:8px 16px;margin-bottom:22px;font-family:'JetBrains Mono',monospace}
+.silk:before{content:attr(data-ref);font-size:11px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}
+.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}
+.silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}.silk.red:before{background:var(--stamp-red)}
+h2{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em;font-size:26px;margin-bottom:8px}
+h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.01em}
+p{margin-bottom:14px;max-width:68ch}
+.lead{font-size:19.5px}
+
+.note,.stop{background:#fff;border-radius:0 10px 10px 0;padding:15px 18px;margin:16px 0}
+.note{border-left:4px solid var(--gold)}
+.stop{border-left:4px solid var(--stamp-red)}
+.note p:last-child,.stop p:last-child,.start p:last-child{margin-bottom:0}
+
+/* navy overview box */
+.start{background:var(--navy);color:#fff;border-radius:14px;padding:24px;margin:10px 0 24px}
+.start .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}
+.start h2{font-size:26px;margin:6px 0 10px;color:#fff}
+.start p{margin-bottom:12px;max-width:none}
+
+/* numbered steps */
+.steps{list-style:none;counter-reset:s;margin-top:12px}
+.steps>li{counter-increment:s;position:relative;padding:14px 0 14px 48px;border-bottom:1px solid var(--line);font-size:16.5px}
+.steps>li:last-child{border-bottom:none}
+.steps>li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:14px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold)}
+
+/* triangle-bullet list */
+.arrows{list-style:none;margin:10px 0 0}
+.arrows li{position:relative;padding-left:22px;margin-bottom:8px;font-size:16px}
+.arrows li:before{content:"\25B6";position:absolute;left:0;top:1px;color:var(--teal);font-size:11px}
+.arrows li:last-child{margin-bottom:0}
+
+/* question cards */
+.question{display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:16px;padding-top:2px}
+.question p{margin-bottom:0;font-size:16px}
+.question .arrows{margin-top:8px}
+@media(max-width:650px){.question{grid-template-columns:1fr}}
+
+.inline{font-family:'JetBrains Mono',monospace;background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--teal);white-space:nowrap;font-size:14.5px}
+
+.readbtn{display:inline-block;background:var(--gold);color:var(--navy-deep);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;letter-spacing:.06em;text-decoration:none;border-radius:8px;padding:10px 16px}
+.readbtn:hover,.readbtn:focus{background:var(--gold-soft)}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin:14px 0 8px;font-size:15.5px}
+th{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;text-align:left;color:var(--navy);padding:10px 12px;border-bottom:2px solid var(--navy)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{font-family:'JetBrains Mono',monospace;font-size:14.5px;color:var(--teal)}
+
+/* two-column split cards */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 6px}
+.split div{background:#fff;border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:16px 18px}
+.split div:last-child{border-top-color:var(--teal)}
+.split h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--navy);margin-bottom:8px}
+.split p{margin-bottom:6px;font-size:15px}
+.split p:last-child{margin-bottom:0}
+@media(max-width:650px){.split{grid-template-columns:1fr}}
+
+/* checklist */
+.checklist{list-style:none;margin:14px 0 22px}
+.checklist li{position:relative;padding:9px 0 9px 32px;border-bottom:1px solid var(--line);font-size:16.5px}
+.checklist li:last-child{border-bottom:none}
+.checklist li:before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:2px solid var(--teal);border-radius:4px}
+
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Task 3</p>
+    <h1>Files, Folders<span class="pop">and Extensions</span></h1>
+    <p class="subtitle">Naming, extensions, and where your files really live</p>
+    <div class="chips"><span>Individual</span><span>Windows &amp; Mac</span><span>Google Doc + PDF</span></div>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <span class="silk" data-ref="00">Before You Start</span>
+
+    <div class="start">
+      <p class="tag">Overview</p>
+      <h2>What's this about?</h2>
+      <p>Every file has two parts: a name and an extension. The extension is the label that tells the computer which program to open.</p>
+      <p>Today you find out what happens when that label is missing, or when it lies.</p>
+    </div>
+
+    <ol class="steps">
+      <li>Download <span class="inline">Task-03-files.zip</span> from Google Classroom.</li>
+      <li>Extract it to the <strong>Desktop</strong>. Right click the zip, then Extract All.</li>
+      <li>Open a new Google Doc. Name it <span class="inline">lastname_filemgmt</span></li>
+      <li>Type your name, the date and your class at the top.</li>
+    </ol>
+    <div class="stop"><strong>STOP</strong></div>
+
+    <p class="lead" style="margin-top:22px">Your personal drive</p>
+    <p>When you log in with your own user on a school computer, you get a personal drive with 8 GB of space that belongs only to you.</p>
+    <p>Find it: open File Explorer and click <strong>This PC</strong>. You will see the C drive and, below it, your drive with a different letter. Write that letter down. You need it later.</p>
+    <ul class="arrows">
+      <li>The Desktop and Documents folders belong to the computer you are sitting at.</li>
+      <li>Your personal drive belongs to <strong>you</strong>. It follows your user, not the machine.</li>
+      <li>If you save to the Desktop and sit at a different computer tomorrow, your work may not be there.</li>
+    </ul>
+    <p style="margin-top:12px">Today you work in the normal computer folders so you can see how they behave. At the end you move everything to your own drive. From now on, that drive is where your class work lives.</p>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="01">Watch and Answer</span>
+    <p class="lead">Watch the video, then answer these 8 questions in your Doc. Short answers, your own words.</p>
+
+    <p><a class="readbtn" href="https://www.youtube.com/watch?v=k-EID5_2D9U" target="_blank" rel="noopener">Watch: Basic concepts of file management (4:02) →</a></p>
+
+    <div class="note"><strong>Heads up.</strong> The video covers files, folders, and extensions in general. It does not talk about drives or paths. For <strong>Questions 4 and 5</strong>, read <a href="reading.html">Drives and Paths</a> instead. It has everything you need, including the research answers.</div>
+
+    <div class="question"><div class="num">01</div><p>A classmate sends you a file called <span class="inline">homework</span>. You double click it and nothing happens. What is missing, and how would you fix it?</p></div>
+    <div class="question"><div class="num">02</div><p>A folder has <span class="inline">essay.docx</span> and <span class="inline">essay.pdf</span>. Are these the same file? Explain what the computer sees.</p></div>
+    <div class="question"><div class="num">03</div><p>Rewrite this file name so it follows good naming rules: <span class="inline">my final project (2) FINAL real version.docx</span></p></div>
+    <div class="question"><div class="num">04</div><div><p>Look at this path: <span class="inline">C:\Users\Student\Documents\School\Maths.docx</span></p>
+      <ul class="arrows">
+        <li>Which part is the drive? Which parts are folders? Which part is the file name, and which is the extension?</li>
+        <li>Write the same path the way a Mac would write it. Two things change. Name both.</li>
+      </ul>
+    </div></div>
+    <div class="question"><div class="num">05</div><div><p><strong>Where do drive letters come from?</strong> Open This PC and look at the list of drives, then read <a href="reading.html">Drives and Paths</a> to answer these.</p>
+      <ul class="arrows">
+        <li>Which letter is your personal drive? Write its full path, starting with the letter.</li>
+        <li>What is the C drive on a Windows computer, and why is it almost always C?</li>
+        <li>What happened to A and B? Explain why they are usually missing.</li>
+        <li>Your Mac has a hard drive too, but no letters anywhere. How does macOS organize drives instead? One or two sentences.</li>
+      </ul>
+    </div></div>
+    <div class="question"><div class="num">06</div><p>You downloaded a file and now you cannot find it. Describe two different ways to locate it on this computer.</p></div>
+    <div class="question"><div class="num">07</div><p>JPG and PNG both store images. Give one situation where you would pick each one, and say why.</p></div>
+    <div class="question"><div class="num">08</div><p>Your teacher asks for a PDF, but your work is a Google Doc. List the steps to hand it in correctly.</p></div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="02">Build the File Table</span>
+    <p class="lead">Open your <span class="inline">Unit2_Files_Day1</span> folder. In your Doc, build this table. One row per file, 12 rows.</p>
+
+    <table>
+      <thead>
+        <tr><th>File name</th><th>Type</th><th>Program that opens it</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Activity_Sheet.doc</td><td></td><td></td><td></td></tr>
+        <tr><td>…</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <p class="lead" style="margin-top:22px">Rules</p>
+    <ul class="arrows">
+      <li><strong>Type</strong> must be one of: Document, Image, Audio, Video, Plain text.</li>
+      <li>To find the program, right click the file and choose <strong>Open with</strong>.</li>
+      <li>Turn on file extensions first, or you are guessing.</li>
+    </ul>
+
+    <div class="split">
+      <div>
+        <h4>Windows (classroom)</h4>
+        <p>File Explorer &gt; View &gt; Show &gt; File name extensions</p>
+      </div>
+      <div>
+        <h4>macOS (your laptop)</h4>
+        <p>Finder &gt; Settings &gt; Advanced &gt; Show all filename extensions</p>
+      </div>
+    </div>
+
+    <div class="note"><strong>Two files will not behave.</strong> Do not skip them and do not delete them. Figure out what is really inside each one, fix it, and write what you did in the Notes column. One of the two is hiding a code word. Write that code word at the bottom of your table.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="03">Export, Rename, Move, Prove It</span>
+    <p class="lead">This part is graded on the file itself, not on what is written inside it.</p>
+    <ol class="steps">
+      <li>In your Doc: File &gt; Download &gt; PDF Document.</li>
+      <li>Go to your <strong>Downloads</strong> folder and find the PDF.</li>
+      <li>Rename it exactly: <span class="inline">lastname_filemgmt_v01.pdf</span></li>
+      <li><strong>Move</strong> it into your <span class="inline">Unit2_Files_Day1</span> folder. Move, not copy. Downloads must end up empty of this file.</li>
+      <li>Take a screenshot of that folder with the PDF inside it and the full path visible.</li>
+      <li>Now move the whole <span class="inline">Unit2_Files_Day1</span> folder from the Desktop to your personal drive, the one you found in This PC. Drag the folder across. Watch what the path at the top changes to.</li>
+      <li>Upload the PDF and the screenshot to Google Classroom.</li>
+    </ol>
+
+    <div class="stop"><strong>Careful with step 6.</strong> When you drag a folder to a different drive, Windows copies it instead of moving it. Check the Desktop afterwards. If the folder is still there, delete the Desktop copy so you only have one.</div>
+
+    <div class="split">
+      <div>
+        <h4>Windows (classroom)</h4>
+        <p>Screenshot: <span class="inline">Win + Shift + S</span></p>
+        <p>The path is the bar at the top of File Explorer. Click it once to see the full path as text.</p>
+      </div>
+      <div>
+        <h4>macOS (your laptop)</h4>
+        <p>Screenshot: <span class="inline">Cmd + Shift + 4</span></p>
+        <p>Path bar is off by default. Turn it on: Finder &gt; View &gt; Show Path Bar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="silk red" data-ref="04">What I Will Check</span>
+    <p class="lead">Go through this list before you upload. If you cannot tick a line, you are not done.</p>
+    <ul class="checklist">
+      <li>Your name, the date and your class are at the top of the Doc.</li>
+      <li>All 8 questions are answered in your own words, not copied.</li>
+      <li>Question 4 breaks the path into drive, folders, file name and extension, and shows the Mac version.</li>
+      <li>Question 5 names your personal drive letter and explains what C, A and B are.</li>
+      <li>The file table has all 12 files, one per row.</li>
+      <li>Every file has a type and a program listed.</li>
+      <li>The two problem files are identified, fixed, and explained in the Notes column.</li>
+      <li>The code word is written at the bottom of the table.</li>
+      <li>Your PDF is named <span class="inline">lastname_filemgmt_v01.pdf</span> with nothing else added.</li>
+      <li>The PDF is inside your <span class="inline">Unit2_Files_Day1</span> folder, not in Downloads.</li>
+      <li>The screenshot shows the file inside the folder with the full path visible.</li>
+      <li>The finished folder is on your personal drive, and there is no leftover copy on the Desktop.</li>
+    </ul>
+    <div class="note"><strong>The last three lines matter as much as the first seven.</strong> A perfect table saved in the wrong place is still lost work. Knowing where your file lives is the whole point of this unit.</div>
+  </section>
+
+</main>
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+</body>
+</html>

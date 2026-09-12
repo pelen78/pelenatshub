@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drives and Paths: Comp Apps Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;
+  --teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;
+  --ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px}
+a{color:var(--teal)}
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow,.meta,.label,.silk,.source-date{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em}
+.eyebrow{font-size:12px;color:var(--gold-soft);margin-bottom:12px}
+h1,h2,h3,h4{font-family:'Fredoka',sans-serif}
+h1{font-size:clamp(40px,8vw,68px);line-height:1;font-weight:600}h1 .pop{display:block;color:var(--gold)}
+.subtitle{font-family:'Fredoka',sans-serif;font-size:clamp(17px,2.6vw,22px);margin-top:12px}.meta{font-size:11.5px;margin-top:18px;color:rgba(255,255,255,.65)}
+main{max-width:880px;margin:auto;padding:24px 24px 44px}
+section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}
+.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:7px 14px;margin-bottom:18px}.silk:before{content:attr(data-ref);font-size:10px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}
+.lead{font-size:20px}.card,.note,.source{background:var(--surface);border:1.5px solid var(--line);border-radius:12px}.card{padding:20px 20px 16px;margin:14px 0;border-top:4px solid var(--gold)}
+.card h3{font-size:24px;margin-bottom:8px}.card ul{margin:8px 0 0 22px}.card li{margin:5px 0}
+.note{border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:15px 18px;margin:16px 0}.note strong{color:var(--navy)}
+.compare{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;margin:16px 0 20px}.compare th{background:var(--navy);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.compare th,.compare td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.compare tr:last-child td{border-bottom:none}.compare td:first-child{font-weight:800;color:var(--navy);width:23%}
+.codebox{background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin:14px 0;overflow-x:auto}.codebox .label{font-size:11px;color:var(--gold-soft);margin-bottom:10px}.codebox pre{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.8;white-space:pre-wrap}.cmd{color:var(--gold-soft)}
+.memory{background:var(--navy);color:#fff;border-radius:12px;padding:22px;margin:18px 0}.memory h3{color:var(--gold-soft);font-size:24px;margin-bottom:10px}.memory p{margin:4px 0}
+.sources{display:grid;gap:12px;margin-top:14px}.source{padding:14px 16px}.source a{word-break:break-all;font-family:'JetBrains Mono',monospace;font-size:13px}.source-date{font-size:10px;color:var(--muted);margin-top:5px}
+.back{display:inline-block;margin-top:20px;background:var(--gold);color:var(--navy-deep);font-family:'JetBrains Mono',monospace;font-weight:700;text-decoration:none;border-radius:8px;padding:9px 14px}
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+@media(max-width:720px){.compare{font-size:15px}.compare td:first-child{width:auto}}
+</style>
+
+<style>
+  body{font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  strong{font-weight:700}
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  p{margin-bottom:14px}
+  section > p{max-width:68ch}
+  .note p:last-child,.card p:last-child{margin-bottom:0}
+  .cover h1,h1{font-size:clamp(44px,9vw,78px);font-weight:600;letter-spacing:-.02em;line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.22)}
+  .subtitle{font-weight:400;color:#fff;opacity:.92;margin-top:10px}
+  .meta{font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65)}
+  .silk{font-size:14px;letter-spacing:.16em;padding:8px 16px;margin-bottom:22px}
+  .silk:before{font-size:11px;letter-spacing:.1em;padding:2px 6px}
+  h2{font-weight:600;letter-spacing:-.01em}
+  h3{font-weight:600;font-size:23px;letter-spacing:-.01em}
+  .lead{font-size:19.5px}
+  .card h3{font-size:22px}
+  .card p{font-size:16px}
+  .card ul li{font-size:15.5px;margin:5px 0}
+  .compare{font-size:16px}
+  .compare th{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+  .memory h3{font-size:22px}
+  .memory p{margin:4px 0;font-size:16.5px}
+  .source strong{font-size:16px}
+  .source a{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0;text-transform:none}
+  .source-date{color:var(--muted);letter-spacing:.18em;margin-top:6px}
+  .inline,code,.cmd{font-family:'JetBrains Mono',monospace;font-size:14.5px}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Task 3 · Student Reading</p>
+    <h1>Drives<span class="pop">and Paths</span></h1>
+    <p class="subtitle">Everything you need for Questions 4 and 5: drive letters, Mac paths, and where files really live</p>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026–2027</p>
+  </div>
+</header>
+<main>
+
+  <section>
+    <span class="silk" data-ref="R0">Why This Reading?</span>
+    <p class="lead">The video covered files, folders, and extensions, but it never talked about drives or paths. That is what this page is for.</p>
+    <div class="note"><strong>Use this page for Questions 4 and 5.</strong> Read it, then answer those two questions on <span class="inline">task.html</span> in your own words. This page is your information source, not a worksheet.</div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="G1">What Is a Path?</span>
+    <p>A <strong>path</strong> is the full address of a file: it tells the computer exactly which drive, which folders, and which file to open.</p>
+    <div class="codebox"><p class="label">Example path (Windows)</p><pre>C:\Users\Student\Documents\School\Maths.docx</pre></div>
+    <table class="compare">
+      <tr><th>Part</th><th>What it is</th></tr>
+      <tr><td>C:\</td><td>The <strong>drive</strong>: the disk the file lives on.</td></tr>
+      <tr><td>Users, Student, Documents, School</td><td>The <strong>folders</strong>, nested inside each other, in order.</td></tr>
+      <tr><td>Maths</td><td>The <strong>file name</strong>.</td></tr>
+      <tr><td>.docx</td><td>The <strong>extension</strong>: tells the computer what kind of file it is.</td></tr>
+    </table>
+    <div class="note"><strong>Read it left to right, outside to inside.</strong> Each backslash <span class="inline">\</span> moves you one folder deeper, starting from the drive and ending at the file.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="W1">Drive Letters (Windows)</span>
+    <div class="card">
+      <h3>What is a drive letter?</h3>
+      <p>A single letter (A through Z) followed by a colon, used to identify one specific storage device or partition. It is always the first thing in a Windows path.</p>
+    </div>
+    <div class="card">
+      <h3>Why is the main drive almost always C?</h3>
+      <p>This goes back to the earliest IBM PCs. Before hard drives were common, computers started programs from <strong>floppy disks</strong>, and the system reserved <strong>A:</strong> for the first floppy drive and <strong>B:</strong> for a second one. When hard drives became standard, they were given the next free letter, <strong>C:</strong>, and that convention stuck, even though almost no computer has used a floppy disk in decades.</p>
+    </div>
+    <div class="card">
+      <h3>What happened to A and B?</h3>
+      <p>They still technically exist, but almost nothing uses them anymore because floppy disk drives disappeared. Windows simply keeps skipping them out of habit, so most computers jump straight from having no A or B drive to <strong>C:</strong> as the first one you see.</p>
+    </div>
+    <div class="note"><strong>Your personal drive is not C.</strong> C: is reserved for the computer itself: the operating system and the software installed on that machine. Your personal network drive gets a different letter (often something like D:, S:, or Z:, depending on how the school network is set up) because it lives somewhere else and follows <strong>your account</strong>, not that specific computer.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="M1">How macOS Writes Paths</span>
+    <div class="card">
+      <h3>No drive letters at all</h3>
+      <p>macOS does not use letters for drives. Instead, everything (your internal disk, any external drive, any connected server) fits into <strong>one single folder structure</strong> that starts at the <strong>root</strong>, written as just <span class="inline">/</span></p>
+    </div>
+    <div class="card">
+      <h3>Forward slashes, not backslashes</h3>
+      <p>Where Windows separates folders with <span class="inline">\</span>, macOS (like Linux) uses <span class="inline">/</span></p>
+    </div>
+    <div class="card">
+      <h3>Where your files live</h3>
+      <p>Your personal files live inside your <strong>home folder</strong>, at <span class="inline">/Users/yourusername/</span>, with the familiar Documents, Desktop, and Downloads folders inside it.</p>
+    </div>
+    <div class="codebox"><p class="label">Same idea, Mac style</p><pre>/Users/Student/Documents/School/Maths.docx</pre></div>
+    <div class="note"><strong>Two things change</strong> when you rewrite a Windows path the Mac way: (1) the drive letter and colon <span class="inline">C:</span> disappear, so you just start at <span class="inline">/</span>, and (2) every backslash <span class="inline">\</span> becomes a forward slash <span class="inline">/</span></div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="C1">Windows vs. Mac, Side by Side</span>
+    <table class="compare">
+      <tr><th></th><th>Windows</th><th>macOS</th></tr>
+      <tr><td>Separator</td><td>Backslash <span class="inline">\</span></td><td>Forward slash <span class="inline">/</span></td></tr>
+      <tr><td>Drives</td><td>Letters: C:, D:, E:…</td><td>No letters, one root folder <span class="inline">/</span></td></tr>
+      <tr><td>Your files</td><td>Often under a drive like C:\Users\yourname</td><td>Under <span class="inline">/Users/yourname</span></td></tr>
+      <tr><td>Example</td><td>C:\Users\Student\Documents\School\Maths.docx</td><td>/Users/Student/Documents/School/Maths.docx</td></tr>
+    </table>
+    <div class="memory"><h3>One sentence to remember</h3><p><strong>Windows finds a file by drive letter, then folders; Mac finds the same file by folders alone, starting from one root.</strong></p></div>
+  </section>
+
+  <section>
+    <span class="silk gold" data-ref="S1">Official Sources</span>
+    <p>These are the pages used to verify the information on this page. You may open them if you want to dig deeper for Question 5.</p>
+    <div class="sources">
+      <div class="source"><strong>Wikipedia: Drive letter assignment (history of A:, B:, C:)</strong><br><a href="https://en.wikipedia.org/wiki/Drive_letter_assignment" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Drive_letter_assignment</a><div class="source-date">Information rechecked September 12, 2026</div></div>
+      <div class="source"><strong>Apple Developer: File System Programming Guide (root, volumes, no drive letters)</strong><br><a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html" target="_blank" rel="noopener">https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html</a><div class="source-date">Information rechecked September 12, 2026</div></div>
+      <div class="source"><strong>Apple Support: See file and folder path names in Finder</strong><br><a href="https://support.apple.com/guide/mac-help/see-file-and-folder-path-names-mchlp1774/mac" target="_blank" rel="noopener">https://support.apple.com/guide/mac-help/see-file-and-folder-path-names-mchlp1774/mac</a><div class="source-date">Information rechecked September 12, 2026</div></div>
+    </div>
+    <a class="back" href="task.html">← Back to the Task</a>
+  </section>
+
+</main>
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+</body>
+</html>
