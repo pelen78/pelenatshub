@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class Timer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  header{max-width:900px;margin:0 auto 20px;text-align:center}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .layout{max-width:900px;margin:0 auto;display:grid;gap:22px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+  /* Face */
+  .face{text-align:center;padding:30px 24px}
+  .clock{
+    font-variant-numeric:tabular-nums;font-feature-settings:"tnum";
+    font-size:clamp(72px,18vw,220px);font-weight:800;line-height:1;
+    letter-spacing:-.02em;margin:0 0 22px;transition:color .2s ease;
+    cursor:pointer;
+  }
+  .clock.green{color:var(--green)}
+  .clock.gold{color:var(--gold)}
+  .clock.red{color:var(--red)}
+  .clock.done{animation:pulse 1s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  .bar{
+    max-width:640px;margin:0 auto 26px;height:16px;border-radius:999px;
+    background:var(--line);overflow:hidden;
+  }
+  .bar-fill{height:100%;border-radius:999px;background:var(--green);transition:width .25s linear,background .3s ease}
+
+  .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:6px}
+  button{
+    font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  button.big{background:var(--red);font-size:20px;padding:14px 44px;border-radius:999px}
+  button.big.go{background:var(--green)}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+  button.chip{
+    background:#FAFCFF;color:var(--navy);border-color:var(--line);
+    font-weight:800;font-size:15px;padding:9px 18px;border-radius:999px;
+  }
+  button.chip:hover{border-color:var(--navy-soft);filter:none;background:#F1F6FF}
+  button.chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  .hint{color:var(--navy-soft);font-size:14px;text-align:center;margin:10px 0 0}
+
+  /* Presets */
+  .presets h2, .custom h2{font-size:16px;font-weight:800;margin:0 0 12px;text-align:center}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+
+  .custom-row{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .custom-row input{
+    font:inherit;font-size:22px;font-weight:800;color:var(--navy);text-align:center;
+    border:1px solid var(--line);border-radius:10px;padding:9px 6px;width:70px;background:#FAFCFF;
+  }
+  .custom-row input:focus{outline:3px solid var(--gold);outline-offset:1px}
+  .custom-row span{font-weight:800;font-size:22px;color:var(--navy-soft)}
+
+  .toggles{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:16px}
+  .check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--navy-soft)}
+  .check input{width:18px;height:18px;accent-color:var(--navy)}
+
+  @media (prefers-reduced-motion:reduce){.clock.done{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Class Timer</h1>
+  <p>Pick a length below, or click the clock to type your own. Space bar starts and pauses.</p>
+</header>
+
+<div class="layout">
+
+  <section class="card face">
+    <div class="clock green" id="clock" tabindex="0" role="button" aria-label="Click to set a custom time">05:00</div>
+    <div class="bar"><div class="bar-fill" id="bar-fill" style="width:100%"></div></div>
+    <div class="actions">
+      <button class="big go" id="toggle">Start</button>
+      <button class="quiet" id="reset">Reset</button>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button class="quiet" id="minus1">&minus;1:00</button>
+      <button class="quiet" id="minus10s">&minus;10s</button>
+      <button class="quiet" id="plus10s">+10s</button>
+      <button class="quiet" id="plus1">+1:00</button>
+    </div>
+    <p class="hint" id="msg">&nbsp;</p>
+  </section>
+
+  <section class="card presets">
+    <h2>Quick presets</h2>
+    <div class="chips" id="presets"></div>
+  </section>
+
+  <section class="card custom">
+    <h2>Custom time</h2>
+    <div class="custom-row">
+      <input type="number" id="min-input" min="0" max="180" value="5" aria-label="Minutes">
+      <span>:</span>
+      <input type="number" id="sec-input" min="0" max="59" value="0" aria-label="Seconds">
+      <button id="set-custom">Set time</button>
+    </div>
+    <div class="toggles">
+      <label class="check"><input type="checkbox" id="sound" checked> Play sound when time's up</label>
+      <label class="check"><input type="checkbox" id="title-clock" checked> Show time left in the tab title</label>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const PRESETS = [1,2,3,5,10,15,20,30]; // minutes
+
+  const $ = id => document.getElementById(id);
+  const clockEl = $('clock'), fillEl = $('bar-fill'), toggleBtn = $('toggle'),
+        msgEl = $('msg'), presetsEl = $('presets');
+
+  let total = 300;      // seconds the current countdown was set to
+  let remaining = 300;  // seconds left right now
+  let running = false;
+  let endAt = null;     // Date.now() timestamp the countdown will hit 0
+  let raf = null;
+  let doneAt = false;
+  const origTitle = document.title;
+
+  function fmt(s){
+    s = Math.max(0, Math.round(s));
+    const m = Math.floor(s/60), r = s%60;
+    return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0');
+  }
+
+  function colorFor(fraction){
+    if(remaining <= 0) return 'red';
+    if(fraction <= 0.15) return 'red';
+    if(fraction <= 0.4) return 'gold';
+    return 'green';
+  }
+
+  function render(){
+    clockEl.textContent = fmt(remaining);
+    const fraction = total > 0 ? remaining/total : 0;
+    const color = colorFor(fraction);
+    clockEl.className = 'clock ' + color + (remaining <= 0 ? ' done' : '');
+    fillEl.style.width = Math.max(0, Math.min(100, fraction*100)) + '%';
+    fillEl.style.background = 'var(--' + color + ')';
+    if($('title-clock').checked && running){
+      document.title = fmt(remaining) + ' — Class Timer';
+    } else if(!running){
+      document.title = origTitle;
+    }
+  }
+
+  function highlightPreset(){
+    const mins = Math.round(total/60);
+    [...presetsEl.children].forEach(b => {
+      b.classList.toggle('active', Number(b.dataset.mins) === mins && total % 60 === 0);
+    });
+  }
+
+  function tick(){
+    if(!running) return;
+    remaining = Math.max(0, (endAt - Date.now())/1000);
+    if(remaining <= 0){
+      remaining = 0;
+      render();
+      finish();
+      return;
+    }
+    render();
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start(){
+    if(running) return;
+    if(remaining <= 0){ remaining = total; }
+    running = true;
+    doneAt = false;
+    endAt = Date.now() + remaining*1000;
+    toggleBtn.textContent = 'Pause';
+    toggleBtn.classList.remove('go');
+    say('');
+    raf = requestAnimationFrame(tick);
+  }
+
+  function pause(){
+    if(!running) return;
+    running = false;
+    cancelAnimationFrame(raf);
+    toggleBtn.textContent = 'Start';
+    toggleBtn.classList.add('go');
+    document.title = origTitle;
+    render();
+  }
+
+  function reset(){
+    running = false;
+    cancelAnimationFrame(raf);
+    remaining = total;
+    doneAt = false;
+    toggleBtn.textContent = 'Start';
+    toggleBtn.classList.add('go');
+    document.title = origTitle;
+    say('');
+    render();
+  }
+
+  function finish(){
+    running = false;
+    cancelAnimationFrame(raf);
+    toggleBtn.textContent = 'Start';
+    toggleBtn.classList.add('go');
+    document.title = "Time's up! — Class Timer";
+    say("Time's up!", true);
+    if(!doneAt && $('sound').checked) beep();
+    doneAt = true;
+    render();
+  }
+
+  function say(text){
+    msgEl.textContent = text || ' ';
+    msgEl.style.color = text ? 'var(--red)' : '';
+  }
+
+  function addSeconds(delta){
+    remaining = Math.max(0, remaining + delta);
+    if(remaining > total) total = remaining;
+    if(running){
+      endAt = Date.now() + remaining*1000;
+      doneAt = false;
+    }
+    render();
+    highlightPreset();
+  }
+
+  function setCustomTime(mins, secs){
+    pause();
+    const m = Math.max(0, Math.min(180, Math.floor(Number(mins)||0)));
+    const s = Math.max(0, Math.min(59, Math.floor(Number(secs)||0)));
+    total = m*60 + s;
+    if(total <= 0) total = 60;
+    remaining = total;
+    doneAt = false;
+    say('');
+    render();
+    highlightPreset();
+  }
+
+  // Simple three-beep alert built with the Web Audio API — no audio file needed.
+  function beep(){
+    try{
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      [0,0.35,0.7].forEach(offset => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime + offset);
+        gain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + offset + 0.3);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime + offset);
+        osc.stop(ctx.currentTime + offset + 0.32);
+      });
+    }catch(e){}
+  }
+
+  function buildPresets(){
+    presetsEl.innerHTML = '';
+    PRESETS.forEach(mins => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = mins + (mins === 1 ? ' min' : ' min');
+      b.dataset.mins = mins;
+      b.onclick = () => {
+        $('min-input').value = mins;
+        $('sec-input').value = 0;
+        setCustomTime(mins, 0);
+      };
+      presetsEl.appendChild(b);
+    });
+  }
+
+  toggleBtn.onclick = () => running ? pause() : start();
+  $('reset').onclick = reset;
+  $('minus1').onclick = () => addSeconds(-60);
+  $('plus1').onclick = () => addSeconds(60);
+  $('minus10s').onclick = () => addSeconds(-10);
+  $('plus10s').onclick = () => addSeconds(10);
+  $('set-custom').onclick = () => setCustomTime($('min-input').value, $('sec-input').value);
+  clockEl.onclick = () => { $('min-input').focus(); $('min-input').select(); };
+  clockEl.onkeydown = e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); clockEl.click(); } };
+  ['min-input','sec-input'].forEach(id => {
+    $(id).addEventListener('keydown', e => {
+      if(e.key === 'Enter') setCustomTime($('min-input').value, $('sec-input').value);
+    });
+  });
+  $('title-clock').addEventListener('change', () => { if(!running) document.title = origTitle; });
+
+  document.addEventListener('keydown', e => {
+    if(e.key !== ' ') return;
+    const el = document.activeElement;
+    if(el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'BUTTON')) return;
+    e.preventDefault();
+    running ? pause() : start();
+  });
+
+  buildPresets();
+  render();
+  highlightPreset();
+})();
+</script>
+</body>
+</html>
