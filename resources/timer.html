@@ -6,7 +6,7 @@
 <title>Class Timer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#EDF2FB;
@@ -15,7 +15,7 @@
     --navy-soft:#41537A;
     --gold:#F0B429;
     --red:#D6303A;
-    --green:#1B7F4B;
+    --navy-deep:#0b1740;
     --line:#DCE4F2;
   }
   *{box-sizing:border-box}
@@ -43,7 +43,7 @@
     letter-spacing:-.02em;margin:0 0 22px;transition:color .2s ease;
     cursor:pointer;
   }
-  .clock.green{color:var(--green)}
+  .clock.navy{color:var(--navy)}
   .clock.gold{color:var(--gold)}
   .clock.red{color:var(--red)}
   .clock.done{animation:pulse 1s ease-in-out infinite}
@@ -53,7 +53,7 @@
     max-width:640px;margin:0 auto 26px;height:16px;border-radius:999px;
     background:var(--line);overflow:hidden;
   }
-  .bar-fill{height:100%;border-radius:999px;background:var(--green);transition:width .25s linear,background .3s ease}
+  .bar-fill{height:100%;border-radius:999px;background:var(--navy);transition:width .25s linear,background .3s ease}
 
   .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:6px}
   button{
@@ -65,7 +65,7 @@
   button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   button:disabled{opacity:.4;cursor:not-allowed;filter:none}
   button.big{background:var(--red);font-size:20px;padding:14px 44px;border-radius:999px}
-  button.big.go{background:var(--green)}
+  button.big.go{background:var(--navy)}
   button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
   button.quiet:hover{border-color:var(--navy-soft);filter:none}
   button.chip{
@@ -94,6 +94,9 @@
   .check input{width:18px;height:18px;accent-color:var(--navy)}
 
   @media (prefers-reduced-motion:reduce){.clock.done{animation:none}}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
@@ -106,7 +109,7 @@
 <div class="layout">
 
   <section class="card face">
-    <div class="clock green" id="clock" tabindex="0" role="button" aria-label="Click to set a custom time">05:00</div>
+    <div class="clock navy" id="clock" tabindex="0" role="button" aria-label="Click to set a custom time">05:00</div>
     <div class="bar"><div class="bar-fill" id="bar-fill" style="width:100%"></div></div>
     <div class="actions">
       <button class="big go" id="toggle">Start</button>
@@ -142,6 +145,8 @@
 
 </div>
 
+<footer>// Resources · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
 <script>
 (function(){
   const PRESETS = [1,2,3,5,10,15,20,30]; // minutes
@@ -168,7 +173,7 @@
     if(remaining <= 0) return 'red';
     if(fraction <= 0.15) return 'red';
     if(fraction <= 0.4) return 'gold';
-    return 'green';
+    return 'navy';
   }
 
   function render(){
@@ -179,7 +184,7 @@
     fillEl.style.width = Math.max(0, Math.min(100, fraction*100)) + '%';
     fillEl.style.background = 'var(--' + color + ')';
     if($('title-clock').checked && running){
-      document.title = fmt(remaining) + ' — Class Timer';
+      document.title = fmt(remaining) + ' · Class Timer';
     } else if(!running){
       document.title = origTitle;
     }
@@ -244,7 +249,7 @@
     cancelAnimationFrame(raf);
     toggleBtn.textContent = 'Start';
     toggleBtn.classList.add('go');
-    document.title = "Time's up! — Class Timer";
+    document.title = "Time's up! · Class Timer";
     say("Time's up!", true);
     if(!doneAt && $('sound').checked) beep();
     doneAt = true;
@@ -280,7 +285,7 @@
     highlightPreset();
   }
 
-  // Simple three-beep alert built with the Web Audio API — no audio file needed.
+  // Simple three-beep alert built with the Web Audio API, no audio file needed.
   function beep(){
     try{
       const Ctx = window.AudioContext || window.webkitAudioContext;

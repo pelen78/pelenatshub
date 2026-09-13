@@ -6,7 +6,7 @@
 <title>Name Shuffle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#EDF2FB;
@@ -16,6 +16,7 @@
     --gold:#F0B429;
     --red:#D6303A;
     --green:#1B7F4B;
+    --navy-deep:#0b1740;
     --line:#DCE4F2;
   }
   *{box-sizing:border-box}
@@ -128,6 +129,9 @@
   .msg.ok{color:var(--green)}
 
   @media (prefers-reduced-motion:reduce){.slot.rolling span{opacity:1}}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
@@ -190,6 +194,8 @@
   </section>
 
 </div>
+
+<footer>// Resources · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
 <script>
 (function(){
