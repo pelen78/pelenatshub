@@ -1,0 +1,6 @@
+READING LIST
+
+- How computers store files
+- A short history of the file extension
+- Why folder structure matters
+- Cloud storage vs local storage
