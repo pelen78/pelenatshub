@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming Foundations: Computer Applications Task 4</title>
+<meta name="description" content="Computer Applications Task 4: Programming Foundations Research">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#12275C;--navy-deep:#0b1740;--gold:#F3B700;--gold-soft:#FFD23D;--teal:#0E7C8B;--green:#0F6E56;--paper:#EDF1FA;--surface:#fff;--ink:#14203A;--muted:#5C6B88;--line:rgba(18,39,92,.16);--panel:#12275C;--stamp-red:#9F1239}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'Nunito',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.62;font-size:17px;-webkit-font-smoothing:antialiased}
+strong{font-weight:700}::selection{background:var(--gold);color:var(--navy-deep)}:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+.cover{position:relative;overflow:hidden;background:radial-gradient(circle at 14% 22%,rgba(243,183,0,.18),transparent 44%),radial-gradient(circle at 86% 78%,rgba(14,124,139,.30),transparent 48%),linear-gradient(160deg,var(--panel),var(--navy-deep));color:#fff;padding:54px 20px 68px;text-align:center;border-bottom:3px solid var(--gold)}
+.cover:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+.cover-frame{position:relative;max-width:700px;margin:auto;border:3px solid var(--gold);border-radius:14px;padding:40px 26px 34px;background:rgba(255,255,255,.05);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:14px}
+h1{font-family:'Fredoka',sans-serif;font-size:clamp(40px,8vw,70px);font-weight:600;letter-spacing:-.02em;line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.22)}
+h1 .pop{display:block;color:var(--gold)}
+.subtitle{font-family:'Fredoka',sans-serif;font-weight:400;font-size:clamp(16px,2.6vw,21px);color:#fff;opacity:.92;margin-top:10px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chips span{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid rgba(243,183,0,.55);border-radius:999px;padding:6px 13px;background:rgba(255,255,255,.08)}
+.meta{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.16em;margin-top:20px;color:rgba(255,255,255,.65)}
+
+main{max-width:880px;margin:auto;padding:24px 24px 44px}
+section{padding:38px 0 12px;border-bottom:1px dashed var(--line)}section:last-child{border-bottom:none}
+.silk{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);border:2px solid var(--navy);border-radius:5px;padding:8px 16px;margin-bottom:22px;font-family:'JetBrains Mono',monospace}
+.silk:before{content:attr(data-ref);font-size:11px;color:#fff;background:var(--navy);border-radius:3px;padding:2px 6px}
+.silk.gold{color:#8a5a22;border-color:#B5763A}.silk.gold:before{background:#B5763A}
+.silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}.silk.red:before{background:var(--stamp-red)}
+h2{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em;font-size:26px;margin-bottom:8px}
+h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.01em;margin-bottom:4px}
+p{margin-bottom:14px;max-width:68ch}
+.lead{font-size:19.5px}
+
+.note,.stop{background:#fff;border-radius:0 10px 10px 0;padding:15px 18px;margin:16px 0}
+.note{border-left:4px solid var(--gold)}
+.stop{border-left:4px solid var(--stamp-red)}
+.note p:last-child,.stop p:last-child,.start p:last-child{margin-bottom:0}
+
+/* navy overview box */
+.start{background:var(--navy);color:#fff;border-radius:14px;padding:24px;margin:10px 0 24px}
+.start .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}
+.start h2{font-size:26px;margin:6px 0 10px;color:#fff}
+.start p{margin-bottom:12px;max-width:none}
+
+/* numbered steps */
+.steps{list-style:none;counter-reset:s;margin-top:12px}
+.steps>li{counter-increment:s;position:relative;padding:14px 0 14px 48px;border-bottom:1px solid var(--line);font-size:16.5px}
+.steps>li:last-child{border-bottom:none}
+.steps>li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:14px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold)}
+
+/* triangle-bullet list */
+.arrows{list-style:none;margin:10px 0 0}
+.arrows li{position:relative;padding-left:22px;margin-bottom:8px;font-size:16px}
+.arrows li:before{content:"\25B6";position:absolute;left:0;top:1px;color:var(--teal);font-size:11px}
+.arrows li:last-child{margin-bottom:0}
+
+/* question cards */
+.question{display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:16px;padding-top:2px}
+.question p{margin-bottom:6px;font-size:16px}
+.question p:last-child{margin-bottom:0}
+.question .arrows{margin-top:8px}
+@media(max-width:650px){.question{grid-template-columns:1fr}}
+
+.inline{font-family:'JetBrains Mono',monospace;background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--teal);white-space:nowrap;font-size:14.5px}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin:14px 0 8px;font-size:15.5px}
+th{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;text-align:left;color:var(--navy);padding:10px 12px;border-bottom:2px solid var(--navy)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{font-family:'JetBrains Mono',monospace;font-size:14.5px;color:var(--teal)}
+
+/* checklist */
+.checklist{list-style:none;margin:14px 0 22px}
+.checklist li{position:relative;padding:9px 0 9px 32px;border-bottom:1px solid var(--line);font-size:16.5px}
+.checklist li:last-child{border-bottom:none}
+.checklist li:before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:2px solid var(--teal);border-radius:4px}
+
+footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Task 4</p>
+    <h1>Programming<span class="pop">Foundations</span></h1>
+    <p class="subtitle">Learn the ideas behind the code before you start CodeHS</p>
+    <div class="chips"><span>Individual</span><span>Research</span><span>Google Doc</span></div>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026-2027</p>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <span class="silk" data-ref="00">Before You Start</span>
+
+    <div class="start">
+      <p class="tag">Overview</p>
+      <h2>What's this about?</h2>
+      <p>Soon you will write code in CodeHS. First, you need a few ideas that programmers use all the time.</p>
+      <p>Today you research programming, algorithms, flowcharts, programming languages, debugging and binary code.</p>
+    </div>
+
+    <ol class="steps">
+      <li>Open a new <strong>Google Doc</strong>.</li>
+      <li>Name it <span class="inline">lastname_programmingresearch</span></li>
+      <li>Type your name, the date and your class at the top.</li>
+      <li>Answer every question with complete sentences, in your own words.</li>
+    </ol>
+
+    <div class="stop"><strong>Research rule.</strong> You can use the Internet to research. Do not copy and paste definitions. Read, understand, then explain it in your own words.</div>
+  </section>
+
+  <section>
+    <span class="silk" data-ref="01">Research and Answer</span>
+    <p class="lead">Answer these 7 questions in your Doc. Use complete sentences. Add examples when the question asks for them.</p>
+
+    <div class="question"><div class="num">01</div><div>
+      <h3>What is programming?</h3>
+      <p>Explain in your own words what computer programming means.</p>
+      <ul class="arrows">
+        <li>What does a programmer tell a computer to do?</li>
+        <li>Why do computers need instructions?</li>
+      </ul>
+    </div></div>
+
+    <div class="question"><div class="num">02</div><div>
+      <h3>What is an algorithm?</h3>
+      <p>Explain what an algorithm is in your own words.</p>
+      <p>Then write an everyday algorithm: list the steps to complete a task.</p>
+      <p><strong>Examples:</strong> making a sandwich, logging into a computer, brushing your teeth, or getting ready for school.</p>
+    </div></div>
+
+    <div class="question"><div class="num">03</div><div>
+      <h3>What is a flowchart?</h3>
+      <p>Explain what a flowchart is and why programmers use them.</p>
+      <p>Then make a table in your Doc for these 5 flowchart symbols. For each one, write its name, its shape, and what it means.</p>
+      <table>
+        <thead>
+          <tr><th>Symbol</th><th>Your table should include</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Start / End</td><td>Name, shape, and what it means</td></tr>
+          <tr><td>Process</td><td>Name, shape, and what it means</td></tr>
+          <tr><td>Decision</td><td>Name, shape, and what it means</td></tr>
+          <tr><td>Input / Output</td><td>Name, shape, and what it means</td></tr>
+          <tr><td>Flowline / Arrow</td><td>Name, shape, and what it means</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+
+    <div class="question"><div class="num">04</div><div>
+      <h3>What is a programming language?</h3>
+      <p>Explain what a programming language is.</p>
+      <p>Give <strong>3 examples</strong> of programming languages. For each one, name one kind of project or program you could make with it.</p>
+    </div></div>
+
+    <div class="question"><div class="num">05</div><div>
+      <h3>What is debugging?</h3>
+      <p>Explain what a <strong>bug</strong> is in programming and what <strong>debugging</strong> means.</p>
+      <p>Why is debugging an important part of programming?</p>
+    </div></div>
+
+    <div class="question"><div class="num">06</div><div>
+      <h3>How do computers store information?</h3>
+      <p>Explain what <strong>binary code</strong> is and why computers use <strong>0s and 1s</strong>.</p>
+      <ul class="arrows">
+        <li>What does <strong>0</strong> usually mean?</li>
+        <li>What does <strong>1</strong> usually mean?</li>
+        <li>A light bulb is one binary digit. What value is a bulb that is <strong>OFF</strong>?</li>
+        <li>What value is a bulb that is <strong>ON</strong>?</li>
+      </ul>
+    </div></div>
+
+    <div class="question"><div class="num">07</div><div>
+      <h3>Reflection</h3>
+      <p>Which of these ideas will be most important when you start writing code? Explain why.</p>
+    </div></div>
+  </section>
+
+  <section>
+    <span class="silk red" data-ref="02">What I Will Check</span>
+    <p class="lead">Go through this list before you turn in your work in Google Classroom. If you cannot tick a line, you are not done.</p>
+    <ul class="checklist">
+      <li>Your name, the date and your class are at the top of the Doc.</li>
+      <li>All 7 questions are answered.</li>
+      <li>Your answers are in your own words, not copied from a website.</li>
+      <li>Your algorithm has clear steps in order.</li>
+      <li>Your flowchart table has all 5 symbols.</li>
+      <li>You gave 3 programming language examples.</li>
+      <li>You explained the difference between binary 0 and 1.</li>
+      <li>Your reflection explains your thinking, not just one word.</li>
+    </ul>
+  </section>
+
+</main>
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026-2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+</body>
+</html>
