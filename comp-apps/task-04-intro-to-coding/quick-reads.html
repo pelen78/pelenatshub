@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quick Reads: Intro to Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EDF1FA;
+    --ink: #14203A;
+    --soft: #5C6B88;
+    --line: rgba(18,39,92,.16);
+    --teal: #0E7C8B;
+    --teal-bg: #DCEEF1;
+    --glow: #F3B700;
+    --card: #FFFFFF;
+    --navy: #12275C;
+    --navy-deep: #0b1740;
+    --gold-soft: #FFD23D;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
+    font-size: 1.15rem; line-height: 1.6;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  h1, h2 { font-family: "Lexend", "Segoe UI", Arial, sans-serif; line-height: 1.2; }
+  h1 { font-size: 2.2rem; margin: 0 0 .5rem; }
+  .intro { color: var(--soft); margin: 0 0 1.5rem; }
+  nav { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.5rem; }
+  nav a {
+    font-family: "Lexend", sans-serif; font-size: .95rem; text-decoration: none;
+    color: var(--teal); background: var(--teal-bg); padding: .35rem .8rem; border-radius: 999px;
+  }
+  nav a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+  section { padding: 2rem 0; border-top: 2px solid var(--line); }
+  .q { display: flex; align-items: center; gap: .8rem; margin-bottom: .75rem; }
+  .num {
+    flex: none; width: 2.6rem; height: 2.6rem; border-radius: 50%;
+    display: grid; place-items: center; background: var(--teal); color: var(--paper);
+    font-family: "Lexend", sans-serif; font-weight: 700;
+  }
+  h2 { font-size: 1.5rem; margin: 0; }
+  p { margin: .6rem 0; }
+  .example {
+    background: var(--teal-bg); border-radius: 12px; padding: .9rem 1.1rem; margin: 1rem 0;
+  }
+  .example strong { font-family: "Lexend", sans-serif; }
+  .example ol { margin: .4rem 0 0; padding-left: 1.4rem; }
+  b.key { background: linear-gradient(transparent 55%, var(--glow) 55%); color: inherit; }
+
+  .shapes { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .8rem; margin-top: 1rem; }
+  .shape { background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: .9rem; }
+  .shape svg { display: block; height: 56px; width: 100%; margin-bottom: .5rem; }
+  .shape svg * { fill: var(--teal-bg); stroke: var(--teal); stroke-width: 3; }
+  .shape svg .arrowhead { fill: var(--teal); }
+  .shape h3 { font-family: "Lexend", sans-serif; font-size: 1.05rem; margin: 0; }
+  .shape p { font-size: 1rem; margin: .2rem 0 0; color: var(--soft); }
+
+  .langs { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .5rem; }
+  .langs li { background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: .6rem 1rem; }
+  .langs strong { font-family: "Lexend", sans-serif; }
+
+  .bulb-box {
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 1.2rem; margin-top: 1rem;
+  }
+  .bulb-btn { background: none; border: 0; padding: 0; cursor: pointer; }
+  .bulb-btn svg { width: 90px; height: 120px; display: block; }
+  .bulb-glass { fill: #C9D2DF; transition: fill .2s; }
+  .bulb-btn[aria-pressed="true"] .bulb-glass { fill: var(--glow); }
+  .bulb-rays { stroke: var(--glow); stroke-width: 5; stroke-linecap: round; opacity: 0; transition: opacity .2s; }
+  .bulb-btn[aria-pressed="true"] .bulb-rays { opacity: 1; }
+  .bulb-base { fill: var(--soft); }
+  .bit { font-family: "Lexend", sans-serif; font-size: 4rem; font-weight: 700; line-height: 1; }
+  .bit-label { color: var(--soft); font-size: 1rem; }
+  /* Copy lock: no selecting, no dragging text or images */
+  main { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  main img, main svg { -webkit-user-drag: none; pointer-events: auto; }
+  .lock-toast {
+    position: fixed; left: 50%; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 1rem); opacity: 0; pointer-events: none;
+    background: var(--ink); color: var(--paper); font-family: "Lexend", sans-serif;
+    padding: .8rem 1.2rem; border-radius: 12px; max-width: calc(100% - 2rem); text-align: center;
+    transition: opacity .2s, transform .2s; z-index: 10;
+  }
+  .lock-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { .lock-toast { transition: none; } }
+  @media print {
+    main { display: none; }
+    body::after { content: "This page cannot be printed. Read it on screen."; display: block; padding: 2rem; font-size: 1.2rem; }
+  }
+  main footer { margin-top: 2rem; color: var(--soft); font-size: .95rem; }
+  main footer a { color: var(--teal); }
+
+  /* cover and site footer, same look as the other task pages */
+  .cover { position: relative; overflow: hidden; background: radial-gradient(circle at 14% 22%, rgba(243,183,0,.18), transparent 44%), radial-gradient(circle at 86% 78%, rgba(14,124,139,.30), transparent 48%), linear-gradient(160deg, var(--navy), var(--navy-deep)); color: #fff; padding: 54px 20px 68px; text-align: center; border-bottom: 3px solid var(--glow); }
+  .cover:before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 48px 48px; opacity: .6; }
+  .cover-frame { position: relative; max-width: 700px; margin: auto; border: 3px solid var(--glow); border-radius: 14px; padding: 40px 26px 34px; background: rgba(255,255,255,.05); box-shadow: 0 18px 44px rgba(0,0,0,.28); }
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-soft); margin: 0 0 14px; }
+  .cover h1 { font-size: clamp(38px, 8vw, 66px); font-weight: 700; letter-spacing: -.02em; line-height: 1; margin: 0; text-shadow: 0 4px 0 rgba(0,0,0,.22); }
+  .cover h1 .pop { display: block; color: var(--glow); }
+  .subtitle { font-family: "Lexend", sans-serif; font-size: clamp(16px, 2.6vw, 20px); opacity: .92; margin: 10px 0 0; }
+  .chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .chips span { font-family: "JetBrains Mono", monospace; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; border: 1.5px solid rgba(243,183,0,.55); border-radius: 999px; padding: 6px 13px; background: rgba(255,255,255,.08); }
+  .meta { font-family: "JetBrains Mono", monospace; font-size: 11.5px; letter-spacing: .16em; margin: 20px 0 0; color: rgba(255,255,255,.65); }
+  .site-foot { background: var(--navy-deep); color: rgba(255,255,255,.8); text-align: center; padding: 25px; font-family: "JetBrains Mono", monospace; font-size: 12px; }
+  .site-foot .who { display: block; margin-top: 6px; color: rgba(255,255,255,.6); }
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Task 4</p>
+    <h1>Quick Reads<span class="pop">Intro to Coding</span></h1>
+    <p class="subtitle">Read here, then answer in your own words</p>
+    <div class="chips"><span>Read</span><span>Google Doc</span></div>
+    <p class="meta">ROOM LB6 · SCHOOL YEAR 2026-2027</p>
+  </div>
+</header>
+
+<main>
+  <p class="intro">Short reads for Task 4. Read one part, then answer that question in your Doc with your own words.</p>
+
+  <nav aria-label="Jump to a question">
+    <a href="#programming">1 Programming</a>
+    <a href="#algorithm">2 Algorithm</a>
+    <a href="#flowchart">3 Flowchart</a>
+    <a href="#languages">4 Languages</a>
+    <a href="#debugging">5 Debugging</a>
+    <a href="#binary">6 Binary</a>
+  </nav>
+
+  <section id="programming">
+    <div class="q"><span class="num">1</span><h2>What is programming?</h2></div>
+    <p>A computer cannot think for itself. It only does what someone tells it to do.</p>
+    <p><b class="key">Programming</b> means writing instructions for a computer. These instructions are called <b class="key">code</b>. The person who writes code is a <b class="key">programmer</b>.</p>
+    <div class="example">
+      <strong>Example:</strong> When you tap "play" on a video, the app follows code a programmer wrote: "When this button is tapped, start the video."
+    </div>
+    <p>Without instructions, a computer is just a box that does nothing.</p>
+  </section>
+
+  <section id="algorithm">
+    <div class="q"><span class="num">2</span><h2>What is an algorithm?</h2></div>
+    <p>An <b class="key">algorithm</b> is a list of steps to finish a task. The steps must be clear and in the right order.</p>
+    <p>Think of a recipe. If you put the cake in the oven before you mix it, it does not work.</p>
+    <div class="example">
+      <strong>Example: making a bowl of cereal</strong>
+      <ol>
+        <li>Get a bowl.</li>
+        <li>Pour the cereal.</li>
+        <li>Pour the milk.</li>
+        <li>Get a spoon.</li>
+      </ol>
+    </div>
+    <p>Computers follow algorithms too. Their steps must be very exact, because a computer does exactly what you say.</p>
+  </section>
+
+  <section id="flowchart">
+    <div class="q"><span class="num">3</span><h2>What is a flowchart?</h2></div>
+    <p>A <b class="key">flowchart</b> is a drawing of an algorithm. It uses shapes and arrows to show the steps in order.</p>
+    <p>Programmers draw a flowchart before they write code. It helps them plan and find mistakes early. Each shape has its own job:</p>
+    <div class="shapes">
+      <div class="shape">
+        <svg viewBox="0 0 160 56" aria-hidden="true"><ellipse cx="80" cy="28" rx="72" ry="22"/></svg>
+        <h3>Start / End</h3>
+        <p>Oval. Shows where the flowchart begins and ends.</p>
+      </div>
+      <div class="shape">
+        <svg viewBox="0 0 160 56" aria-hidden="true"><rect x="12" y="6" width="136" height="44"/></svg>
+        <h3>Process</h3>
+        <p>Rectangle. An action or step, like "pour the milk."</p>
+      </div>
+      <div class="shape">
+        <svg viewBox="0 0 160 56" aria-hidden="true"><polygon points="80,4 140,28 80,52 20,28"/></svg>
+        <h3>Decision</h3>
+        <p>Diamond. A yes or no question, like "Is the bowl full?"</p>
+      </div>
+      <div class="shape">
+        <svg viewBox="0 0 160 56" aria-hidden="true"><polygon points="36,6 150,6 124,50 10,50"/></svg>
+        <h3>Input / Output</h3>
+        <p>Parallelogram. Information going in or coming out.</p>
+      </div>
+      <div class="shape">
+        <svg viewBox="0 0 160 56" aria-hidden="true"><line x1="16" y1="28" x2="128" y2="28"/><polygon class="arrowhead" points="146,28 126,18 126,38"/></svg>
+        <h3>Flowline / Arrow</h3>
+        <p>Arrow. Shows which step comes next.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="languages">
+    <div class="q"><span class="num">4</span><h2>What is a programming language?</h2></div>
+    <p>People talk in Spanish or English. Computers need their own languages too.</p>
+    <p>A <b class="key">programming language</b> is a set of words and rules we use to write code a computer can understand. There are many, and each one is good for different things:</p>
+    <ul class="langs">
+      <li><strong>Scratch:</strong> games and animations made with blocks.</li>
+      <li><strong>Python:</strong> simple games, apps and robots.</li>
+      <li><strong>JavaScript:</strong> websites you can click and interact with.</li>
+      <li><strong>Lua:</strong> games inside Roblox.</li>
+      <li><strong>C#:</strong> video games made with Unity.</li>
+      <li><strong>Swift:</strong> apps for iPhone and iPad.</li>
+    </ul>
+  </section>
+
+  <section id="debugging">
+    <div class="q"><span class="num">5</span><h2>What is debugging?</h2></div>
+    <p>A <b class="key">bug</b> is a mistake in the code. It can make a program crash, freeze or do the wrong thing.</p>
+    <p><b class="key">Debugging</b> means finding the bug and fixing it.</p>
+    <p>Every programmer makes bugs, even experts. Debugging is how a program goes from "almost works" to "works."</p>
+    <div class="example">
+      <strong>Fun fact:</strong> In 1947, Grace Hopper's team found a real moth stuck inside a computer. They wrote that they had "debugged" the machine.
+    </div>
+  </section>
+
+  <section id="binary">
+    <div class="q"><span class="num">6</span><h2>How do computers store information?</h2></div>
+    <p>Inside a computer there are millions of tiny switches. Each switch can only be <b class="key">on</b> or <b class="key">off</b>.</p>
+    <p>Computers write this with two numbers: 0 and 1. This is called <b class="key">binary code</b>. Each 0 or 1 is called a <b class="key">bit</b>.</p>
+    <p>With lots of bits together, a computer can store letters, photos, music and games.</p>
+    <div class="bulb-box">
+      <button class="bulb-btn" id="bulb" aria-pressed="false" aria-label="Light bulb, click to turn on or off">
+        <svg viewBox="0 0 90 120" aria-hidden="true">
+          <g class="bulb-rays">
+            <line x1="45" y1="4" x2="45" y2="12"/><line x1="10" y1="18" x2="16" y2="24"/>
+            <line x1="80" y1="18" x2="74" y2="24"/><line x1="2" y1="50" x2="10" y2="50"/>
+            <line x1="88" y1="50" x2="80" y2="50"/>
+          </g>
+          <path class="bulb-glass" d="M45 18 C24 18 14 34 14 50 C14 64 24 72 30 80 L60 80 C66 72 76 64 76 50 C76 34 66 18 45 18 Z"/>
+          <rect class="bulb-base" x="30" y="84" width="30" height="8" rx="3"/>
+          <rect class="bulb-base" x="32" y="95" width="26" height="8" rx="3"/>
+          <rect class="bulb-base" x="37" y="106" width="16" height="7" rx="3"/>
+        </svg>
+      </button>
+      <div>
+        <div class="bit" id="bitValue">0</div>
+        <div class="bit-label" id="bitLabel">The bulb is off. Click it.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Done reading? Go back to <a href="task.html">Task 4</a> and answer in your own words.
+  </footer>
+</main>
+<footer class="site-foot">// Computer Applications · The American School of Tampico · ROOM LB6 · 2026-2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+<script>
+  const bulb = document.getElementById("bulb");
+  const bitValue = document.getElementById("bitValue");
+  const bitLabel = document.getElementById("bitLabel");
+  bulb.addEventListener("click", () => {
+    const on = bulb.getAttribute("aria-pressed") !== "true";
+    bulb.setAttribute("aria-pressed", String(on));
+    bitValue.textContent = on ? "1" : "0";
+    bitLabel.textContent = on ? "The bulb is on. Click it again." : "The bulb is off. Click it.";
+  });
+
+  // Copy lock
+  const toast = document.createElement("div");
+  toast.className = "lock-toast";
+  toast.setAttribute("role", "status");
+  toast.textContent = "🔒 Copy is turned off. Read it, then explain it in your own words.";
+  document.body.appendChild(toast);
+  let toastTimer;
+  function showLock() {
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+  ["copy", "cut", "contextmenu", "selectstart", "dragstart"].forEach(evt => {
+    document.addEventListener(evt, e => { e.preventDefault(); if (evt !== "selectstart") showLock(); });
+  });
+  document.addEventListener("keydown", e => {
+    const k = e.key.toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if ((mod && ["c", "x", "a", "s", "p", "u"].includes(k)) || (mod && e.shiftKey && ["i", "j", "c"].includes(k)) || k === "f12") {
+      e.preventDefault();
+      showLock();
+    }
+  });
+</script>
+</body>
+</html>
