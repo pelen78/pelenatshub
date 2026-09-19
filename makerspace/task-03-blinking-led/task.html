@@ -289,85 +289,6 @@
   }
 
 
-  /* ---------- Locked phases ---------- */
-  .phase-gate{
-    margin:38px 0 12px;
-    border:2px solid var(--navy);
-    border-radius:16px;
-    overflow:hidden;
-    background:var(--surface);
-    box-shadow:0 12px 30px rgba(18,39,92,.10);
-  }
-  .gate-head{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:18px 20px;
-    background:linear-gradient(135deg,var(--panel),var(--panel-2));
-    color:#fff;
-  }
-  .gate-lock{
-    width:42px;height:42px;
-    display:grid;place-items:center;
-    border:2px solid var(--gold);
-    border-radius:50%;
-    color:var(--gold-soft);
-    font-size:21px;
-    flex:0 0 auto;
-  }
-  .gate-head h2{
-    font-family:'Fredoka',sans-serif;
-    font-size:25px;
-    line-height:1.1;
-    margin:0;
-  }
-  .gate-head p{
-    margin:4px 0 0;
-    color:rgba(255,255,255,.76);
-    font-family:'JetBrains Mono',monospace;
-    font-size:11.5px;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-  }
-  .gate-body{padding:22px 20px 20px}
-  .gate-body > p{margin-bottom:12px}
-  .unlock-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .unlock-row input{
-    width:150px;
-    padding:11px 13px;
-    border:1.5px solid var(--line);
-    border-radius:8px;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'JetBrains Mono',monospace;
-    font-size:17px;
-    letter-spacing:.18em;
-  }
-  .unlock-row button{
-    border:0;
-    border-radius:8px;
-    padding:12px 18px;
-    background:var(--navy);
-    color:#fff;
-    font-family:'Nunito',sans-serif;
-    font-weight:800;
-    font-size:15px;
-    cursor:pointer;
-  }
-  .unlock-row button:hover{filter:brightness(1.12)}
-  .gate-msg{
-    min-height:22px;
-    margin:10px 0 0!important;
-    font-family:'JetBrains Mono',monospace;
-    font-size:12px;
-    color:var(--stamp-red);
-  }
-  .gate-msg.ok{color:var(--green)}
-  .locked-content{display:none}
-  .locked-content.unlocked{display:block}
-  .phase-gate.unlocked .gate-head{background:linear-gradient(135deg,var(--green),#095244)}
-  .phase-gate.unlocked .gate-lock{border-color:#fff;color:#fff}
-  .phase-gate.unlocked .gate-body{display:none}
 
 </style>
 </head>
@@ -394,30 +315,30 @@
   <section id="mission">
     <span class="silk" data-ref="U1">Your Mission</span>
     <p class="lead">In this practice, you will build your first Arduino circuit: <strong>How to Blink an LED</strong>.</p>
-    <p>This practice has <strong>3 stages</strong>. <strong>Every stage starts in Tinkercad.</strong> After your simulation works and the teacher checks it, you will receive the materials needed to build that stage using a real Arduino.</p>
-    <p>You must complete each stage in order before moving on to the next one.</p>
+    <p>This practice has <strong>4 challenges</strong>. <strong>Every challenge starts in Tinkercad.</strong> After your simulation works and the teacher checks it, you will receive the materials needed to build that challenge using a real Arduino.</p>
+    <p>You must complete each challenge in order before moving on to the next one.</p>
 
     <div class="today">
-      <p class="tag">The Rule for Every Part</p>
+      <p class="tag">The Rule for Every Challenge</p>
       <h2>Simulate first. Build second.</h2>
       <ol>
-        <li><strong>Watch or read</strong> the instructions for the current part.</li>
+        <li><strong>Watch or read</strong> the instructions for the current challenge.</li>
         <li><strong>Build and test it in Tinkercad.</strong></li>
         <li><strong>Show the working simulation to the teacher.</strong></li>
-        <li><strong>Receive the physical materials</strong> for that part.</li>
+        <li><strong>Receive the physical materials</strong> for that challenge.</li>
         <li><strong>Build and test it in real life.</strong></li>
         <li><strong>Take pictures</strong> of the physical circuit and process with the classroom camera.</li>
-        <li>Only then move to the next part.</li>
+        <li>Only then move to the next challenge.</li>
       </ol>
     </div>
 
     <div class="quest">
-      <p class="q">IMPORTANT &rarr; You will not receive the physical components for a part until the Tinkercad version is complete, working, and checked by the teacher.</p>
+      <p class="q">IMPORTANT &rarr; You will not receive the physical components for a challenge until the Tinkercad version is complete, working, and checked by the teacher.</p>
     </div>
   </section>
 
   <section id="part-one">
-    <span class="silk gold" data-ref="P1">Part 1 &middot; One LED Without a Breadboard</span>
+    <span class="silk gold" data-ref="C1">Challenge 1 &middot; One LED Without a Breadboard</span>
     <p>Start with the basic circuit: one external LED connected directly to the Arduino.</p>
 
     <div class="note"><p><strong>Tutorial 1:</strong> <a href="https://www.youtube.com/watch?v=33sNhlekRV8" target="_blank" rel="noopener">How to Blink an LED</a></p></div>
@@ -433,28 +354,14 @@
     </ul>
 
     <div class="quest">
-      <p class="q">TEACHER CHECK &rarr; When Part 1 works in Tinkercad and in real life, ask the teacher for the code to unlock Part 2.</p>
+      <p class="q">TEACHER CHECK &rarr; When Challenge 1 works in Tinkercad and in real life, show it to the teacher before you start Challenge 2.</p>
     </div>
+
+    <div class="note"><p><strong>Presentation:</strong> <a href="#pres-challenge-1">What to include in your presentation for Challenge 1 &darr;</a></p></div>
   </section>
 
-  <div class="phase-gate" id="gate-part-two">
-    <div class="gate-head">
-      <div class="gate-lock" aria-hidden="true">🔒</div>
-      <div><h2>Part 2 · Breadboard</h2><p>Complete Part 1 first</p></div>
-    </div>
-    <div class="gate-body">
-      <p>Enter the teacher code after Part 1 has been checked.</p>
-      <div class="unlock-row">
-        <input id="code-part-two" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Part 2 access code" placeholder="••••">
-        <button type="button" onclick="unlockPhase('part-two')">Unlock Part 2</button>
-      </div>
-      <p class="gate-msg" id="msg-part-two" aria-live="polite"></p>
-    </div>
-  </div>
-
-  <div class="locked-content" id="content-part-two">
     <section id="part-two">
-      <span class="silk gold" data-ref="P2">Part 2 &middot; One LED With a Breadboard</span>
+      <span class="silk gold" data-ref="C2">Challenge 2 &middot; One LED With a Breadboard</span>
       <p>Now rebuild the blinking LED using a <strong>breadboard</strong>. The goal is to understand how the same circuit can be organized differently using breadboard rows and power connections.</p>
 
       <div class="note"><p><strong>Tutorial 2:</strong> <a href="https://www.youtube.com/watch?v=FKekzzj5844" target="_blank" rel="noopener">How to Blink an LED with Breadboard</a></p></div>
@@ -469,30 +376,15 @@
       </ul>
 
       <div class="quest">
-        <p class="q">TEACHER CHECK &rarr; When the breadboard version works in Tinkercad and in real life, ask the teacher for the code to unlock Part 3.</p>
+        <p class="q">TEACHER CHECK &rarr; When the breadboard version works in Tinkercad and in real life, show it to the teacher before you start Challenge 3.</p>
       </div>
+
+      <div class="note"><p><strong>Presentation:</strong> <a href="#pres-challenge-2">What to include in your presentation for Challenge 2 &darr;</a></p></div>
     </section>
-  </div>
 
-  <div class="phase-gate" id="gate-part-three">
-    <div class="gate-head">
-      <div class="gate-lock" aria-hidden="true">🔒</div>
-      <div><h2>Part 3 · Add a Second LED</h2><p>No tutorial this time</p></div>
-    </div>
-    <div class="gate-body">
-      <p>Enter the teacher code after Part 2 has been checked.</p>
-      <div class="unlock-row">
-        <input id="code-part-three" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Part 3 access code" placeholder="••••">
-        <button type="button" onclick="unlockPhase('part-three')">Unlock Part 3</button>
-      </div>
-      <p class="gate-msg" id="msg-part-three" aria-live="polite"></p>
-    </div>
-  </div>
-
-  <div class="locked-content" id="content-part-three">
     <section id="part-three">
-      <span class="silk red" data-ref="P3">Part 3 &middot; Challenge: Add a Second LED</span>
-      <p><strong>There is no tutorial for this part.</strong> Use what you learned in Parts 1 and 2 to figure out how to add a second LED to your breadboard circuit.</p>
+      <span class="silk red" data-ref="C3">Challenge 3 &middot; Add a Second LED</span>
+      <p><strong>There is no tutorial for this challenge.</strong> Use what you learned in Challenges 1 and 2 to figure out how to add a second LED to your breadboard circuit.</p>
 
       <div class="quest">
         <p class="q">YOUR CHALLENGE &rarr; How can you add another LED, give it the connections it needs, and control it from the Arduino without removing the first LED?</p>
@@ -507,50 +399,103 @@
         <li><span class="num">06</span><span><strong>Build the final circuit in real life.</strong><span class="hint">Add the second LED to the working breadboard circuit.</span></span></li>
         <li><span class="num">07</span><span><strong>Document the final circuit.</strong><span class="hint">The teacher will take pictures of the two-LED circuit. Save the final Tinkercad share link.</span></span></li>
       </ul>
+
+      <div class="note"><p><strong>Presentation:</strong> <a href="#pres-challenge-3">What to include in your presentation for Challenge 3 &darr;</a></p></div>
+    </section>
+
+    <section id="part-four">
+      <span class="silk red" data-ref="C4">Challenge 4 &middot; Blinking LED + Push Button</span>
+      <p>Now add a <strong>push button</strong> to your LED circuit. Use what you learned in Challenges 1 to 3 and the tutorials below to make the Arduino read the button.</p>
+
+      <div class="note"><p><strong>Tutorial 3:</strong> <a href="https://www.youtube.com/watch?v=ZoaUlquC6x8" target="_blank" rel="noopener">Arduino - Turn LED On and Off With Push Button</a><br><strong>Tutorial 4:</strong> <a href="https://www.youtube.com/watch?v=PC15jBx2UxI&amp;t=3s" target="_blank" rel="noopener">Pushbutton Digital Input With Arduino in Tinkercad</a><br><strong>Tutorial 5:</strong> <a href="https://www.youtube.com/watch?v=yBgMJssXqHY" target="_blank" rel="noopener">How to Use a Button with an Arduino (Lesson #5)</a></p></div>
+
+      <ul class="blocks">
+        <li><span class="num">01</span><span><strong>Watch the tutorials.</strong><span class="hint">Pay attention to how the push button connects to the Arduino and to the code that reads it (pinMode, digitalRead, and if).</span></span></li>
+        <li><span class="num">02</span><span><strong>Build the circuit in Tinkercad first.</strong><span class="hint">Use one Arduino, one LED, one resistor, and one push button on the breadboard.</span></span></li>
+        <li><span class="num">03</span><span><strong>Write your code.</strong><span class="hint">Make the LED blink when the button is pressed. Choose your own pins and delay values, do not copy the tutorial exactly.</span></span></li>
+        <li><span class="num">04</span><span><strong>Run the simulation.</strong><span class="hint">Your LED must react to the button correctly before you continue.</span></span></li>
+        <li><span class="num">05</span><span><strong>Show your Tinkercad circuit to the teacher.</strong><span class="hint">After approval, you will receive the materials for the physical build.</span></span></li>
+        <li><span class="num">06</span><span><strong>Build the same circuit in real life.</strong><span class="hint">Use the same pins and delay values you already tested.</span></span></li>
+        <li><span class="num">07</span><span><strong>Document your work.</strong><span class="hint">The teacher will take pictures with the classroom camera. Keep your Tinkercad share link for the final presentation.</span></span></li>
+      </ul>
+
+      <div class="note"><p><strong>Presentation:</strong> <a href="#pres-challenge-4">What to include in your presentation for Challenge 4 &darr;</a></p></div>
     </section>
 
     <section id="presentation">
-      <span class="silk" data-ref="S1">Final Presentation &middot; 10 Slides</span>
-      <p>After you finish all three parts, create a presentation that follows the <strong>same order as the practice</strong>. Use your own explanations, the photos taken during class, screenshots from Tinkercad, and the share links for each Tinkercad circuit.</p>
+      <span class="silk" data-ref="S1">Final Presentation</span>
+      <p>Create your final presentation, in the <strong>same order as the practice</strong>.</p>
 
-      <div class="note"><p><strong>Follow the project sequence:</strong> Slides 1&ndash;4 = Part 1 &middot; Slides 5&ndash;7 = Part 2 &middot; Slides 8&ndash;10 = Part 3.</p></div>
+      <ul class="rules">
+        <li class="ok"><strong>Start from a free template you find online.</strong> Do not use the basic Google Slides themes. Delete any sample text or images that come with it.</li>
+        <li class="ok">Use your <strong>class photos</strong> and your own <strong>Tinkercad screenshots and share links</strong> as evidence.</li>
+        <li class="ok"><strong>Explain, do not just list steps.</strong> Write in your own words what your <strong>code</strong> does and how your <strong>board connections</strong> work.</li>
+        <li><strong>Do not use AI</strong> to make the presentation or write your explanations. AI may only be used to generate images.</li>
+      </ul>
 
-      <h3>Part 1 &middot; One Blinking LED</h3>
+      <p><strong>Free templates:</strong> <a href="https://slidesgo.com/" target="_blank" rel="noopener">Slidesgo</a> &middot; <a href="https://www.slidescarnival.com/" target="_blank" rel="noopener">SlidesCarnival</a> &middot; <a href="https://genially.com/templates/presentations/" target="_blank" rel="noopener">Genially</a>. Keep the credits that come with the template.</p>
+
+      <h3 id="pres-challenge-1">Challenge 1 &middot; One Blinking LED</h3>
       <ul class="blocks">
         <li><span class="num">01</span><span><strong>What is the purpose of this project?</strong><span class="hint">Explain what you are learning to make the Arduino do.</span></span></li>
-        <li><span class="num">02</span><span><strong>What elements do we need to complete Part 1?</strong><span class="hint">Name the components used for your first blinking LED circuit and explain what each one does.</span></span></li>
-        <li><span class="num">03</span><span><strong>Explain how to connect each element to the Arduino board.</strong><span class="hint">Explain the connections you used in Part 1, including the digital pin, resistor, LED polarity, and GND.</span></span></li>
-        <li><span class="num">04</span><span><strong>Add your Part 1 Tinkercad diagram and physical circuit.</strong><span class="hint">Include a Tinkercad screenshot, the clickable Tinkercad share link, your pin number, your delay value, and photos of the real circuit working.</span></span></li>
+        <li><span class="num">02</span><span><strong>What elements do we need to complete Challenge 1?</strong><span class="hint">Name the components used for your first blinking LED circuit and explain what each one does.</span></span></li>
+        <li><span class="num">03</span><span><strong>Explain how to connect each element to the Arduino board.</strong><span class="hint">Explain the connections you used in Challenge 1, including the digital pin, resistor, LED polarity, and GND. Do not just list the steps: explain where each wire goes on the board and why.</span></span></li>
+        <li><span class="num">04</span><span><strong>Add your Challenge 1 Tinkercad diagram and physical circuit.</strong><span class="hint">Include a Tinkercad screenshot, the clickable Tinkercad share link, your pin number, your delay value, and photos of the real circuit working. Paste your code and explain what each part does and why.</span></span></li>
       </ul>
 
-      <h3>Part 2 &middot; Blinking LED With a Breadboard</h3>
+      <div class="note"><p><a href="#part-one">&uarr; Back to Challenge 1</a></p></div>
+
+      <h3 id="pres-challenge-2">Challenge 2 &middot; Blinking LED With a Breadboard</h3>
       <ul class="blocks">
-        <li><span class="num">05</span><span><strong>What is the main difference between the first version of Blinking LED and this one?</strong><span class="hint">Compare the circuit from Part 1 with the breadboard circuit from Part 2.</span></span></li>
-        <li><span class="num">06</span><span><strong>What elements do we need to complete Part 2?</strong><span class="hint">Name the components used for the breadboard version and identify what was added or changed.</span></span></li>
-        <li><span class="num">07</span><span><strong>Explain how to connect this circuit using the breadboard.</strong><span class="hint">Show how you built Part 2. Include a Tinkercad screenshot, the clickable Tinkercad share link, and photos of your real breadboard circuit.</span></span></li>
+        <li><span class="num">05</span><span><strong>What is the main difference between the first version of Blinking LED and this one?</strong><span class="hint">Compare the circuit from Challenge 1 with the breadboard circuit from Challenge 2.</span></span></li>
+        <li><span class="num">06</span><span><strong>What elements do we need to complete Challenge 2?</strong><span class="hint">Name the components used for the breadboard version and identify what was added or changed.</span></span></li>
+        <li><span class="num">07</span><span><strong>Explain how to connect this circuit using the breadboard.</strong><span class="hint">Show how you built Challenge 2. Include a Tinkercad screenshot, the clickable Tinkercad share link, and photos of your real breadboard circuit. Explain each connection on the breadboard and what your code does, not just the steps.</span></span></li>
       </ul>
 
-      <h3>Part 3 &middot; Add a Second LED</h3>
+      <div class="note"><p><a href="#part-two">&uarr; Back to Challenge 2</a></p></div>
+
+      <h3 id="pres-challenge-3">Challenge 3 &middot; Add a Second LED</h3>
       <ul class="blocks">
-        <li><span class="num">08</span><span><strong>Explain how you added a second LED using the breadboard.</strong><span class="hint">Explain what you added and how you connected the second LED, including its pin, resistor, polarity, and ground connection.</span></span></li>
+        <li><span class="num">08</span><span><strong>Explain how you added a second LED using the breadboard.</strong><span class="hint">Explain what you added and how you connected the second LED, including its pin, resistor, polarity, and ground connection. Explain where each wire goes and why, not just the steps.</span></span></li>
         <li><span class="num">09</span><span><strong>What are breadboard buses/rails, and how did you use them to connect the second LED?</strong><span class="hint">Explain what the buses do and how they helped you complete the final circuit.</span></span></li>
-        <li><span class="num">10</span><span><strong>Add your final Tinkercad diagram and physical circuit.</strong><span class="hint">Include a screenshot and clickable Tinkercad share link to the final two-LED circuit, plus photos of the real final circuit. Briefly explain how both LEDs work.</span></span></li>
+        <li><span class="num">10</span><span><strong>Add your final Tinkercad diagram and physical circuit.</strong><span class="hint">Include a screenshot and clickable Tinkercad share link to the final two-LED circuit, plus photos of the real final circuit. Paste your final code and explain what each part does and why, and how both LEDs are connected and work.</span></span></li>
       </ul>
+
+      <div class="note"><p><a href="#part-three">&uarr; Back to Challenge 3</a></p></div>
+
+      <h3 id="pres-challenge-4">Challenge 4 &middot; Blinking LED + Push Button</h3>
+      <ul class="blocks">
+        <li><span class="num">11</span><span><strong>What does the push button do in this circuit?</strong><span class="hint">Explain what a push button is and how the Arduino knows when it is pressed.</span></span></li>
+        <li><span class="num">12</span><span><strong>What elements do we need to complete Challenge 4?</strong><span class="hint">Name the components used and identify what was added to your LED circuit.</span></span></li>
+        <li><span class="num">13</span><span><strong>Explain how to connect the push button and the LED to the Arduino.</strong><span class="hint">Explain the connections you used, including the pins, resistor, button wiring, LED polarity, and GND. Do not just list the steps: explain where each wire goes and why.</span></span></li>
+        <li><span class="num">14</span><span><strong>Add your final Tinkercad diagram and physical circuit.</strong><span class="hint">Include a screenshot and clickable Tinkercad share link, plus photos of the real circuit working. Paste your code and explain what each part does and why.</span></span></li>
+      </ul>
+
+      <div class="note"><p><a href="#part-four">&uarr; Back to Challenge 4</a></p></div>
+
+      <div class="today">
+        <p class="tag">Turn In</p>
+        <h2>Submit your Google Slides presentation</h2>
+        <ol>
+          <li>Check that you included <strong>all the information above</strong> and no sample text is left.</li>
+          <li>Check that your <strong>Tinkercad links are clickable and work</strong>.</li>
+          <li>Submit your presentation in <strong>Google Classroom</strong>.</li>
+        </ol>
+      </div>
     </section>
 
     <section id="submit">
       <span class="silk" data-ref="T1">Before You Submit</span>
       <ul class="rules">
-        <li class="ok">I completed Part 1 in Tinkercad before building it physically.</li>
-        <li class="ok">I completed Part 2 in Tinkercad before building it physically.</li>
-        <li class="ok">I solved Part 3 in Tinkercad before adding the second LED physically.</li>
-        <li class="ok">I used a digital pin other than pin 13 in Part 1.</li>
+        <li class="ok">I completed Challenge 1 in Tinkercad before building it physically.</li>
+        <li class="ok">I completed Challenge 2 in Tinkercad before building it physically.</li>
+        <li class="ok">I solved Challenge 3 in Tinkercad before adding the second LED physically.</li>
+        <li class="ok">I used a digital pin other than pin 13 in Challenge 1.</li>
         <li class="ok">I changed the delay time from the first tutorial.</li>
         <li class="ok">My final circuit has two working LEDs.</li>
         <li class="ok">I included photos from the physical building process.</li>
         <li class="ok">I included Tinkercad screenshots and clickable share links.</li>
         <li class="ok">I tested my Tinkercad links and they open correctly.</li>
-        <li class="ok">My presentation has all 10 slides and my explanations are in my own words.</li>
       </ul>
 
       <div class="quest">
@@ -558,102 +503,10 @@
       </div>
     </section>
 
-    <section id="submit-presentation">
-      <span class="silk gold" data-ref="T2">Submit Your Presentation</span>
-      <p>Create your final presentation in <strong>Google Slides</strong>. Before you start building your slides, find a <strong>presentation template online</strong> that fits your project and import it or make a copy of it in Google Slides.</p>
-
-      <div class="note"><p><strong>Do not use one of the basic Google Slides themes.</strong> Take a few minutes to find a template that looks organized, interesting, and appropriate for an Arduino project. The template gives you the design &mdash; <strong>you still create the presentation.</strong></p></div>
-
-      <h3>Where to find a template</h3>
-      <p>Choose a <strong>FREE</strong> template. You do not need to pay for anything.</p>
-      <ul class="blocks">
-        <li><span class="num">01</span><span><strong><a href="https://slidesgo.com/" target="_blank" rel="noopener">Slidesgo</a></strong><span class="hint">Free Google Slides templates are available. A free account is required, free users can download up to 3 templates per month, and you must keep the credits slide.</span></span></li>
-        <li><span class="num">02</span><span><strong><a href="https://www.slidescarnival.com/" target="_blank" rel="noopener">SlidesCarnival</a></strong><span class="hint">Free Google Slides templates with no sign-up or download limit. Keep the required credits or attribution included with the template.</span></span></li>
-        <li><span class="num">03</span><span><strong><a href="https://genially.com/templates/presentations/" target="_blank" rel="noopener">Genially</a></strong><span class="hint">Genially has free presentation templates, but they are designed to be edited and presented inside Genially, not imported directly into Google Slides. For this assignment, Slidesgo or SlidesCarnival are the recommended choices.</span></span></li>
-      </ul>
-
-      <ul class="rules">
-        <li><strong>Do not use the basic/default Google Slides themes.</strong></li>
-        <li class="ok"><strong>Find a template online</strong> from a presentation-template website and use it in Google Slides.</li>
-        <li class="ok">You may download/import a template or use a template that lets you <strong>make a copy in Google Slides</strong>.</li>
-        <li><strong>Do not use AI to create the presentation, write your explanations, summarize the project, or decide what to put on each slide.</strong></li>
-        <li class="ok"><strong>AI may be used only to generate images</strong> that you want to include in your presentation.</li>
-        <li class="ok">Use the <strong>photos taken during class</strong> and your own <strong>Tinkercad screenshots</strong> as evidence of your work.</li>
-        <li class="ok">Write all explanations <strong>in your own words</strong> based on what you built and learned.</li>
-        <li class="ok">Customize the template so the presentation is easy to read and looks consistent. Do not leave unused sample text or images from the original template.</li>
-      </ul>
-
-      <div class="today">
-        <p class="tag">Turn In</p>
-        <h2>Submit your Google Slides presentation</h2>
-        <ol>
-          <li>Make sure your presentation contains <strong>all 10 required slides</strong>.</li>
-          <li>Check that your <strong>Tinkercad links are clickable and work</strong>.</li>
-          <li>Remove any <strong>sample text, placeholder images, or extra slides</strong> that came with the template.</li>
-          <li>Submit your finished <strong>Google Slides presentation in Google Classroom</strong>.</li>
-        </ol>
-      </div>
-    </section>
-  </div>
-
 </main>
 
 <footer>// Maker Space · The American School of Tampico · ROOM LB6 · 2026&ndash;2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
-<script>
-(function(){
-  const access = {
-    'part-two': '1234',
-    'part-three': '5678'
-  };
-
-  function setUnlocked(part){
-    const gate = document.getElementById('gate-' + part);
-    const content = document.getElementById('content-' + part);
-    const lock = gate ? gate.querySelector('.gate-lock') : null;
-    const sub = gate ? gate.querySelector('.gate-head p') : null;
-    if(gate) gate.classList.add('unlocked');
-    if(content) content.classList.add('unlocked');
-    if(lock) lock.textContent = '✓';
-    if(sub) sub.textContent = 'Unlocked';
-  }
-
-  window.unlockPhase = function(part){
-    const input = document.getElementById('code-' + part);
-    const msg = document.getElementById('msg-' + part);
-    if(!input || !msg) return;
-
-    if(part === 'part-three' && localStorage.getItem('maker-practice-1-part-two') !== 'unlocked'){
-      msg.textContent = 'Part 2 must be unlocked first.';
-      msg.classList.remove('ok');
-      return;
-    }
-
-    if(input.value.trim() === access[part]){
-      localStorage.setItem('maker-practice-1-' + part, 'unlocked');
-      msg.textContent = 'Access granted.';
-      msg.classList.add('ok');
-      setUnlocked(part);
-      const content = document.getElementById('content-' + part);
-      if(content) setTimeout(() => content.scrollIntoView({behavior:'smooth', block:'start'}), 80);
-    }else{
-      msg.textContent = 'Incorrect code. Ask your teacher.';
-      msg.classList.remove('ok');
-      input.select();
-    }
-  };
-
-  ['part-two','part-three'].forEach(function(part){
-    if(localStorage.getItem('maker-practice-1-' + part) === 'unlocked') setUnlocked(part);
-    const input = document.getElementById('code-' + part);
-    if(input){
-      input.addEventListener('keydown', function(e){
-        if(e.key === 'Enter') window.unlockPhase(part);
-      });
-    }
-  });
-})();
-</script>
 
 </body>
 </html>
