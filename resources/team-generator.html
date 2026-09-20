@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --navy-deep:#0b1740;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  header{max-width:1120px;margin:0 auto 20px}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .layout{max-width:1120px;margin:0 auto;display:grid;gap:22px;grid-template-columns:380px 1fr;align-items:start}
+  @media (max-width:900px){.layout{grid-template-columns:1fr}}
+  .stack{display:grid;gap:22px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .card h2{font-size:16px;font-weight:800;margin:0 0 4px}
+  .card h2 + .hint{margin:0 0 14px}
+  .hint{color:var(--navy-soft);font-size:14px;margin:6px 0 0}
+  .hidden{display:none!important}
+
+  label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px;color:var(--navy-soft)}
+  input[type=text],input[type=number],select,textarea{
+    width:100%;font:inherit;font-size:15px;color:var(--navy);
+    border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#FAFCFF;min-width:0;
+  }
+  input:focus,select:focus,textarea:focus{outline:3px solid var(--gold);outline-offset:1px}
+  input[type=number]{max-width:120px}
+  textarea{height:230px;min-height:150px;resize:vertical;line-height:1.6}
+  .inline{display:flex;gap:8px;align-items:center}
+  .inline select{flex:1}
+
+  button{
+    font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  button.big{background:var(--red);font-size:20px;padding:14px 40px;border-radius:999px;width:100%}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+  button.quiet.danger{color:var(--red)}
+  button.quiet.danger:hover{border-color:var(--red)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .toolbar:first-child{margin-top:0}
+
+  .check{display:flex;align-items:center;gap:8px;margin:0 18px 0 0;font-size:14px;font-weight:600;color:var(--navy-soft)}
+  .check input{width:18px;height:18px;accent-color:var(--navy);margin:0}
+  .radio-row{display:flex;flex-wrap:wrap;gap:6px 0;margin:6px 0 4px}
+  .hr{height:1px;background:var(--line);margin:18px 0}
+
+  .msg{font-weight:700;font-size:15px;margin:12px 0 0;min-height:22px}
+  .privacy{font-size:13px;color:var(--navy-soft);margin:14px 0 0}
+
+  /* Results */
+  .stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+  .pill{border-radius:99px;padding:4px 12px;background:#E4ECFA;color:var(--navy);font:700 12px/1.5 'JetBrains Mono',ui-monospace,monospace}
+  .resultActions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+  .teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media (max-width:560px){.teams{grid-template-columns:1fr}}
+  .team{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+  .teamHead{display:flex;align-items:center;gap:10px;background:#F1F6FF;border-bottom:1px solid var(--line);padding:10px 12px}
+  .teamNum{background:var(--navy);color:#fff;border-radius:8px;width:30px;height:30px;display:grid;place-items:center;font-size:14px;font-weight:800;flex:none}
+  .teamHead strong{font-weight:800;font-size:16px;flex:1}
+  .teamHead span.count{font-size:13px;font-weight:600;color:var(--navy-soft)}
+  .member{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line)}
+  .member:last-child{border-bottom:0}
+  .memberName{min-width:0;overflow-wrap:anywhere;font-size:15px;font-weight:600}
+  .move{width:92px;padding:3px 4px;font-size:13px;font-weight:800;color:var(--navy);background:transparent;border:1px solid transparent;border-radius:8px;cursor:pointer}
+  .move:hover:not(:disabled){border-color:var(--line);background:#FAFCFF}
+  .empty{background:#F8FAFF;border:1px dashed var(--line);border-radius:12px;padding:40px 22px;text-align:center;color:var(--navy-soft)}
+  .empty b{display:block;color:var(--navy);font-size:20px;font-weight:800;margin-bottom:6px}
+  .notice{padding:10px 12px;border-radius:10px;background:#FFF6E0;color:#7A5600;font-size:14px;font-weight:600;margin-top:12px}
+
+  @media (prefers-reduced-motion:reduce){button{transition:none}}
+  @media print{
+    body{background:#fff;padding:0}
+    header p,.left,.resultActions,footer,.move,.hint,.privacy{display:none!important}
+    .layout{display:block}.card{border:0;padding:0}
+    .teams{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.team{break-inside:avoid}
+  }
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Team Generator</h1>
+  <p>Create randomized student teams in seconds. Adjust the teams by hand before you share them with your class.</p>
+</header>
+
+<div class="layout">
+
+  <div class="stack left">
+    <section class="card" aria-label="Class and names">
+      <h2>Class and names</h2>
+      <p class="hint">Pick a class, then paste or type its student names.</p>
+      <label for="classSelect" style="margin-top:0">Class / group</label>
+      <div class="inline"><select id="classSelect" aria-label="Choose class"></select><button class="quiet" id="addClass" type="button">+ New</button></div>
+      <div class="toolbar"><button class="quiet" type="button" id="renameClass">Rename</button><button class="quiet danger" type="button" id="deleteClass">Delete class</button></div>
+      <label for="roster">Student names <span id="nameCount">(0)</span></label>
+      <textarea id="roster" spellcheck="false" placeholder="One name per line&#10;Alex Rivera&#10;Jordan Lee&#10;Sam Torres"></textarea>
+      <p class="hint">One name per line, or paste a column from Google Sheets. Saved automatically in this browser.</p>
+      <div class="toolbar"><button type="button" class="quiet" id="uploadBtn">Upload names (.txt or .pdf)</button><button type="button" class="quiet" id="loadDemo">Load sample names</button><input type="file" id="fileInput" accept=".txt,.pdf,text/plain,application/pdf" class="hidden"></div>
+      <p class="hint">You can also drag a .txt or .pdf file onto the box. PDFs must contain real text (not a scanned photo). Check the list after loading.</p>
+    </section>
+
+    <section class="card" aria-label="Team setup">
+      <h2>Make teams</h2>
+      <p class="hint">Choose how to split the class.</p>
+      <div class="radio-row" role="radiogroup" aria-label="Grouping method"><label class="check"><input type="radio" name="mode" value="size" checked> Students per team</label><label class="check"><input type="radio" name="mode" value="count"> Number of teams</label></div>
+      <label for="amount" id="amountLabel">Maximum students per team</label>
+      <input id="amount" type="number" min="1" max="100" step="1" value="3">
+      <p class="hint" id="amountHint">Teams will be as evenly sized as possible.</p>
+      <div class="toolbar"><button id="generate" class="big" type="button">Generate teams</button></div>
+      <p class="msg" id="message" role="status" aria-live="polite"></p>
+      <p class="privacy">Names and classes are stored only in this browser. Nothing is sent online or synced between devices.</p>
+    </section>
+  </div>
+
+  <section class="card" aria-label="Generated teams">
+    <h2>Your teams</h2>
+    <p class="hint" id="resultSubtitle">Generate teams to see them here.</p>
+    <div class="stats hidden" id="stats"></div>
+    <div class="resultActions hidden" id="resultActions"><button class="quiet" id="reshuffle" type="button">Shuffle again</button><button class="quiet" id="copyTeams" type="button">Copy teams</button><button class="quiet" id="downloadCsv" type="button">Download CSV</button><button class="quiet" id="printTeams" type="button">Print</button></div>
+    <div id="empty" class="empty" style="margin-top:14px"><b>Ready when you are.</b>Add names, choose a team size, and press <strong>Generate teams</strong>.</div>
+    <div id="teams" class="teams" aria-live="polite"></div>
+    <p class="hint hidden" id="moveHint">Need to change something? Use "Move to..." next to a student. Moving students by hand can make team sizes uneven.</p>
+    <div class="notice hidden" id="notice"></div>
+  </section>
+
+</div>
+
+<footer>// Resources · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(() => {
+  'use strict';
+  const KEY = 'classroom-team-generator-v1';
+  const $ = id => document.getElementById(id);
+  const demoNames = ['Alex Rivera','Jordan Lee','Sam Torres','Taylor Kim','Casey Martin','Jamie Cruz','Riley Chen','Morgan Diaz','Avery Lopez','Drew Santos','Charlie Ruiz','Robin Park'];
+  function freshState() {return {active:'demo',classes:[{id:'demo',name:'Sample Class',roster:[],teams:[],mode:'size',amount:3}]};}
+  function load() {try {const data=JSON.parse(localStorage.getItem(KEY));if(data && Array.isArray(data.classes) && data.classes.length && data.classes.every(c=>c && typeof c.id==='string' && typeof c.name==='string' && Array.isArray(c.roster) && Array.isArray(c.teams)))return data;}catch(e){} return freshState();}
+  let state=load();
+  function save() {try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){showMessage('Browser storage is unavailable. Your changes may not persist.',true);}}
+  function current() {return state.classes.find(c=>c.id===state.active) || state.classes[0];}
+  function uid(){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+  function showMessage(t,warning=false){$('message').textContent=t;$('message').style.color=warning?'var(--red)':'var(--green)';}
+  function parseNames(text){const seen=new Set(),names=[],dupes=[];text.split(/\r?\n/).forEach(line=>{const name=line.trim().replace(/\s+/g,' ');if(!name)return;const norm=name.toLocaleLowerCase();if(seen.has(norm))dupes.push(name);else {seen.add(norm);names.push(name);}});return {names,dupes};}
+  function fillClassSelect(){const sel=$('classSelect');sel.replaceChildren();for(const c of state.classes){const op=document.createElement('option');op.value=c.id;op.textContent=c.name;sel.append(op);}sel.value=current().id;}
+  function refreshRoster(){const c=current();$('roster').value=c.roster.join('\n');$('nameCount').textContent='('+c.roster.length+')';const mode=c.mode==='count'?'count':'size';document.querySelector(`input[name="mode"][value="${mode}"]`).checked=true;$('amount').value=c.amount||3;syncMode();}
+  function syncMode(){const mode=document.querySelector('input[name="mode"]:checked').value;$('amountLabel').textContent=mode==='size'?'Maximum students per team':'Number of teams';$('amountHint').textContent=mode==='size'?'Teams will be as evenly sized as possible.':'Students will be spread evenly across the chosen teams.';}
+  function randomIndex(n) {if(n<=1)return 0;if(window.crypto&&crypto.getRandomValues){const x=new Uint32Array(1),range=4294967296,limit=range-(range%n);do{crypto.getRandomValues(x);}while(x[0]>=limit);return x[0]%n;}return Math.floor(Math.random()*n);}
+  function shuffle(names){const a=[...names];for(let i=a.length-1;i>0;i--){const j=randomIndex(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function buildTeams(names,mode,amount){const number=mode==='size'?Math.ceil(names.length/amount):Math.min(names.length,amount);const result=Array.from({length:number},()=>[]),shuffled=shuffle(names);for(let i=0;i<shuffled.length;i++)result[i%number].push(shuffled[i]);return result;}
+  function generate(){const c=current(),parsed=parseNames($('roster').value);c.roster=parsed.names;save();$('nameCount').textContent='('+c.roster.length+')';if(parsed.names.length<2){showMessage('Add at least two students to create teams.',true);return;}const raw=Number($('amount').value);if(!Number.isInteger(raw)||raw<1||raw>100){showMessage('Choose a whole number between 1 and 100.',true);return;}const mode=document.querySelector('input[name="mode"]:checked').value;c.mode=mode;c.amount=raw;c.teams=buildTeams(parsed.names,mode,raw);save();render();let note=parsed.dupes.length?`${parsed.dupes.length} duplicate name(s) were included only once. `:'';if(c.teams.some(team=>team.length===1))note+='One team contains a single student; try a different team size if needed.';showMessage(note||'Teams generated! You can shuffle again or move students between teams.',!!note);}
+  function render(){const c=current(),groups=c.teams.filter(t=>t.length),container=$('teams');container.replaceChildren();const valid=groups.length>0;$('empty').classList.toggle('hidden',valid);$('stats').classList.toggle('hidden',!valid);$('resultActions').classList.toggle('hidden',!valid);$('moveHint').classList.toggle('hidden',!valid);$('notice').classList.add('hidden');$('resultSubtitle').textContent=valid?`${c.name} · ${groups.reduce((a,t)=>a+t.length,0)} students assigned`:'Generate teams to see them here.';if(!valid)return;
+    $('stats').replaceChildren();for(const text of [`${groups.length} TEAM${groups.length===1?'':'S'}`,`${groups.reduce((a,t)=>a+t.length,0)} STUDENTS`]){const item=document.createElement('span');item.className='pill';item.textContent=text;$('stats').append(item);}
+    groups.forEach((team,i)=>{const card=document.createElement('article');card.className='team';const head=document.createElement('div');head.className='teamHead';const badge=document.createElement('span');badge.className='teamNum';badge.textContent=i+1;const title=document.createElement('strong');title.textContent=`Team ${i+1}`;const n=document.createElement('span');n.className='count';n.textContent=`${team.length} student${team.length===1?'':'s'}`;head.append(badge,title,n);card.append(head);
+      team.forEach((name,j)=>{const row=document.createElement('div');row.className='member';const span=document.createElement('span');span.className='memberName';span.textContent=name;const sel=document.createElement('select');sel.className='move';sel.setAttribute('aria-label',`Move ${name} to another team`);const first=document.createElement('option');first.value='';first.textContent='Move to...';sel.append(first);groups.forEach((_,to)=>{if(to===i)return;const option=document.createElement('option');option.value=String(to);option.textContent=`Team ${to+1}`;sel.append(option);});sel.disabled=groups.length<2;sel.addEventListener('change',()=>{const target=Number(sel.value);if(!Number.isInteger(target)||target<0||target>=c.teams.length||target===i)return;const [moved]=c.teams[i].splice(j,1);c.teams[target].push(moved);c.teams=c.teams.filter(t=>t.length);save();render();showMessage(`${moved} moved to Team ${c.teams.findIndex(t=>t.includes(moved))+1}.`);});row.append(span,sel);card.append(row);});container.append(card);});
+    if(groups.some(t=>t.length===1)){$('notice').classList.remove('hidden');$('notice').textContent='One team has a single student. Adjust the number or size of teams and regenerate if you want to avoid this.';}
+  }
+  function formatTeams(){return current().teams.map((team,i)=>`Team ${i+1}\n${team.map((name,j)=>`  ${j+1}. ${name}`).join('\n')}`).join('\n\n');}
+  function csvCell(s){let value=String(s);if(/^[=+\-@\t\r]/.test(value))value="'"+value;return '"'+value.replace(/"/g,'""')+'"';}
+  function download(){const c=current(),rows=[['Class','Team','Student']];c.teams.forEach((team,i)=>team.forEach(name=>rows.push([c.name,`Team ${i+1}`,name])));const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='teams-'+c.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showMessage('CSV downloaded.');}
+  $('classSelect').addEventListener('change',e=>{state.active=e.target.value;save();refreshRoster();render();showMessage('');});
+  $('addClass').addEventListener('click',()=>{const entered=prompt('Name for the new class:','Makerspace');if(entered===null)return;const name=entered.trim();if(!name){showMessage('Please enter a class name.',true);return;}const id=uid();state.classes.push({id,name,roster:[],teams:[],mode:'size',amount:3});state.active=id;save();fillClassSelect();refreshRoster();render();showMessage('New class created. Add student names to get started.');});
+  $('renameClass').addEventListener('click',()=>{const c=current(),entered=prompt('Rename this class:',c.name);if(entered===null)return;const name=entered.trim();if(!name){showMessage('Class name cannot be blank.',true);return;}c.name=name;save();fillClassSelect();render();showMessage('Class renamed.');});
+  $('deleteClass').addEventListener('click',()=>{const c=current();if(!confirm(`Delete “${c.name}” and its saved names and teams from this browser?`))return;state.classes=state.classes.filter(item=>item.id!==c.id);if(!state.classes.length)state=freshState();state.active=state.classes[0].id;save();fillClassSelect();refreshRoster();render();showMessage('Class removed from this browser.');});
+  $('roster').addEventListener('input',()=>{const c=current(),parsed=parseNames($('roster').value);c.roster=parsed.names;$('nameCount').textContent=`(${parsed.names.length})`;if(c.teams.length){c.teams=[];render();showMessage('The roster changed. Generate new teams to use the updated names.');}save();});
+  $('loadDemo').addEventListener('click',()=>{if($('roster').value.trim()&&!confirm('Replace the current names with 12 sample names?'))return;const c=current();c.roster=[...demoNames];c.teams=[];save();refreshRoster();render();showMessage('Sample names loaded. Click Generate teams!');});
+  document.querySelectorAll('input[name="mode"]').forEach(radio=>radio.addEventListener('change',()=>{current().mode=radio.value;syncMode();save();}));
+  $('amount').addEventListener('change',()=>{const n=Number($('amount').value);if(Number.isInteger(n)&&n>=1&&n<=100){current().amount=n;save();}});
+  $('generate').addEventListener('click',generate);$('reshuffle').addEventListener('click',generate);
+  $('copyTeams').addEventListener('click',async()=>{const text=formatTeams();try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);}else{const helper=document.createElement('textarea');helper.value=text;helper.style.position='fixed';helper.style.opacity='0';document.body.append(helper);helper.select();if(!document.execCommand('copy'))throw new Error('Copy failed');helper.remove();}showMessage('Teams copied.');}catch(e){showMessage('Copy was blocked by the browser. Use Download CSV instead.',true);}});
+  $('downloadCsv').addEventListener('click',download);$('printTeams').addEventListener('click',()=>window.print());
+
+  /* ---- Upload names from .txt or .pdf ---- */
+  const PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',PDFJS_WORKER='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  function loadPdfJs(){return new Promise((resolve,reject)=>{if(window.pdfjsLib)return resolve(window.pdfjsLib);const s=document.createElement('script');s.src=PDFJS;s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER;resolve(window.pdfjsLib);};s.onerror=()=>reject(new Error('pdf.js could not be loaded'));document.head.append(s);});}
+  async function pdfToLines(buffer){const lib=await loadPdfJs(),pdf=await lib.getDocument({data:buffer}).promise,lines=[];for(let p=1;p<=pdf.numPages;p++){const content=await (await pdf.getPage(p)).getTextContent(),rows=[];for(const it of content.items){if(!it.str||!it.str.trim())continue;const y=it.transform[5],x=it.transform[4];let row=rows.find(r=>Math.abs(r.y-y)<3);if(!row){row={y,parts:[]};rows.push(row);}row.parts.push({x,str:it.str.trim()});}rows.sort((a,b)=>b.y-a.y).forEach(r=>lines.push(r.parts.sort((a,b)=>a.x-b.x).map(t=>t.str).join(' ')));}return lines;}
+  // drop list numbers and bullets ("1.", "2)", "- ", "•") from the start of a line
+  const cleanLine=l=>l.replace(/^\uFEFF/,'').replace(/^\s*(?:\d+\s*[.)\-:]?\s+|[•·*\-]\s+)/,'').replace(/\s+/g,' ').trim();
+  async function importFile(file){
+    if(!file)return;const lower=file.name.toLowerCase(),isPdf=lower.endsWith('.pdf')||file.type==='application/pdf',isTxt=lower.endsWith('.txt')||file.type==='text/plain';
+    if(!isPdf&&!isTxt){showMessage('Please choose a .txt or .pdf file.',true);return;}
+    if(file.size>5*1024*1024){showMessage('That file is too large (5 MB max).',true);return;}
+    if($('roster').value.trim()&&!confirm('Replace the current names with the ones from this file?'))return;
+    showMessage('Reading '+file.name+'...');
+    try{
+      const raw=isPdf?await pdfToLines(await file.arrayBuffer()):(await file.text()).split(/\r?\n/);
+      const names=raw.map(cleanLine).filter(Boolean),parsed=parseNames(names.join('\n')),c=current();
+      if(!parsed.names.length){showMessage(isPdf?'No text found. If this PDF is a scan or photo, it cannot be read; try a .txt file or paste the names.':'The file has no names.',true);return;}
+      c.roster=parsed.names;c.teams=[];save();refreshRoster();render();
+      showMessage(parsed.names.length+' names loaded'+(parsed.dupes.length?' ('+parsed.dupes.length+' duplicate(s) skipped)':'')+'. Check the list, then generate teams.',!!parsed.dupes.length);
+    }catch(e){showMessage(isPdf?'This PDF could not be read. Try a .txt file or paste the names.':'The file could not be read.',true);}
+  }
+  $('uploadBtn').addEventListener('click',()=>$('fileInput').click());
+  $('fileInput').addEventListener('change',e=>{importFile(e.target.files[0]);e.target.value='';});
+  ['dragover','dragleave','drop'].forEach(ev=>$('roster').addEventListener(ev,e=>{e.preventDefault();$('roster').style.borderColor=ev==='dragover'?'var(--gold)':'';if(ev==='drop')importFile(e.dataTransfer.files[0]);}));
+  state.active=current().id;fillClassSelect();refreshRoster();render();
+})();
+</script>
+</body>
+</html>
