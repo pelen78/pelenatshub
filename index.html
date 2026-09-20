@@ -505,6 +505,52 @@ const GROUPS = {
     ]
   },
 
+  "Games": {
+    note: "// Quick games to review, practice, and have fun in class.",
+    activities: [
+      {
+        title: "Snake",
+        date: "Arcade",
+        description: "The classic snake game. Eat the gold food to grow without hitting the walls or yourself. Pick a speed, choose solid or wrap-around walls, and beat your best score.",
+        status: "done",
+        pinned: true,
+        link: "games/snake.html"
+      },
+      {
+        title: "Asteroids",
+        date: "Arcade",
+        description: "Fly your ship, blast the asteroids, and survive. Rocks split into smaller, faster pieces, and the screen wraps around. Turn, thrust, and fire to reach the next level.",
+        status: "done",
+        pinned: true,
+        link: "games/asteroids.html"
+      },
+      {
+        title: "Space Invaders",
+        date: "Arcade",
+        description: "Defend Earth from the alien fleet. Hide behind the shields, shoot the red bonus ship, and stop the invaders before they land. They speed up as you clear them.",
+        status: "done",
+        pinned: true,
+        link: "games/space-invaders.html"
+      },
+      {
+        title: "Dino Run",
+        date: "Arcade",
+        description: "Jump the cacti and duck the birds in this endless runner. Play the Daily Challenge, where everyone runs the exact same course, and fight for a spot on the top 10 leaderboard.",
+        status: "done",
+        pinned: true,
+        link: "games/dino-run.html"
+      },
+      {
+        title: "Tetris",
+        date: "Arcade",
+        description: "Marathon mode: clear lines to level up to level 15. See the next three pieces, save one with Hold, and use the ghost outline to line up your drops. Back-to-back Tetrises score big.",
+        status: "done",
+        pinned: true,
+        link: "games/tetris.html"
+      }
+    ]
+  },
+
   "Interventions": {
     note: "// System to invite students to intervention sessions.",
     activities: [
@@ -550,7 +596,7 @@ const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-09-18-c';
+const GROUPS_VERSION='2026-09-19-e';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){

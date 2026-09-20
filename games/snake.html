@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --navy-deep:#0b1740;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  header{max-width:640px;margin:0 auto 20px}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .game{max-width:640px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+  .scores{display:flex;gap:10px;margin-bottom:14px}
+  .score{flex:1;background:#F1F6FF;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
+  .score .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft)}
+  .score .val{display:block;font-size:26px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+
+  .board{position:relative;width:100%;aspect-ratio:1;border-radius:12px;overflow:hidden;border:2px solid var(--navy);touch-action:none;user-select:none;-webkit-user-select:none}
+  canvas{display:block;width:100%;height:100%}
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:rgba(22,41,77,.82);color:#fff}
+  .overlay.hidden{display:none}
+  .overlay h2{margin:0;font-size:clamp(28px,6vw,38px);font-weight:800}
+  .overlay p{margin:0;max-width:340px;color:#C9D4EC}
+  .overlay .newbest{color:var(--gold);font-weight:800}
+
+  button,select{font:inherit}
+  button{
+    font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button.big{background:var(--gold);color:var(--navy);font-size:19px;padding:12px 36px;border-radius:999px;margin-top:6px}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+  .controls .spacer{flex:1}
+  .opt{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--navy-soft)}
+  select{font-weight:800;font-size:14px;color:var(--navy);border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#FAFCFF;cursor:pointer}
+
+  .dpad{display:none;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:8px;justify-content:center;margin-top:16px}
+  .dpad button{padding:0;font-size:24px;border-radius:14px}
+  .dpad .up{grid-column:2;grid-row:1}
+  .dpad .left{grid-column:1;grid-row:2}
+  .dpad .down{grid-column:2;grid-row:2}
+  .dpad .right{grid-column:3;grid-row:2}
+  @media (pointer:coarse){.dpad{display:grid}}
+
+  .hint{color:var(--navy-soft);font-size:14px;margin:14px 0 0}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Snake</h1>
+  <p>Eat the gold food to grow. Don't crash into the walls or into yourself.</p>
+</header>
+
+<div class="game">
+  <section class="card">
+    <div class="scores">
+      <div class="score"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
+      <div class="score"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
+      <div class="score"><span class="lbl">LENGTH</span><span class="val" id="length">3</span></div>
+    </div>
+
+    <div class="board" id="board">
+      <canvas id="cv" width="600" height="600" aria-label="Snake game board" role="img"></canvas>
+      <div class="overlay" id="overlay">
+        <h2 id="ovTitle">Snake</h2>
+        <p id="ovText"></p>
+        <button class="big" id="ovBtn" type="button">Start</button>
+      </div>
+    </div>
+
+    <div class="dpad" aria-label="Direction buttons">
+      <button class="up" type="button" data-d="up" aria-label="Up">▲</button>
+      <button class="left" type="button" data-d="left" aria-label="Left">◀</button>
+      <button class="down" type="button" data-d="down" aria-label="Down">▼</button>
+      <button class="right" type="button" data-d="right" aria-label="Right">▶</button>
+    </div>
+
+    <div class="controls">
+      <label class="opt">Speed
+        <select id="speed"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="fast">Fast</option></select>
+      </label>
+      <label class="opt">Walls
+        <select id="walls"><option value="solid" selected>Solid</option><option value="wrap">Wrap around</option></select>
+      </label>
+      <span class="spacer"></span>
+      <button class="quiet" id="pauseBtn" type="button">Pause</button>
+      <button class="quiet" id="restartBtn" type="button">New game</button>
+    </div>
+    <p class="hint">Controls: arrow keys or W A S D. Space pauses. On a tablet or phone, swipe on the board or use the buttons. The game speeds up as you grow.</p>
+  </section>
+</div>
+
+<footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(() => {
+  'use strict';
+  const N = 20, CELL = 30;                       // 20 x 20 board, 600px canvas
+  const BASE = { easy: 150, normal: 115, fast: 85 };
+  const MIN_TICK = 55;
+  const DIRS = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+
+  // a button clicked with the mouse must not keep focus, or Space would press it again during play
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button'); if (b && e.detail > 0) b.blur(); });
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d');
+
+  let snake, dir, queue, food, foods, state, tickMs, acc, last, best, newBest = false;
+  // state: ready | running | paused | over | won
+
+  const bestKey = () => 'hub-snake-best-' + $('speed').value + '-' + $('walls').value;
+  const loadBest = () => { try { return Number(localStorage.getItem(bestKey())) || 0; } catch (_) { return 0; } };
+  const saveBest = v => { try { localStorage.setItem(bestKey(), String(v)); } catch (_) {} };
+
+  function reset() {
+    snake = [[7,10],[6,10],[5,10]];               // head first
+    dir = 'right'; queue = [];
+    foods = 0; acc = 0; last = 0; newBest = false;
+    tickMs = BASE[$('speed').value];
+    best = loadBest();
+    placeFood();
+    setState('ready');
+    updateScores();
+  }
+
+  function placeFood() {
+    const taken = new Set(snake.map(c => c[0] + ',' + c[1]));
+    const free = [];
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (!taken.has(x + ',' + y)) free.push([x, y]);
+    food = free.length ? free[Math.floor(Math.random() * free.length)] : null;
+  }
+
+  function updateScores() {
+    $('score').textContent = foods * 10;
+    $('best').textContent = best;
+    $('length').textContent = snake.length;
+  }
+
+  /* ---------- state + overlay ---------- */
+  function setState(s) {
+    state = s;
+    const ov = $('overlay');
+    ov.classList.toggle('hidden', s === 'running');
+    $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
+    $('pauseBtn').disabled = !(s === 'running' || s === 'paused');
+    if (s === 'ready') {
+      $('ovTitle').textContent = 'Ready?';
+      $('ovText').textContent = 'Use the arrow keys or W A S D. Press Space or the button to start.';
+      $('ovBtn').textContent = 'Start';
+    } else if (s === 'paused') {
+      $('ovTitle').textContent = 'Paused';
+      $('ovText').textContent = 'Take a breath. Press Space to keep playing.';
+      $('ovBtn').textContent = 'Resume';
+    } else if (s === 'over' || s === 'won') {
+      const score = foods * 10;
+      $('ovTitle').textContent = s === 'won' ? 'You filled the board!' : 'Game over';
+      $('ovText').innerHTML = 'Score: <b>' + score + '</b> · Length: <b>' + snake.length + '</b>' + (newBest ? '<br><span class="newbest">New best score!</span>' : '');
+      $('ovBtn').textContent = 'Play again';
+    }
+  }
+
+  function start() { if (state === 'ready') { last = performance.now(); acc = 0; setState('running'); } }
+  function togglePause() {
+    if (state === 'running') setState('paused');
+    else if (state === 'paused') { last = performance.now(); setState('running'); }
+  }
+  function primary() {
+    if (state === 'ready') start();
+    else if (state === 'paused') togglePause();
+    else if (state === 'over' || state === 'won') { reset(); start(); }
+  }
+
+  /* ---------- input ---------- */
+  const opposite = { up:'down', down:'up', left:'right', right:'left' };
+  function turn(d) {
+    if (state === 'over' || state === 'won') return;
+    if (state === 'paused') return;
+    const ref = queue.length ? queue[queue.length - 1] : dir;
+    if (d === ref || d === opposite[ref]) { if (state === 'ready') start(); return; }
+    if (queue.length < 2) queue.push(d);           // small buffer so quick turns are not lost
+    if (state === 'ready') start();
+  }
+
+  const KEYS = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right', w:'up', W:'up', s:'down', S:'down', a:'left', A:'left', d:'right', D:'right' };
+  document.addEventListener('keydown', e => {
+    if (e.target && (e.target.tagName === 'SELECT')) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (KEYS[e.key]) { e.preventDefault(); turn(KEYS[e.key]); return; }
+    if (e.key === ' ' || e.code === 'Space') {
+      if (e.target && e.target.tagName === 'BUTTON') return;   // let a focused button use Space normally
+      e.preventDefault();
+      if (state === 'running' || state === 'paused') togglePause(); else primary();
+    }
+  });
+
+  // swipe on the board
+  let touch = null;
+  const board = $('board');
+  board.addEventListener('touchstart', e => { const t = e.changedTouches[0]; touch = { x: t.clientX, y: t.clientY }; }, { passive: true });
+  board.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+  board.addEventListener('touchend', e => {
+    if (!touch) return;
+    const t = e.changedTouches[0], dx = t.clientX - touch.x, dy = t.clientY - touch.y;
+    touch = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    turn(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+  });
+  document.querySelectorAll('.dpad button').forEach(b => b.addEventListener('pointerdown', e => { e.preventDefault(); turn(b.dataset.d); }));
+
+  $('ovBtn').addEventListener('click', primary);
+  $('pauseBtn').addEventListener('click', togglePause);
+  $('restartBtn').addEventListener('click', () => { reset(); });
+  ['speed', 'walls'].forEach(id => $(id).addEventListener('change', e => { e.target.blur(); reset(); }));
+  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') setState('paused'); });
+
+  /* ---------- game step ---------- */
+  function step() {
+    if (queue.length) dir = queue.shift();
+    const [dx, dy] = DIRS[dir];
+    let nx = snake[0][0] + dx, ny = snake[0][1] + dy;
+
+    if ($('walls').value === 'wrap') { nx = (nx + N) % N; ny = (ny + N) % N; }
+    else if (nx < 0 || ny < 0 || nx >= N || ny >= N) return end('over');
+
+    const eating = food && nx === food[0] && ny === food[1];
+    const body = eating ? snake : snake.slice(0, -1);   // the tail cell is free unless we grow
+    if (body.some(c => c[0] === nx && c[1] === ny)) return end('over');
+
+    snake.unshift([nx, ny]);
+    if (eating) {
+      foods++;
+      tickMs = Math.max(MIN_TICK, BASE[$('speed').value] - Math.floor(foods / 5) * 8);
+      placeFood();
+      if (!food) return end('won');
+    } else snake.pop();
+    updateScores();
+  }
+
+  function end(kind) {
+    const score = foods * 10;
+    newBest = score > best;
+    if (newBest) { best = score; saveBest(best); }
+    updateScores();
+    setState(kind);
+  }
+
+  /* ---------- drawing ---------- */
+  function rr(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function draw() {
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) {
+      ctx.fillStyle = (x + y) % 2 ? '#F1F6FF' : '#E6EEFB';
+      ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+    }
+    if (food) {
+      ctx.fillStyle = '#F0B429';
+      ctx.beginPath(); ctx.arc(food[0] * CELL + CELL / 2, food[1] * CELL + CELL / 2, CELL * 0.34, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.beginPath(); ctx.arc(food[0] * CELL + CELL * 0.42, food[1] * CELL + CELL * 0.4, CELL * 0.09, 0, Math.PI * 2); ctx.fill();
+    }
+    for (let i = snake.length - 1; i >= 0; i--) {
+      const [x, y] = snake[i], pad = i === 0 ? 1 : 2;
+      ctx.fillStyle = i === 0 ? '#16294D' : (i % 2 ? '#2A4478' : '#22396A');
+      rr(x * CELL + pad, y * CELL + pad, CELL - pad * 2, CELL - pad * 2, 8); ctx.fill();
+    }
+    // eyes
+    const [hx, hy] = snake[0], cx = hx * CELL + CELL / 2, cy = hy * CELL + CELL / 2;
+    const [dx, dy] = DIRS[dir], px = -dy, py = dx;         // perpendicular
+    ctx.fillStyle = '#fff';
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + dx * 6 + px * 6 * s, cy + dy * 6 + py * 6 * s, 3.6, 0, Math.PI * 2); ctx.fill(); });
+    ctx.fillStyle = '#16294D';
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + dx * 7.5 + px * 6 * s, cy + dy * 7.5 + py * 6 * s, 1.7, 0, Math.PI * 2); ctx.fill(); });
+  }
+
+  function frame(t) {
+    if (state === 'running') {
+      const dt = Math.min(t - last, 250);               // ignore long gaps (tab switches)
+      acc += dt;
+      while (acc >= tickMs && state === 'running') { acc -= tickMs; step(); }
+    }
+    last = t;
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

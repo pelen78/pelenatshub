@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dino Run</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --navy-deep:#0b1740;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  .hidden{display:none!important}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  header{max-width:860px;margin:0 auto 20px}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .game{max-width:860px;margin:0 auto;display:grid;gap:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .card h2{font-size:16px;font-weight:800;margin:0 0 4px}
+  .hint{color:var(--navy-soft);font-size:14px;margin:6px 0 0}
+
+  .scores{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .score{background:#F1F6FF;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
+  .score .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft)}
+  .score .val{display:block;font-size:26px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+  .score .val.flash{color:var(--gold)}
+
+  .board{position:relative;width:100%;aspect-ratio:8/3;border-radius:12px;overflow:hidden;border:2px solid var(--navy);touch-action:none;user-select:none;-webkit-user-select:none;background:#F1F6FF}
+  canvas{display:block;width:100%;height:100%}
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:14px;background:rgba(22,41,77,.84);color:#fff}
+  .overlay.hidden{display:none}
+  .overlay h2{margin:0;font-size:clamp(22px,5vw,34px);font-weight:800;color:#fff}
+  .overlay p{margin:0;max-width:440px;color:#C9D4EC;font-size:15px}
+  .overlay .gold{color:var(--gold);font-weight:800}
+  .saverow{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .saverow input{font:inherit;font-weight:700;font-size:15px;color:var(--navy);border:2px solid var(--gold);border-radius:10px;padding:8px 12px;width:180px;background:#fff}
+  .saverow input:focus{outline:3px solid #fff;outline-offset:1px}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+
+  button{
+    font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button.big{background:var(--gold);color:var(--navy);font-size:18px;padding:10px 30px;border-radius:999px}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+  .overlay button.quiet{color:#fff;border-color:rgba(255,255,255,.4)}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  button.sm{font-size:14px;padding:8px 14px}
+
+  select{font:inherit;font-weight:800;font-size:14px;color:var(--navy);border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#FAFCFF;cursor:pointer}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+  .controls .spacer{flex:1}
+  .opt{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--navy-soft)}
+
+  .touch{display:none;gap:12px;margin-top:16px}
+  .touch button{height:76px;border-radius:18px;font-size:18px;touch-action:none}
+  .touch .jump{flex:2;background:var(--gold);color:var(--navy)}
+  .touch .duck{flex:1}
+  .touch button.on{filter:brightness(1.35)}
+  @media (pointer:coarse){.touch{display:flex}}
+
+  /* Leaderboard */
+  ol{list-style:none;counter-reset:n;margin:12px 0 0;padding:0}
+  ol li{counter-increment:n;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:7px 6px;border-bottom:1px solid var(--line);font-size:15px}
+  ol li::before{content:counter(n);background:var(--navy);color:#fff;border-radius:8px;width:30px;height:30px;display:grid;place-items:center;font-size:14px;font-weight:800}
+  ol li:first-child::before{background:var(--gold);color:var(--navy)}
+  ol li.me{background:#FFF6E0;border-radius:10px}
+  ol li .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  ol li .pt{font-weight:800;font-variant-numeric:tabular-nums}
+  .empty{background:#F8FAFF;border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--navy-soft);font-size:14px;margin-top:12px}
+  .lbhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Dino Run</h1>
+  <p>Jump the cacti, duck the birds, and run as far as you can. Beat your classmates in the Daily Challenge.</p>
+</header>
+
+<div class="game">
+  <section class="card">
+    <div class="scores">
+      <div class="score"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
+      <div class="score"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
+      <div class="score"><span class="lbl">SPEED</span><span class="val" id="speed">1.0x</span></div>
+    </div>
+
+    <div class="board" id="board">
+      <canvas id="cv" width="800" height="300" aria-label="Dino Run game" role="img"></canvas>
+      <div class="overlay" id="overlay">
+        <h2 id="ovTitle">Dino Run</h2>
+        <p id="ovText"></p>
+        <div class="saverow hidden" id="saveRow">
+          <input id="nameIn" maxlength="14" placeholder="Your name" autocomplete="off" aria-label="Your name for the leaderboard">
+          <button class="big" id="saveBtn" type="button">Save score</button>
+        </div>
+        <div class="btnrow">
+          <button class="big" id="ovBtn" type="button">Start</button>
+          <button class="quiet sm hidden" id="copyBtn" type="button">Copy my score</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="touch" aria-label="On-screen controls">
+      <button type="button" class="duck" data-k="duck" aria-label="Duck">Duck</button>
+      <button type="button" class="jump" data-k="jump" aria-label="Jump">Jump</button>
+    </div>
+
+    <div class="controls">
+      <label class="opt">Mode
+        <select id="mode"><option value="daily" selected>Daily Challenge</option><option value="free">Free play</option></select>
+      </label>
+      <button class="quiet sm" id="soundBtn" type="button" aria-pressed="true">Sound: on</button>
+      <span class="spacer"></span>
+      <button class="quiet sm" id="pauseBtn" type="button">Pause</button>
+      <button class="quiet sm" id="restartBtn" type="button">New run</button>
+    </div>
+    <p class="hint">Controls: Space, ▲ or W to jump (in the air, ▼ drops you faster). Hold ▼ or S to duck. P pauses. On a tablet or phone, tap the board to jump and hold Duck. Every player gets the same course in the Daily Challenge, so scores are fair to compare.</p>
+  </section>
+
+  <section class="card">
+    <div class="lbhead">
+      <div><h2 id="lbTitle">Leaderboard</h2><p class="hint" id="lbSub"></p></div>
+    </div>
+    <ol id="lb"></ol>
+    <p class="hint">This board is saved on this computer only. To compare across the class, use the same computer, or ask players to share their score with the Copy my score button.</p>
+  </section>
+</div>
+
+<footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(() => {
+  'use strict';
+  const W = 800, H = 300, GROUND = 250, TOP_N = 10;
+  const STEP = 1 / 60;
+  const DINO_X = 70, DINO_W = 44, DINO_H = 48, DUCK_W = 58, DUCK_H = 28;
+  const JUMP_V = 700, GRAVITY = 2400, FALL_MULT = 2.8, BUFFER = 0.12;
+  const SPEED0 = 320, SPEED_MAX = 780, SPEED_GAIN = 7;
+
+  // a button clicked with the mouse must not keep focus, or Space would press it again during play
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button'); if (b && e.detail > 0) b.blur(); });
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  /* ---------- storage ---------- */
+  const store = {
+    get(k, fb) { try { const v = localStorage.getItem(k); return v == null ? fb : v; } catch (_) { return fb; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+  };
+  const pad = n => String(n).padStart(2, '0');
+  const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+  const boardKey = () => mode() === 'daily' ? 'hub-dino-lb-daily-' + runDate : 'hub-dino-lb-free';
+  const loadBoard = () => { try { const a = JSON.parse(store.get(boardKey(), '[]')); return Array.isArray(a) ? a : []; } catch (_) { return []; } };
+  const mode = () => $('mode').value;
+
+  /* ---------- seeded random so the daily course is identical for everyone ---------- */
+  function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  let rnd;
+
+  /* ---------- state ---------- */
+  let state, dino, obstacles, clouds, stars, speed, dist, score, best, elapsed, gapLeft, runDate;
+  const sessionBest = { daily: 0, free: 0 };
+  let nightT, nightTarget, buffer, overAt, lastSaved, legT, legFlip, milestoneAt, flashT;
+  const keys = { down: false };
+  // state: ready | running | paused | over
+
+  const theme = t => {
+    const mix = (a, b) => { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const A = p(a), B = p(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
+    return { bg: mix('#F1F6FF', '#0b1740'), fg: mix('#16294D', '#EDF2FB'), cactus: mix('#1B7F4B', '#4BD6AB'), cloud: mix('#DCE4F2', '#1E3163'), bird: mix('#D6303A', '#FF6B75'), line: mix('#41537A', '#7C8FBE') };
+  };
+
+  function reset() {
+    runDate = todayStr();
+    const seed = mode() === 'daily' ? hashStr('dino-' + runDate) : (Date.now() ^ (Math.random() * 1e9)) >>> 0;
+    rnd = mulberry(seed);
+    dino = { lift: 0, vy: 0, ducking: false };
+    obstacles = []; speed = SPEED0; dist = 0; score = 0; elapsed = 0; gapLeft = 380;
+    clouds = [{ x: 200, y: 50, s: 1 }, { x: 520, y: 90, s: 0.8 }, { x: 760, y: 40, s: 1.1 }];
+    stars = Array.from({ length: 30 }, () => ({ x: Math.random() * W, y: Math.random() * 130, a: 0.3 + Math.random() * 0.6 }));
+    nightT = 0; nightTarget = 0; buffer = 0; legT = 0; legFlip = 0; milestoneAt = 100; flashT = 0; lastSaved = -1;
+    const b = loadBoard(); best = Math.max(b.length ? b[0].score : 0, sessionBest[mode()]);
+    renderBoard(); hud(true);
+    setState('ready');
+  }
+
+  /* ---------- sound (tiny WebAudio beeps, created on first key press) ---------- */
+  let audio = null, soundOn = store.get('hub-dino-sound', '1') === '1';
+  function beep(freq, dur, type, vol, slide) {
+    if (!soundOn) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
+      o.type = type || 'square'; o.frequency.setValueAtTime(freq, t);
+      if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+      g.gain.setValueAtTime(vol || 0.05, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + dur);
+    } catch (_) {}
+  }
+  const sfx = { jump: () => beep(420, 0.14, 'square', 0.04, 760), milestone: () => { beep(880, 0.08); setTimeout(() => beep(1180, 0.1), 90); }, die: () => beep(220, 0.35, 'sawtooth', 0.06, 70) };
+  function updateSoundBtn() { $('soundBtn').textContent = 'Sound: ' + (soundOn ? 'on' : 'off'); $('soundBtn').setAttribute('aria-pressed', String(soundOn)); }
+
+  /* ---------- HUD, overlay, leaderboard ---------- */
+  const hudCache = {};
+  function hud(force) {
+    const v = { score, best, speed: (speed / SPEED0).toFixed(1) + 'x' };
+    for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
+  }
+  const shownScore = () => String(score).padStart(5, '0');
+
+  function setState(s) {
+    state = s;
+    $('overlay').classList.toggle('hidden', s === 'running');
+    $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
+    $('pauseBtn').disabled = !(s === 'running' || s === 'paused');
+    const showSave = s === 'over' && qualifies();
+    $('saveRow').classList.toggle('hidden', !showSave);
+    $('copyBtn').classList.toggle('hidden', s !== 'over');
+    if (s === 'ready') {
+      $('ovTitle').textContent = mode() === 'daily' ? 'Daily Challenge' : 'Free play';
+      $('ovText').textContent = mode() === 'daily'
+        ? 'Everyone runs the same course today (' + runDate + '). Press Space or the button to start.'
+        : 'A new random course every run. Press Space or the button to start.';
+      $('ovBtn').textContent = 'Start';
+    } else if (s === 'paused') {
+      $('ovTitle').textContent = 'Paused'; $('ovText').textContent = 'Press P to keep running.'; $('ovBtn').textContent = 'Resume';
+    } else if (s === 'over') {
+      $('ovTitle').textContent = 'Game over';
+      const rank = qualifies() ? rankOf(score) : 0;
+      $('ovText').innerHTML = 'Score: <b>' + score + '</b>' + (rank ? '<br><span class="gold">That is #' + rank + ' on the ' + (mode() === 'daily' ? "today's" : 'free play') + ' board! Add your name:</span>' : '');
+      $('ovBtn').textContent = 'Run again';
+      if (showSave) { $('nameIn').value = store.get('hub-dino-name', ''); setTimeout(() => $('nameIn').focus(), 30); }
+    }
+  }
+  function qualifies() {
+    if (score <= 0) return false;
+    const b = loadBoard();
+    return b.length < TOP_N || score > b[b.length - 1].score;
+  }
+  const rankOf = sc => loadBoard().filter(e => e.score >= sc).length + 1;
+
+  function saveScore() {
+    const name = ($('nameIn').value.trim() || 'Player').slice(0, 14);
+    store.set('hub-dino-name', name);
+    let b = loadBoard();
+    const same = b.find(e => e.name.toLowerCase() === name.toLowerCase());
+    if (same) { if (score > same.score) { same.score = score; } }   // one line per player: keep the best
+    else b.push({ name, score });
+    b.sort((x, y) => y.score - x.score); b = b.slice(0, TOP_N);
+    store.set(boardKey(), JSON.stringify(b));
+    lastSaved = name.toLowerCase();
+    best = Math.max(b[0].score, sessionBest[mode()]);
+    $('saveRow').classList.add('hidden');
+    $('ovText').innerHTML = 'Score: <b>' + score + '</b><br><span class="gold">Saved, ' + esc(name) + '!</span>';
+    renderBoard(); hud(true);
+    $('ovBtn').focus();
+  }
+
+  function renderBoard() {
+    const b = loadBoard(), d = mode() === 'daily';
+    $('lbTitle').textContent = d ? 'Daily Challenge leaderboard' : 'Free play leaderboard';
+    $('lbSub').textContent = d ? 'Same course for everyone · ' + runDate + ' · resets every day' : 'All-time top 10 on this computer';
+    $('lb').innerHTML = b.length ? b.map(e => '<li class="' + (e.name.toLowerCase() === lastSaved ? 'me' : '') + '"><span class="nm">' + esc(e.name) + '</span><span class="pt">' + e.score + '</span></li>').join('')
+      : '<div class="empty">No scores yet. Be the first to run!</div>';
+  }
+
+  function start() { if (state === 'ready') { setState('running'); jump(); } }
+  function togglePause() {
+    if (state === 'running') { keys.down = false; setState('paused'); }
+    else if (state === 'paused') setState('running');
+  }
+  function primary() {
+    if (state === 'ready') start();
+    else if (state === 'paused') togglePause();
+    else if (state === 'over') { if (performance.now() - overAt > 600) { reset(); start(); } }
+  }
+
+  /* ---------- input ---------- */
+  function jump() {
+    if (state !== 'running') return;
+    if (dino.lift <= 0.5) { dino.vy = JUMP_V; dino.lift = 0.6; buffer = 0; sfx.jump(); }
+    else buffer = BUFFER;                                        // pressed a moment early: jump on landing
+  }
+  const isTyping = e => e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT');
+  document.addEventListener('keydown', e => {
+    if (isTyping(e)) { if (e.key === 'Enter' && e.target.id === 'nameIn') { e.preventDefault(); saveScore(); } return; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === ' ' || e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+      if (e.target && e.target.tagName === 'BUTTON' && (e.key === ' ' || e.code === 'Space')) return;
+      e.preventDefault();
+      if (e.repeat) return;
+      if (state === 'running') jump(); else primary();
+      return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); keys.down = true; if (state === 'ready') start(); return; }
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
+    if (e.key === 'Enter' && state !== 'running' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
+  });
+  document.addEventListener('keyup', e => { if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = false; });
+  window.addEventListener('blur', () => { keys.down = false; if (state === 'running') setState('paused'); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') setState('paused'); });
+
+  $('board').addEventListener('pointerdown', e => {
+    if (e.target.closest('.overlay button, .overlay input')) return;
+    e.preventDefault();
+    if (state === 'running') jump(); else if (state === 'ready' || state === 'paused') primary();
+  });
+  document.querySelectorAll('.touch button').forEach(b => {
+    const k = b.dataset.k;
+    const on = e => { e.preventDefault(); b.classList.add('on'); if (k === 'jump') { if (state === 'running') jump(); else primary(); } else { keys.down = true; if (state === 'ready') start(); } };
+    const off = e => { e.preventDefault(); b.classList.remove('on'); if (k === 'duck') keys.down = false; };
+    b.addEventListener('pointerdown', on);
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, off));
+    b.addEventListener('contextmenu', e => e.preventDefault());
+  });
+
+  $('ovBtn').addEventListener('click', primary);
+  $('saveBtn').addEventListener('click', saveScore);
+  $('pauseBtn').addEventListener('click', togglePause);
+  $('restartBtn').addEventListener('click', reset);
+  $('mode').addEventListener('change', e => { e.target.blur(); reset(); });
+  $('soundBtn').addEventListener('click', () => { soundOn = !soundOn; store.set('hub-dino-sound', soundOn ? '1' : '0'); updateSoundBtn(); if (soundOn) sfx.milestone(); });
+  $('copyBtn').addEventListener('click', async () => {
+    const who = store.get('hub-dino-name', '') || 'I';
+    const text = 'Dino Run ' + (mode() === 'daily' ? 'Daily Challenge ' + runDate : 'Free play') + ': ' + score + ' points (' + who + '). Can you beat it?';
+    let ok = false;
+    try { await navigator.clipboard.writeText(text); ok = true; } catch (_) {
+      try { const t = document.createElement('textarea'); t.value = text; document.body.append(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (_) {}
+    }
+    $('copyBtn').textContent = ok ? 'Copied!' : 'Copy failed';
+    setTimeout(() => { $('copyBtn').textContent = 'Copy my score'; }, 1600);
+  });
+
+  /* ---------- simulation ---------- */
+  function spawn() {
+    const birdOk = score >= 300 && rnd() < 0.28;
+    if (birdOk) {
+      const lane = Math.floor(rnd() * 3);                    // 0 low (jump), 1 middle (duck or jump), 2 high (run under)
+      const ys = [GROUND - 34, GROUND - 62, GROUND - 104];
+      obstacles.push({ kind: 'bird', x: W + 30, y: ys[lane], w: 42, h: 28, lane });
+      return 42;
+    }
+    const big = rnd() < 0.45, n = 1 + Math.floor(rnd() * (score > 150 ? 3 : 2));
+    const cw = big ? 28 : 20, ch = big ? 54 : 38, total = n * cw + (n - 1) * 4;
+    obstacles.push({ kind: 'cactus', x: W + 30, y: GROUND - ch, w: total, h: ch, n, cw });
+    return total;
+  }
+
+  function hitbox() {
+    return dino.ducking
+      ? { x: DINO_X + 4, y: GROUND - dino.lift - DUCK_H + 4, w: DUCK_W - 10, h: DUCK_H - 8 }
+      : { x: DINO_X + 8, y: GROUND - dino.lift - DINO_H + 4, w: DINO_W - 16, h: DINO_H - 8 };
+  }
+  function crash() {
+    state = 'over'; overAt = performance.now(); sfx.die();
+    sessionBest[mode()] = Math.max(sessionBest[mode()], score);
+    best = Math.max(best, score);
+    hud(true);
+    setState('over');
+  }
+
+  function update(dt) {
+    elapsed += dt;
+    speed = Math.min(SPEED_MAX, SPEED0 + elapsed * SPEED_GAIN);
+    dist += speed * dt;
+    const s = Math.floor(dist * 0.03);
+    if (s !== score) {
+      score = s;
+      if (score >= milestoneAt) { milestoneAt += 100; flashT = 0.7; sfx.milestone(); }
+      nightTarget = Math.floor(score / 700) % 2 === 1 ? 1 : 0;
+    }
+    nightT += Math.sign(nightTarget - nightT) * Math.min(Math.abs(nightTarget - nightT), dt * 1.5);
+
+    // dino physics
+    dino.ducking = keys.down && dino.lift <= 0.5;
+    if (dino.lift > 0 || dino.vy > 0) {
+      dino.vy -= GRAVITY * (keys.down ? FALL_MULT : 1) * dt;
+      dino.lift += dino.vy * dt;
+      if (dino.lift <= 0) { dino.lift = 0; dino.vy = 0; if (buffer > 0) jump(); }
+    }
+    if (buffer > 0) buffer -= dt;
+    legT += dt; if (legT > 0.09) { legT = 0; legFlip ^= 1; }
+
+    // obstacles
+    for (const o of obstacles) o.x -= speed * dt;
+    while (obstacles.length && obstacles[0].x + obstacles[0].w < -20) obstacles.shift();
+    gapLeft -= speed * dt;
+    if (gapLeft <= 0) {
+      const w = spawn();
+      gapLeft = w + speed * 0.72 + rnd() * speed * 0.85;     // always leaves room to land and jump again
+    }
+    for (const c of clouds) { c.x -= speed * 0.12 * dt * c.s; if (c.x < -60) { c.x = W + 40; c.y = 30 + Math.random() * 80; } }
+
+    // collision
+    const h = hitbox();
+    for (const o of obstacles) {
+      const pad = o.kind === 'bird' ? 6 : 3;
+      if (h.x < o.x + o.w - pad && h.x + h.w > o.x + pad && h.y < o.y + o.h - pad && h.y + h.h > o.y + pad) { crash(); return; }
+    }
+    if (flashT > 0) { flashT -= dt; $('score').classList.toggle('flash', Math.floor(flashT * 8) % 2 === 0 && flashT > 0); } else $('score').classList.remove('flash');
+    hud();
+  }
+
+  /* ---------- drawing ---------- */
+  function drawDino(th) {
+    const x = DINO_X, ground = GROUND - dino.lift;
+    ctx.fillStyle = th.fg;
+    if (dino.ducking) {
+      const y = ground - DUCK_H;
+      ctx.fillRect(x, y + 6, 44, 14);                       // body
+      ctx.fillRect(x - 6, y + 8, 8, 8);                     // tail
+      ctx.fillRect(x + 34, y, 24, 14);                      // head
+      ctx.fillStyle = th.bg; ctx.fillRect(x + 48, y + 3, 4, 4); ctx.fillRect(x + 46, y + 10, 12, 2);
+      ctx.fillStyle = th.fg;
+      const a = dino.lift > 0 ? 0 : legFlip;
+      ctx.fillRect(x + 8, y + 20, 8, a ? 8 : 4); ctx.fillRect(x + 26, y + 20, 8, a ? 4 : 8);
+    } else {
+      const y = ground - DINO_H;
+      ctx.fillRect(x + 4, y + 20, 26, 20);                  // body
+      ctx.fillRect(x - 2, y + 20, 8, 10);                   // tail base
+      ctx.fillRect(x - 6, y + 16, 6, 8);                    // tail tip
+      ctx.fillRect(x + 18, y + 12, 12, 12);                 // neck
+      ctx.fillRect(x + 20, y, 24, 18);                      // head
+      ctx.fillRect(x + 30, y + 26, 8, 4);                   // arm
+      ctx.fillStyle = th.bg; ctx.fillRect(x + 34, y + 4, 4, 4); ctx.fillRect(x + 32, y + 13, 12, 2);
+      ctx.fillStyle = th.fg;
+      const a = dino.lift > 0 ? 0 : legFlip;
+      ctx.fillRect(x + 8, y + 40, 8, a ? 8 : 5); ctx.fillRect(x + 20, y + 40, 8, a ? 5 : 8);
+    }
+  }
+  function drawCactus(o, th) {
+    ctx.fillStyle = th.cactus;
+    for (let i = 0; i < o.n; i++) {
+      const cx = o.x + i * (o.cw + 4), sw = o.cw > 24 ? 10 : 8, sx = cx + (o.cw - sw) / 2;
+      ctx.fillRect(sx, o.y, sw, o.h);
+      ctx.fillRect(sx - 6, o.y + o.h * 0.34, 6, 5); ctx.fillRect(sx - 6, o.y + o.h * 0.18, 5, o.h * 0.2);
+      ctx.fillRect(sx + sw, o.y + o.h * 0.5, 6, 5); ctx.fillRect(sx + sw + 1, o.y + o.h * 0.32, 5, o.h * 0.22);
+    }
+  }
+  function drawBird(o, th) {
+    ctx.fillStyle = th.bird;
+    ctx.fillRect(o.x + 8, o.y + 10, 26, 10);                // body
+    ctx.fillRect(o.x, o.y + 12, 10, 5);                     // tail
+    ctx.fillRect(o.x + 32, o.y + 8, 10, 8);                 // head
+    ctx.fillStyle = th.fg; ctx.fillRect(o.x + 40, o.y + 12, 6, 3);   // beak
+    ctx.fillStyle = th.bird;
+    const up = Math.floor(performance.now() / 130) % 2 === 0;
+    ctx.beginPath();
+    if (up) { ctx.moveTo(o.x + 14, o.y + 10); ctx.lineTo(o.x + 28, o.y + 10); ctx.lineTo(o.x + 22, o.y - 2); }
+    else { ctx.moveTo(o.x + 14, o.y + 20); ctx.lineTo(o.x + 28, o.y + 20); ctx.lineTo(o.x + 22, o.y + 30); }
+    ctx.fill();
+  }
+  function draw() {
+    const th = theme(nightT);
+    ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+    if (nightT > 0.05) for (const s of stars) { ctx.globalAlpha = s.a * nightT; ctx.fillStyle = '#fff'; ctx.fillRect(s.x, s.y, 2, 2); }
+    ctx.globalAlpha = 1;
+    // sun / moon
+    ctx.fillStyle = nightT > 0.5 ? '#EDF2FB' : '#F0B429';
+    ctx.beginPath(); ctx.arc(700, 48, 16, 0, Math.PI * 2); ctx.fill();
+    if (nightT > 0.5) { ctx.fillStyle = th.bg; ctx.beginPath(); ctx.arc(707, 44, 14, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = th.cloud;
+    for (const c of clouds) { ctx.fillRect(c.x, c.y, 44 * c.s, 10); ctx.fillRect(c.x + 10 * c.s, c.y - 8, 22 * c.s, 10); ctx.fillRect(c.x + 26 * c.s, c.y + 8, 30 * c.s, 6); }
+    // ground with moving specks
+    ctx.fillStyle = th.line; ctx.fillRect(0, GROUND, W, 2);
+    const off = (dist * 0.9) % 160;
+    for (let x = -off; x < W; x += 80) { ctx.fillRect(x + 20, GROUND + 8, 14, 2); ctx.fillRect(x + 56, GROUND + 15, 6, 2); }
+
+    for (const o of obstacles) o.kind === 'bird' ? drawBird(o, th) : drawCactus(o, th);
+    drawDino(th);
+
+    ctx.fillStyle = th.fg; ctx.font = '700 22px "JetBrains Mono",monospace'; ctx.textAlign = 'right';
+    ctx.fillText(shownScore(), W - 16, 32);
+  }
+
+  /* ---------- main loop ---------- */
+  let last = 0, acc = 0;
+  function frame(t) {
+    if (state === 'running') {
+      acc += Math.min((t - last) / 1000, 0.1);
+      while (acc >= STEP && state === 'running') { acc -= STEP; update(STEP); }
+    } else acc = 0;
+    last = t;
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  updateSoundBtn();
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

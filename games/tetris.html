@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tetris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --navy-deep:#0b1740;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;
+    min-height:100vh;padding:26px 20px 56px;
+  }
+  .hidden{display:none!important}
+  header{max-width:860px;margin:0 auto 20px}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
+
+  .game{max-width:860px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+  .tetris{display:grid;grid-template-columns:150px 300px 150px;gap:16px;justify-content:center;align-items:start;grid-template-areas:"left board right"}
+  .left{grid-area:left}.right{grid-area:right}.boardwrap{grid-area:board}
+  .side{display:grid;gap:10px}
+  .box{background:#F1F6FF;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft);margin-bottom:4px}
+  .box .val{display:block;font-size:24px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+  .box .sub{display:block;font-size:12px;color:var(--navy-soft);font-weight:600}
+  .box canvas{display:block;width:100%;height:auto;margin-top:2px}
+
+  .board{position:relative;width:100%;aspect-ratio:1/2;border-radius:12px;overflow:hidden;border:2px solid var(--navy);background:var(--navy-deep);touch-action:none;user-select:none;-webkit-user-select:none}
+  .board canvas{display:block;width:100%;height:100%}
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;background:rgba(11,23,64,.86);color:#fff}
+  .overlay h2{margin:0;font-size:clamp(26px,5vw,34px);font-weight:800}
+  .overlay p{margin:0;color:#C9D4EC;font-size:15px}
+  .overlay .keys{font-size:13px;text-align:left;line-height:1.7;color:#C9D4EC;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 12px}
+  .overlay .keys b{color:#fff;font-family:'JetBrains Mono',monospace;font-weight:700}
+  .overlay .newbest{color:var(--gold);font-weight:800}
+  .banner{position:absolute;left:0;right:0;top:16%;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.1em;color:var(--gold);font-size:22px;pointer-events:none;opacity:0;transition:opacity .2s;text-shadow:0 2px 8px #0b1740;line-height:1.3}
+  .banner.on{opacity:1}
+  .banner small{display:block;font-size:13px;color:#fff;letter-spacing:.06em}
+
+  button,select{font:inherit}
+  button{
+    font-weight:800;cursor:pointer;border:2px solid transparent;
+    border-radius:12px;padding:12px 24px;font-size:17px;
+    background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button.big{background:var(--gold);color:var(--navy);font-size:19px;padding:12px 36px;border-radius:999px;margin-top:4px}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
+  button.quiet:hover{border-color:var(--navy-soft);filter:none}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  select{font-weight:800;font-size:14px;color:var(--navy);border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#FAFCFF;cursor:pointer}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px;justify-content:center}
+  .opt{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--navy-soft)}
+
+  .touch{display:none;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .touch button{width:72px;height:64px;padding:0;font-size:22px;border-radius:16px;touch-action:none}
+  .touch button.wide{width:96px;font-size:15px}
+  .touch button.gold{background:var(--gold);color:var(--navy)}
+  .touch button.on{filter:brightness(1.35)}
+  @media (pointer:coarse){.touch{display:flex}}
+
+  .hint{color:var(--navy-soft);font-size:14px;margin:14px 0 0}
+
+  @media (max-width:660px){
+    .tetris{grid-template-columns:1fr 1fr;grid-template-areas:"right left" "board board"}
+    .boardwrap{max-width:300px;margin:0 auto;width:100%}
+    .left .box canvas,.right .box canvas{max-width:104px}
+  }
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Tetris</h1>
+  <p>Marathon mode: clear lines to level up and reach level 15. Plan ahead with the next pieces, and use Hold to save one for later.</p>
+</header>
+
+<div class="game">
+  <section class="card">
+    <div class="tetris">
+      <div class="left side">
+        <div class="box"><span class="lbl">HOLD</span><canvas id="holdCv" width="104" height="64" aria-label="Held piece"></canvas></div>
+        <div class="box"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
+        <div class="box"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
+        <div class="box"><span class="lbl">LEVEL</span><span class="val" id="level">1</span></div>
+        <div class="box"><span class="lbl">LINES</span><span class="val" id="lines">0</span><span class="sub" id="goal">goal: 150</span></div>
+      </div>
+
+      <div class="boardwrap">
+        <div class="board" id="board">
+          <canvas id="cv" width="300" height="600" aria-label="Tetris board" role="img"></canvas>
+          <div class="banner" id="banner"></div>
+          <div class="overlay" id="overlay">
+            <h2 id="ovTitle">Tetris</h2>
+            <p id="ovText"></p>
+            <div class="keys" id="ovKeys"><b>◀ ▶</b> move &nbsp; <b>▼</b> soft drop<br><b>▲ / X</b> rotate &nbsp; <b>Z</b> rotate back<br><b>Space</b> hard drop &nbsp; <b>C / Shift</b> hold<br><b>P</b> pause</div>
+            <button class="big" id="ovBtn" type="button">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right side">
+        <div class="box"><span class="lbl">NEXT</span><canvas id="nextCv" width="104" height="192" aria-label="Next pieces"></canvas></div>
+      </div>
+    </div>
+
+    <div class="touch" aria-label="On-screen controls">
+      <button type="button" data-a="left" aria-label="Move left">◀</button>
+      <button type="button" data-a="down" aria-label="Soft drop">▼</button>
+      <button type="button" data-a="right" aria-label="Move right">▶</button>
+      <button type="button" data-a="rotCCW" aria-label="Rotate left">↺</button>
+      <button type="button" data-a="rotCW" aria-label="Rotate right">↻</button>
+      <button type="button" class="wide" data-a="hold" aria-label="Hold piece">Hold</button>
+      <button type="button" class="wide gold" data-a="hard" aria-label="Hard drop">Drop</button>
+    </div>
+
+    <div class="controls">
+      <label class="opt">Start level
+        <select id="startLevel"></select>
+      </label>
+      <button class="quiet" id="pauseBtn" type="button">Pause</button>
+      <button class="quiet" id="restartBtn" type="button">New game</button>
+    </div>
+    <p class="hint">The faded outline shows where your piece will land. You can hold one piece at a time, once per piece. Scoring: 1 line = 100, 2 = 300, 3 = 500, 4 (Tetris) = 800, times your level. Back-to-back Tetrises and combos earn extra. Finish 150 lines from level 1 to complete the Marathon.</p>
+  </section>
+</div>
+
+<footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(() => {
+  'use strict';
+  const COLS = 10, ROWS = 22, HIDDEN = 2, CELL = 30, MAX_LEVEL = 15;
+  const STEP = 1 / 60;
+  const DAS = 0.16, ARR = 0.045, LOCK_DELAY = 0.5, MAX_LOCK_RESETS = 15, CLEAR_TIME = 0.24;
+
+  const NAMES = ['', 'I', 'J', 'L', 'O', 'S', 'T', 'Z'];
+  const COLORS = ['', '#38BDF8', '#5C7CFA', '#FF922B', '#FFD43B', '#51CF66', '#B197FC', '#FF6B6B'];
+  const SHAPES = {
+    1: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+    2: [[1,0,0],[1,1,1],[0,0,0]],
+    3: [[0,0,1],[1,1,1],[0,0,0]],
+    4: [[1,1],[1,1]],
+    5: [[0,1,1],[1,1,0],[0,0,0]],
+    6: [[0,1,0],[1,1,1],[0,0,0]],
+    7: [[1,1,0],[0,1,1],[0,0,0]]
+  };
+  // SRS wall kicks, written as [dx, dy] with dy pointing UP (flipped when applied)
+  const KICKS_JLSTZ = {
+    '01': [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], '10': [[0,0],[1,0],[1,-1],[0,2],[1,2]],
+    '12': [[0,0],[1,0],[1,-1],[0,2],[1,2]],     '21': [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]],
+    '23': [[0,0],[1,0],[1,1],[0,-2],[1,-2]],    '32': [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]],
+    '30': [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]],  '03': [[0,0],[1,0],[1,1],[0,-2],[1,-2]]
+  };
+  const KICKS_I = {
+    '01': [[0,0],[-2,0],[1,0],[-2,-1],[1,2]],   '10': [[0,0],[2,0],[-1,0],[2,1],[-1,-2]],
+    '12': [[0,0],[-1,0],[2,0],[-1,2],[2,-1]],   '21': [[0,0],[1,0],[-2,0],[1,-2],[-2,1]],
+    '23': [[0,0],[2,0],[-1,0],[2,1],[-1,-2]],   '32': [[0,0],[-2,0],[1,0],[-2,-1],[1,2]],
+    '30': [[0,0],[1,0],[-2,0],[1,-2],[-2,1]],   '03': [[0,0],[-1,0],[2,0],[-1,2],[2,-1]]
+  };
+  const LINE_POINTS = [0, 100, 300, 500, 800];
+  const LINE_NAMES = ['', 'SINGLE', 'DOUBLE', 'TRIPLE', 'TETRIS!'];
+
+  // a button clicked with the mouse must not keep focus, or Space would press it again during play
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button'); if (b && e.detail > 0) b.blur(); });
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d');
+  const holdCtx = $('holdCv').getContext('2d'), nextCtx = $('nextCv').getContext('2d');
+
+  let state, grid, cur, queue, holdT, canHold, score, best, level, lines, startLvl, goal;
+  let dropT, lockT, lockResets, lowest, combo, b2b, clearRows, clearT, newBest = false, overReason = '', pausedFrom = 'running';
+  const held = { left: false, right: false, down: false };
+  let dasDir = 0, dasT = 0, arrT = 0;
+  // state: ready | running | paused | clearing | over | won
+
+  const BEST_KEY = 'hub-tetris-best';
+  const loadBest = () => { try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch (_) { return 0; } };
+  const saveBest = v => { try { localStorage.setItem(BEST_KEY, String(v)); } catch (_) {} };
+
+  /* ---------- helpers ---------- */
+  const clone = m => m.map(r => r.slice());
+  const rotateM = (m, dir) => {
+    const n = m.length, out = Array.from({ length: n }, () => Array(n).fill(0));
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) { if (dir > 0) out[c][n - 1 - r] = m[r][c]; else out[n - 1 - c][r] = m[r][c]; }
+    return out;
+  };
+  const collides = (m, x, y) => {
+    for (let r = 0; r < m.length; r++) for (let c = 0; c < m[r].length; c++) {
+      if (!m[r][c]) continue;
+      const gx = x + c, gy = y + r;
+      if (gx < 0 || gx >= COLS || gy >= ROWS) return true;
+      if (gy >= 0 && grid[gy][gx]) return true;
+    }
+    return false;
+  };
+  const gravityInterval = lv => Math.pow(0.8 - (lv - 1) * 0.007, lv - 1);
+  const grounded = () => collides(cur.m, cur.x, cur.y + 1);
+
+  function refillQueue() {
+    while (queue.length < 7) {
+      const bag = [1, 2, 3, 4, 5, 6, 7];
+      for (let i = bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+      queue.push(...bag);
+    }
+  }
+  const takeNext = () => { refillQueue(); return queue.shift(); };
+
+  /* ---------- setup ---------- */
+  function reset() {
+    grid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+    queue = []; holdT = 0; canHold = true;
+    score = 0; lines = 0; startLvl = Number($('startLevel').value) || 1; level = startLvl;
+    goal = (MAX_LEVEL + 1 - startLvl) * 10;
+    best = loadBest(); newBest = false; overReason = '';
+    combo = -1; b2b = false; clearRows = []; clearT = 0;
+    dropT = 0; lockT = 0; lockResets = 0;
+    held.left = held.right = held.down = false; dasDir = 0; dasT = 0; arrT = 0;
+    cur = null;
+    spawn(takeNext());
+    setState('ready');
+    hud(true); drawSide();
+  }
+
+  function spawn(t) {
+    cur = { t, m: clone(SHAPES[t]), r: 0, x: t === 4 ? 4 : 3, y: 1 };
+    dropT = 0; lockT = 0; lockResets = 0; lowest = cur.y;
+    if (collides(cur.m, cur.x, cur.y)) { endGame('over', 'Blocked out!'); return false; }
+    drawSide();
+    return true;
+  }
+
+  /* ---------- HUD + overlay ---------- */
+  const hudCache = {};
+  function hud(force) {
+    const v = { score, best, level, lines };
+    for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
+    $('goal').textContent = 'goal: ' + goal;
+  }
+  function setState(s) {
+    state = s;
+    $('overlay').classList.toggle('hidden', s === 'running' || s === 'clearing');
+    $('ovKeys').classList.toggle('hidden', s === 'over' || s === 'won');
+    $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
+    $('pauseBtn').disabled = !(s === 'running' || s === 'paused' || s === 'clearing');
+    if (s === 'ready') {
+      $('ovTitle').textContent = 'Marathon';
+      $('ovText').textContent = 'Clear ' + goal + ' lines to finish. Press Space or the button to start.';
+      $('ovBtn').textContent = 'Start';
+    } else if (s === 'paused') {
+      $('ovTitle').textContent = 'Paused'; $('ovText').textContent = 'Press P to keep playing.'; $('ovBtn').textContent = 'Resume';
+    } else if (s === 'over' || s === 'won') {
+      $('ovTitle').textContent = s === 'won' ? 'Marathon complete!' : 'Game over';
+      $('ovText').innerHTML = (overReason ? overReason + '<br>' : '') + 'Score: <b>' + score + '</b> · Level: <b>' + level + '</b> · Lines: <b>' + lines + '</b>' + (newBest ? '<br><span class="newbest">New best score!</span>' : '');
+      $('ovBtn').textContent = 'Play again';
+    }
+  }
+  let bannerT;
+  function banner(main, sub) {
+    const b = $('banner'); b.innerHTML = main + (sub ? '<small>' + sub + '</small>' : ''); b.classList.add('on');
+    clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 1300);
+  }
+  function endGame(kind, reason) {
+    overReason = reason || '';
+    if (score > best) { best = score; newBest = true; }
+    if (newBest) saveBest(best);
+    hud(true); setState(kind);
+  }
+
+  function start() { if (state === 'ready') setState('running'); }
+  function togglePause() {
+    if (state === 'running' || state === 'clearing') { held.left = held.right = held.down = false; dasDir = 0; pausedFrom = state; setState('paused'); }
+    else if (state === 'paused') setState(pausedFrom);
+  }
+  function primary() {
+    if (state === 'ready') start();
+    else if (state === 'paused') togglePause();
+    else if (state === 'over' || state === 'won') { reset(); start(); }
+  }
+
+  /* ---------- actions ---------- */
+  function onMoved() {
+    if (cur.y > lowest) { lowest = cur.y; lockResets = 0; }
+    if (grounded() && lockResets < MAX_LOCK_RESETS) { lockT = 0; lockResets++; }
+  }
+  function move(dx) {
+    if (!cur || collides(cur.m, cur.x + dx, cur.y)) return false;
+    cur.x += dx; onMoved(); return true;
+  }
+  function rotate(dir) {
+    if (!cur || cur.t === 4) return false;
+    const to = (cur.r + dir + 4) % 4, nm = rotateM(cur.m, dir);
+    const kicks = (cur.t === 1 ? KICKS_I : KICKS_JLSTZ)['' + cur.r + to];
+    for (const [kx, ky] of kicks) {
+      if (!collides(nm, cur.x + kx, cur.y - ky)) { cur.m = nm; cur.r = to; cur.x += kx; cur.y -= ky; onMoved(); return true; }
+    }
+    return false;
+  }
+  function ghostY() { let y = cur.y; while (!collides(cur.m, cur.x, y + 1)) y++; return y; }
+  function hardDrop() {
+    if (!cur) return;
+    const gy = ghostY(); score += (gy - cur.y) * 2; cur.y = gy; lockPiece();
+  }
+  function holdPiece() {
+    if (!cur || !canHold) return;
+    canHold = false;
+    const t = cur.t;
+    if (holdT === 0) { holdT = t; spawn(takeNext()); }
+    else { const back = holdT; holdT = t; spawn(back); }
+    drawSide();
+  }
+
+  function press(a) {
+    if (a === 'left') { held.left = true; dasDir = -1; dasT = 0; arrT = 0; if (state === 'running') move(-1); }
+    else if (a === 'right') { held.right = true; dasDir = 1; dasT = 0; arrT = 0; if (state === 'running') move(1); }
+    else if (a === 'down') held.down = true;
+    else if (state !== 'running') return;
+    else if (a === 'rotCW') rotate(1);
+    else if (a === 'rotCCW') rotate(-1);
+    else if (a === 'hard') hardDrop();
+    else if (a === 'hold') holdPiece();
+  }
+  function release(a) {
+    if (a === 'left') { held.left = false; if (dasDir === -1) { dasDir = held.right ? 1 : 0; dasT = 0; arrT = 0; } }
+    else if (a === 'right') { held.right = false; if (dasDir === 1) { dasDir = held.left ? -1 : 0; dasT = 0; arrT = 0; } }
+    else if (a === 'down') held.down = false;
+  }
+
+  /* ---------- locking + line clears ---------- */
+  function lockPiece() {
+    let allHidden = true;
+    for (let r = 0; r < cur.m.length; r++) for (let c = 0; c < cur.m[r].length; c++) {
+      if (!cur.m[r][c]) continue;
+      const gy = cur.y + r, gx = cur.x + c;
+      if (gy >= 0) grid[gy][gx] = cur.t;
+      if (gy >= HIDDEN) allHidden = false;
+    }
+    const t = cur.t; cur = null; canHold = true;
+    if (allHidden) { endGame('over', 'Locked out!'); return; }
+    const full = [];
+    for (let r = 0; r < ROWS; r++) if (grid[r].every(v => v)) full.push(r);
+    if (full.length) { clearRows = full; clearT = CLEAR_TIME; setState('clearing'); }
+    else { combo = -1; spawn(takeNext()); }
+  }
+
+  function finishClear() {
+    const n = clearRows.length;
+    grid = grid.filter((_, r) => !clearRows.includes(r));
+    while (grid.length < ROWS) grid.unshift(Array(COLS).fill(0));
+    clearRows = [];
+    combo++;
+    let pts = LINE_POINTS[n] * level;
+    const tetris = n === 4;
+    let sub = '';
+    if (tetris && b2b) { pts = Math.floor(pts * 1.5); sub = 'BACK-TO-BACK'; }
+    b2b = tetris ? true : (n > 0 ? false : b2b);
+    if (combo > 0) { pts += 50 * combo * level; sub += (sub ? ' · ' : '') + combo + 'x COMBO'; }
+    score += pts;
+    lines += n;
+    if (score > best) { best = score; newBest = true; }
+    banner(LINE_NAMES[n], sub);
+    const newLevel = Math.min(MAX_LEVEL, startLvl + Math.floor(lines / 10));
+    if (newLevel > level) { level = newLevel; banner('LEVEL ' + level, LINE_NAMES[n]); }
+    hud();
+    if (lines >= goal) { endGame('won', 'You cleared all ' + goal + ' lines!'); return; }
+    setState('running');
+    spawn(takeNext());
+  }
+
+  /* ---------- simulation ---------- */
+  function update(dt) {
+    if (state === 'clearing') { clearT -= dt; if (clearT <= 0) finishClear(); return; }
+    if (state !== 'running' || !cur) return;
+
+    // sideways auto-repeat
+    if (dasDir !== 0 && (dasDir < 0 ? held.left : held.right)) {
+      dasT += dt;
+      if (dasT >= DAS) { arrT += dt; while (arrT >= ARR) { arrT -= ARR; if (!move(dasDir)) break; } }
+    }
+
+    // gravity (soft drop is much faster and scores 1 per row)
+    const base = gravityInterval(level), interval = held.down ? Math.max(0.02, Math.min(base, 0.6) / 20) : base;
+    dropT += dt;
+    while (dropT >= interval && cur) {
+      if (grounded()) { dropT = 0; break; }
+      dropT -= interval; cur.y++; if (held.down) score++;
+      if (cur.y > lowest) { lowest = cur.y; lockResets = 0; }
+    }
+    if (!cur) return;
+
+    // lock delay
+    if (grounded()) { lockT += dt; if (lockT >= LOCK_DELAY) lockPiece(); }
+    else lockT = 0;
+    if (score > best) { best = score; newBest = true; }
+    hud();
+  }
+
+  /* ---------- drawing ---------- */
+  function cell(c, x, y, size, color, alpha) {
+    c.globalAlpha = alpha == null ? 1 : alpha;
+    c.fillStyle = color; c.fillRect(x, y, size, size);
+    c.fillStyle = 'rgba(255,255,255,.28)'; c.fillRect(x, y, size, Math.max(2, size * 0.14)); c.fillRect(x, y, Math.max(2, size * 0.14), size);
+    c.fillStyle = 'rgba(0,0,0,.22)'; c.fillRect(x, y + size - Math.max(2, size * 0.14), size, Math.max(2, size * 0.14)); c.fillRect(x + size - Math.max(2, size * 0.14), y, Math.max(2, size * 0.14), size);
+    c.globalAlpha = 1;
+  }
+  function drawBoard() {
+    ctx.fillStyle = '#0b1740'; ctx.fillRect(0, 0, 300, 600);
+    ctx.strokeStyle = 'rgba(201,212,236,.07)'; ctx.lineWidth = 1; ctx.beginPath();
+    for (let x = 1; x < COLS; x++) { ctx.moveTo(x * CELL + .5, 0); ctx.lineTo(x * CELL + .5, 600); }
+    for (let y = 1; y < ROWS - HIDDEN; y++) { ctx.moveTo(0, y * CELL + .5); ctx.lineTo(300, y * CELL + .5); }
+    ctx.stroke();
+    for (let r = HIDDEN; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (grid[r][c]) cell(ctx, c * CELL, (r - HIDDEN) * CELL, CELL, COLORS[grid[r][c]]);
+    if (cur && (state === 'running' || state === 'paused' || state === 'ready')) {
+      const gy = ghostY();
+      for (let r = 0; r < cur.m.length; r++) for (let c = 0; c < cur.m[r].length; c++) if (cur.m[r][c]) {
+        const yy = gy + r - HIDDEN; if (yy >= 0 && gy !== cur.y) { ctx.globalAlpha = 0.5; ctx.strokeStyle = COLORS[cur.t]; ctx.lineWidth = 2; ctx.strokeRect((cur.x + c) * CELL + 2, yy * CELL + 2, CELL - 4, CELL - 4); ctx.globalAlpha = 1; }
+      }
+      for (let r = 0; r < cur.m.length; r++) for (let c = 0; c < cur.m[r].length; c++) if (cur.m[r][c]) {
+        const yy = cur.y + r - HIDDEN; if (yy >= -0.99) cell(ctx, (cur.x + c) * CELL, yy * CELL, CELL, COLORS[cur.t]);
+      }
+    }
+    if (state === 'clearing') {
+      const a = 0.35 + 0.65 * Math.abs(Math.sin(clearT * 30));
+      ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(2) + ')';
+      for (const r of clearRows) ctx.fillRect(0, (r - HIDDEN) * CELL, 300, CELL);
+    }
+  }
+  function drawMini(c, t, ox, oy, cw, ch, size, dim) {
+    if (!t) return;
+    const m = SHAPES[t]; let minR = 9, maxR = -1, minC = 9, maxC = -1;
+    for (let r = 0; r < m.length; r++) for (let q = 0; q < m[r].length; q++) if (m[r][q]) { minR = Math.min(minR, r); maxR = Math.max(maxR, r); minC = Math.min(minC, q); maxC = Math.max(maxC, q); }
+    const w = (maxC - minC + 1) * size, h = (maxR - minR + 1) * size, sx = ox + (cw - w) / 2, sy = oy + (ch - h) / 2;
+    for (let r = minR; r <= maxR; r++) for (let q = minC; q <= maxC; q++) if (m[r][q]) cell(c, sx + (q - minC) * size, sy + (r - minR) * size, size, COLORS[t], dim ? 0.45 : 1);
+  }
+  function drawSide() {
+    holdCtx.clearRect(0, 0, 104, 64);
+    drawMini(holdCtx, holdT, 0, 0, 104, 64, 24, !canHold);
+    nextCtx.clearRect(0, 0, 104, 192);
+    refillQueue();
+    for (let i = 0; i < 3; i++) drawMini(nextCtx, queue[i], 0, i * 64, 104, 64, i === 0 ? 24 : 20, false);
+  }
+
+  /* ---------- input ---------- */
+  const KEYMAP = {
+    ArrowLeft: 'left', a: 'left', A: 'left', ArrowRight: 'right', d: 'right', D: 'right', ArrowDown: 'down', s: 'down', S: 'down',
+    ArrowUp: 'rotCW', w: 'rotCW', W: 'rotCW', x: 'rotCW', X: 'rotCW', z: 'rotCCW', Z: 'rotCCW',
+    ' ': 'hard', c: 'hold', C: 'hold', Shift: 'hold'
+  };
+  document.addEventListener('keydown', e => {
+    if (e.target && e.target.tagName === 'SELECT') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const a = KEYMAP[e.key];
+    if (a) {
+      if (e.key === ' ' && e.target && e.target.tagName === 'BUTTON') return;
+      e.preventDefault();
+      if (e.repeat) return;
+      if (state === 'ready') { if (a === 'hard') { start(); return; } start(); }
+      else if (state !== 'running' && state !== 'clearing') { if (a === 'hard') primary(); return; }
+      press(a); return;
+    }
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
+    if (e.key === 'Enter' && state !== 'running' && state !== 'clearing' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
+  });
+  document.addEventListener('keyup', e => { const a = KEYMAP[e.key]; if (a) release(a); });
+  window.addEventListener('blur', () => { held.left = held.right = held.down = false; dasDir = 0; if (state === 'running') togglePause(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') togglePause(); });
+
+  document.querySelectorAll('.touch button').forEach(b => {
+    const a = b.dataset.a;
+    b.addEventListener('pointerdown', e => { e.preventDefault(); b.classList.add('on'); if (state === 'ready') start(); press(a); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, e => { e.preventDefault(); b.classList.remove('on'); release(a); }));
+    b.addEventListener('contextmenu', e => e.preventDefault());
+  });
+
+  $('ovBtn').addEventListener('click', primary);
+  $('pauseBtn').addEventListener('click', togglePause);
+  $('restartBtn').addEventListener('click', reset);
+  const sel = $('startLevel'); for (let i = 1; i <= 10; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i; sel.appendChild(o); }
+  sel.addEventListener('change', e => { e.target.blur(); reset(); });
+
+  /* ---------- main loop ---------- */
+  let last = 0, acc = 0;
+  function frame(t) {
+    if (state === 'running' || state === 'clearing') {
+      acc += Math.min((t - last) / 1000, 0.1);
+      while (acc >= STEP && (state === 'running' || state === 'clearing')) { acc -= STEP; update(STEP); }
+    } else acc = 0;
+    last = t;
+    drawBoard();
+    requestAnimationFrame(frame);
+  }
+
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
