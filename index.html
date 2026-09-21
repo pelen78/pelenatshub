@@ -509,6 +509,14 @@ const GROUPS = {
     note: "// Quick games to review, practice, and have fun in class.",
     activities: [
       {
+        title: "Lab Reboot: Arduino Missions",
+        date: "Arduino",
+        description: "Restore six lab systems: wire Arduino circuits, complete code, test your work on the breadboard, and take on bonus experiments. Includes progressive hints and a teacher learning dashboard.",
+        status: "done",
+        pinned: true,
+        link: "games/lab-reboot.html"
+      },
+      {
         title: "Snake",
         date: "Arcade",
         description: "The classic snake game. Eat the gold food to grow without hitting the walls or yourself. Pick a speed, choose solid or wrap-around walls, and beat your best score.",
@@ -596,10 +604,24 @@ const LS_DATA='classhub-data';
 const LS_VER='classhub-data-version';
 /* Bump GROUPS_VERSION every time you edit the GROUPS list above by hand.
    Any old draft saved in the browser is thrown away and the file wins. */
-const GROUPS_VERSION='2026-09-19-e';
+const GROUPS_VERSION='2026-09-20-lab-reboot';
 function loadLocal(){
   try{
     if(localStorage.getItem(LS_VER)!==GROUPS_VERSION){
+      // Add this new game once without discarding drafts from the previous release.
+      if(localStorage.getItem(LS_VER)==='2026-09-19-e'){
+        const draft=JSON.parse(localStorage.getItem(LS_DATA)||'null');
+        if(draft && typeof draft==='object' && !Array.isArray(draft) &&
+           (!draft.Games || Array.isArray(draft.Games.activities))){
+          draft.Games ||= {note:GROUPS.Games.note,activities:[]};
+          if(!draft.Games.activities.some(a=>a.link==='games/lab-reboot.html')){
+            draft.Games.activities.unshift(clone(GROUPS.Games.activities[0]));
+          }
+          localStorage.setItem(LS_DATA,JSON.stringify(draft));
+          localStorage.setItem(LS_VER,GROUPS_VERSION);
+          return draft;
+        }
+      }
       localStorage.removeItem(LS_DATA);
       localStorage.setItem(LS_VER,GROUPS_VERSION);
       return null;
