@@ -168,24 +168,26 @@
   /* jump nav: links to each part of the page, stays on top while scrolling */
   .jump{
     position:sticky;top:0;z-index:20;
-    background:var(--surface);border-bottom:1.5px solid var(--line);
-    box-shadow:0 4px 14px rgba(11,23,64,.08);
+    background:var(--panel-2);border-bottom:3px solid var(--gold);
+    box-shadow:0 6px 18px rgba(11,23,64,.25);
   }
   .jump ul{
-    list-style:none;max-width:860px;margin:0 auto;padding:10px 24px;
+    list-style:none;max-width:1000px;margin:0 auto;padding:12px 24px;justify-content:safe center;
     display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
   }
   .jump ul::-webkit-scrollbar{display:none}
   .jump li{flex:none}
   .jump a{
     display:inline-flex;align-items:center;gap:7px;
-    font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;
     letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
-    color:var(--navy);border:1.5px solid var(--line);border-radius:999px;padding:6px 11px;
+    color:#fff;background:rgba(255,255,255,.08);
+    border:1.5px solid rgba(243,183,0,.6);border-radius:999px;padding:7px 12px;
     transition:border-color .16s,background .16s;
   }
-  .jump a:hover,.jump a:focus-visible{border-color:var(--navy)}
-  .jump a b{font-weight:700;color:var(--copper)}
+  .jump a:hover,.jump a:focus-visible{background:var(--gold);border-color:var(--gold);color:#0b1740}
+  .jump a b{font-weight:700;color:var(--gold-soft)}
+  .jump a:hover b,.jump a:focus-visible b{color:#0b1740}
   @media (max-width:560px){
     .jump ul{padding:8px 16px}
     .jump a{font-size:11px;padding:5px 10px}
