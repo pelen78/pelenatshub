@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice 2: Echo Alert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;       /* LED on */
+    --copper:#B5763A;      /* trace copper */
+    --paper:#EDF1FA;
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --copper:#E0A567;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Board cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 14% 22%, rgba(243,183,0,.18), transparent 44%),
+      radial-gradient(circle at 86% 78%, rgba(14,124,139,.30), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px),
+      radial-gradient(rgba(243,183,0,.30) 2.2px, transparent 2.4px);
+    background-size:48px 48px, 48px 48px, 96px 96px;
+    opacity:.7;pointer-events:none;
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:14px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:1.5px dashed rgba(243,183,0,.40);
+    border-radius:8px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(40px,8.4vw,72px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:1.0;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:block;color:var(--gold)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  /* power LED badge */
+  .power{
+    position:absolute;right:-6px;bottom:-20px;
+    display:flex;align-items:center;gap:9px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:2px solid var(--gold-soft);
+    border-radius:8px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.92);
+  }
+  .power .led{
+    width:10px;height:10px;border-radius:50%;
+    background:#4bd6ab;
+    box-shadow:0 0 10px 2px rgba(75,214,171,.75);
+  }
+  @keyframes blink{0%,44%{opacity:1}50%,94%{opacity:.18}100%{opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .power .led{animation:blink 2s steps(1,end) infinite}
+  }
+  @media (max-width:560px){
+    .power{position:static;display:inline-flex;margin-top:20px}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+  section[id]{scroll-margin-top:70px}
+
+  /* jump nav: links to each part of the page, stays on top while scrolling */
+  .jump{
+    position:sticky;top:0;z-index:20;
+    background:var(--panel-2);border-bottom:3px solid var(--gold);
+    box-shadow:0 6px 18px rgba(11,23,64,.25);
+  }
+  .jump ul{
+    list-style:none;max-width:1000px;margin:0 auto;padding:12px 24px;justify-content:safe center;
+    display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+  }
+  .jump ul::-webkit-scrollbar{display:none}
+  .jump li{flex:none}
+  .jump a{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+    color:#fff;background:rgba(255,255,255,.08);
+    border:1.5px solid rgba(243,183,0,.6);border-radius:999px;padding:7px 12px;
+    transition:border-color .16s,background .16s;
+  }
+  .jump a:hover,.jump a:focus-visible{background:var(--gold);border-color:var(--gold);color:#0b1740}
+  .jump a b{font-weight:700;color:var(--gold-soft)}
+  .jump a:hover b,.jump a:focus-visible b{color:#0b1740}
+  @media (max-width:560px){
+    .jump ul{padding:8px 16px}
+    .jump a{font-size:11px;padding:5px 10px}
+  }
+
+  /* silkscreen section labels, aligned, not rotated */
+  .silk{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px solid var(--navy);
+    border-radius:4px;
+    padding:8px 16px;
+    margin-bottom:22px;
+  }
+  .silk::before{
+    content:attr(data-ref);
+    font-size:11px;
+    letter-spacing:.1em;
+    color:var(--surface);
+    background:var(--navy);
+    border-radius:2px;
+    padding:2px 6px;
+  }
+  .silk.red{color:var(--stamp-red);border-color:var(--stamp-red)}
+  .silk.red::before{background:var(--stamp-red)}
+  .silk.gold{color:var(--copper);border-color:var(--copper)}
+  .silk.gold::before{background:var(--copper)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Blocks (requirements / topics) ---------- */
+  .blocks{list-style:none;margin:14px 0 24px}
+  .blocks li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .blocks li:last-child{border-bottom:none}
+  .blocks .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+  .blocks .hint{display:block;font-size:15px;color:var(--muted);line-height:1.45}
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  .note{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .note p{margin-bottom:0}
+
+  /* ---------- Bench check ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .silk{font-size:12.5px;padding:7px 12px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+
+
+
+
+  /* ---------- Research sources ---------- */
+  .sources{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 24px}
+  .src{
+    display:flex;flex-direction:column;gap:4px;text-decoration:none;color:var(--ink);
+    background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;
+    transition:transform .12s ease,border-color .12s ease;
+  }
+  .src:hover,.src:focus-visible{transform:translateY(-2px);border-color:var(--gold)}
+  .src .kind{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;color:var(--teal)}
+  .src .name{font-family:'Fredoka',sans-serif;font-weight:500;font-size:17.5px;color:var(--navy);line-height:1.25}
+  .src .desc{font-size:14.5px;color:var(--muted)}
+
+  /* ---------- Parts + wiring cards ---------- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 8px}
+  .card{background:var(--surface);border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:18px 20px}
+  .card:last-child{border-top-color:var(--teal)}
+  .card p{margin-bottom:8px;font-size:16px}
+  .card p:last-child{margin-bottom:0}
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:var(--navy);margin-bottom:8px}
+  .parts{list-style:none;display:grid;gap:8px}
+  .parts li{padding-left:22px;position:relative;font-size:16px}
+  .parts li::before{content:"";position:absolute;left:2px;top:9px;width:9px;height:9px;border-radius:2px;border:2px solid var(--copper)}
+  @media (max-width:650px){.sources,.two{grid-template-columns:1fr}}
+
+  /* ---------- Code ---------- */
+  code{font-family:'JetBrains Mono',monospace;font-size:14.5px;background:rgba(18,39,92,.09);border-radius:4px;padding:1px 6px;color:var(--navy)}
+  @media (prefers-color-scheme: dark){code{background:rgba(130,160,230,.16)}}
+  .today code{background:rgba(255,255,255,.14);color:var(--gold-soft)}
+  .codebox{background:var(--panel-2);border-radius:12px;padding:18px 20px;overflow-x:auto;margin:14px 0 18px}
+  .codebox pre{font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.75;color:#d6e2ff}
+  .codebox .cm{color:#8da2d6}
+  .codebox .kw{color:var(--gold-soft)}
+  .codebox .fn{color:#68d6c0}
+  .codebox .n{color:#f29ca8}
+  .codebox .todo{color:#0b1740;background:var(--gold-soft);border-radius:3px;padding:0 4px}
+  .btn{
+    display:inline-block;background:var(--gold);color:#0b1740;text-decoration:none;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;letter-spacing:.06em;
+    border-radius:8px;padding:11px 18px;margin:4px 0 18px;
+  }
+  .btn:hover,.btn:focus-visible{background:var(--gold-soft)}
+
+  /* ---------- Troubleshooting ---------- */
+  .fix{background:var(--surface);border:1.5px solid var(--line);border-top:5px solid var(--stamp-red);border-radius:12px;padding:20px 22px;margin:18px 0 22px}
+  .fix h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:var(--stamp-red);margin-bottom:10px}
+  .fix dl{display:grid;gap:12px}
+  .fix dt{font-weight:700}
+  .fix dd{color:var(--muted);font-size:15.5px}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Maker Space · Practice 2</p>
+    <h1>Echo Alert<span class="pop">Ultrasonic Sensor</span></h1>
+    <p class="subtitle">Your Arduino can blink. Now it learns to see.</p>
+    <div class="chips">
+      <span>Arduino</span>
+      <span>Tinkercad</span>
+      <span>Sensor</span>
+      <span>Challenge</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026&ndash;2027 · ROOM LB6</p>
+    <div class="power"><span class="led"></span>Sense &amp; react</div>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Page sections">
+  <ul>
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#research"><b>R</b> Research</a></li>
+    <li><a href="#part-one"><b>C1</b> Echo Alert</a></li>
+    <li><a href="#presentation">Presentation</a></li>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <section id="mission">
+    <span class="silk" data-ref="U1">Your Mission</span>
+    <p class="lead">Bats find their way in the dark with echoes. The <strong>HC-SR04 ultrasonic sensor</strong> does the same thing.</p>
+    <p>It sends a sound that humans cannot hear. Then it measures how long the echo takes to come back. The Arduino turns that time into <strong>centimeters</strong>.</p>
+    <p>This practice has <strong>research</strong> and <strong>challenges</strong>. Research comes first. Every challenge starts in Tinkercad.</p>
+    <p>You turn in <strong>two things</strong>: a <strong>Google Doc</strong> with your research answers, and a <strong>presentation</strong> with your circuit.</p>
+
+    <div class="today">
+      <p class="tag">The Rule for Every Challenge</p>
+      <h2>Research first. Simulate second. Build third.</h2>
+      <ol>
+        <li><strong>Answer the research questions</strong> in a Google Doc.</li>
+        <li><strong>Build and test the challenge in Tinkercad.</strong></li>
+        <li><strong>Show the working simulation to the teacher.</strong></li>
+        <li><strong>Receive the physical materials</strong> for that challenge.</li>
+        <li><strong>Build and test it in real life.</strong></li>
+        <li><strong>Take pictures</strong> of the physical circuit and process with the classroom camera.</li>
+      </ol>
+    </div>
+
+    <div class="quest">
+      <p class="q">IMPORTANT &rarr; Do not open Tinkercad until your research answers are done. You will not receive the sensor until your Tinkercad version works.</p>
+    </div>
+  </section>
+
+  <section id="research">
+    <span class="silk gold" data-ref="R">Research &middot; How the Sensor Works</span>
+    <p>Use these sources to answer the questions. Use your own words and complete sentences.</p>
+
+    <div class="today">
+      <p class="tag">Your Research Doc</p>
+      <h2>Answer in a Google Doc</h2>
+      <ol>
+        <li>Open a new <strong>Google Doc</strong>. Name it <code>lastname_echoalert</code></li>
+        <li>Type your <strong>name</strong>, the <strong>date</strong> and your <strong>class</strong> at the top.</li>
+        <li>Write each question, then your answer below it.</li>
+      </ol>
+    </div>
+
+    <div class="sources">
+      <a class="src" href="https://arduinogetstarted.com/tutorials/arduino-ultrasonic-sensor" target="_blank" rel="noopener">
+        <span class="kind">ARTICLE · ENGLISH</span>
+        <span class="name">Arduino: Ultrasonic Sensor</span>
+        <span class="desc">How it works, pins, wiring and code. Start here.</span>
+      </a>
+      <a class="src" href="https://naylampmechatronics.com/blog/10_tutorial-de-arduino-y-sensor-ultrasonico-hc-sr04.html" target="_blank" rel="noopener">
+        <span class="kind">ARTICLE · ESPAÑOL</span>
+        <span class="name">Tutorial de Arduino y sensor ultrasónico HC-SR04</span>
+        <span class="desc">Good explanation of the distance formula.</span>
+      </a>
+      <a class="src" href="https://www.youtube.com/watch?v=KGwtit2bFyo" target="_blank" rel="noopener">
+        <span class="kind">VIDEO · 4 MIN</span>
+        <span class="name">How To Use Ultrasonic Sensor</span>
+        <span class="desc">Quick look at the sensor and its pins.</span>
+      </a>
+      <a class="src" href="https://www.youtube.com/watch?v=zYl6MCKW5Ec" target="_blank" rel="noopener">
+        <span class="kind">VIDEO · 15 MIN</span>
+        <span class="name">Arduino Self-Driving Car</span>
+        <span class="desc">The sensor in a real project, built in Tinkercad.</span>
+      </a>
+    </div>
+
+    <ul class="blocks">
+      <li><span class="num">01</span><span><strong>How does an ultrasonic sensor work?</strong><span class="hint">Explain what the trigger and the echo do.</span></span></li>
+      <li><span class="num">02</span><span><strong>How do you connect the sensor to the Arduino?</strong><span class="hint">List the 4 pins and where each one goes.</span></span></li>
+      <li><span class="num">03</span><span><strong>How do you program the Arduino to read the sensor?</strong><span class="hint">Name the commands you need and explain what each one does.</span></span></li>
+      <li><span class="num">04</span><span><strong>How do you measure the distance of an object?</strong><span class="hint">Write the formula. Explain why it is divided by 2.</span></span></li>
+      <li><span class="num">05</span><span><strong>Bonus: why is 1 cm a bad distance to use?</strong><span class="hint">Your LED turns on at 5 to 7 cm. Why not at 1 cm? Hint: find the sensor's measuring range in the sources.</span></span></li>
+    </ul>
+
+  </section>
+
+  <section id="part-one">
+    <span class="silk gold" data-ref="C1">Challenge 1 &middot; The Echo Alert Circuit</span>
+    <p>The LED stays <strong>off</strong>. When an object gets <strong>5 to 7 cm</strong> close to the sensor, the LED turns <strong>on</strong>. When the object moves away, the LED turns off again.</p>
+
+    <div class="two">
+      <div class="card">
+        <h4>Parts you need</h4>
+        <ul class="parts">
+          <li>Arduino Uno R3</li>
+          <li>Small breadboard</li>
+          <li>Ultrasonic Distance Sensor (4 pins)</li>
+          <li>1 LED, any color</li>
+          <li>1 resistor, 220 &#8486;</li>
+          <li>Jumper wires</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Wiring</h4>
+        <ul class="parts">
+          <li>Sensor <code>VCC</code> to <code>5V</code></li>
+          <li>Sensor <code>GND</code> to <code>GND</code></li>
+          <li>Sensor <code>TRIG</code> to pin <code>9</code></li>
+          <li>Sensor <code>ECHO</code> to pin <code>10</code></li>
+          <li>LED long leg (+) to pin <code>7</code> through the resistor</li>
+          <li>LED short leg (&minus;) to <code>GND</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <ul class="blocks">
+      <li><span class="num">01</span><span><strong>Start a new design in Tinkercad Circuits.</strong><span class="hint">Name it <code>EchoAlert_YourName</code>.</span></span></li>
+      <li><span class="num">02</span><span><strong>Add the sensor.</strong><span class="hint">Search "Ultrasonic Distance Sensor". Pick the one with 4 pins, not 3.</span></span></li>
+      <li><span class="num">03</span><span><strong>Place the parts and wire them.</strong><span class="hint">Follow the wiring card above. Red wires for power, black wires for ground.</span></span></li>
+      <li><span class="num">04</span><span><strong>Add the starter code.</strong><span class="hint">Open Code, change Blocks to Text, and paste the code below.</span></span></li>
+      <li><span class="num">05</span><span><strong>Test the distance.</strong><span class="hint">Start the simulation and open the Serial Monitor. Move the object. The number must change.</span></span></li>
+      <li><span class="num">06</span><span><strong>Write your <code>if</code> and <code>else</code>.</strong><span class="hint">Turn the LED on when the object is close. Pick a number from 5 to 7 cm.</span></span></li>
+      <li><span class="num">07</span><span><strong>Show your Tinkercad circuit to the teacher.</strong><span class="hint">After approval, you will receive the materials for the physical build.</span></span></li>
+      <li><span class="num">08</span><span><strong>Build the same circuit in real life.</strong><span class="hint">Use the same pins and the same distance you already tested.</span></span></li>
+      <li><span class="num">09</span><span><strong>Document your work.</strong><span class="hint">The teacher will take pictures with the classroom camera. Keep your Tinkercad share link for the presentation.</span></span></li>
+    </ul>
+
+    <h3>Starter code</h3>
+    <div class="codebox">
+<pre><span class="cm">// Echo Alert - Your Full Name Here</span>
+
+<span class="kw">int</span> trigPin = <span class="n">9</span>;
+<span class="kw">int</span> echoPin = <span class="n">10</span>;
+<span class="kw">int</span> ledPin  = <span class="n">7</span>;
+
+<span class="kw">long</span> duration;
+<span class="kw">int</span> distance;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(trigPin, OUTPUT);
+  <span class="fn">pinMode</span>(echoPin, INPUT);
+  <span class="fn">pinMode</span>(ledPin, OUTPUT);
+  Serial.<span class="fn">begin</span>(<span class="n">9600</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="cm">// 1. Send a 10 microsecond pulse from the trigger</span>
+  <span class="fn">digitalWrite</span>(trigPin, LOW);
+  <span class="fn">delayMicroseconds</span>(<span class="n">2</span>);
+  <span class="fn">digitalWrite</span>(trigPin, HIGH);
+  <span class="fn">delayMicroseconds</span>(<span class="n">10</span>);
+  <span class="fn">digitalWrite</span>(trigPin, LOW);
+
+  <span class="cm">// 2. Measure how long the echo takes to come back</span>
+  duration = <span class="fn">pulseIn</span>(echoPin, HIGH);
+
+  <span class="cm">// 3. Turn time into centimeters</span>
+  distance = duration * <span class="n">0.034</span> / <span class="n">2</span>;
+
+  Serial.<span class="fn">print</span>(<span class="n">"Distance: "</span>);
+  Serial.<span class="fn">print</span>(distance);
+  Serial.<span class="fn">println</span>(<span class="n">" cm"</span>);
+
+  <span class="cm">// 4. <span class="todo">YOUR TURN</span> Turn the LED on when the object is close,</span>
+  <span class="cm">//    and off when it is far. Use if and else.</span>
+
+  <span class="fn">delay</span>(<span class="n">100</span>);
+}</pre>
+    </div>
+
+    <a class="btn" href="https://www.tinkercad.com/circuits" target="_blank" rel="noopener">Open Tinkercad Circuits &rarr;</a>
+
+    <div class="fix">
+      <h4>It does not work? Check this first</h4>
+      <dl>
+        <dt>I cannot change the distance in the simulation.</dt>
+        <dd>Start the simulation first. Then click the sensor. A circle appears in front of it. Drag the circle closer and farther.</dd>
+        <dt>The Serial Monitor always says 0 cm.</dt>
+        <dd>Check that TRIG and ECHO are not swapped. You write to TRIG. You read from ECHO.</dd>
+        <dt>The LED is always on.</dt>
+        <dd>Check your comparison. <code>distance &lt;= 7</code> means close. Did you write an <code>else</code> to turn it off?</dd>
+        <dt>The LED never turns on.</dt>
+        <dd>The LED may be backwards. The long leg (+) goes to the pin side.</dd>
+      </dl>
+    </div>
+
+    <div class="note"><p><strong>Presentation:</strong> <a href="#pres-challenge-1">What to include in your presentation for Challenge 1 &darr;</a></p></div>
+  </section>
+
+  <section id="presentation">
+    <span class="silk" data-ref="S1">Final Presentation</span>
+    <p class="lead">Make a presentation about <strong>your circuit</strong>.</p>
+    <p>Pick a free template from <a href="https://slidesgo.com/" target="_blank" rel="noopener">Slidesgo</a>, <a href="https://www.slidescarnival.com/" target="_blank" rel="noopener">SlidesCarnival</a> or <a href="https://genially.com/templates/presentations/" target="_blank" rel="noopener">Genially</a>. Write everything in your own words. Use AI only to make images.</p>
+
+    <h3 id="pres-challenge-1">Your slides</h3>
+    <ul class="blocks">
+      <li><span class="num">01</span><span><strong>The parts.</strong><span class="hint">Name each part and what it does.</span></span></li>
+      <li><span class="num">02</span><span><strong>The connections.</strong><span class="hint">Where each wire goes on the Arduino, and why.</span></span></li>
+      <li><span class="num">03</span><span><strong>Your circuit.</strong><span class="hint">A Tinkercad screenshot, your Tinkercad link, and photos of the real circuit.</span></span></li>
+      <li><span class="num">04</span><span><strong>Your code.</strong><span class="hint">Paste it and explain what it does. Say which distance you chose.</span></span></li>
+    </ul>
+  </section>
+
+  <section id="submit">
+    <span class="silk" data-ref="T1">Submission</span>
+    <p class="lead">Turn in <strong>two things</strong> in Google Classroom.</p>
+
+    <div class="two">
+      <div class="card">
+        <h4>1. Google Doc</h4>
+        <p>Your answers to the 5 research questions.</p>
+        <p>Name: <code>lastname_echoalert</code></p>
+      </div>
+      <div class="card">
+        <h4>2. Presentation</h4>
+        <p>Your circuit: parts, connections, pictures and code.</p>
+        <p>Your Tinkercad link opens for anyone.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>// Maker Space · The American School of Tampico · ROOM LB6 · 2026&ndash;2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+</body>
+</html>
