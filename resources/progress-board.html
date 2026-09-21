@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF2FB;
+    --card:#FFFFFF;
+    --navy:#16294D;
+    --navy-soft:#41537A;
+    --gold:#F0B429;
+    --red:#D6303A;
+    --green:#1B7F4B;
+    --blue:#2C5DAA;
+    --purple:#6E45A8;
+    --orange:#B0620B;
+    --line:#DCE4F2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--navy);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.5;min-height:100vh;padding:26px 20px 56px;
+  }
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+  .hidden{display:none!important}
+
+  header{max-width:1120px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
+  header p{margin:4px 0 0;color:var(--navy-soft)}
+  .badge-demo{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;background:#FFF6D6;color:#7A5600;border:1px solid #EBD58A;border-radius:8px;padding:5px 10px}
+  .head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+  main{max-width:1120px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{
+    font-weight:800;cursor:pointer;border:2px solid transparent;border-radius:12px;
+    padding:9px 18px;font-size:15px;background:var(--navy);color:#fff;transition:filter .12s ease;
+  }
+  button:hover:not(:disabled){filter:brightness(1.12)}
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600}
+  button.quiet:hover:not(:disabled){border-color:var(--navy-soft);filter:none}
+  button.gold{background:var(--gold);color:var(--navy)}
+  button.green{background:var(--green)}
+  button.sm{padding:5px 11px;font-size:13px;border-radius:9px}
+  input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;width:100%}
+  label.lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft);text-transform:uppercase;margin-bottom:5px}
+
+  /* Teacher toolbar */
+  .toolbar{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+  .toolbar .field{flex:1;min-width:190px}
+  .toolbar .btns{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* Stats (also filters) */
+  .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0}
+  .stat{text-align:left;background:var(--card);color:var(--navy);border:2px solid var(--line);border-radius:14px;padding:13px 15px;font-weight:400}
+  .stat:hover:not(:disabled){border-color:var(--navy-soft);filter:none}
+  .stat.on{border-color:var(--navy)}
+  .stat .n{display:block;font-size:30px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+  .stat .t{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--navy-soft)}
+  .stat .bar{display:block;height:5px;border-radius:5px;margin-top:8px;background:var(--line)}
+  .stat[data-k=working] .bar{background:var(--blue)}
+  .stat[data-k=help] .bar{background:var(--gold)}
+  .stat[data-k=review] .bar{background:var(--purple)}
+  .stat[data-k=done] .bar{background:var(--green)}
+
+  .board-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 12px}
+  .board-head h2{font-size:20px;margin:0}
+  .board-head input{max-width:230px}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+  @media (max-width:940px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}aside{order:-1}}
+  @media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .kid{padding:16px}
+  .kid.flag-help{border-color:#E9C46A;box-shadow:0 0 0 2px #F0B42933}
+  .kid.flag-review{border-color:#CBB6EA}
+  .kid-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .who{display:flex;gap:10px;align-items:center;min-width:0}
+  .avatar{width:38px;height:38px;border-radius:10px;background:#E4ECFA;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+  .who strong{display:block;overflow-wrap:anywhere;line-height:1.2}
+  .sub{font-size:13px;color:var(--navy-soft)}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.03em;border:1px solid;border-radius:6px;padding:3px 7px;white-space:nowrap}
+  .pill.notstarted{background:#F0F2F7;color:#5F6B82;border-color:#E0E4EC}
+  .pill.working{background:#E7EFFF;color:var(--blue);border-color:#C8DAF9}
+  .pill.help{background:#FFF0D2;color:var(--orange);border-color:#F0D08F}
+  .pill.review{background:#F1E8FF;color:var(--purple);border-color:#DACAF5}
+  .pill.done{background:#E4F4EC;color:var(--green);border-color:#B9E2CC}
+  .note{font-size:14px;color:#3B4A69;margin:12px 0 0;min-height:21px;overflow-wrap:anywhere}
+  .note.empty{color:#8B97AE}
+  .kid-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #EDF0F6}
+  .kid-actions select{width:auto;flex:1;min-width:120px;padding:5px 8px;font-size:13px}
+  .icon-btn{background:transparent;color:#8B97AE;border:0;padding:2px 8px;font-size:18px;line-height:1}
+  .icon-btn:hover:not(:disabled){color:var(--red);filter:none}
+
+  aside{display:grid;gap:16px}
+  .panel h2{font-size:18px;margin:0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .count{font-family:'JetBrains Mono',monospace;font-size:12px;background:#E4ECFA;border-radius:20px;padding:2px 10px;font-weight:700}
+  .q-item{border-top:1px solid #E7ECF5;padding:12px 0;display:grid;gap:7px}
+  .q-item:first-of-type{margin-top:12px}
+  .q-row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .q-row strong{font-size:15px}
+  .elapsed{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--orange);white-space:nowrap}
+  .elapsed.old{color:var(--red)}
+  .q-btns{display:flex;gap:7px;flex-wrap:wrap}
+  .empty-box{margin-top:12px;border:1px dashed var(--line);border-radius:10px;background:#F8FAFE;padding:18px;text-align:center;color:var(--navy-soft);font-size:14px}
+  .hint{font-size:13px;color:var(--navy-soft);margin-top:10px}
+
+  /* Student view */
+  .stu{max-width:640px;margin:0 auto;display:grid;gap:16px}
+  .stu h2{margin:0;font-size:26px}
+  .stu-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .project-line{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;color:var(--navy-soft);text-transform:uppercase}
+  .choices{display:grid;grid-template-columns:1fr;gap:10px;margin-top:16px}
+  .choice{display:flex;align-items:center;gap:14px;text-align:left;background:#fff;color:var(--navy);border:2px solid var(--line);border-radius:14px;padding:14px 16px;font-weight:400}
+  .choice:hover:not(:disabled){border-color:var(--navy-soft);filter:none}
+  .choice .ic{font-size:26px;width:34px;text-align:center}
+  .choice b{display:block;font-size:17px}
+  .choice small{display:block;color:var(--navy-soft);font-size:14px}
+  .choice.sel[data-k=working]{background:#EAF1FF;border-color:var(--blue)}
+  .choice.sel[data-k=help]{background:#FFF4DC;border-color:var(--gold)}
+  .choice.sel[data-k=review]{background:#F4EDFF;border-color:var(--purple)}
+  .helpform{margin-top:14px;padding:16px;border:1px solid #EBD58A;background:#FFFBEC;border-radius:12px;display:grid;gap:10px}
+  .reason{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid #EBDDAF;border-radius:10px;background:#fff;cursor:pointer}
+  .reason input{width:auto;accent-color:var(--navy)}
+  .helpform .row{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+  .banner{border-radius:12px;padding:14px 16px;margin-top:16px;font-size:15px}
+  .banner.wait{background:#F4EDFF;border:1px solid #DACAF5}
+  .banner.ok{background:#E4F4EC;border:1px solid #B9E2CC}
+  .banner.help{background:#FFF4DC;border:1px solid #EBD58A}
+  .lock-note{font-size:13px;color:var(--navy-soft);margin-top:12px}
+
+  dialog{border:1px solid var(--line);border-radius:16px;padding:22px;width:min(94vw,440px);color:var(--navy);box-shadow:0 20px 60px #0E203644}
+  dialog::backdrop{background:#14254270}
+  dialog h3{margin:0 0 12px;font-size:20px}
+  dialog form{display:grid;gap:12px}
+  dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:10px;padding:10px 16px;z-index:9;max-width:calc(100vw - 30px);font-weight:600}
+  footer{max-width:1120px;margin:26px auto 0;color:var(--navy-soft);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="project-line" id="crumb">Resources · Progress Board</div>
+    <h1 id="title">Project Progress Board</h1>
+    <p id="subtitle"></p>
+  </div>
+  <div class="head-actions" id="headActions">
+    <span class="badge-demo">● DEMO · SAVED IN THIS BROWSER</span>
+  </div>
+</header>
+
+<main>
+  <!-- ============ TEACHER ============ -->
+  <section id="teacherView" class="hidden">
+    <div class="card toolbar">
+      <div class="field"><label class="lbl" for="groupSel">Class / group</label><select id="groupSel"></select></div>
+      <div class="field" style="flex:2"><label class="lbl" for="projectIn">Current project</label><input id="projectIn" maxlength="100"></div>
+      <div class="btns">
+        <button class="quiet" id="addGroupBtn" type="button">+ Group</button>
+        <button id="addStudentsBtn" type="button">+ Students</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="layout">
+      <div>
+        <div class="board-head">
+          <h2>Students <span class="count" id="visibleCount">0</span></h2>
+          <input id="search" type="search" placeholder="Search names..." aria-label="Search students">
+        </div>
+        <div class="grid" id="grid" aria-live="polite"></div>
+      </div>
+      <aside>
+        <div class="card panel"><h2>Help queue <span class="count" id="helpCount">0</span></h2><div id="helpQueue"></div><div class="hint">Oldest request first.</div></div>
+        <div class="card panel"><h2>Ready for review <span class="count" id="reviewCount">0</span></h2><div id="reviewQueue"></div><div class="hint">Only you can mark a project Finished.</div></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ STUDENT ============ -->
+  <section id="studentView" class="stu hidden">
+    <div class="card" id="pickCard">
+      <div id="classField" class="hidden" style="margin-bottom:12px"><label class="lbl" for="stuGroup">My class</label><select id="stuGroup"></select></div>
+      <div><label class="lbl" for="stuName">My name</label><select id="stuName"></select></div>
+    </div>
+
+    <div class="card hidden" id="meCard">
+      <div class="stu-top">
+        <div><div class="project-line" id="stuProject"></div><h2 id="stuHello"></h2></div>
+        <span class="pill notstarted" id="stuPill"></span>
+      </div>
+      <div id="stuBody"></div>
+      <div style="margin-top:16px"><button class="quiet sm" id="notMe" type="button">This is not me</button></div>
+    </div>
+  </section>
+</main>
+
+<footer id="foot"></footer>
+
+<!-- Dialogs -->
+<dialog id="groupDlg"><form method="dialog" id="groupForm">
+  <h3>Add a class / group</h3>
+  <div><label class="lbl" for="groupName">Group name</label><input id="groupName" maxlength="60" required placeholder="Example: AP CS Principles 1" autocomplete="off"></div>
+  <div class="row"><button type="button" class="quiet" data-close>Cancel</button><button type="submit">Add group</button></div>
+</form></dialog>
+
+<dialog id="studentsDlg"><form method="dialog" id="studentsForm">
+  <h3>Add students</h3>
+  <div><label class="lbl" for="studentNames">One name per line</label><textarea id="studentNames" rows="8" required placeholder="Paste your roster here"></textarea></div>
+  <div class="row"><button type="button" class="quiet" data-close>Cancel</button><button type="submit">Add students</button></div>
+</form></dialog>
+
+<dialog id="confirmDlg"><form method="dialog" id="confirmForm">
+  <h3 id="confirmTitle">Are you sure?</h3>
+  <p id="confirmText" style="margin:0"></p>
+  <div class="row"><button type="button" class="quiet" data-close>Cancel</button><button type="submit" id="confirmOk">Confirm</button></div>
+</form></dialog>
+
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* =========================================================
+   DATA LAYER
+   Everything goes through load() / mutate(). In this demo the
+   store is localStorage (synced between tabs of the same
+   browser). To make it real across computers, only these
+   functions need to be swapped for a shared database.
+   ========================================================= */
+const KEY = 'ppb-demo-v2';
+const UI_KEY = 'ppb-ui-v1';
+const ME_KEY = 'ppb-student-v1';
+
+const STATUS = {
+  notstarted:{label:'NOT STARTED', cls:'notstarted'},
+  working:   {label:'WORKING',     cls:'working'},
+  help:      {label:'NEEDS HELP',  cls:'help'},
+  review:    {label:'READY FOR REVIEW', cls:'review'},
+  done:      {label:'FINISHED',    cls:'done'}
+};
+const REASONS = [
+  'My circuit is not working',
+  'I have an error in my code',
+  "I don't understand the instructions",
+  'Something else'
+];
+
+const now = () => Date.now();
+const mins = m => now() - m * 60000;
+const uid = () => 'i' + now().toString(36) + Math.random().toString(36).slice(2, 7);
+const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || uid();
+
+function seed() {
+  const s = (name, status, note, reqMin) => ({
+    id: uid(), name, status, note: note || '',
+    requestedAt: status === 'help' ? mins(reqMin || 1) : null, updatedAt: now()
+  });
+  return { groups: [
+    { id: 'makerspace-1', name: 'Makerspace 1', project: 'Arduino: Button Controlled LED', students: [
+      s('Ana Lucía', 'done'), s('Carlos', 'help', 'My circuit is not working · The LED does not turn on', 12),
+      s('Gabriel', 'working'), s('Gina', 'review'), s('Mariano', 'help', 'I have an error in my code', 7),
+      s('Abner', 'help', "I don't understand the instructions", 2), s('Sofía', 'working'), s('Diego', 'notstarted')
+    ]},
+    { id: 'comp-apps-1', name: 'Comp Apps 1', project: 'Intro to Coding', students: [
+      s('Alex', 'working'), s('Sam', 'notstarted'), s('Valeria', 'review'), s('Mateo', 'help', 'I have an error in my code', 4)
+    ]},
+    { id: 'ap-cs-principles-1', name: 'AP CS Principles 1', project: 'Task 01: What Runs Your Code', students: [
+      s('Camila', 'working'), s('Andrés', 'review'), s('Renata', 'notstarted'), s('Julián', 'done')
+    ]}
+  ]};
+}
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (d && Array.isArray(d.groups) && d.groups.length) return d;
+  } catch (_) {}
+  const d = seed();
+  try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (_) {}
+  return d;
+}
+let data = load();
+
+// Re-read the freshest data, apply a change, save, redraw. Reading first
+// means two open tabs (teacher + student) never overwrite each other with stale state.
+function mutate(fn) {
+  data = load();
+  fn(data);
+  try { localStorage.setItem(KEY, JSON.stringify(data)); }
+  catch (_) { toast('Browser storage is unavailable. Changes will not be saved.'); }
+  render();
+}
+window.addEventListener('storage', e => {
+  if (e.key === KEY) { data = load(); render(); }
+});
+
+const ui = (() => { try { return JSON.parse(localStorage.getItem(UI_KEY)) || {}; } catch (_) { return {}; } })();
+const saveUi = () => { try { localStorage.setItem(UI_KEY, JSON.stringify(ui)); } catch (_) {} };
+const me = (() => { try { return JSON.parse(localStorage.getItem(ME_KEY)) || {}; } catch (_) { return {}; } })();
+const saveMe = () => { try { localStorage.setItem(ME_KEY, JSON.stringify(me)); } catch (_) {} };
+
+/* ---------- Rules (the part that matters for "Finished") ---------- */
+// What a STUDENT is allowed to do. Finished is never in this list.
+const STUDENT_CAN = ['working', 'help', 'review'];
+function studentSetStatus(gid, sid, status, note) {
+  mutate(d => {
+    const st = find(d, gid, sid);
+    if (!st || !STUDENT_CAN.includes(status)) return;
+    if (st.status === 'done') return;               // approved work is locked
+    applyStatus(st, status, note);
+  });
+}
+function teacherSetStatus(gid, sid, status) {
+  mutate(d => { const st = find(d, gid, sid); if (st) applyStatus(st, status, ''); });
+}
+function applyStatus(st, status, note) {
+  st.status = status;
+  st.updatedAt = now();
+  if (status === 'help') { if (st.requestedAt == null) st.requestedAt = now(); st.note = note || 'Needs help'; }
+  else { st.requestedAt = null; st.note = ''; }
+}
+const find = (d, gid, sid) => (d.groups.find(g => g.id === gid)?.students || []).find(s => s.id === sid);
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pill = k => `<span class="pill ${STATUS[k].cls}">${STATUS[k].label}</span>`;
+const waited = t => { const m = Math.max(0, Math.floor((now() - t) / 60000)); return m < 1 ? 'just now' : m < 60 ? m + ' min' : Math.floor(m / 60) + 'h ' + (m % 60) + 'm'; };
+let toastT;
+function toast(msg) { clearTimeout(toastT); const t = $('toast'); t.textContent = msg; t.classList.remove('hidden'); toastT = setTimeout(() => t.classList.add('hidden'), 2600); }
+function askConfirm(title, text, okLabel, onOk) {
+  $('confirmTitle').textContent = title; $('confirmText').textContent = text; $('confirmOk').textContent = okLabel;
+  $('confirmDlg').returnValue = ''; $('confirmDlg')._ok = onOk; $('confirmDlg').showModal();
+}
+const params = new URLSearchParams(location.search);
+const isStudent = params.get('view') === 'student';
+const curGroup = () => data.groups.find(g => g.id === ui.groupId) || data.groups[0];
+
+/* =========================================================
+   TEACHER VIEW
+   ========================================================= */
+let filter = 'all';
+
+function renderTeacher() {
+  const g = curGroup();
+  ui.groupId = g.id;
+
+  const sel = $('groupSel');
+  sel.innerHTML = data.groups.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+  sel.value = g.id;
+  if (document.activeElement !== $('projectIn')) $('projectIn').value = g.project;
+
+  const ss = g.students, by = k => ss.filter(s => s.status === k).length;
+  const tiles = [['all', 'ALL STUDENTS', ss.length], ['working', 'WORKING', by('working')], ['help', 'NEEDS HELP', by('help')], ['review', 'READY FOR REVIEW', by('review')], ['done', 'FINISHED', by('done')]];
+  $('stats').innerHTML = tiles.map(([k, t, n]) =>
+    `<button type="button" class="stat ${filter === k ? 'on' : ''}" data-k="${k}" aria-pressed="${filter === k}"><span class="n">${n}</span><span class="t">${t}</span><span class="bar"></span></button>`).join('');
+
+  const q = $('search').value.trim().toLowerCase();
+  const list = ss.filter(s => (filter === 'all' || s.status === filter) && s.name.toLowerCase().includes(q));
+  $('visibleCount').textContent = list.length;
+  $('grid').innerHTML = list.length ? list.map(kid).join('') :
+    `<div class="empty-box" style="grid-column:1/-1">${ss.length ? 'No students match this filter.' : 'No students yet. Use "+ Students" to paste your roster.'}</div>`;
+
+  const helps = ss.filter(s => s.status === 'help').sort((a, b) => a.requestedAt - b.requestedAt);
+  $('helpCount').textContent = helps.length;
+  $('helpQueue').innerHTML = helps.length ? helps.map((s, i) => `
+    <div class="q-item"><div class="q-row"><div><strong>${i + 1}. ${esc(s.name)}</strong><div class="sub">${esc(s.note)}</div></div>
+    <span class="elapsed ${now() - s.requestedAt > 10 * 60000 ? 'old' : ''}">${waited(s.requestedAt)}</span></div>
+    <div class="q-btns"><button class="sm" data-act="helped" data-id="${s.id}" type="button">✓ Helped</button></div></div>`).join('')
+    : '<div class="empty-box">Nobody is waiting for help 🎉</div>';
+
+  const revs = ss.filter(s => s.status === 'review').sort((a, b) => a.updatedAt - b.updatedAt);
+  $('reviewCount').textContent = revs.length;
+  $('reviewQueue').innerHTML = revs.length ? revs.map(s => `
+    <div class="q-item"><div class="q-row"><strong>${esc(s.name)}</strong><span class="elapsed" style="color:var(--purple)">${waited(s.updatedAt)}</span></div>
+    <div class="q-btns"><button class="sm green" data-act="approve" data-id="${s.id}" type="button">✓ Approve</button>
+    <button class="sm quiet" data-act="sendback" data-id="${s.id}" type="button">Send back</button></div></div>`).join('')
+    : '<div class="empty-box">Nothing to review right now.</div>';
+
+  const n = helps.length;
+  document.title = (n ? `(${n}) ` : '') + 'Progress Board';
+  $('subtitle').textContent = g.students.length + ' students · ' + g.name;
+}
+
+function kid(s) {
+  const subline = { notstarted: 'Not started yet', working: 'In progress', help: 'Waiting ' + waited(s.requestedAt), review: 'Waiting for you', done: 'Approved' }[s.status];
+  const note = s.status === 'help' ? esc(s.note) : '<span class="empty">No help request</span>';
+  const opts = Object.keys(STATUS).filter(k => k !== 'help')
+    .map(k => `<option value="${k}" ${s.status === k ? 'selected' : ''}>${STATUS[k].label}</option>`).join('');
+  return `<article class="card kid ${s.status === 'help' ? 'flag-help' : s.status === 'review' ? 'flag-review' : ''}">
+    <div class="kid-top"><div class="who"><div class="avatar" aria-hidden="true">${esc(s.name.trim()[0]?.toUpperCase() || '?')}</div>
+      <div><strong>${esc(s.name)}</strong><div class="sub">${subline}</div></div></div>${pill(s.status)}</div>
+    <div class="note">${note}</div>
+    <div class="kid-actions">
+      <select data-act="set" data-id="${s.id}" aria-label="Set status for ${esc(s.name)}">${s.status === 'help' ? '<option selected disabled>NEEDS HELP</option>' : ''}${opts}</select>
+      ${s.status === 'review' ? `<button class="sm green" data-act="approve" data-id="${s.id}" type="button">✓ Approve</button>` : ''}
+      <button class="icon-btn" data-act="remove" data-id="${s.id}" aria-label="Remove ${esc(s.name)}" title="Remove student" type="button">×</button>
+    </div></article>`;
+}
+
+function teacherEvents() {
+  $('groupSel').addEventListener('change', e => { ui.groupId = e.target.value; filter = 'all'; saveUi(); render(); });
+  $('projectIn').addEventListener('change', e => {
+    const v = e.target.value.trim() || 'Untitled project'; const gid = curGroup().id;
+    mutate(d => { d.groups.find(g => g.id === gid).project = v; }); toast('Project name saved');
+  });
+  $('search').addEventListener('input', renderTeacher);
+  $('stats').addEventListener('click', e => { const b = e.target.closest('.stat'); if (b) { filter = filter === b.dataset.k ? 'all' : b.dataset.k; renderTeacher(); } });
+
+  const onAct = e => {
+    const el = e.target.closest('[data-act]'); if (!el) return;
+    if (el.tagName === 'SELECT') return;
+    const gid = curGroup().id, id = el.dataset.id, act = el.dataset.act;
+    if (act === 'approve') { teacherSetStatus(gid, id, 'done'); toast('Marked as Finished'); }
+    if (act === 'sendback') { teacherSetStatus(gid, id, 'working'); toast('Sent back to Working'); }
+    if (act === 'helped') { teacherSetStatus(gid, id, 'working'); toast('Removed from the help queue'); }
+    if (act === 'remove') {
+      const s = find(data, gid, id);
+      askConfirm('Remove student?', `${s.name} will be removed from this group.`, 'Remove', () =>
+        mutate(d => { const g = d.groups.find(x => x.id === gid); g.students = g.students.filter(x => x.id !== id); }));
+    }
+  };
+  $('grid').addEventListener('click', onAct);
+  $('helpQueue').addEventListener('click', onAct);
+  $('reviewQueue').addEventListener('click', onAct);
+  $('grid').addEventListener('change', e => {
+    if (e.target.dataset.act === 'set') teacherSetStatus(curGroup().id, e.target.dataset.id, e.target.value);
+  });
+
+  $('addGroupBtn').addEventListener('click', () => { $('groupName').value = ''; $('groupDlg').showModal(); $('groupName').focus(); });
+  $('groupForm').addEventListener('submit', () => {
+    const name = $('groupName').value.trim(); if (!name) return;
+    let id = slug(name); while (data.groups.some(g => g.id === id)) id += '-2';
+    mutate(d => d.groups.push({ id, name, project: 'New project', students: [] }));
+    ui.groupId = id; saveUi(); filter = 'all'; render(); toast('Group added');
+  });
+  $('addStudentsBtn').addEventListener('click', () => { $('studentNames').value = ''; $('studentsDlg').showModal(); $('studentNames').focus(); });
+  $('studentsForm').addEventListener('submit', () => {
+    const names = $('studentNames').value.split('\n').map(x => x.trim()).filter(Boolean);
+    const gid = curGroup().id; let added = 0;
+    mutate(d => {
+      const g = d.groups.find(x => x.id === gid);
+      names.forEach(n => {
+        if (g.students.some(s => s.name.toLowerCase() === n.toLowerCase())) return;
+        g.students.push({ id: uid(), name: n.slice(0, 80), status: 'notstarted', note: '', requestedAt: null, updatedAt: now() }); added++;
+      });
+      g.students.sort((a, b) => a.name.localeCompare(b.name));
+    });
+    toast(added + (added === 1 ? ' student added' : ' students added'));
+  });
+
+  // header buttons
+  const ha = $('headActions');
+  ha.insertAdjacentHTML('beforeend', `
+    <button class="quiet sm" id="copyLink" type="button">Copy student link</button>
+    <a href="?view=student" target="_blank" rel="noopener"><button class="quiet sm" type="button">Preview student view ↗</button></a>
+    <button class="quiet sm" id="csvBtn" type="button">↓ CSV</button>
+    <button class="quiet sm" id="resetBtn" type="button">Reset demo</button>`);
+  $('copyLink').addEventListener('click', async () => {
+    const u = new URL(location.href); u.search = ''; u.hash = '';
+    u.searchParams.set('view', 'student'); u.searchParams.set('group', curGroup().id);
+    try { await navigator.clipboard.writeText(u.toString()); toast('Student link copied'); }
+    catch (_) { prompt('Copy this link:', u.toString()); }
+  });
+  $('csvBtn').addEventListener('click', exportCsv);
+  $('resetBtn').addEventListener('click', () => askConfirm('Reset demo data?', 'This replaces everything with the sample groups and students.', 'Reset', () => {
+    mutate(d => { const f = seed(); d.groups = f.groups; }); ui.groupId = data.groups[0].id; filter = 'all'; saveUi(); render(); toast('Demo data restored');
+  }));
+}
+
+function exportCsv() {
+  const g = curGroup();
+  const rows = [['Group', 'Project', 'Student', 'Status', 'Help request', 'Updated'],
+    ...g.students.map(s => [g.name, g.project, s.name, STATUS[s.status].label, s.note, new Date(s.updatedAt).toISOString()])];
+  const csv = '﻿' + rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a'); a.href = url; a.download = 'progress-' + slug(g.name) + '.csv';
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* =========================================================
+   STUDENT VIEW
+   ========================================================= */
+let helpDraft = false;
+const lockedGroup = params.get('group');
+
+function renderStudent() {
+  // which group
+  let g = data.groups.find(x => x.id === (lockedGroup || me.groupId)) || data.groups[0];
+  const showClass = !lockedGroup && data.groups.length > 1;
+  $('classField').classList.toggle('hidden', !showClass);
+  $('stuGroup').innerHTML = data.groups.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+  $('stuGroup').value = g.id;
+
+  const names = [...g.students].sort((a, b) => a.name.localeCompare(b.name));
+  if (!names.some(s => s.id === me.studentId) || me.groupId !== g.id) me.studentId = '';
+  $('stuName').innerHTML = '<option value="">Choose your name...</option>' + names.map(s => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+  $('stuName').value = me.studentId;
+
+  const s = names.find(x => x.id === me.studentId);
+  $('pickCard').classList.toggle('hidden', !!s);
+  $('meCard').classList.toggle('hidden', !s);
+  $('subtitle').textContent = s ? '' : 'Pick your name, then tell your teacher how your project is going.';
+  if (!s) return;
+
+  $('stuProject').textContent = g.project;
+  $('stuHello').textContent = 'Hi, ' + s.name.split(' ')[0] + '!';
+  $('stuPill').className = 'pill ' + STATUS[s.status].cls;
+  $('stuPill').textContent = STATUS[s.status].label;
+
+  if (s.status === 'done') {
+    $('stuBody').innerHTML = `<div class="banner ok"><b>Your project is finished 🎉</b><br>Your teacher reviewed and approved it. Nice work!</div>`;
+    return;
+  }
+
+  const choice = (k, ic, t, sub) => `<button type="button" class="choice ${s.status === k ? 'sel' : ''}" data-k="${k}" aria-pressed="${s.status === k}">
+    <span class="ic" aria-hidden="true">${ic}</span><span><b>${t}</b><small>${sub}</small></span></button>`;
+  let html = `<div class="choices">
+    ${choice('working', '⌨️', "I'm working", 'I am working on my project.')}
+    ${choice('help', '✋', 'I need help', 'I have a question or a problem.')}
+    ${choice('review', '👀', 'Ready for review', 'I finished and I want my teacher to check it.')}
+  </div>`;
+
+  if (helpDraft) {
+    html += `<form class="helpform" id="helpForm"><b>What do you need help with?</b>
+      ${REASONS.map((r, i) => `<label class="reason"><input type="radio" name="reason" value="${esc(r)}" ${i === 0 ? 'checked' : ''}> ${esc(r)}</label>`).join('')}
+      <textarea id="helpDetails" rows="2" maxlength="160" placeholder="Add details (optional)"></textarea>
+      <div class="row"><button type="button" class="quiet" id="helpCancel">Cancel</button><button type="submit" class="gold">Request help</button></div></form>`;
+  } else if (s.status === 'help') {
+    html += `<div class="banner help">✋ Your teacher can see your request: <b>${esc(s.note)}</b><br>You are waiting since ${waited(s.requestedAt)}.
+      <div style="margin-top:10px"><button class="quiet sm" id="helpDone" type="button">I solved it, back to working</button></div></div>`;
+  } else if (s.status === 'review') {
+    html += `<div class="banner wait">👀 Your teacher will review your project soon.</div>`;
+  }
+  html += `<p class="lock-note">Only your teacher can mark a project as Finished, after checking your work.</p>`;
+  $('stuBody').innerHTML = html;
+}
+
+function studentEvents() {
+  $('stuGroup').addEventListener('change', e => { me.groupId = e.target.value; me.studentId = ''; saveMe(); renderStudent(); });
+  $('stuName').addEventListener('change', e => { me.groupId = $('stuGroup').value; me.studentId = e.target.value; helpDraft = false; saveMe(); renderStudent(); });
+  $('notMe').addEventListener('click', () => { me.studentId = ''; helpDraft = false; saveMe(); renderStudent(); });
+
+  const gid = () => me.groupId || (lockedGroup || data.groups[0].id);
+  $('stuBody').addEventListener('click', e => {
+    const c = e.target.closest('.choice');
+    if (c) {
+      if (c.dataset.k === 'help') { helpDraft = true; renderStudent(); return; }
+      helpDraft = false; studentSetStatus(gid(), me.studentId, c.dataset.k); toast('Your teacher can see your update'); return;
+    }
+    if (e.target.id === 'helpCancel') { helpDraft = false; renderStudent(); }
+    if (e.target.id === 'helpDone') { studentSetStatus(gid(), me.studentId, 'working'); toast('Great, back to work!'); }
+  });
+  $('stuBody').addEventListener('submit', e => {
+    if (e.target.id !== 'helpForm') return;
+    e.preventDefault();
+    const reason = e.target.reason.value, extra = $('helpDetails').value.trim();
+    helpDraft = false;
+    studentSetStatus(gid(), me.studentId, 'help', extra ? reason + ' · ' + extra : reason);
+    toast('Help request sent');
+  });
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+document.querySelectorAll('dialog [data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
+$('confirmForm').addEventListener('submit', () => { const d = $('confirmDlg'); if (d._ok) d._ok(); d._ok = null; });
+
+function render() { isStudent ? renderStudent() : renderTeacher(); }
+
+if (isStudent) {
+  $('studentView').classList.remove('hidden');
+  $('title').textContent = 'My Project Progress';
+  $('crumb').textContent = 'Student view';
+  $('foot').textContent = 'Update your status whenever it changes. Your teacher sees it right away.';
+  studentEvents();
+} else {
+  $('teacherView').classList.remove('hidden');
+  $('foot').innerHTML = 'Demo: data lives only in this browser (two tabs of the same browser stay in sync, other computers do not). In the real version, students on their own computers update this board live, and "Finished" can only be set from your signed-in teacher account.';
+  teacherEvents();
+  setInterval(() => { if (!document.querySelector('dialog[open]') && document.activeElement?.tagName !== 'SELECT') renderTeacher(); }, 20000);
+}
+render();
+})();
+</script>
+</body>
+</html>

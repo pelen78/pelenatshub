@@ -163,6 +163,33 @@
   main{max-width:860px;margin:0 auto;padding:24px 24px 0}
   section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
   section:last-of-type{border-bottom:none}
+  section[id]{scroll-margin-top:70px}
+
+  /* jump nav: links to each part of the page, stays on top while scrolling */
+  .jump{
+    position:sticky;top:0;z-index:20;
+    background:var(--surface);border-bottom:1.5px solid var(--line);
+    box-shadow:0 4px 14px rgba(11,23,64,.08);
+  }
+  .jump ul{
+    list-style:none;max-width:860px;margin:0 auto;padding:10px 24px;
+    display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+  }
+  .jump ul::-webkit-scrollbar{display:none}
+  .jump li{flex:none}
+  .jump a{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+    color:var(--navy);border:1.5px solid var(--line);border-radius:999px;padding:6px 11px;
+    transition:border-color .16s,background .16s;
+  }
+  .jump a:hover,.jump a:focus-visible{border-color:var(--navy)}
+  .jump a b{font-weight:700;color:var(--copper)}
+  @media (max-width:560px){
+    .jump ul{padding:8px 16px}
+    .jump a{font-size:11px;padding:5px 10px}
+  }
 
   /* silkscreen section labels, aligned, not rotated */
   .silk{
@@ -309,6 +336,18 @@
     <div class="power"><span class="led"></span>Build &amp; test</div>
   </div>
 </header>
+
+<nav class="jump" aria-label="Page sections">
+  <ul>
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#part-one"><b>C1</b> No Breadboard</a></li>
+    <li><a href="#part-two"><b>C2</b> Breadboard</a></li>
+    <li><a href="#part-three"><b>C3</b> Second LED</a></li>
+    <li><a href="#part-four"><b>C4</b> Push Button</a></li>
+    <li><a href="#presentation">Presentation</a></li>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+</nav>
 
 <main>
 
