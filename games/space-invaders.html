@@ -2,137 +2,50 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Space Invaders</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1740">
+<title>Space Invaders · ATS Class Hub</title>
 <style>
-  :root{
-    --bg:#EDF2FB;
-    --card:#FFFFFF;
-    --navy:#16294D;
-    --navy-soft:#41537A;
-    --gold:#F0B429;
-    --red:#D6303A;
-    --green:#1B7F4B;
-    --navy-deep:#0b1740;
-    --line:#DCE4F2;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg);
-    color:var(--navy);
-    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
-    font-size:16px;line-height:1.5;
-    min-height:100vh;padding:26px 20px 56px;
-  }
-  header{max-width:860px;margin:0 auto 20px}
-  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
-  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
-
-  .game{max-width:860px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-
-  .scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-  .score{background:#F1F6FF;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
-  .score .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft)}
-  .score .val{display:block;font-size:26px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
-  @media (max-width:480px){.scores{grid-template-columns:repeat(2,1fr)}}
-
-  .board{position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:2px solid var(--navy);touch-action:none;user-select:none;-webkit-user-select:none;background:var(--navy-deep)}
-  canvas{display:block;width:100%;height:100%}
-  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:rgba(11,23,64,.78);color:#fff}
-  .overlay.hidden{display:none}
-  .overlay h2{margin:0;font-size:clamp(28px,6vw,40px);font-weight:800}
-  .overlay p{margin:0;max-width:420px;color:#C9D4EC}
-  .overlay .newbest{color:var(--gold);font-weight:800}
-  .banner{position:absolute;left:0;right:0;top:12%;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.12em;color:var(--gold);font-size:clamp(16px,3vw,24px);pointer-events:none;opacity:0;transition:opacity .25s}
-  .banner.on{opacity:1}
-
-  button{
-    font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent;
-    border-radius:12px;padding:12px 24px;font-size:17px;
-    background:var(--navy);color:#fff;transition:filter .12s ease;
-  }
-  button:hover{filter:brightness(1.12)}
-  button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  button.big{background:var(--gold);color:var(--navy);font-size:19px;padding:12px 36px;border-radius:999px;margin-top:6px}
-  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
-  button.quiet:hover{border-color:var(--navy-soft);filter:none}
-  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
-
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end;margin-top:14px}
-
-  .touch{display:none;justify-content:space-between;gap:12px;margin-top:16px}
-  .touch .grp{display:flex;gap:10px}
-  .touch button{width:84px;height:76px;padding:0;font-size:22px;border-radius:18px;touch-action:none}
-  .touch button.fire{background:var(--gold);color:var(--navy);width:120px;font-size:17px}
-  .touch button.on{filter:brightness(1.35)}
-  @media (pointer:coarse){.touch{display:flex}}
-
-  .hint{color:var(--navy-soft);font-size:14px;margin:14px 0 0}
-
-  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
-  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+:root{--bg:#edf2fb;--navy:#16294d;--deep:#0b1740;--soft:#41537a;--gold:#f0b429;--line:#dce4f2}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;min-height:100svh;display:flex;flex-direction:column;background:var(--bg);color:var(--navy);font:16px/1.5 'Avenir Next',Avenir,'Trebuchet MS',sans-serif}button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.hub-header{width:100%;max-width:1160px;margin:0 auto;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.08em}.hub-header small{display:block;color:var(--soft);font-size:10px;letter-spacing:.02em}.tag{border:1px solid #b8c6dd;border-radius:5px;padding:5px 9px}.arcade{width:calc(100% - 32px);max-width:1120px;margin:0 auto 20px;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 34px #16294d0c}.masthead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}h1{font-size:clamp(23px,2.5vw,32px);line-height:1.15;letter-spacing:-1px;margin:0;font-weight:900}.edition{display:block;font:11px/1.5 ui-monospace,monospace;letter-spacing:.12em;color:var(--soft);margin-bottom:3px}.mast-actions{display:flex;gap:8px}button{min-height:44px;border:1px solid #b8c6dd;background:#fff;color:var(--navy);border-radius:8px;padding:9px 14px;font-weight:700;font-size:15px}button:hover:not(:disabled){background:var(--bg)}.primary{background:var(--gold);color:var(--deep);border:0;font-size:18px;font-weight:800;min-height:48px;padding:11px 26px;box-shadow:0 3px 0 #ac7a12}.primary:hover:not(:disabled){background:#ffd36b}.play-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:start}.arena{min-width:0}.board{position:relative;width:100%;max-width:calc((100svh - 252px)*4/3);aspect-ratio:4/3;margin:0 auto;border:2px solid var(--navy);border-radius:10px;overflow:hidden;touch-action:none;user-select:none;background:var(--deep)}canvas{display:block;width:100%;height:100%}.board-foot{display:flex;justify-content:space-between;gap:10px;margin-top:7px;color:var(--soft);font:12px/1.5 ui-monospace,monospace}.overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:18px;background:#0b1740e8;color:#fff;overflow:auto}.overlay.hidden{display:none}.overlay h2{font-size:clamp(26px,3.4vw,38px);line-height:1.1;margin:0;letter-spacing:-1px}.overlay p{max-width:430px;color:#dce4f2;margin:0;font-size:15px}.eyebrow{font:700 12px ui-monospace,monospace;letter-spacing:.15em;color:var(--gold)}.banner{position:absolute;z-index:1;top:8%;left:50%;transform:translateX(-50%);max-width:90%;padding:8px 14px;border-radius:6px;background:#fff3d2;color:var(--deep);text-align:center;font-size:14px;font-weight:800;pointer-events:none}.sidebar{display:flex;flex-direction:column;gap:12px;min-width:0}.scores{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;padding-bottom:12px;border-bottom:1px solid var(--line)}.label{display:block;font:13px/1.4 ui-monospace,monospace;letter-spacing:.05em;color:var(--soft)}.value{display:block;font-size:30px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}.score-total .value{font-size:38px}.best .value{color:#805300}.next-life{margin:0;font-size:14px;color:var(--soft)}.goal{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:12px 14px}.goal h3{font-size:20px;line-height:1.25;margin:7px 0 11px}.goal progress{display:block;width:100%;height:7px;border:0;border-radius:5px;overflow:hidden;background:#d4def0;accent-color:var(--gold)}progress::-webkit-progress-bar{background:#d4def0}progress::-webkit-progress-value{background:var(--gold)}progress::-moz-progress-bar{background:var(--gold)}.goal-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px;font:13px/1.4 ui-monospace,monospace;color:var(--soft)}.controls{display:flex;gap:10px}.controls button{flex:1;font-size:16px}#pauseBtn{background:var(--navy);color:#fff;border-color:var(--navy)}details{border-top:1px solid var(--line);padding-top:10px;color:var(--soft);font-size:14px}summary{cursor:pointer;font-size:15px;font-weight:700;padding:2px 0}.help{display:grid;gap:12px;padding-top:12px}.help p{margin:0}kbd{display:inline-block;background:var(--bg);border:1px solid #b8c6dd;border-bottom-width:2px;border-radius:4px;padding:1px 5px;color:var(--navy);font:13px ui-monospace,monospace}.touch{display:none;justify-content:space-between;gap:12px;margin-top:12px}.touch .grp{display:flex;gap:8px}.touch button{width:64px;height:52px;font-size:20px;touch-action:none}.touch .fire{width:92px;background:var(--gold);font-size:16px}.touch .on{background:#dce4f2;box-shadow:inset 0 0 0 2px var(--navy)}.touch .fire.on{background:#ffd36b}.results{width:min(420px,100%)}.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 6px;background:#16294d;border:1px solid #41537a;border-radius:8px}.result-grid strong{display:block;font-size:23px;color:#fff}.result-grid span{font-size:11px;color:#dce4f2}.results p{margin-top:10px}.record{color:#ffd36b!important;font-weight:700}.unlocks{color:#ffd36b!important;font-size:14px!important}.footer{margin:auto 0 0;padding:25px 20px;background:var(--deep);color:#ffffffcc;text-align:center;font:12px/1.5 'JetBrains Mono',ui-monospace,monospace}.footer .who{display:block;margin-top:6px;color:#ffffff99}dialog{max-width:min(580px,calc(100vw - 24px));max-height:85svh;padding:24px;background:#fff;color:var(--navy);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 60px #0b174055}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:26px;margin:0 0 8px;line-height:1.2}dialog p{font-size:15px;color:var(--soft)}.dialog-top,.dialog-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.dialog-actions{justify-content:flex-end;margin-top:20px}.collection-group h3{font:13px ui-monospace,monospace;text-transform:uppercase;color:var(--soft);margin:20px 0 10px}.items{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.cosmetic{text-align:left;background:var(--bg);min-height:96px;padding:12px}.cosmetic[aria-pressed="true"]{border-color:#a47710;box-shadow:inset 0 0 0 1px var(--gold)}.cosmetic b{display:block;font-size:14px}.cosmetic small{display:block;font-size:12px;font-weight:400;margin-top:5px;color:var(--soft)}.swatch{display:block;width:32px;height:9px;border-radius:4px;background:var(--swatch);margin-bottom:8px}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
+@media(pointer:coarse){.touch{display:flex}}
+@media(min-width:821px) and (max-height:760px){.arcade{padding:12px 16px;margin-bottom:12px}.masthead{margin-bottom:10px}.edition{display:none}.sidebar{gap:9px}.scores{gap:8px 16px;padding-bottom:9px}.value{font-size:27px}.score-total .value{font-size:34px}.goal{padding:10px 12px}.goal h3{font-size:19px}.overlay{gap:8px}.overlay p{font-size:14px}.board{max-width:calc((100svh - 242px)*4/3)}}
+@media(max-width:820px){.arcade{width:calc(100% - 20px);padding:14px}.play-layout{grid-template-columns:1fr}.board{max-width:700px}.masthead{align-items:flex-start;flex-wrap:wrap}.mast-actions{gap:8px}h1{font-size:27px}.edition{font-size:10px}.sidebar{gap:14px}.scores{grid-template-columns:repeat(4,1fr);gap:10px}.value,.score-total .value{font-size:28px}.label{font-size:12px}.items{grid-template-columns:repeat(2,1fr)}.board-foot{font-size:10px}.overlay{gap:8px;padding:12px}.overlay p{font-size:13px}.overlay h2{font-size:27px}.result-grid strong{font-size:19px}.result-grid span{font-size:10px}}
+@media(max-width:400px){.overlay .eyebrow{font-size:10px}.overlay h2{font-size:23px}.overlay .primary{min-height:40px;padding:8px 18px;font-size:16px}.result-grid{padding:5px}.results p{font-size:12px;margin-top:5px}.overlay{justify-content:flex-start}.scores{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>Space Invaders</h1>
-  <p>Defend Earth from the alien fleet. Use the shields for cover, and stop them before they land.</p>
-</header>
-
-<div class="game">
-  <section class="card">
-    <div class="scores">
-      <div class="score"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
-      <div class="score"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
-      <div class="score"><span class="lbl">LIVES</span><span class="val" id="lives">3</span></div>
-      <div class="score"><span class="lbl">LEVEL</span><span class="val" id="level">1</span></div>
-    </div>
-
-    <div class="board" id="board">
-      <canvas id="cv" width="800" height="600" aria-label="Space Invaders game board" role="img"></canvas>
-      <div class="banner" id="banner"></div>
-      <div class="overlay" id="overlay">
-        <h2 id="ovTitle">Space Invaders</h2>
-        <p id="ovText"></p>
-        <button class="big" id="ovBtn" type="button">Start</button>
-      </div>
-    </div>
-
-    <div class="touch" aria-label="On-screen controls">
-      <div class="grp"><button type="button" data-k="left" aria-label="Move left">◀</button><button type="button" data-k="right" aria-label="Move right">▶</button></div>
-      <div class="grp"><button type="button" class="fire" data-k="fire" aria-label="Fire">Fire</button></div>
-    </div>
-
-    <div class="controls">
-      <button class="quiet" id="pauseBtn" type="button">Pause</button>
-      <button class="quiet" id="restartBtn" type="button">New game</button>
-    </div>
-    <p class="hint">Controls: ◀ ▶ (or A D) move, Space fire, P pause. Shoot the red ship that flies across the top for bonus points. The invaders speed up as you clear them. Every 1,500 points earns an extra life.</p>
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><span class="tag">GAMES</span></header>
+<main class="arcade">
+ <div class="masthead"><div><span class="edition">EARTH DEFENSE / ARCADE 02</span><h1>SPACE INVADERS<span style="color:var(--gold)">.</span></h1></div><div class="mast-actions"><button id="soundBtn" aria-pressed="true">Sound on</button><button id="looksBtn">Your fleet</button></div></div>
+ <div class="play-layout">
+  <section class="arena" aria-label="Game arena">
+   <div class="board" id="board"><canvas id="cv" width="800" height="600" role="img" aria-label="Space Invaders. Arrow keys or A and D move; hold Space to fire; P pauses."></canvas><div class="banner" id="banner" hidden></div>
+    <div class="overlay" id="overlay"><span class="eyebrow" id="ovEyebrow">DEFEND. ADVANCE. REPEAT.</span><h2 id="ovTitle">Ready, pilot?</h2><p id="ovText"></p><div class="results" id="results" hidden></div><button class="primary" id="ovBtn">Launch</button></div>
+   </div>
+   <div class="board-foot"><span id="waveName">WAVE 01 / CLASSIC FLEET</span><span id="enemiesLeft">55 ENEMIES</span></div>
+   <div class="touch" aria-label="Touch controls"><div class="grp"><button data-k="left" aria-label="Move left">◀</button><button data-k="right" aria-label="Move right">▶</button></div><button class="fire" data-k="fire" aria-label="Hold to fire">Fire</button></div>
   </section>
-</div>
-
-<footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
-
+  <aside class="sidebar" aria-label="Score and controls">
+   <div class="scores"><div class="score-total"><span class="label">SCORE</span><strong class="value" id="score">0</strong></div><div class="best"><span class="label">BEST</span><strong class="value" id="best">0</strong></div><div><span class="label">LIVES</span><strong class="value" id="lives">3</strong></div><div><span class="label">WAVE</span><strong class="value" id="level">1</strong></div></div>
+   <p class="next-life" id="nextLife">Next extra life in 1,500 points</p>
+   <section class="goal" aria-label="Current goal"><span class="label">NEXT GOAL</span><h3 id="goalTitle">Defeat 15 invaders</h3><progress id="goalBar" max="15" value="0" aria-label="Goal progress"></progress><div class="goal-meta"><span id="goalCount">0 / 15</span><span id="goalReward">DART SHIP</span></div></section>
+   <div class="controls"><button id="pauseBtn">Pause</button><button id="restartBtn">New game</button></div>
+   <details><summary>How to play &amp; game info</summary><div class="help"><p><kbd>← →</kbd> or <kbd>A D</kbd> move.<br>Hold <kbd>Space</kbd> to fire. <kbd>P</kbd> pauses.</p><p>Use the shelters for cover. Your shots can damage them, too. The red bonus ship brings extra points.</p><p>New formations each wave. Armored invaders take two hits. Every fifth wave brings a boss; hit its hull until its health bar is empty.</p><p>After losing a life, your blue shield protects you briefly. Every 1,500 points earns an extra life.</p><p id="storageNote">Records and unlocked looks stay on this device.</p></div></details>
+  </aside>
+ </div>
+</main>
+<footer class="footer">// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+<div class="sr-only" role="status" aria-live="polite" id="announce"></div>
+<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new mission?</h2><p>This run will end. Your record and unlocked looks are already saved.</p><div class="dialog-actions"><button id="restartCancel">Keep playing</button><button class="primary" id="restartConfirm">New game</button></div></dialog>
+<dialog id="looksDialog" aria-labelledby="looksTitle"><div class="dialog-top"><h2 id="looksTitle">Your fleet.</h2><button id="looksClose">Done</button></div><p>Earn new looks by completing goals. Every design has the same speed, hitbox and firepower.</p><div id="collection"></div></dialog>
 <script>
 (() => {
-  'use strict';
-  const W = 800, H = 600, TAU = Math.PI * 2;
-  const STEP = 1 / 60;
-
-  const COLS = 11, ROWS = 5, GX = 52, GY = 44, IW = 36, IH = 24, PX = 3;   // grid spacing, invader box, sprite pixel size
-  const MOVE_X = 10, DROP = 20, SIDE = 24;
-  const PLAYER_Y = H - 48, PLAYER_W = 40, PLAYER_H = 18, PLAYER_V = 310;
-  const PBULLET_V = 620, EBULLET_V = 230;
-  const BUNKER_Y = H - 170, CELL = 3, BW = 22, BH = 16;
-  const EXTRA_LIFE_EVERY = 1500;
-
-  // 8x8, 11x8 and 12x8 pixel sprites, two animation frames each
+'use strict';
+const W=800,H=600,TAU=Math.PI*2,STEP=1/60;
+const COLS=11,ROWS=5,GX=52,GY=44,IW=36,IH=24,PX=3;
+const PLAYER_Y=552,PLAYER_W=40,PLAYER_V=310,PBULLET_V=620,EBULLET_V=230;
+const BUNKER_Y=430,CELL=3,BW=22,BH=16,EXTRA_LIFE_EVERY=1500;
   const SPRITES = [
     [ // 0: squid (top row)
       ['...##...', '..####..', '.######.', '##.##.##', '########', '..#..#..', '.#.##.#.', '#.#..#.#'],
@@ -147,338 +60,371 @@
       ['....####....', '.##########.', '############', '###..##..###', '############', '..###..###..', '.##..##..##.', '..##....##..']
     ]
   ];
-  const TYPE_OF_ROW = [0, 1, 1, 2, 2];
-  const POINTS = [30, 20, 10];
-  const COLORS = ['#F0B429', '#C9D4EC', '#8FB0F2'];
-
-  // a button clicked with the mouse must not keep focus, or Space would press it again during play
-  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button'); if (b && e.detail > 0) b.blur(); });
-  const $ = id => document.getElementById(id);
-  const cv = $('cv'), ctx = cv.getContext('2d');
-
-  let state, invaders, fx, fy, dir, stepT, frameIdx, alive, ebullets, pbullet, bunkers, particles, ufo, ufoIn;
-  let player, score, best, lives, level, nextLife, newBest = false, playerDown, levelPause, fireLatch;
-  const keys = { left: false, right: false, fire: false };
-  // state: ready | running | paused | over
-
-  const rand = (a, b) => a + Math.random() * (b - a);
-  const BEST_KEY = 'hub-space-invaders-best';
-  const loadBest = () => { try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch (_) { return 0; } };
-  const saveBest = v => { try { localStorage.setItem(BEST_KEY, String(v)); } catch (_) {} };
-  const stars = Array.from({ length: 60 }, () => ({ x: rand(0, W), y: rand(0, H), s: Math.random() < 0.15 ? 2 : 1, a: rand(0.2, 0.7) }));
-
-  /* ---------- setup ---------- */
-  function buildBunkers() {
-    // rounded top corners and a notch at the bottom
-    const make = () => Array.from({ length: BH }, (_, r) => Array.from({ length: BW }, (_, c) => {
-      if (r < 3 && (c < 3 - r || c >= BW - 3 + r)) return false;
-      if (r >= BH - 5 && c >= 7 && c < BW - 7) return false;
-      return true;
-    }));
-    const gap = W / 4;
-    return [0, 1, 2, 3].map(i => ({ x: gap * i + gap / 2 - (BW * CELL) / 2, y: BUNKER_Y, cells: make() }));
+const TYPES=[0,1,1,2,2],POINTS=[30,20,10],COLORS=['#f0b429','#c9d4ec','#8fb0f2'];
+const $=id=>document.getElementById(id),ctx=$('cv').getContext('2d');
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+const rand=(a,b)=>a+Math.random()*(b-a);
+const keys={left:false,right:false,fire:false},keyboard={left:false,right:false,fire:false},pointers=new Map();
+const BEST_KEY='hub-space-invaders-best',PROFILE_KEY='hub-space-invaders-profile-v2';
+const cosmetics={
+ ship:[{id:'defender',name:'ATS Defender',color:'#f0b429',rule:'Starter ship'},{id:'dart',name:'Dart',color:'#9bb9f0',rule:'Defeat 15 invaders in one run'},{id:'crown',name:'Crown',color:'#ffd36b',rule:'Defeat a boss'}],
+ shot:[{id:'pulse',name:'Pulse',color:'#fff2bf',rule:'Starter shot'},{id:'comet',name:'Comet',color:'#b9d7ff',rule:'Clear 3 waves in one run'}],
+ sky:[{id:'stars',name:'Night patrol',color:'#16294d',rule:'Starter sky'},{id:'constellation',name:'Star chart',color:'#41537a',rule:'Shoot down a bonus ship'}]
+};
+let storageOK=true;const sessionStore={};
+function storageMessage(){if(!storageOK)$('storageNote').textContent='Storage unavailable — records and looks last for this session only.';}
+function read(key){if(Object.hasOwn(sessionStore,key))return sessionStore[key];try{return localStorage.getItem(key);}catch{storageOK=false;return null;}}
+function write(key,value){sessionStore[key]=String(value);try{localStorage.setItem(key,String(value));}catch{storageOK=false;}storageMessage();}
+function loadBest(){const n=Number(read(BEST_KEY));return Number.isFinite(n)&&n>=0?Math.floor(n):0;}
+let profile={sound:true,unlocked:['defender','pulse','stars'],equipped:{ship:'defender',shot:'pulse',sky:'stars'}};
+try{
+ const saved=JSON.parse(read(PROFILE_KEY)||'null');
+ if(saved&&typeof saved==='object'){
+  profile.sound=saved.sound!==false;
+  const known=Object.values(cosmetics).flat().map(x=>x.id);
+  profile.unlocked=[...new Set([...profile.unlocked,...(Array.isArray(saved.unlocked)?saved.unlocked:[]).filter(x=>known.includes(x))])];
+  for(const group of Object.keys(cosmetics))if(cosmetics[group].some(x=>x.id===saved.equipped?.[group])&&profile.unlocked.includes(saved.equipped[group]))profile.equipped[group]=saved.equipped[group];
+ }
+}catch{/* Ignore damaged preferences. */}
+const saveProfile=()=>write(PROFILE_KEY,JSON.stringify(profile));
+let audioContext,lastShotSound=-1;const voices=new Set();
+function initAudio(){
+ if(!profile.sound)return;
+ try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext??=new Audio();if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});}catch{/* Optional audio. */}
+}
+function sound(kind){
+ if(!profile.sound||!audioContext||audioContext.state!=='running')return;
+ const now=audioContext.currentTime;if(kind==='shot'&&now-lastShotSound<.1)return;if(kind==='shot')lastShotSound=now;
+ const notes={shot:[420],hit:[780],armor:[230],hurt:[120],bonus:[620,820],wave:[440,660,880],record:[660,880,1100],boss:[180,240,320],unlock:[520,780]};
+ try{(notes[kind]||[300]).forEach((f,i)=>{
+  const o=audioContext.createOscillator(),g=audioContext.createGain(),t=now+i*.09;
+  o.type=kind==='hurt'?'triangle':'sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(kind==='shot'||kind==='hurt'?f*.45:f*1.2,t+.1);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(kind==='shot'?.018:.045,t+.008);g.gain.exponentialRampToValueAtTime(.001,t+.14);
+  o.connect(g);g.connect(audioContext.destination);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();g.disconnect();};o.start(t);o.stop(t+.15);
+ });}catch{/* A suspended audio device should not stop play. */}
+}
+function soundLabel(){$('soundBtn').textContent=profile.sound?'Sound on':'Sound off';$('soundBtn').setAttribute('aria-pressed',String(profile.sound));}
+let state='ready',invaders=[],alive=0,initialCount=55,fx=62,fy=84,dir=1,stepT=0,frameIdx=0;
+let player,score,best,startBest,lives,level,nextLife,playerDown,levelPause,overReason,boss,ufo,ufoIn,pbullet,ebullets,bunkers,particles,floaters;
+let stats,goal,bonusGoal=50,recordCelebrated=false,runUnlocks=[],bannerLife=0,hitFlash=0,last=0,acc=0;
+let pendingRestart=null,looksResume=false;
+const stars=Array.from({length:60},()=>({x:rand(0,W),y:rand(0,H),s:Math.random()<.15?2:1,a:rand(.2,.7)}));
+function announce(text){$('announce').textContent=text;}
+function banner(text,seconds=2){$('banner').textContent=text;$('banner').hidden=false;bannerLife=seconds;announce(text);}
+function burst(x,y,color,n=12,speed=140){
+ if(reduced.matches)return;
+ for(let i=0;i<n;i++){const a=rand(0,TAU),v=rand(speed*.3,speed);particles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:rand(.3,.7),color});}
+ particles=particles.slice(-180);
+}
+function floating(x,y,text){if(!reduced.matches){floaters.push({x,y,text,life:.8});floaters=floaters.slice(-12);}}
+function buildBunkers(){
+ const shape=()=>Array.from({length:BH},(_,r)=>Array.from({length:BW},(_,c)=>!(r<3&&(c<3-r||c>=BW-3+r))&&!(r>=BH-5&&c>=7&&c<BW-7)));
+ return [0,1,2,3].map(i=>({x:200*i+100-BW*CELL/2,y:BUNKER_Y,cells:shape()}));
+}
+function formationName(){return level%5===0?'MOTHERSHIP':['CLASSIC FLEET','STAGGERED FLEET','DIAMOND FLEET','ARMORED FLEET'][(level-1)%5];}
+function buildWave(){
+ invaders=[];boss=null;const type=(level-1)%5;
+ if(level%5===0){
+  const hp=12+Math.floor(level/5)*4;boss={x:W/2,y:94,w:140,h:48,hp,max:hp,t:0,fireIn:1.2,flash:0};
+ }else{
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+   if(type===1&&(r%2===0?c===0||c===10:c===5))continue;
+   if(type===2&&Math.abs(c-5)>[2,3,4,3,2][r])continue;
+   const armored=level>=3&&r===0&&(c===3||c===5||c===7);
+   invaders.push({r,c,type:TYPES[r],alive:true,hp:armored?2:1,maxHp:armored?2:1,flash:0});
   }
-  function buildWave() {
-    invaders = [];
-    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) invaders.push({ r, c, type: TYPE_OF_ROW[r], alive: true });
-    alive = invaders.length;
-    fx = 62; fy = 84 + Math.min(level - 1, 5) * 14; dir = 1; stepT = 0; frameIdx = 0;
-    ebullets = []; pbullet = null; bunkers = buildBunkers();
-    ufo = null; ufoIn = rand(12, 22);
-  }
-  function reset() {
-    score = 0; lives = 3; level = 1; nextLife = EXTRA_LIFE_EVERY;
-    best = loadBest(); newBest = false;
-    player = { x: W / 2, alive: true };
-    particles = []; playerDown = 0; levelPause = 0; fireLatch = false;
-    Object.keys(keys).forEach(k => keys[k] = false);
-    buildWave();
-    setState('ready');
-    hud(true);
-  }
-
-  /* ---------- HUD + overlay ---------- */
-  const hudCache = {};
-  function hud(force) {
-    const v = { score, best, lives, level };
-    for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
-  }
-  function setState(s) {
-    state = s;
-    $('overlay').classList.toggle('hidden', s === 'running');
-    $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
-    $('pauseBtn').disabled = !(s === 'running' || s === 'paused');
-    if (s === 'ready') {
-      $('ovTitle').textContent = 'Ready?';
-      $('ovText').textContent = 'Move with ◀ ▶, fire with Space. Press Space or the button to start.';
-      $('ovBtn').textContent = 'Start';
-    } else if (s === 'paused') {
-      $('ovTitle').textContent = 'Paused';
-      $('ovText').textContent = 'Press P to keep playing.';
-      $('ovBtn').textContent = 'Resume';
-    } else if (s === 'over') {
-      $('ovTitle').textContent = 'Game over';
-      $('ovText').innerHTML = (overReason ? overReason + '<br>' : '') + 'Score: <b>' + score + '</b> · Level: <b>' + level + '</b>' + (newBest ? '<br><span class="newbest">New best score!</span>' : '');
-      $('ovBtn').textContent = 'Play again';
+ }
+ alive=invaders.length;initialCount=alive;
+ fx=62;fy=84+Math.min(level-1,5)*12;dir=1;stepT=0;frameIdx=0;
+ ebullets=[];pbullet=null;bunkers=buildBunkers();ufo=null;ufoIn=rand(10,16);levelPause=0;
+ $('waveName').textContent=`WAVE ${String(level).padStart(2,'0')} / ${formationName()}`;
+ if(boss){banner('MOTHERSHIP INBOUND · HIT THE HULL',2.8);sound('boss');}
+}
+function pickGoal(){
+ const goals=[
+  {id:'dart',metric:'kills',target:15,title:'Defeat 15 invaders',reward:'DART SHIP'},
+  {id:'comet',metric:'waves',target:3,title:'Clear 3 waves',reward:'COMET SHOT'},
+  {id:'constellation',metric:'ufos',target:1,title:'Catch the bonus ship',reward:'STAR CHART'},
+  {id:'crown',metric:'bosses',target:1,title:'Defeat a boss',reward:'CROWN SHIP'}
+ ];
+ goal=goals.find(g=>!profile.unlocked.includes(g.id))||{metric:'kills',target:bonusGoal,title:`Defeat ${bonusGoal} invaders`,reward:'PERSONAL GOAL'};
+}
+function updateGoal(){
+ for(let guard=0;guard<5&&state!=='ready'&&stats[goal.metric]>=goal.target;guard++){
+  if(goal.id){
+   profile.unlocked.push(goal.id);runUnlocks.push(goal.id);saveProfile();
+   const item=Object.values(cosmetics).flat().find(x=>x.id===goal.id);banner(`Unlocked: ${item.name} · open Your fleet`);sound('unlock');pickGoal();
+  }else{bonusGoal=Math.max(bonusGoal+25,stats.kills+25);banner('Goal complete. Keep defending!');pickGoal();}
+ }
+ const current=Math.min(goal.target,stats[goal.metric]);
+ text('goalTitle',goal.title);text('goalCount',`${current} / ${goal.target}`);text('goalReward',goal.reward);
+ $('goalBar').max=goal.target;$('goalBar').value=current;$('goalBar').setAttribute('aria-valuetext',`${current} of ${goal.target}`);
+}
+const cache={};
+function text(id,value){if(cache[id]!==String(value)){cache[id]=String(value);$(id).textContent=value;}}
+function hud(){
+ for(const [id,v]of Object.entries({score,best,lives,level}))text(id,v);
+ text('nextLife',`Next extra life in ${(nextLife-score).toLocaleString('en-US')} points`);
+ text('enemiesLeft',boss?`BOSS ${boss.hp} / ${boss.max} HP`:levelPause>0?'WAVE CLEAR':`${alive} ENEMIES`);
+ updateGoal();
+}
+function reset(){
+ clearInputs();score=0;lives=3;level=1;nextLife=EXTRA_LIFE_EVERY;best=loadBest();startBest=best;recordCelebrated=false;
+ player={x:W/2,alive:true,shield:0};playerDown=0;levelPause=0;overReason='';particles=[];floaters=[];runUnlocks=[];hitFlash=0;
+ stats={elapsed:0,kills:0,waves:0,ufos:0,bosses:0,shots:0,hits:0};bonusGoal=50;state='ready';
+ bannerLife=0;$('banner').hidden=true;last=0;acc=0;buildWave();pickGoal();setState('ready');hud();storageMessage();
+}
+function timeText(seconds){return `${Math.floor(seconds/60)}:${String(Math.floor(seconds)%60).padStart(2,'0')}`;}
+function results(){
+ const root=$('results');root.replaceChildren();const grid=document.createElement('div');grid.className='result-grid';
+ const accuracy=stats.shots?Math.round(stats.hits/stats.shots*100):0;
+ for(const [value,label]of [[timeText(stats.elapsed),'Time alive'],[stats.kills,'Invaders'],[stats.waves,'Waves cleared'],[accuracy+'%','Accuracy']]){
+  const cell=document.createElement('div'),v=document.createElement('strong'),l=document.createElement('span');v.textContent=value;l.textContent=label;cell.append(v,l);grid.append(cell);
+ }
+ root.append(grid);const rec=document.createElement('p');rec.className='record';
+ rec.textContent=score>startBest?`New best · ${score-startBest} points above your previous record!`:`${startBest-score+10} more points to beat your best.`;root.append(rec);
+ if(runUnlocks.length){const p=document.createElement('p');p.className='unlocks';p.textContent='Unlocked: '+runUnlocks.map(id=>Object.values(cosmetics).flat().find(x=>x.id===id).name).join(' + ');root.append(p);}
+}
+function setState(next){
+ state=next;$('overlay').classList.toggle('hidden',state==='running');$('pauseBtn').textContent=state==='paused'?'Resume':'Pause';$('pauseBtn').disabled=!['running','paused'].includes(state);
+ $('results').hidden=state!=='over';
+ if(state==='ready'){
+  $('ovEyebrow').textContent='DEFEND. ADVANCE. REPEAT.';$('ovTitle').textContent='Ready, pilot?';$('ovText').textContent='Move with ← → or A D. Hold Space to fire. Clear the fleet and face a boss every five waves.';$('ovBtn').textContent='Launch';
+ }else if(state==='paused'){
+  $('ovEyebrow').textContent='MISSION ON HOLD';$('ovTitle').textContent='Paused.';$('ovText').textContent='Your ship and the clock are waiting. Press P or Resume to return.';$('ovBtn').textContent='Resume';
+ }else if(state==='over'){
+  $('ovEyebrow').textContent=score>startBest?'NEW PERSONAL BEST':'MISSION COMPLETE';$('ovTitle').textContent=`${score.toLocaleString('en-US')} points`;$('ovText').textContent=overReason;$('ovBtn').textContent='Play again';results();announce(`Game over. ${overReason} ${score} points. ${stats.waves} waves cleared.`);
+ }
+}
+function start(){initAudio();if(state==='over')reset();if(state==='ready'||state==='paused'){last=0;acc=0;setState('running');}}
+function pause(){if(state==='running'){clearInputs();setState('paused');}}
+function togglePause(){if(state==='running')pause();else if(state==='paused')start();}
+function endGame(reason){if(state!=='running')return;overReason=reason;clearInputs();if(score>best)best=score;write(BEST_KEY,best);hud();setState('over');sound('hurt');}
+function addScore(points,x,y){
+ score+=points;
+ while(score>=nextLife){nextLife+=EXTRA_LIFE_EVERY;lives++;banner('EXTRA LIFE +1');sound('bonus');}
+ if(score>best){best=score;write(BEST_KEY,best);}
+ if(score>startBest&&!recordCelebrated){recordCelebrated=true;banner(startBest?'NEW PERSONAL BEST!':'FIRST PERSONAL BEST!');sound('record');}
+ if(Number.isFinite(x))floating(x,y,'+'+points);
+}
+function hitBunkers(x,y,radius){
+ for(const b of bunkers){
+  const cx=Math.floor((x-b.x)/CELL),cy=Math.floor((y-b.y)/CELL);
+  if(cx<0||cy<0||cx>=BW||cy>=BH||!b.cells[cy][cx])continue;
+  for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+   const ux=cx+dx,uy=cy+dy;if(dx*dx+dy*dy<=radius*radius+1&&ux>=0&&uy>=0&&ux<BW&&uy<BH)b.cells[uy][ux]=false;
+  }return true;
+ }return false;
+}
+function eraseRect(x,y,w,h){
+ for(const b of bunkers){
+  const c0=Math.max(0,Math.floor((x-b.x)/CELL)),c1=Math.min(BW-1,Math.floor((x+w-b.x)/CELL));
+  const r0=Math.max(0,Math.floor((y-b.y)/CELL)),r1=Math.min(BH-1,Math.floor((y+h-b.y)/CELL));
+  for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)b.cells[r][c]=false;
+ }
+}
+const invX=i=>fx+i.c*GX,invY=i=>fy+i.r*GY;
+function march(){
+ const live=invaders.filter(i=>i.alive);if(!live.length)return;
+ const left=fx+Math.min(...live.map(i=>i.c))*GX,right=fx+Math.max(...live.map(i=>i.c))*GX+IW;
+ if(dir>0&&right+10>W-24||dir<0&&left-10<24){fy+=20;dir=-dir;}else fx+=dir*10;
+ frameIdx^=1;for(const i of live)eraseRect(invX(i),invY(i),IW,IH);
+ if(Math.max(...live.map(i=>invY(i)+IH))>=PLAYER_Y-4){player.alive=false;lives=0;burst(player.x,PLAYER_Y,'#f0b429',30,240);endGame('The invaders landed.');}
+}
+function playerHit(){
+ if(!player.alive||player.shield>0||state!=='running')return false;
+ player.alive=false;playerDown=1.1;lives--;ebullets=[];pbullet=null;hitFlash=.2;
+ burst(player.x,PLAYER_Y,'#f0b429',26,210);sound('hurt');
+ if(lives<=0){lives=0;endGame('Your last ship was destroyed.');}else banner('SHIP LOST · SHIELD ON RESPAWN',1.6);
+ return true;
+}
+function hurtBoss(){
+ if(!boss)return;boss.hp--;boss.flash=.12;stats.hits++;sound('armor');
+ addScore(10,boss.x,boss.y+25);burst(boss.x,boss.y,'#ffd36b',5,90);
+ if(boss.hp<=0){
+  const x=boss.x,y=boss.y;boss=null;stats.bosses++;ebullets=[];addScore(400+level*50,x,y);burst(x,y,'#f0b429',65,250);sound('wave');
+ }
+}
+function updateBoss(dt){
+ if(!boss)return;boss.t+=dt;boss.x=400+Math.sin(boss.t*.68)*265;boss.y=92+Math.sin(boss.t*.4)*16;boss.flash=Math.max(0,boss.flash-dt);boss.fireIn-=dt;
+ if(boss.fireIn<=0&&player.alive){
+  boss.fireIn=Math.max(.65,1.25-level*.025);
+  const aim=Math.max(-110,Math.min(110,(player.x-boss.x)*.33));
+  for(const spread of [-65,65])if(ebullets.length<7)ebullets.push({x:boss.x+spread*.55,y:boss.y+30,vx:aim+spread*.6,wob:0});
+ }
+}
+function updateEffects(dt){
+ for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;}particles=particles.filter(p=>p.life>0);
+ for(const p of floaters){p.y-=35*dt;p.life-=dt;}floaters=floaters.filter(p=>p.life>0);
+ if(bannerLife>0){bannerLife-=dt;if(bannerLife<=0)$('banner').hidden=true;}
+ hitFlash=Math.max(0,hitFlash-dt);
+}
+function update(dt){
+ if(state!=='running')return;
+ stats.elapsed+=dt;updateEffects(dt);
+ if(player.alive){
+  player.shield=Math.max(0,player.shield-dt);
+  player.x=Math.max(26,Math.min(W-26,player.x+(Number(keys.right)-Number(keys.left))*PLAYER_V*dt));
+  if(keys.fire&&!pbullet&&levelPause<=0){pbullet={x:player.x,y:PLAYER_Y-14};stats.shots++;sound('shot');}
+ }else if(playerDown>0){
+  playerDown-=dt;if(playerDown<=0){player.alive=true;player.x=W/2;player.shield=1.8;}
+ }
+ if(levelPause>0){
+  levelPause-=dt;if(levelPause<=0){level++;buildWave();if(!boss)banner(`WAVE ${level} · ${formationName()}`);}
+  hud();return;
+ }
+ if(pbullet){
+  const n=Math.ceil(PBULLET_V*dt/CELL),dy=PBULLET_V*dt/n;
+  for(let s=0;s<n&&pbullet;s++){
+   pbullet.y-=dy;
+   if(pbullet.y<16){pbullet=null;break;}
+   if(hitBunkers(pbullet.x,pbullet.y,1)){pbullet=null;break;}
+   if(boss&&Math.abs(pbullet.x-boss.x)<boss.w/2&&Math.abs(pbullet.y-boss.y)<boss.h/2){pbullet=null;hurtBoss();break;}
+   if(ufo&&Math.abs(pbullet.x-ufo.x)<22&&Math.abs(pbullet.y-ufo.y)<12){
+    stats.ufos++;stats.hits++;const pts=ufo.pts;addScore(pts,ufo.x,ufo.y);burst(ufo.x,ufo.y,'#ff8c91',24,190);banner(`BONUS SHIP +${pts}`);sound('bonus');ufo=null;pbullet=null;break;
+   }
+   for(const i of invaders){
+    if(!i.alive)continue;const x=invX(i),y=invY(i);
+    if(pbullet.x>x&&pbullet.x<x+IW&&pbullet.y>y&&pbullet.y<y+IH){
+     i.hp--;i.flash=.1;stats.hits++;pbullet=null;
+     if(i.hp<=0){i.alive=false;alive--;stats.kills++;addScore(POINTS[i.type]+(i.maxHp>1?10:0),x+IW/2,y);burst(x+IW/2,y+IH/2,COLORS[i.type]);sound('hit');}
+     else{burst(x+IW/2,y,'#fff2bf',6,75);sound('armor');}break;
     }
+   }
   }
-  let overReason = '', bannerT;
-  function banner(text) {
-    const b = $('banner'); b.textContent = text; b.classList.add('on');
-    clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 1400);
+ }
+ // No more enemy fire or leftover bullets once a fleet is cleared.
+ if(alive===0&&!boss){stats.waves++;levelPause=1.7;ebullets=[];pbullet=null;ufo=null;banner(`WAVE ${level} CLEARED!`);sound('wave');hud();return;}
+ for(const i of invaders)i.flash=Math.max(0,i.flash-dt);
+ if(alive>0){
+  stepT+=dt;const interval=Math.max(.035,(.024+.2*alive/initialCount)*Math.pow(.95,level-1));
+  while(stepT>=interval&&state==='running'){stepT-=interval;march();}
+  if(state!=='running')return;
+ }
+ updateBoss(dt);
+ if(player.alive&&alive>0&&ebullets.length<Math.min(2+Math.floor(level/2),5)&&Math.random()<dt*(.9+level*.12)){
+  const cols={};for(const i of invaders)if(i.alive&&(!cols[i.c]||i.r>cols[i.c].r))cols[i.c]=i;
+  const list=Object.values(cols),shooter=list[Math.floor(Math.random()*list.length)];
+  if(shooter)ebullets.push({x:invX(shooter)+IW/2,y:invY(shooter)+IH,vx:0,wob:0});
+ }
+ for(let k=ebullets.length-1;k>=0;k--){
+  const b=ebullets[k],vy=EBULLET_V+Math.min(level,15)*8,n=Math.ceil(Math.max(vy,Math.abs(b.vx))*dt/CELL);let gone=false;
+  for(let s=0;s<n&&!gone;s++){
+   b.y+=vy*dt/n;b.x+=b.vx*dt/n;
+   if(b.y>H||b.x<0||b.x>W){gone=true;break;}
+   if(hitBunkers(b.x,b.y,2)){gone=true;break;}
+   if(player.alive&&Math.abs(b.x-player.x)<PLAYER_W/2&&b.y>PLAYER_Y-4&&b.y<PLAYER_Y+18){
+    gone=true;
+    // A hit clears the entire bullet array. Leave this loop immediately.
+    if(playerHit()){hud();return;}
+   }
   }
-  function start() { if (state === 'ready') setState('running'); }
-  function togglePause() {
-    if (state === 'running') { Object.keys(keys).forEach(k => keys[k] = false); setState('paused'); }
-    else if (state === 'paused') setState('running');
-  }
-  function primary() {
-    if (state === 'ready') start();
-    else if (state === 'paused') togglePause();
-    else if (state === 'over') { reset(); start(); }
-  }
-
-  /* ---------- input ---------- */
-  const KEYMAP = { ArrowLeft:'left', a:'left', A:'left', ArrowRight:'right', d:'right', D:'right' };
-  document.addEventListener('keydown', e => {
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-    const k = KEYMAP[e.key];
-    if (k) { e.preventDefault(); keys[k] = true; if (state === 'ready') start(); return; }
-    if (e.key === ' ' || e.code === 'Space') {
-      if (e.target && e.target.tagName === 'BUTTON') return;
-      e.preventDefault();
-      if (state === 'running') keys.fire = true; else primary();
-      return;
-    }
-    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
-    if (e.key === 'Enter' && state !== 'running' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
-  });
-  document.addEventListener('keyup', e => {
-    const k = KEYMAP[e.key];
-    if (k) keys[k] = false;
-    if (e.key === ' ' || e.code === 'Space') keys.fire = false;
-  });
-  window.addEventListener('blur', () => { Object.keys(keys).forEach(k => keys[k] = false); if (state === 'running') setState('paused'); });
-  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') setState('paused'); });
-
-  document.querySelectorAll('.touch button').forEach(b => {
-    const k = b.dataset.k, on = e => { e.preventDefault(); keys[k] = true; b.classList.add('on'); if (state === 'ready') start(); };
-    const off = e => { e.preventDefault(); keys[k] = false; b.classList.remove('on'); };
-    b.addEventListener('pointerdown', on);
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, off));
-    b.addEventListener('contextmenu', e => e.preventDefault());
-  });
-  $('ovBtn').addEventListener('click', primary);
-  $('pauseBtn').addEventListener('click', togglePause);
-  $('restartBtn').addEventListener('click', reset);
-
-  /* ---------- helpers ---------- */
-  const invX = i => fx + i.c * GX, invY = i => fy + i.r * GY;
-  function burst(x, y, n, speed, color) {
-    for (let i = 0; i < n; i++) {
-      const a = rand(0, TAU), s = rand(speed * 0.3, speed);
-      particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(0.3, 0.7), max: 0.7, color });
-    }
-  }
-  function addScore(p) {
-    score += p;
-    if (score >= nextLife) { nextLife += EXTRA_LIFE_EVERY; lives++; banner('EXTRA LIFE'); }
-    if (score > best) { best = score; newBest = true; }
-  }
-  function endGame(reason) {
-    overReason = reason;
-    if (newBest) saveBest(best);
-    hud();
-    setState('over');
-  }
-  // knock a round hole in a bunker; returns true when the point hit a solid cell
-  function hitBunkers(x, y, radius) {
-    for (const b of bunkers) {
-      const cx = Math.floor((x - b.x) / CELL), cy = Math.floor((y - b.y) / CELL);
-      if (cx < 0 || cy < 0 || cx >= BW || cy >= BH || !b.cells[cy][cx]) continue;
-      for (let dy = -radius; dy <= radius; dy++) for (let dx = -radius; dx <= radius; dx++) {
-        const ux = cx + dx, uy = cy + dy;
-        if (dx * dx + dy * dy <= radius * radius + 1 && ux >= 0 && uy >= 0 && ux < BW && uy < BH) b.cells[uy][ux] = false;
-      }
-      return true;
-    }
-    return false;
-  }
-  function eraseRect(x, y, w, h) {
-    for (const b of bunkers) {
-      const c0 = Math.max(0, Math.floor((x - b.x) / CELL)), c1 = Math.min(BW - 1, Math.floor((x + w - b.x) / CELL));
-      const r0 = Math.max(0, Math.floor((y - b.y) / CELL)), r1 = Math.min(BH - 1, Math.floor((y + h - b.y) / CELL));
-      for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) b.cells[r][c] = false;
-    }
-  }
-
-  /* ---------- simulation ---------- */
-  function stepInvaders() {
-    const live = invaders.filter(i => i.alive);
-    const minC = Math.min(...live.map(i => i.c)), maxC = Math.max(...live.map(i => i.c));
-    const left = fx + minC * GX, right = fx + maxC * GX + IW;
-    if ((dir > 0 && right + MOVE_X > W - SIDE) || (dir < 0 && left - MOVE_X < SIDE)) { fy += DROP; dir = -dir; }
-    else fx += dir * MOVE_X;
-    frameIdx ^= 1;
-    for (const i of live) eraseRect(invX(i), invY(i), IW, IH);
-    const lowest = Math.max(...live.map(i => invY(i) + IH));
-    if (lowest >= PLAYER_Y - 4) { player.alive = false; burst(player.x, PLAYER_Y, 30, 240, '#4BD6AB'); lives = 0; endGame('The invaders landed!'); }
-  }
-
-  function playerHit() {
-    player.alive = false; playerDown = 1.3;
-    burst(player.x, PLAYER_Y + 8, 30, 240, '#4BD6AB');
-    lives--; ebullets = []; pbullet = null;
-    if (lives <= 0) { lives = 0; endGame('The invaders got you.'); }
-  }
-
-  function update(dt) {
-    // player
-    if (player.alive) {
-      if (keys.left) player.x -= PLAYER_V * dt;
-      if (keys.right) player.x += PLAYER_V * dt;
-      player.x = Math.max(PLAYER_W / 2 + 6, Math.min(W - PLAYER_W / 2 - 6, player.x));
-      if (keys.fire && !pbullet) pbullet = { x: player.x, y: PLAYER_Y - 14 };
-    } else if (playerDown > 0) {
-      playerDown -= dt;
-      if (playerDown <= 0 && state === 'running') player.alive = true;
-    }
-
-    // player bullet (sub-steps so it cannot skip through thin bunker cells)
-    if (pbullet) {
-      const dist = PBULLET_V * dt, n = Math.ceil(dist / CELL), each = dist / n;
-      for (let s = 0; s < n && pbullet; s++) {
-        pbullet.y -= each;
-        if (pbullet.y < 20) { pbullet = null; break; }
-        if (hitBunkers(pbullet.x, pbullet.y, 1)) { pbullet = null; break; }
-        if (ufo && Math.abs(pbullet.x - ufo.x) < 22 && Math.abs(pbullet.y - ufo.y) < 12) {
-          addScore(ufo.pts); burst(ufo.x, ufo.y, 22, 200, '#FF6B75'); banner('+' + ufo.pts); ufo = null; pbullet = null; break;
-        }
-        for (const i of invaders) {
-          if (!i.alive) continue;
-          const x = invX(i), y = invY(i);
-          if (pbullet.x > x && pbullet.x < x + IW && pbullet.y > y && pbullet.y < y + IH) {
-            i.alive = false; alive--; addScore(POINTS[i.type]);
-            burst(x + IW / 2, y + IH / 2, 12, 150, COLORS[i.type]);
-            pbullet = null; break;
-          }
-        }
-      }
-    }
-
-    // invaders march, faster as fewer remain
-    if (alive > 0) {
-      stepT += dt;
-      const interval = Math.max(0.012, (0.024 + 0.2 * (alive / (ROWS * COLS))) * Math.pow(0.93, level - 1));
-      while (stepT >= interval && state === 'running' && alive > 0) { stepT -= interval; stepInvaders(); }
-    }
-
-    // enemy fire: the lowest invader of a random column shoots
-    if (player.alive && alive > 0 && state === 'running') {
-      const maxB = Math.min(2 + Math.floor(level / 2), 5);
-      if (ebullets.length < maxB && Math.random() < dt * (0.9 + level * 0.15)) {
-        const cols = {};
-        for (const i of invaders) if (i.alive && (!cols[i.c] || i.r > cols[i.c].r)) cols[i.c] = i;
-        const list = Object.values(cols), shooter = list[Math.floor(Math.random() * list.length)];
-        if (shooter) ebullets.push({ x: invX(shooter) + IW / 2, y: invY(shooter) + IH, wob: 0 });
-      }
-    }
-    for (let k = ebullets.length - 1; k >= 0; k--) {
-      const b = ebullets[k], dist = (EBULLET_V + level * 8) * dt, n = Math.ceil(dist / CELL), each = dist / n;
-      let gone = false;
-      for (let s = 0; s < n && !gone; s++) {
-        b.y += each;
-        if (b.y > H) { gone = true; break; }
-        if (hitBunkers(b.x, b.y, 2)) { gone = true; break; }
-        if (player.alive && Math.abs(b.x - player.x) < PLAYER_W / 2 && b.y > PLAYER_Y - 4 && b.y < PLAYER_Y + PLAYER_H) { gone = true; playerHit(); break; }
-      }
-      b.wob += dt * 20;
-      if (gone) ebullets.splice(k, 1);
-      if (state !== 'running') return;
-    }
-
-    // mystery ship
-    ufoIn -= dt;
-    if (!ufo && ufoIn <= 0 && alive > 8) {
-      const fromLeft = Math.random() < 0.5;
-      ufo = { x: fromLeft ? -30 : W + 30, y: 52, v: (fromLeft ? 1 : -1) * 130, pts: [50, 100, 150, 300][Math.floor(Math.random() * 4)] };
-      ufoIn = rand(18, 28);
-    }
-    if (ufo) { ufo.x += ufo.v * dt; if (ufo.x < -40 || ufo.x > W + 40) ufo = null; }
-
-    // particles
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i]; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
-      if (p.life <= 0) particles.splice(i, 1);
-    }
-
-    // wave cleared
-    if (alive === 0 && levelPause <= 0) levelPause = 1.6;
-    if (levelPause > 0) {
-      levelPause -= dt;
-      if (levelPause <= 0) { level++; buildWave(); banner('LEVEL ' + level); }
-    }
-    hud();
-  }
-
-  /* ---------- drawing ---------- */
-  function drawSprite(rows, x, y, color) {
-    ctx.fillStyle = color;
-    const w = rows[0].length * PX, ox = x + (IW - w) / 2;
-    for (let r = 0; r < rows.length; r++) for (let c = 0; c < rows[r].length; c++) if (rows[r][c] === '#') ctx.fillRect(ox + c * PX, y + r * PX, PX, PX);
-  }
-  function draw() {
-    ctx.fillStyle = '#0b1740'; ctx.fillRect(0, 0, W, H);
-    for (const s of stars) { ctx.fillStyle = 'rgba(201,212,236,' + s.a + ')'; ctx.fillRect(s.x, s.y, s.s, s.s); }
-
-    for (const i of invaders) if (i.alive) drawSprite(SPRITES[i.type][frameIdx], invX(i), invY(i), COLORS[i.type]);
-
-    ctx.fillStyle = '#4BD6AB';
-    for (const b of bunkers) for (let r = 0; r < BH; r++) for (let c = 0; c < BW; c++) if (b.cells[r][c]) ctx.fillRect(b.x + c * CELL, b.y + r * CELL, CELL, CELL);
-
-    if (ufo) {
-      ctx.fillStyle = '#FF6B75';
-      ctx.beginPath(); ctx.ellipse(ufo.x, ufo.y, 22, 9, 0, 0, TAU); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(ufo.x, ufo.y - 7, 10, 7, 0, Math.PI, 0); ctx.fill();
-      ctx.fillStyle = '#0b1740'; for (let k = -1; k <= 1; k++) ctx.fillRect(ufo.x + k * 11 - 2, ufo.y - 1, 4, 3);
-    }
-
-    if (player.alive) {
-      ctx.fillStyle = '#4BD6AB';
-      ctx.fillRect(player.x - PLAYER_W / 2, PLAYER_Y + 6, PLAYER_W, 12);
-      ctx.fillRect(player.x - PLAYER_W / 2 + 6, PLAYER_Y + 2, PLAYER_W - 12, 6);
-      ctx.fillRect(player.x - 3, PLAYER_Y - 8, 6, 12);
-    }
-
-    ctx.fillStyle = '#F0B429';
-    if (pbullet) ctx.fillRect(pbullet.x - 1.5, pbullet.y - 8, 3, 14);
-    ctx.fillStyle = '#FF6B75';
-    for (const b of ebullets) {
-      const w = Math.sin(b.wob) * 3;
-      ctx.fillRect(b.x + w - 1.5, b.y - 12, 3, 5); ctx.fillRect(b.x - w - 1.5, b.y - 7, 3, 5); ctx.fillRect(b.x + w - 1.5, b.y - 2, 3, 5);
-    }
-    for (const p of particles) { ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.color; ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3); }
-    ctx.globalAlpha = 1;
-
-    // ground line
-    ctx.fillStyle = 'rgba(75,214,171,.55)'; ctx.fillRect(0, PLAYER_Y + 22, W, 2);
-  }
-
-  /* ---------- main loop ---------- */
-  let last = 0, acc = 0;
-  function frame(t) {
-    if (state === 'running') {
-      acc += Math.min((t - last) / 1000, 0.1);
-      while (acc >= STEP && state === 'running') { acc -= STEP; update(STEP); }
-    } else acc = 0;
-    last = t;
-    draw();
-    requestAnimationFrame(frame);
-  }
-
-  reset();
-  requestAnimationFrame(frame);
+  b.wob+=dt*20;if(gone)ebullets.splice(k,1);
+ }
+ if(!boss){
+  ufoIn-=dt;
+  if(!ufo&&ufoIn<=0&&alive>5){const left=Math.random()<.5;ufo={x:left?-30:W+30,y:45,v:(left?1:-1)*130,pts:[50,100,150,300][Math.floor(Math.random()*4)]};ufoIn=rand(16,24);}
+  if(ufo){ufo.x+=ufo.v*dt;if(ufo.x< -40||ufo.x>W+40)ufo=null;}
+ }
+ hud();
+}
+function sprite(rows,x,y,color){ctx.fillStyle=color;const ox=x+(IW-rows[0].length*PX)/2;for(let r=0;r<rows.length;r++)for(let c=0;c<rows[r].length;c++)if(rows[r][c]==='#')ctx.fillRect(ox+c*PX,y+r*PX,PX,PX);}
+function drawPlayer(){
+ const x=player.x,y=PLAYER_Y,look=profile.equipped.ship;ctx.fillStyle=cosmetics.ship.find(x=>x.id===look).color;
+ if(look==='dart'){
+  ctx.beginPath();ctx.moveTo(x,y-8);ctx.lineTo(x+20,y+18);ctx.lineTo(x,y+10);ctx.lineTo(x-20,y+18);ctx.closePath();ctx.fill();
+ }else if(look==='crown'){
+  ctx.fillRect(x-20,y+5,40,13);ctx.fillRect(x-18,y-3,6,12);ctx.fillRect(x+12,y-3,6,12);ctx.fillRect(x-3,y-8,6,16);
+ }else{ctx.fillRect(x-20,y+6,40,12);ctx.fillRect(x-14,y+2,28,6);ctx.fillRect(x-3,y-8,6,12);}
+ ctx.fillStyle='#fff2bf';ctx.fillRect(x-3,y+4,6,5);
+ if(player.shield>0){ctx.strokeStyle='#b9d7ff';ctx.lineWidth=3;ctx.globalAlpha=reduced.matches?.85:.6+Math.sin(stats.elapsed*12)*.2;ctx.beginPath();ctx.ellipse(x,y+5,31,27,0,0,TAU);ctx.stroke();ctx.globalAlpha=1;}
+}
+function draw(){
+ ctx.fillStyle=profile.equipped.sky==='constellation'?'#101f46':'#0b1740';ctx.fillRect(0,0,W,H);
+ if(profile.equipped.sky==='constellation'){
+  ctx.strokeStyle='#253d69';ctx.lineWidth=1;ctx.beginPath();for(let i=0;i<18;i+=3){ctx.moveTo(stars[i].x,stars[i].y);ctx.lineTo(stars[i+1].x,stars[i+1].y);ctx.lineTo(stars[i+2].x,stars[i+2].y);}ctx.stroke();
+ }
+ for(const s of stars){ctx.fillStyle=`rgba(201,212,236,${s.a})`;ctx.fillRect(s.x,s.y,s.s,s.s);}
+ for(const i of invaders)if(i.alive){
+  const x=invX(i),y=invY(i);sprite(SPRITES[i.type][frameIdx],x,y,i.flash>0?'#fff':COLORS[i.type]);
+  if(i.hp>1){ctx.strokeStyle='#ffd36b';ctx.lineWidth=2;ctx.strokeRect(x-4,y-4,IW+8,IH+8);ctx.fillStyle='#ffd36b';ctx.fillRect(x+IW/2-3,y-9,6,3);}
+ }
+ ctx.fillStyle='#8fb0f2';for(const b of bunkers)for(let r=0;r<BH;r++)for(let c=0;c<BW;c++)if(b.cells[r][c])ctx.fillRect(b.x+c*CELL,b.y+r*CELL,CELL,CELL);
+ if(boss){
+  ctx.save();ctx.translate(boss.x,boss.y);ctx.fillStyle=boss.flash>0?'#fff':'#f0b429';
+  ctx.beginPath();ctx.moveTo(-70,8);ctx.lineTo(-48,-12);ctx.lineTo(-26,-12);ctx.lineTo(-14,-24);ctx.lineTo(14,-24);ctx.lineTo(26,-12);ctx.lineTo(48,-12);ctx.lineTo(70,8);ctx.lineTo(52,24);ctx.lineTo(-52,24);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#0b1740';for(let x=-40;x<=40;x+=20)ctx.fillRect(x-4,-1,8,8);ctx.restore();
+  ctx.fillStyle='#41537a';ctx.fillRect(250,17,300,7);ctx.fillStyle='#f0b429';ctx.fillRect(250,17,300*boss.hp/boss.max,7);
+ }
+ if(ufo){ctx.fillStyle='#ff8c91';ctx.beginPath();ctx.ellipse(ufo.x,ufo.y,22,9,0,0,TAU);ctx.fill();ctx.beginPath();ctx.ellipse(ufo.x,ufo.y-7,10,7,0,Math.PI,0);ctx.fill();ctx.fillStyle='#0b1740';for(let k=-1;k<=1;k++)ctx.fillRect(ufo.x+k*11-2,ufo.y-1,4,3);}
+ if(player.alive)drawPlayer();
+ if(pbullet){
+  if(profile.equipped.shot==='comet'){ctx.globalAlpha=.4;ctx.fillStyle='#9bb9f0';ctx.fillRect(pbullet.x-2,pbullet.y+5,4,15);ctx.globalAlpha=1;}
+  ctx.fillStyle=profile.equipped.shot==='comet'?'#b9d7ff':'#fff2bf';ctx.fillRect(pbullet.x-1.5,pbullet.y-8,3,14);
+ }
+ ctx.fillStyle='#ff8c91';for(const b of ebullets){const w=Math.sin(b.wob)*3;ctx.fillRect(b.x+w-1.5,b.y-12,3,5);ctx.fillRect(b.x-w-1.5,b.y-7,3,5);ctx.fillRect(b.x+w-1.5,b.y-2,3,5);}
+ for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/.7);ctx.fillStyle=p.color;ctx.fillRect(p.x-2,p.y-2,4,4);}ctx.globalAlpha=1;
+ ctx.font='bold 20px system-ui';ctx.textAlign='center';
+ for(const p of floaters){ctx.globalAlpha=Math.max(0,p.life/.8);ctx.fillStyle='#fff2bf';ctx.fillText(p.text,Math.max(30,Math.min(770,p.x)),Math.max(25,p.y));}ctx.globalAlpha=1;
+ if(hitFlash>0&&!reduced.matches){ctx.strokeStyle='#ff8c91';ctx.lineWidth=6;ctx.strokeRect(3,3,W-6,H-6);}
+ ctx.fillStyle='#41537a';ctx.fillRect(0,PLAYER_Y+24,W,2);
+}
+function syncKeys(){for(const key of Object.keys(keys))keys[key]=keyboard[key]||[...pointers.values()].includes(key);document.querySelectorAll('[data-k]').forEach(b=>b.classList.toggle('on',[...pointers.values()].includes(b.dataset.k)));}
+function clearInputs(){for(const k of Object.keys(keys)){keys[k]=false;keyboard[k]=false;}pointers.clear();document.querySelectorAll('[data-k]').forEach(b=>b.classList.remove('on'));}
+function modalOpen(){return $('restartDialog').open||$('looksDialog').open;}
+function askRestart(){if(['ready','over'].includes(state)){reset();start();return;}pendingRestart={resume:state==='running'};pause();$('restartDialog').showModal();$('restartCancel').focus();}
+function finishRestart(confirm){if(!pendingRestart)return;const resume=pendingRestart.resume;pendingRestart=null;$('restartDialog').close();if(confirm){reset();start();}else if(resume)start();}
+function renderCollection(){
+ $('collection').replaceChildren();
+ for(const [group,items]of Object.entries(cosmetics)){
+  const section=document.createElement('section');section.className='collection-group';const heading=document.createElement('h3');heading.textContent={ship:'Ships',shot:'Shots',sky:'Skies'}[group];section.append(heading);
+  const list=document.createElement('div');list.className='items';section.append(list);
+  for(const item of items){
+   const available=profile.unlocked.includes(item.id),button=document.createElement('button');button.className='cosmetic';button.disabled=!available;button.setAttribute('aria-pressed',String(profile.equipped[group]===item.id));
+   const swatch=document.createElement('span');swatch.className='swatch';swatch.style.setProperty('--swatch',item.color);const name=document.createElement('b');name.textContent=item.name;const info=document.createElement('small');info.textContent=available?(profile.equipped[group]===item.id?'Equipped':'Select look'):'Locked · '+item.rule;
+   button.append(swatch,name,info);button.addEventListener('click',()=>{profile.equipped[group]=item.id;saveProfile();renderCollection();});list.append(button);
+  }$('collection').append(section);
+ }
+}
+function openLooks(){looksResume=state==='running';pause();renderCollection();$('looksDialog').showModal();}
+function closeLooks(){const resume=looksResume;looksResume=false;$('looksDialog').close();if(resume)start();}
+function lostFocus(){clearInputs();if(pendingRestart)pendingRestart.resume=false;looksResume=false;pause();}
+const KEYMAP={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right'};
+document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(b&&e.detail>0)b.blur();});
+document.addEventListener('keydown',e=>{
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const isSpace=e.code==='Space'||e.key===' ';
+ if(e.repeat&&(e.key.toLowerCase()==='p'||e.key==='Escape'||isSpace&&state!=='running')){e.preventDefault();return;}
+ if(modalOpen()||['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)||e.target.isContentEditable)return;
+ if(KEYMAP[e.key]){e.preventDefault();if(state==='ready')start();if(state==='running'){keyboard[KEYMAP[e.key]]=true;syncKeys();}return;}
+ if(isSpace){
+  if(e.target.tagName==='BUTTON'){if(e.repeat)e.preventDefault();return;}
+  e.preventDefault();if(state==='running'){keyboard.fire=true;syncKeys();}else if(!e.repeat){start();keyboard.fire=true;syncKeys();}return;
+ }
+ if(e.key.toLowerCase()==='p'||e.key==='Escape'){e.preventDefault();togglePause();}
+ if(e.key==='Enter'&&state!=='running'&&e.target.tagName!=='BUTTON'&&!e.repeat){e.preventDefault();start();}
+});
+document.addEventListener('keyup',e=>{if(KEYMAP[e.key])keyboard[KEYMAP[e.key]]=false;if(e.code==='Space'||e.key===' ')keyboard.fire=false;syncKeys();});
+window.addEventListener('blur',lostFocus);document.addEventListener('visibilitychange',()=>{if(document.hidden)lostFocus();});
+document.querySelectorAll('[data-k]').forEach(b=>{
+ b.addEventListener('pointerdown',e=>{if(e.button>0||modalOpen())return;e.preventDefault();if(state==='ready')start();if(state!=='running')return;pointers.set(e.pointerId,b.dataset.k);b.setPointerCapture(e.pointerId);syncKeys();});
+ const off=e=>{pointers.delete(e.pointerId);syncKeys();};for(const event of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(event,off);
+ b.addEventListener('contextmenu',e=>e.preventDefault());
+});
+$('ovBtn').addEventListener('click',start);$('pauseBtn').addEventListener('click',togglePause);$('restartBtn').addEventListener('click',askRestart);
+$('restartCancel').addEventListener('click',()=>finishRestart(false));$('restartConfirm').addEventListener('click',()=>finishRestart(true));$('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
+$('looksBtn').addEventListener('click',openLooks);$('looksClose').addEventListener('click',closeLooks);$('looksDialog').addEventListener('cancel',e=>{e.preventDefault();closeLooks();});
+$('soundBtn').addEventListener('click',()=>{profile.sound=!profile.sound;if(profile.sound)initAudio();else for(const o of voices){try{o.stop();}catch{}}saveProfile();soundLabel();});
+function frame(now){
+ const dt=last?Math.max(0,(now-last)/1000):0;last=now;
+ if(state==='running'){
+  if(dt>.5){pause();acc=0;}else{acc+=dt;while(acc>=STEP&&state==='running'){acc-=STEP;update(STEP);}}
+ }else acc=0;
+ draw();requestAnimationFrame(frame);
+}
+reset();soundLabel();requestAnimationFrame(frame);
 })();
+
 </script>
 </body>
 </html>
