@@ -17,8 +17,8 @@ En **Settings → Variables and Secrets**, configurar en producción:
 | Nombre | Tipo | Valor |
 | --- | --- | --- |
 | `GITHUB_TOKEN` | Secret cifrado | Token de GitHub limitado a este repositorio, permiso Contents: Read and write |
-| `ACCESS_TEAM_DOMAIN` | Variable | Dominio del equipo, por ejemplo `tu-equipo.cloudflareaccess.com` |
-| `ACCESS_AUD` | Variable | Application Audience (AUD) de la aplicación Access |
+| `ACCESS_TEAM_DOMAIN` | Secret cifrado | Dominio del equipo, por ejemplo `tu-equipo.cloudflareaccess.com` |
+| `ACCESS_AUD` | Secret cifrado | Application Audience (AUD) de la aplicación Access |
 | `ADMIN_EMAILS` | Secret cifrado | Los dos correos autorizados, separados por coma |
 | `PUBLIC_ORIGIN` | Variable opcional | `https://pelenlab.com` (valor predeterminado) |
 
@@ -34,6 +34,8 @@ En Cloudflare Zero Trust / Access, crear una aplicación **Self-hosted** con est
 Activar el método **One-time PIN**. Crear una política **Allow → Emails**, con los dos correos elegidos por la propietaria. No usar una regla Everyone ni autorizar el dominio completo de la escuela. No proteger el sitio completo ni las carpetas de las actividades.
 
 Configurar `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` y `ADMIN_EMAILS` con los valores correspondientes. El servidor verifica criptográficamente el JWT (firma, emisor, audiencia, vencimiento y correo permitido); no confía solo en una cabecera de correo. Si faltan secretos o configuración, no permite entrar ni publicar. Los dominios de preview tampoco pueden escribir en el repositorio de producción.
+
+Guardar también los parámetros de Access como secretos mantiene su configuración independiente de los campos administrados por Wrangler. Configurar Pages Functions en **Fail closed** y activar **HTTP Only** en la cookie de Cloudflare Access.
 
 Redeploy después de configurar variables y secretos. Comprobar con ambos correos que `/admin/` abre el panel, que un correo diferente es rechazado y que un assignment abre sin iniciar sesión.
 
