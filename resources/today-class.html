@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#16294d"><meta name="hub-root" content="../"><title>Today's Class · ATS Class Hub</title>
+<style>
+:root{--bg:#edf2fb;--paper:#fff;--navy:#16294d;--deep:#0b1740;--soft:#41537a;--gold:#f0b429;--line:#dce4f2}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--navy);font:16px/1.5 'Avenir Next',Avenir,'Trebuchet MS',sans-serif;min-height:100svh;display:flex;flex-direction:column}button,select{font:inherit;color:inherit}button,a,select{touch-action:manipulation}button{min-height:46px;padding:10px 18px;border:1px solid #b8c6dd;border-radius:7px;background:#fff;font-weight:750;cursor:pointer}button:hover{background:#f3f6fc}button:disabled,select:disabled{opacity:.5;cursor:default}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.primary{background:var(--gold);color:var(--deep);border-color:var(--gold)}.primary:hover{background:#ffd36b}.hub-header{width:min(1280px,100%);margin:0 auto;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.06em}.hub-header small{display:block;font-size:10px;color:var(--soft);letter-spacing:0}.hub-header a{color:var(--navy);text-decoration:none;border-bottom:2px solid var(--gold);padding:4px 0;white-space:nowrap}.app{width:100%;max-width:1280px;margin:0 auto;padding:8px 28px 26px;flex:1}.masthead{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:4px 0 22px}.eyebrow{font:11px/1.5 ui-monospace,monospace;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}.masthead h1{font:700 clamp(32px,3.5vw,44px)/1.13 Georgia,'Times New Roman',serif;letter-spacing:-1px;margin:5px 0 7px}.masthead h1 span{color:var(--gold)}.masthead p{font-size:15px;margin:0;color:var(--soft)}.selection-bar{display:grid;grid-template-columns:minmax(160px,230px) minmax(0,1fr) auto;align-items:end;gap:18px;padding:18px 20px;background:white;border:1px solid var(--line);border-radius:12px;margin-bottom:22px}.selection-bar label{display:block;font-size:13px;font-weight:750;margin-bottom:6px}.number{font:11px ui-monospace,monospace;color:#856117;margin-right:7px}select{width:100%;min-width:0;min-height:46px;padding:10px 34px 10px 12px;border:1px solid #b8c6dd;border-radius:6px;background:#fafcff;font-weight:650;font-size:15px;text-overflow:ellipsis}.classboard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 12px 36px #16294d08}.board-head{padding:24px 30px 25px;border-bottom:1px solid var(--line)}.board-meta{display:flex;justify-content:space-between;align-items:center;gap:16px}.class-name{font:750 12px ui-monospace,monospace;letter-spacing:.08em;color:var(--soft)}.task-tag{font:11px ui-monospace,monospace;color:var(--soft);display:flex;gap:10px;align-items:center}.status{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:4px;padding:4px 7px}.status.current{background:#fff7e0;border-color:#ead49b;color:#805b0c}.status.current::before{content:'';width:5px;height:5px;background:#bd8b17;border-radius:50%}.board-head h2{font:700 clamp(27px,3.05vw,42px)/1.12 Georgia,'Times New Roman',serif;letter-spacing:-.025em;margin:15px 0 0;overflow-wrap:anywhere;max-width:1000px}.learning-grid{display:grid;grid-template-columns:1fr 1.3fr}.target-panel{padding:30px;background:#f6f8fd;border-right:1px solid var(--line);position:relative}.section-label{display:block;width:fit-content;max-width:100%;margin:0 0 24px;padding:16px 22px;background:var(--gold);border-radius:16px;font:900 38px/1.15 'Avenir Next',Avenir,'Trebuchet MS',sans-serif;letter-spacing:-.035em;color:var(--deep);text-wrap:balance;overflow-wrap:break-word}.target{font-size:clamp(24px,2.45vw,32px);font-weight:750;line-height:1.35;letter-spacing:-.02em;margin:0;overflow-wrap:anywhere}.criteria-panel{padding:30px}.criteria{list-style:none;counter-reset:criterion;padding:0;margin:0}.criteria li{counter-increment:criterion;display:flex;gap:14px;padding:0 0 17px;margin:0 0 17px;border-bottom:1px solid #e9edf5;font-size:clamp(18px,1.6vw,22px);line-height:1.45}.criteria li:last-child{padding-bottom:0;margin-bottom:0;border:0}.criteria li::before{content:counter(criterion,decimal-leading-zero);font:12px/1.5 ui-monospace,monospace;color:#977017;min-width:23px;flex-shrink:0;padding-top:5px}.criteria li span{min-width:0;overflow-wrap:anywhere}.board-foot{border-top:1px solid var(--line);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;gap:16px;font:11px ui-monospace,monospace;color:var(--soft)}.board-foot a{font-size:12px;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:3px;white-space:nowrap}.teacher-note{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin:12px 2px 0;font-size:12px;color:var(--soft)}.teacher-note p{margin:0;max-width:720px}.message{font-size:13px;color:#a02d37;margin:10px 0 0;min-height:0}.footer{padding:25px 20px;background:var(--deep);color:#ffffffcc;text-align:center;font:12px/1.5 ui-monospace,monospace}.footer .who{display:block;margin-top:6px;color:#ffffff99}.projection-tools{display:none}.projecting{background:white}.projecting .hub-header,.projecting .masthead,.projecting .selection-bar,.projecting .teacher-note,.projecting .footer{display:none}.projecting .app{max-width:1700px;padding:0 32px 20px}.projecting .projection-tools{display:flex;justify-content:space-between;align-items:center;gap:15px;width:min(1700px,100%);margin:auto;padding:12px 32px;font:11px ui-monospace,monospace;color:var(--soft)}.projection-tools button{min-height:36px;font-size:13px;padding:6px 12px}.projecting .classboard{box-shadow:none;border:0;border-radius:0}.projecting .board-head{padding:15px 18px 25px}.projecting .board-head h2{font-size:clamp(36px,3.8vw,56px);max-width:1300px}.projecting .class-name{font-size:15px}.projecting .task-tag{font-size:13px}.projecting .target-panel,.projecting .criteria-panel{padding:30px}.projecting .target{font-size:clamp(27px,2.8vw,39px)}.projecting .section-label{font-size:48px}.projecting .criteria li{font-size:clamp(22px,2.05vw,29px);padding-bottom:18px;margin-bottom:18px}.projecting .criteria li::before{font-size:15px}.projecting .board-foot{padding:16px 18px;font-size:12px}.projecting .board-foot a{font-size:13px}.load-error{background:white;border:1px solid var(--line);border-radius:12px;padding:30px;color:var(--soft)}
+@media(max-width:850px){.hub-header{padding:12px 18px}.app{padding:8px 18px 22px}.selection-bar{grid-template-columns:minmax(130px,180px) minmax(0,1fr);gap:12px;padding:15px}.selection-bar button{grid-column:1/-1;justify-self:end;min-height:42px}.learning-grid{grid-template-columns:1fr}.target-panel{border-right:0;border-bottom:1px solid var(--line);padding:24px}.criteria-panel{padding:24px}.target{font-size:25px}.criteria li{font-size:20px}.board-head{padding:22px 24px}.board-head h2{font-size:31px}.board-foot{padding:15px 24px}.projecting .board-head h2{font-size:36px}.projecting .criteria li{font-size:24px}.projecting .target{font-size:30px}}
+@media(max-width:520px){.hub-header{padding:12px 14px}.hub-header small{font-size:9px}.app{padding:6px 12px 20px}.masthead{margin-bottom:18px}.masthead h1{font-size:33px}.masthead p{font-size:14px}.eyebrow{font-size:10px}.selection-bar{grid-template-columns:1fr;padding:14px}.selection-bar button{width:100%;justify-self:stretch}.board-head{padding:19px 20px}.board-meta{align-items:flex-start;gap:10px;flex-wrap:wrap}.class-name{font-size:11px}.task-tag{font-size:10px}.board-head h2{font-size:28px;margin-top:14px}.target-panel,.criteria-panel{padding:22px 20px}.target{font-size:24px}.section-label{font-size:32px;margin-bottom:20px;padding:14px 18px;border-radius:14px}.criteria li{font-size:19px;gap:9px}.board-foot{padding:14px 20px;flex-wrap:wrap;font-size:10px}.teacher-note{display:block}.teacher-note p+p{margin-top:8px}.projecting .app{padding:0 10px 18px}.projecting .projection-tools{padding:10px 20px}.projecting .projection-tools>span{font-size:10px}.projecting .board-head{padding:12px 12px 20px}.projecting .board-head h2{font-size:30px}.projecting .class-name{font-size:12px}.projecting .target-panel,.projecting .criteria-panel{padding:24px 20px}.projecting .target{font-size:27px}.projecting .criteria li{font-size:22px}.projecting .section-label{font-size:38px}}
+@media print{body{background:white}.hub-header,.masthead,.selection-bar,.projection-tools,.teacher-note,.footer,.message{display:none!important}.app{padding:0;max-width:none}.classboard{border:0;box-shadow:none}.learning-grid{grid-template-columns:1fr}.target-panel{border-right:0;border-bottom:1px solid var(--line);background:white}.board-head h2{font-size:30px}.target{font-size:25px}.criteria li{font-size:20px;break-inside:avoid}.board-foot a{display:none}}
+</style></head><body>
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a id="hubLink" href="../index.html#resources">← Class Hub</a></header>
+<div class="projection-tools"><span>ATS / CLASS HUB · ROOM LB6</span><button id="backBtn">← Choose another assignment</button></div>
+<main class="app"><div class="masthead"><div><span class="eyebrow">ONE CLASS. ONE CLEAR GOAL.</span><h1>Today's Class<span>.</span></h1><p>Choose your classroom and assignment. Your learning goals are ready.</p></div></div>
+<section class="selection-bar" aria-label="Choose what to display"><div><label for="classroom"><span class="number">01</span>Classroom</label><select id="classroom"></select></div><div><label for="assignment"><span class="number">02</span>Assignment</label><select id="assignment"></select></div><button id="projectBtn" class="primary">Project ↗</button></section>
+<article class="classboard" id="board" tabindex="-1" aria-label="Learning target and success criteria"><header class="board-head"><div class="board-meta"><span class="class-name" id="className"></span><div class="task-tag"><span id="taskLabel"></span><span id="taskStatus" class="status"></span></div></div><h2 id="assignmentTitle"></h2></header>
+<div class="learning-grid"><section class="target-panel" aria-labelledby="targetLabel"><h3 class="section-label" id="targetLabel">Learning Target</h3><p class="target" id="target"></p></section><section class="criteria-panel" aria-labelledby="criteriaLabel"><h3 class="section-label" id="criteriaLabel">Success Criteria</h3><ol class="criteria" id="criteria"></ol></section></div>
+<footer class="board-foot"><span>Ms. Ma. Elena Montes · <strong>Ms. Pelen</strong></span><a id="sourceLink" href="#" target="_blank" rel="noopener">Open assignment ↗</a></footer></article>
+<div class="load-error" id="loadError" hidden>These learning goals could not be loaded. Please reopen Today's Class from your hub.</div>
+<div class="teacher-note"><p>Learning goals prepared from your hub’s assignment instructions. When an assignment changes, review its learning goals too.</p><p id="selectionStatus">Remembers your last selection.</p></div><p class="message" id="message" role="status"></p>
+</main><footer class="footer">// Resources · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+<script type="application/json" id="learning-catalog">{
+  "schema": 1,
+  "source": "Assignment instructions in the ATS Class Hub",
+  "preparedOn": "2026-09-21",
+  "classrooms": [
+    {
+      "id": "comp-apps",
+      "name": "Comp Apps",
+      "assignments": [
+        {
+          "id": "task-03-file-management",
+          "title": "Files, Folders and Extensions",
+          "label": "Task 3",
+          "status": "now",
+          "path": "comp-apps/task-03-file-management/task.html",
+          "learningTarget": "I can identify file types and use names, extensions and paths to organize and locate my files.",
+          "successCriteria": [
+            "I can explain what a file extension tells the computer and classify the 11 files by type.",
+            "I can identify the drive, folders, file name and extension in a path.",
+            "I can explain how Windows and macOS organize drives and paths.",
+            "I can export, rename and move my PDF to the correct folder and drive, with four screenshots as evidence."
+          ],
+          "sourceHash": "08d464d6b37b7a4c14bc1dfadff2c92428e2f180a0d0961fc5699e341b4af5e8"
+        },
+        {
+          "id": "task-04-intro-to-coding",
+          "title": "Introduction to Coding",
+          "label": "Task 4",
+          "status": "soon",
+          "path": "comp-apps/task-04-intro-to-coding/task.html",
+          "learningTarget": "I can explain the basic ideas programmers use to give computers clear instructions.",
+          "successCriteria": [
+            "I can explain programming and name three languages with an example use for each.",
+            "I can write an everyday algorithm with clear steps in order.",
+            "I can identify the five flowchart symbols and explain what each one means.",
+            "I can explain what bugs are and why programmers debug their code.",
+            "I can explain binary 0 and 1 and connect them to OFF and ON."
+          ],
+          "sourceHash": "a5f99e75f3227881278fb7cba19f85400204cea9d3c4439d87cb99d81a2ff4f7"
+        },
+        {
+          "id": "task-02-youtube-tutorial",
+          "title": "Google Tools: Video Tutorial Project",
+          "label": "Task 2",
+          "status": "done",
+          "path": "comp-apps/task-02-youtube-tutorial/task.html",
+          "learningTarget": "I can use my assigned Google tool and teach someone else how to use it through a clear video tutorial.",
+          "successCriteria": [
+            "I can demonstrate every required skill for my assigned Google tool.",
+            "I can explain the steps with readable subtitles and no voice narration.",
+            "I can make a screen recording of at least three minutes without exposing private information.",
+            "I can publish the video as Unlisted and test that its link opens."
+          ],
+          "sourceHash": "1ff9a2541d62e4742c9b9a06781852c7162a4ed368ef41717c04d349e9316995"
+        },
+        {
+          "id": "task-01-digital-portfolio",
+          "title": "Digital Passport: Build Your Academic Portfolio",
+          "label": "Task 1",
+          "status": "done",
+          "path": "comp-apps/task-01-digital-portfolio/task.html",
+          "learningTarget": "I can design and publish an organized academic portfolio that communicates my digital identity responsibly.",
+          "successCriteria": [
+            "I can build my own Wix design from a blank template.",
+            "I can complete Home, My Tech Story and Travel Log with the required grade and subject sections.",
+            "I can make navigation, text and layout work on both desktop and mobile.",
+            "I can use appropriate personal information and test that my published website opens."
+          ],
+          "sourceHash": "921775e7eb49dd9b159d94750ec1fa63a9d7cf684f085353a097992a51bfbc2d"
+        },
+        {
+          "id": "syllabus-activity",
+          "title": "The Fine Print: Syllabus Activity",
+          "label": "Syllabus",
+          "status": "done",
+          "path": "comp-apps/syllabus-activity/fine-print.html",
+          "learningTarget": "I can use the Computer Applications syllabus to explain my responsibilities and the course expectations.",
+          "successCriteria": [
+            "I can find the answers to all ten syllabus questions independently.",
+            "I can explain the grading, attendance, punctuality and late-work rules using the syllabus.",
+            "I can identify the required material, course units and academic-honesty expectations."
+          ],
+          "sourceHash": "9848f3cc4410dd8973438f3db7ef88c10bddb4b62e7989cbb6bdd900d869b7fb"
+        }
+      ]
+    },
+    {
+      "id": "makerspace",
+      "name": "MakerSpace",
+      "assignments": [
+        {
+          "id": "task-04-echo-alert",
+          "title": "Echo Alert: Ultrasonic Sensor",
+          "label": "Task 4",
+          "status": "now",
+          "path": "makerspace/task-04-echo-alert/task.html",
+          "learningTarget": "I can use an ultrasonic sensor to measure distance and program an LED to respond to a nearby object.",
+          "successCriteria": [
+            "I can explain TRIG, ECHO and why the distance formula divides the travel time by two.",
+            "I can wire the four sensor pins and the LED correctly and read changing distances in the Serial Monitor.",
+            "I can use if/else to turn the LED on at my chosen threshold of 5–7 cm and off when the object moves away.",
+            "I can test my simulation before building, then explain my circuit and code using my own evidence."
+          ],
+          "sourceHash": "c27b8156b972221c5ab54fa83417e3be43daa0353edacb6dce33fa15f4edd4c5"
+        },
+        {
+          "id": "task-03-blinking-led",
+          "title": "Blinking LED: Arduino Challenge",
+          "label": "Task 3",
+          "status": "done",
+          "path": "makerspace/task-03-blinking-led/task.html",
+          "learningTarget": "I can build, program and explain Arduino circuits that control LEDs and respond to a push button.",
+          "successCriteria": [
+            "I can connect an LED with the correct polarity, resistor, digital pin and ground.",
+            "I can change the pin and timing in my code and explain how they affect the LED.",
+            "I can use breadboard connections to add and control a second LED.",
+            "I can read a push button and make the LED blink when it is pressed.",
+            "I can test each challenge in Tinkercad before building it, and explain my wiring and code."
+          ],
+          "sourceHash": "7ad89345b2322c9fabcd2c15b34d8b089fc09c3ee25005ccd4b695c8385e481a"
+        },
+        {
+          "id": "task-02-arduino-mini-lesson",
+          "title": "Teach the Class: Arduino Basics",
+          "label": "Task 2",
+          "status": "done",
+          "path": "makerspace/task-02-arduino-mini-lesson/task.html",
+          "learningTarget": "I can research an Arduino concept and teach it clearly using my own explanations and examples.",
+          "successCriteria": [
+            "I can explain my assigned topic using information from at least two reliable sources I have read.",
+            "I can teach the key vocabulary and show a useful visual, example or demonstration.",
+            "I can explain why this concept matters when using Arduino.",
+            "I can present a clear five-minute mini lesson and end with a question that checks understanding."
+          ],
+          "sourceHash": "8b1c25020075c903920401c3fa46ccfc13cb5ad7047f0a094b3bf687a4216309"
+        },
+        {
+          "id": "task-01-arduino-research",
+          "title": "Arduino Research Project",
+          "label": "Task 1",
+          "status": "done",
+          "path": "makerspace/task-01-arduino-research/task.html",
+          "learningTarget": "I can explain what Arduino can do and choose a realistic project based on its capabilities and limitations.",
+          "successCriteria": [
+            "I can explain the eight research topics in my own words and identify my sources.",
+            "I can compare Arduino with Raspberry Pi and explain when I would choose Arduino.",
+            "I can explore four projects, identify their materials and justify one realistic choice.",
+            "I can communicate my findings clearly in Google Slides and open the installed Arduino IDE."
+          ],
+          "sourceHash": "eb2cbe28c9701f5efac97ac51f321964f2b246ac58e49b6a56c9fcb7a14e350b"
+        },
+        {
+          "id": "syllabus-activity",
+          "title": "The Fine Print: Syllabus Activity",
+          "label": "Syllabus",
+          "status": "done",
+          "path": "makerspace/syllabus-activity/fine-print.html",
+          "learningTarget": "I can use the MakerSpace syllabus to explain course expectations and my responsibility for classroom equipment.",
+          "successCriteria": [
+            "I can find the answers to all ten syllabus questions independently.",
+            "I can explain how grades, attendance, punctuality and late work are handled.",
+            "I can identify the equipment-use rule and explain the consequences of misusing tools."
+          ],
+          "sourceHash": "a629644e264995633a0c17fd9453c23659ed60534fb680dd9c304baf081bec65"
+        }
+      ]
+    },
+    {
+      "id": "ap-cs-principles",
+      "name": "AP CS Principles",
+      "assignments": [
+        {
+          "id": "task-02-codehs-unit-1",
+          "title": "CodeHS Unit 1: Programming Foundations",
+          "label": "Task 2",
+          "status": "now",
+          "path": "ap-cs-principles/task-02-codehs-unit-1/task.html",
+          "learningTarget": "I can use precise instructions and algorithms to solve programming problems, then test and improve my solutions.",
+          "successCriteria": [
+            "I can explain how a program follows an algorithm and why instructions must be precise.",
+            "I can find an error, make a correction and test whether the solution works.",
+            "I can compare different ways to solve the same programming problem.",
+            "I can record the key ideas in my own words and show my progress in the notes and challenges documents."
+          ],
+          "sourceHash": "db999c44f74cdf73bf119d85524267619208e8068bcf4d5c1b7e39fabb9cc9ee"
+        },
+        {
+          "id": "task-01-what-runs-your-code",
+          "title": "What Runs Your Code?",
+          "label": "Task 1",
+          "status": "done",
+          "path": "ap-cs-principles/task-01-what-runs-your-code/task.html",
+          "learningTarget": "I can explain the roles of programming tools and use them to write and run a JavaScript program.",
+          "successCriteria": [
+            "I can distinguish an editor, a compiler and an interpreter in my own words.",
+            "I can identify the roles of VS Code, Terminal and Node.js in my workflow.",
+            "I can run hello.js with Node.js and show the command and result in a screenshot.",
+            "I can explain whether my workflow used a separate compile-first step."
+          ],
+          "sourceHash": "6a129f861c0fdb25c891a15effd48211c1c2273a62ec2aeac9a2642deee448b3"
+        }
+      ]
+    }
+  ]
+}</script>
+<script>
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id),KEY='ats-learning-board-selection-v1';
+  const STATUS={now:'Current',soon:'Upcoming',done:'Past activity'};
+  let catalog,projecting=false,selection={classroom:'',assignments:{}};
+  function validCatalog(data){
+    if(data?.schema!==1||!Array.isArray(data.classrooms)||!data.classrooms.length)throw Error('Invalid catalog');
+    const classes=new Set();
+    for(const c of data.classrooms){
+      if(!c||typeof c.id!=='string'||!/^[a-z0-9-]+$/.test(c.id)||classes.has(c.id)||typeof c.name!=='string'||!Array.isArray(c.assignments)||!c.assignments.length)throw Error('Invalid classroom');
+      classes.add(c.id);const ids=new Set();
+      for(const a of c.assignments){
+        if(!a||typeof a.id!=='string'||ids.has(a.id)||typeof a.title!=='string'||!a.title.trim()||typeof a.learningTarget!=='string'||!a.learningTarget.trim()||!Array.isArray(a.successCriteria)||!a.successCriteria.length||a.successCriteria.some(x=>typeof x!=='string'||!x.trim())||!['now','soon','done'].includes(a.status)||typeof a.label!=='string'||typeof a.path!=='string'||!new RegExp('^'+c.id+'/[a-z0-9-]+/[a-z0-9-]+\\.html$').test(a.path))throw Error('Invalid assignment');
+        ids.add(a.id);
+      }
+    }return data;
+  }
+  try{catalog=validCatalog(JSON.parse($('learning-catalog').textContent));}
+  catch{ $('board').hidden=true;$('loadError').hidden=false;$('classroom').disabled=true;$('assignment').disabled=true;$('projectBtn').disabled=true;return; }
+  const base=new URL(document.querySelector('meta[name="hub-root"]').content,location.href);
+  $('hubLink').href=new URL('index.html#resources',base).href;
+  try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved.classroom==='string'){selection.classroom=saved.classroom;for(const c of catalog.classrooms){const id=saved.assignments?.[c.id];if(typeof id==='string'&&c.assignments.some(a=>a.id===id))selection.assignments[c.id]=id;}}}catch{}
+  if(!catalog.classrooms.some(c=>c.id===selection.classroom))selection.classroom=catalog.classrooms[0].id;
+  const classroom=()=>catalog.classrooms.find(c=>c.id===selection.classroom);
+  function chooseDefault(c){return c.assignments.find(a=>a.status==='now')||c.assignments[0];}
+  function current(){const c=classroom();return c.assignments.find(a=>a.id===selection.assignments[c.id])||chooseDefault(c);}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(selection));$('selectionStatus').textContent='Remembers your last selection.';}catch{$('selectionStatus').textContent='Your selection lasts for this session.';}}
+  function fillAssignments(){const c=classroom(),select=$('assignment');select.replaceChildren();for(const a of c.assignments){const o=document.createElement('option');o.value=a.id;o.textContent=a.title+(a.status==='now'?' · Current':a.status==='soon'?' · Upcoming':'');select.appendChild(o);}const a=current();selection.assignments[c.id]=a.id;select.value=a.id;}
+  function render(){const c=classroom(),a=current();$('className').textContent=c.name;$('assignmentTitle').textContent=a.title;$('taskLabel').textContent=a.label;$('taskStatus').textContent=STATUS[a.status];$('taskStatus').classList.toggle('current',a.status==='now');$('target').textContent=a.learningTarget;$('criteria').replaceChildren();for(const text of a.successCriteria){const li=document.createElement('li'),span=document.createElement('span');span.textContent=text;li.appendChild(span);$('criteria').appendChild(li);}$('sourceLink').href=new URL(a.path,base).href;$('sourceLink').setAttribute('aria-label','Open assignment: '+a.title);}
+  function changeClass(id){if(!catalog.classrooms.some(c=>c.id===id))return;selection.classroom=id;$('classroom').value=id;fillAssignments();save();render();}
+  function changeAssignment(id){if(!classroom().assignments.some(a=>a.id===id))return;selection.assignments[selection.classroom]=id;$('assignment').value=id;save();render();}
+  async function project(){projecting=true;document.body.classList.add('projecting');$('board').focus({preventScroll:true});window.scrollTo(0,0);$('message').textContent='';if(document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen();}catch{/* Projection layout also works when native full screen is unavailable. */}}}
+  function back(){projecting=false;document.body.classList.remove('projecting');if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});$('assignment').focus();}
+  for(const c of catalog.classrooms){const option=document.createElement('option');option.value=c.id;option.textContent=c.name;$('classroom').appendChild(option);}
+  $('classroom').addEventListener('change',e=>changeClass(e.target.value));$('assignment').addEventListener('change',e=>changeAssignment(e.target.value));$('projectBtn').addEventListener('click',project);$('backBtn').addEventListener('click',back);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&projecting){e.preventDefault();back();}});
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&projecting)back();});
+  changeClass(selection.classroom);
+})();
+
+</script></body></html>

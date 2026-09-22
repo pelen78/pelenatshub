@@ -486,6 +486,14 @@ const GROUPS = {
     note: "// Tools for me to use in class, not tied to any one subject.",
     activities: [
       {
+        title: "Today's Class",
+        date: "Reference",
+        description: "Choose a classroom and assignment to project its Learning Target and Success Criteria, prepared from the detailed instructions in the hub.",
+        status: "done",
+        pinned: true,
+        link: "resources/today-class.html"
+      },
+      {
         title: "Name Shuffle",
         date: "Reference",
         description: "Randomly shuffle and pick names from my class groups, for calling on students, making teams, or picking who goes first.",
@@ -644,6 +652,35 @@ function saveLocal(){
   }catch(e){}
 }
 let DATA = loadLocal() || clone(GROUPS);
+/*__TODAY_CLASS_MIGRATION_START__*/
+// Add this resource once, preserving current browser drafts and existing resource edits.
+try {
+  const migrationKey='classhub-today-class-added-v1';
+  if(localStorage.getItem(migrationKey)!=='1'){
+    const resource=GROUPS.Resources.activities.find(a=>a.link==='resources/today-class.html');
+    DATA.Resources ||= {note:GROUPS.Resources.note,activities:[]};
+    if(resource && Array.isArray(DATA.Resources.activities)){
+      if(!DATA.Resources.activities.some(a=>a && a.link===resource.link))DATA.Resources.activities.unshift(clone(resource));
+      localStorage.setItem(LS_DATA,JSON.stringify(DATA));
+      localStorage.setItem(migrationKey,'1');
+    }
+  }
+} catch (_) {}
+/*__TODAY_CLASS_MIGRATION_END__*/
+/*__TODAY_CLASS_LEARNING_BOARD_START__*/
+// Update only the previous default description; preserve teacher edits and deleted resources.
+try {
+  const migrationKey='classhub-today-class-learning-board-v1';
+  if(localStorage.getItem(migrationKey)!=='1'){
+    const resource=DATA.Resources?.activities?.find(a=>a && a.link==='resources/today-class.html');
+    if(resource && resource.description==="Prepare and project today's goal, instructions, materials, and what to turn in. Switch between Start, Work, and Wrap-up, and save preparations for each class group."){
+      resource.description="Choose a classroom and assignment to project its Learning Target and Success Criteria, prepared from the detailed instructions in the hub.";
+      localStorage.setItem(LS_DATA,JSON.stringify(DATA));
+    }
+    localStorage.setItem(migrationKey,'1');
+  }
+} catch (_) {}
+/*__TODAY_CLASS_LEARNING_BOARD_END__*/
 
 function badge(a){
   if(a.pinned) return '<span class="badge pinned">📌 Reference</span>';
