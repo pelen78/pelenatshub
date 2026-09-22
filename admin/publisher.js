@@ -2,7 +2,7 @@ const $ = id => document.getElementById(id);
 let state, selectedId = null, dirty = false, busy = false, selectedHtml = null;
 let pendingPayload = null, pendingSignature = '', publication = null, pollTimer, pollCount = 0;
 const blobUrls = [];
-const statusNames = { now: 'En curso', soon: 'Próximamente', done: 'Finalizada' };
+const statusNames = { now: 'In progress', soon: 'Coming up', done: 'Finished' };
 
 function notice(message = '', error = false) {
   $('notice').textContent = message; $('notice').hidden = !message; $('notice').classList.toggle('error', error);
@@ -10,9 +10,9 @@ function notice(message = '', error = false) {
 async function api(path, options = {}) {
   const response = await fetch(`/api/admin/${path}`, { ...options, credentials: 'same-origin', headers: { 'X-Hub-Request': '1', ...options.headers } });
   const type = response.headers.get('Content-Type') || '';
-  if (!type.includes('application/json')) throw new Error('La sesión no está disponible. Vuelve a entrar al panel.');
+  if (!type.includes('application/json')) throw new Error('Your session is unavailable. Sign in to the dashboard again.');
   const data = await response.json();
-  if (!response.ok) { const error = new Error(data.error || 'No se pudo completar la operación.'); error.status = response.status; throw error; }
+  if (!response.ok) { const error = new Error(data.error || 'The operation could not be completed.'); error.status = response.status; throw error; }
   return data;
 }
 function lock(value) {
@@ -20,14 +20,14 @@ function lock(value) {
   $('fields').disabled = value || !state;
   for (const id of ['refresh', 'newActivity', 'confirmRemove']) $(id).disabled = value;
   $('activities').querySelectorAll('button').forEach(b => b.disabled = value);
-  $('publishButton').textContent = value ? 'Guardando en GitHub…' : selectedId ? 'Publicar cambios ↗' : 'Publicar actividad ↗';
+  $('publishButton').textContent = value ? 'Saving to GitHub…' : selectedId ? 'Publish changes ↗' : 'Publish assignment ↗';
 }
 async function loadState(preserve = true) {
   const previousSubject = $('subject').value;
   const next = await api('state'); state = next;
   $('account').textContent = next.email;
   const filterValue = $('filter').value;
-  $('subject').replaceChildren(); $('filter').replaceChildren(new Option('Todas las materias', ''));
+  $('subject').replaceChildren(); $('filter').replaceChildren(new Option('All subjects', ''));
   for (const name of Object.keys(next.groups)) { $('subject').add(new Option(name, name)); $('filter').add(new Option(name, name)); }
   if (Object.hasOwn(next.groups, previousSubject)) $('subject').value = previousSubject;
   $('filter').value = filterValue;
@@ -46,24 +46,24 @@ function renderList() {
       const button = document.createElement('button'); button.type = 'button'; button.className = 'activity';
       button.classList.toggle('selected', a.id === selectedId); button.disabled = busy;
       const meta = document.createElement('small'), dot = document.createElement('span'); dot.className = `dot ${a.status}`;
-      meta.append(dot, `${group} · ${a.pinned ? 'Referencia' : statusNames[a.status]}`);
+      meta.append(dot, `${group} · ${a.pinned ? 'Reference' : statusNames[a.status]}`);
       const title = document.createElement('strong'); title.textContent = a.title; button.append(meta, title);
       button.addEventListener('click', () => selectActivity(group, a)); $('activities').append(button); count++;
     }
   }
-  if (!count) { const empty = document.createElement('p'); empty.className = 'empty'; empty.textContent = 'No hay actividades que coincidan.'; $('activities').append(empty); }
+  if (!count) { const empty = document.createElement('p'); empty.className = 'empty'; empty.textContent = 'No matching assignments.'; $('activities').append(empty); }
 }
-function canLeave() { return !dirty || confirm('Hay cambios sin publicar. ¿Quieres descartarlos?'); }
+function canLeave() { return !dirty || confirm('You have unpublished changes. Discard them?'); }
 function resetFiles() {
   selectedHtml = null; $('htmlFile').value = ''; $('assetFiles').value = ''; $('assetFolder').value = '';
-  $('fileName').textContent = 'Sin archivo seleccionado'; $('clearFile').hidden = true; $('assetCount').textContent = '';
+  $('fileName').textContent = 'No file selected'; $('clearFile').hidden = true; $('assetCount').textContent = '';
   $('link').disabled = false;
 }
 function resetForm(check = true) {
   if (busy || (check && !canLeave())) return;
   const subject = $('subject').value; $('editorForm').reset(); if (subject) $('subject').value = subject;
   selectedId = null; resetFiles(); pendingPayload = null; dirty = false;
-  $('modeLabel').textContent = 'NUEVA ACTIVIDAD'; $('editorTitle').textContent = '¿Qué sigue en clase?';
+  $('modeLabel').textContent = 'NEW ASSIGNMENT'; $('editorTitle').textContent = 'What’s next in class?';
   $('removeButton').hidden = true; $('replaceHint').hidden = true; $('assetsSection').hidden = false;
   lock(false); renderList();
 }
@@ -72,7 +72,7 @@ function selectActivity(group, a) {
   resetForm(false); selectedId = a.id; $('subject').value = group;
   for (const key of ['title', 'description', 'date', 'status', 'link']) $(key).value = a[key] || '';
   $('pinned').checked = Boolean(a.pinned);
-  $('modeLabel').textContent = 'EDITAR ACTIVIDAD'; $('editorTitle').textContent = 'Todo listo para mejorarla.';
+  $('modeLabel').textContent = 'EDIT ASSIGNMENT'; $('editorTitle').textContent = 'Ready for an update.';
   $('removeButton').hidden = false;
   const local = /^(assignments|comp-apps|makerspace|ap-cs-principles|games|resources)\//.test(a.link || '');
   $('replaceHint').hidden = !local;
@@ -81,7 +81,7 @@ function selectActivity(group, a) {
 }
 async function chooseHtml(file) {
   if (!file) return;
-  if (!/\.html?$/i.test(file.name) || file.size > 5 * 1024 * 1024) { notice('Selecciona un HTML de hasta 5 MB.', true); return; }
+  if (!/\.html?$/i.test(file.name) || file.size > 5 * 1024 * 1024) { notice('Choose an HTML file up to 5 MB.', true); return; }
   selectedHtml = file; dirty = true; pendingPayload = null;
   $('fileName').textContent = `${file.name} · ${Math.ceil(file.size / 1024)} KB`;
   $('clearFile').hidden = false; $('link').disabled = true; notice();
@@ -98,24 +98,24 @@ async function toBase64(file) {
 }
 function validateLink(link) {
   if (!link) return;
-  if (/[\x00-\x20\\<>"']/.test(link) || (!/^https?:\/\//i.test(link) && !/^[\w.-]+(?:\/[\w.%~-]+)*(?:[?#][^\s]*)?$/.test(link))) throw new Error('Usa un enlace https:// o una ruta del hub; cambia los espacios por %20.');
+  if (/[\x00-\x20\\<>"']/.test(link) || (!/^https?:\/\//i.test(link) && !/^[\w.-]+(?:\/[\w.%~-]+)*(?:[?#][^\s]*)?$/.test(link))) throw new Error('Use an https:// link or a hub path; replace spaces with %20.');
 }
 async function formPayload() {
   const assets = assetSelection();
-  if (assets.length > 30 || assets.reduce((s, a) => s + a.file.size, selectedHtml?.size || 0) > 20 * 1024 * 1024) throw new Error('Usa como máximo 30 archivos y 20 MB en total.');
-  if (assets.length && !selectedHtml) throw new Error('Selecciona el HTML junto con sus archivos de apoyo.');
+  if (assets.length > 30 || assets.reduce((s, a) => s + a.file.size, selectedHtml?.size || 0) > 20 * 1024 * 1024) throw new Error('Use no more than 30 files and 20 MB total.');
+  if (assets.length && !selectedHtml) throw new Error('Choose the HTML file along with its supporting files.');
   const entry = Object.fromEntries(['title', 'description', 'date', 'status', 'link'].map(key => [key, $(key).value.trim()]));
   entry.pinned = $('pinned').checked; if (!selectedHtml) validateLink(entry.link);
-  if (!entry.title) throw new Error('Escribe un título para la actividad.');
+  if (!entry.title) throw new Error('Enter an assignment title.');
   if (selectedHtml) entry.link = '';
   const html = selectedHtml ? await selectedHtml.text() : null;
-  if (html !== null && !/<(?:!doctype\s+html|html|body)\b/i.test(html)) throw new Error('El archivo seleccionado no parece un documento HTML.');
+  if (html !== null && !/<(?:!doctype\s+html|html|body)\b/i.test(html)) throw new Error('The selected file does not appear to be an HTML document.');
   return { action: 'save', revision: state.revision, id: selectedId, group: $('subject').value, entry, html, assets: await Promise.all(assets.map(async a => ({ path: a.path, content: await toBase64(a.file) }))) };
 }
 async function submit(payload) {
   const signature = JSON.stringify(payload);
   if (!pendingPayload || signature !== pendingSignature) { pendingPayload = { ...payload, requestId: crypto.randomUUID() }; pendingSignature = signature; }
-  lock(true); notice('Guardando la actividad y sus archivos en GitHub…');
+  lock(true); notice('Saving the assignment and its files to GitHub…');
   try {
     const result = await api('publish', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pendingPayload) });
     const removing = payload.action === 'remove';
@@ -123,11 +123,11 @@ async function submit(payload) {
     try { sessionStorage.setItem('hub-publication', JSON.stringify(publication)); } catch {}
     pendingPayload = null; dirty = false; notice();
     $('publication').hidden = false; $('publishedLink').hidden = true; $('copyLink').hidden = true;
-    $('publicationText').textContent = 'Guardado en GitHub. Esperando la publicación en pelenlab.com…';
+    $('publicationText').textContent = 'Saved to GitHub. Waiting for publication on pelenlab.com…';
     $('checkPublication').hidden = true; startPolling();
-    try { await loadState(false); } catch { notice('Se guardó en GitHub, pero no se pudo recargar la lista. Pulsa Actualizar.', true); }
+    try { await loadState(false); } catch { notice('Saved to GitHub, but the list could not be reloaded. Select Refresh.', true); }
   } catch (error) {
-    notice(`${error.message}${error.status === 409 ? ' Pulsa Actualizar para cargar la versión reciente; tus campos no se borrarán.' : ''}`, true);
+    notice(`${error.message}${error.status === 409 ? ' Select Refresh to load the latest version; your form entries will be kept.' : ''}`, true);
   } finally { lock(false); }
 }
 function startPolling() { clearTimeout(pollTimer); pollCount = 0; checkPublication(); }
@@ -138,29 +138,29 @@ async function checkPublication() {
     const response = await fetch(`/publication.json?publication=${encodeURIComponent(publication.requestId)}&t=${Date.now()}`, { cache: 'no-store' });
     const marker = response.ok ? await response.json() : null;
     if (marker?.requestId === publication.requestId) {
-      $('publicationText').textContent = publication.removing ? 'Publicado: la actividad se retiró del hub.' : 'Publicado. El enlace de tu actividad está listo para Classroom.';
+      $('publicationText').textContent = publication.removing ? 'Published: the assignment has been removed from the hub.' : 'Published. Your assignment link is ready for Classroom.';
       const link = publication.removing ? '/' : publication.link || '/';
       $('publishedLink').href = link.startsWith('http') ? link : '/' + link.replace(/^\//, '');
-      $('publishedLink').textContent = publication.removing || !publication.link ? 'Ver el hub ↗' : 'Abrir actividad ↗';
+      $('publishedLink').textContent = publication.removing || !publication.link ? 'View hub ↗' : 'Open assignment ↗';
       $('publishedLink').hidden = false; $('copyLink').hidden = publication.removing || !publication.link;
       try { sessionStorage.removeItem('hub-publication'); } catch {}
       return;
     }
   } catch { /* A deployment can temporarily return a non-JSON response. */ }
   if (++pollCount >= 30) {
-    $('publicationText').textContent = 'Guardado en GitHub. Aún no se confirmó la publicación; revisa el despliegue de Cloudflare si tarda más de lo habitual.';
+    $('publicationText').textContent = 'Saved to GitHub. Publication is not confirmed yet; check the Cloudflare deployment if it takes longer than usual.';
     $('checkPublication').hidden = false; return;
   }
-  $('publicationText').textContent = 'Guardado en GitHub. Cloudflare está preparando la publicación…';
+  $('publicationText').textContent = 'Saved to GitHub. Cloudflare is preparing your publication…';
   pollTimer = setTimeout(checkPublication, 5000);
 }
 async function preview() {
   $('previewMeta').textContent = `${$('subject').value} · ${$('date').value || 'TBA'} · ${statusNames[$('status').value]}`;
-  $('previewTitle').textContent = $('title').value || 'Título de tu actividad';
+  $('previewTitle').textContent = $('title').value || 'Your assignment title';
   $('previewDescription').textContent = $('description').value;
   blobUrls.splice(0).forEach(URL.revokeObjectURL);
   $('previewFrame').hidden = !selectedHtml;
-  $('previewNote').textContent = selectedHtml ? 'Vista aislada. Algunas funciones externas no se ejecutan aquí; revisa también los archivos de apoyo antes de publicar.' : 'Vista de la tarjeta. Selecciona un HTML para revisar también su contenido.';
+  $('previewNote').textContent = selectedHtml ? 'Sandboxed preview. Some external features are unavailable here; check the supporting files before publishing.' : 'Card preview. Choose an HTML file to preview its contents too.';
   if (selectedHtml) {
     const doc = new DOMParser().parseFromString(await selectedHtml.text(), 'text/html');
     doc.querySelectorAll('base, meta[http-equiv="refresh" i]').forEach(el => el.remove());
@@ -178,11 +178,11 @@ async function preview() {
 $('editorForm').addEventListener('input', () => { dirty = true; pendingPayload = null; });
 $('editorForm').addEventListener('submit', async event => { event.preventDefault(); if (busy || !state) return; lock(true); try { await submit(await formPayload()); } catch (error) { notice(error.message, true); lock(false); } });
 $('newActivity').onclick = () => { resetForm(); $('title').focus(); };
-$('refresh').onclick = async () => { if (busy) return; lock(true); try { await loadState(); pendingPayload = null; notice('Lista actualizada. Los datos de tu formulario se conservaron.'); } catch (error) { notice(error.message, true); } finally { lock(false); } };
+$('refresh').onclick = async () => { if (busy) return; lock(true); try { await loadState(); pendingPayload = null; notice('List refreshed. Your form entries have been kept.'); } catch (error) { notice(error.message, true); } finally { lock(false); } };
 $('search').oninput = renderList; $('filter').onchange = renderList;
 $('htmlFile').onchange = () => chooseHtml($('htmlFile').files[0]);
 $('clearFile').onclick = () => { resetFiles(); dirty = true; pendingPayload = null; };
-for (const id of ['assetFiles', 'assetFolder']) $(id).onchange = () => { $('assetCount').textContent = `${assetSelection().length} archivos de apoyo seleccionados`; dirty = true; pendingPayload = null; };
+for (const id of ['assetFiles', 'assetFolder']) $(id).onchange = () => { $('assetCount').textContent = `${assetSelection().length} supporting files selected`; dirty = true; pendingPayload = null; };
 const drop = document.querySelector('.upload');
 drop.addEventListener('dragover', e => { e.preventDefault(); if (!busy && state) drop.classList.add('dragging'); });
 drop.addEventListener('dragleave', () => drop.classList.remove('dragging'));
@@ -195,8 +195,8 @@ $('confirmRemove').onclick = () => { $('removeDialog').close(); submit({ action:
 $('checkPublication').onclick = startPolling;
 window.addEventListener('beforeunload', e => { if (dirty || busy) { e.preventDefault(); e.returnValue = ''; } });
 try { publication = JSON.parse(sessionStorage.getItem('hub-publication') || 'null'); if (publication) startPolling(); } catch {}
-loadState(false).catch(error => { notice(error.message, true); $('activities').textContent = 'No se pudo cargar la lista.'; });
+loadState(false).catch(error => { notice(error.message, true); $('activities').textContent = 'The list could not be loaded.'; });
 
-$('copyLink').onclick = async () => { try { await navigator.clipboard.writeText($('publishedLink').href); $('copyLink').textContent = 'Enlace copiado ✓'; setTimeout(() => $('copyLink').textContent = 'Copiar enlace para Classroom', 2500); } catch { notice('No se pudo copiar automáticamente. Usa el enlace Abrir actividad.', true); } };
+$('copyLink').onclick = async () => { try { await navigator.clipboard.writeText($('publishedLink').href); $('copyLink').textContent = 'Link copied ✓'; setTimeout(() => $('copyLink').textContent = 'Copy link for Classroom', 2500); } catch { notice('The link could not be copied automatically. Use Open assignment instead.', true); } };
 
 $('previewDialog').addEventListener('close', () => { $('previewFrame').srcdoc = ''; blobUrls.splice(0).forEach(URL.revokeObjectURL); });

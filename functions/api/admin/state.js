@@ -4,5 +4,5 @@ export async function onRequestGet({ env, data }) {
   try {
     const state = await github(env).snapshot();
     return json({ groups: state.groups, revision: state.revision, email: data.identity.email });
-  } catch (error) { return json({ error: error.status ? error.message : 'No se pudo leer GitHub. Intenta nuevamente.' }, error.status || 502); }
+  } catch (error) { return json({ error: error.status ? error.message : 'GitHub could not be read. Try again.' }, error.status || 502); }
 }

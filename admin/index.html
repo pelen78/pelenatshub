@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Publicar actividades · Pelen Class Hub</title>
+<title>Publish assignments · Pelen Class Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/publisher.css">
 <script type="module" src="/admin/publisher.js"></script>
 </head>
 <body>
-<header class="masthead"><a class="brand" href="/">PELEN / CLASS HUB<span>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</span></a><div class="account"><span id="account">Panel de profesor</span><a href="/cdn-cgi/access/logout">Salir ↗</a></div></header>
+<header class="masthead"><a class="brand" href="/">PELEN / CLASS HUB<span>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</span></a><div class="account"><span id="account">Teacher dashboard</span><a href="/cdn-cgi/access/logout">Sign out ↗</a></div></header>
 <main>
-  <div class="heading"><div><p class="eyebrow">TU ESPACIO DE PUBLICACIÓN</p><h1>Una actividad más.<span>Todo en su lugar.</span></h1><p class="intro">Agrega tu assignment al portafolio y lleva su enlace a Classroom.</p></div><a class="hub-link" href="/" target="_blank" rel="noopener">Ver el hub ↗</a></div>
+  <div class="heading"><div><p class="eyebrow">YOUR PUBLISHING SPACE</p><h1>One more assignment.<span>Everything in place.</span></h1><p class="intro">Add an assignment to your portfolio and share its link in Classroom.</p></div><a class="hub-link" href="/" target="_blank" rel="noopener">View hub ↗</a></div>
   <div id="notice" role="status" aria-live="polite" hidden></div>
-  <div id="publication" class="publication" role="status" aria-live="polite" hidden><span id="publicationText"></span><a id="publishedLink" hidden target="_blank" rel="noopener">Abrir actividad ↗</a><button id="copyLink" class="secondary" hidden>Copiar enlace para Classroom</button><button id="checkPublication" class="text-button" hidden>Comprobar de nuevo</button></div>
+  <div id="publication" class="publication" role="status" aria-live="polite" hidden><span id="publicationText"></span><a id="publishedLink" hidden target="_blank" rel="noopener">Open assignment ↗</a><button id="copyLink" class="secondary" hidden>Copy link for Classroom</button><button id="checkPublication" class="text-button" hidden>Check again</button></div>
   <div class="workspace">
-    <aside class="catalog"><div class="catalog-title"><h2>Actividades</h2><button id="refresh" class="text-button" type="button">Actualizar</button></div><label class="sr-only" for="search">Buscar actividades</label><input id="search" type="search" placeholder="Buscar una actividad…"><label class="sr-only" for="filter">Filtrar por materia</label><select id="filter"><option value="">Todas las materias</option></select><div id="activities" class="activities"><p class="empty">Cargando tus actividades…</p></div></aside>
-    <section class="editor"><div class="editor-heading"><div><p class="eyebrow" id="modeLabel">NUEVA ACTIVIDAD</p><h2 id="editorTitle">¿Qué sigue en clase?</h2></div><button id="newActivity" class="secondary" type="button">+ ADD</button></div>
+    <aside class="catalog"><div class="catalog-title"><h2>Assignments</h2><button id="refresh" class="text-button" type="button">Refresh</button></div><label class="sr-only" for="search">Search assignments</label><input id="search" type="search" placeholder="Search assignments…"><label class="sr-only" for="filter">Filter by subject</label><select id="filter"><option value="">All subjects</option></select><div id="activities" class="activities"><p class="empty">Loading your assignments…</p></div></aside>
+    <section class="editor"><div class="editor-heading"><div><p class="eyebrow" id="modeLabel">NEW ASSIGNMENT</p><h2 id="editorTitle">What’s next in class?</h2></div><button id="newActivity" class="secondary" type="button">+ ADD</button></div>
       <form id="editorForm">
         <fieldset id="fields" disabled>
-          <div class="grid"><label>Materia<select id="subject" required></select></label><label>Estado<select id="status"><option value="now">Now · En curso</option><option value="soon">Coming up · Próximamente</option><option value="done">Finished · Finalizada</option></select></label></div>
-          <label>Título<input id="title" maxlength="180" placeholder="Ej. Build your first circuit" required></label>
-          <label>Descripción<textarea id="description" rows="3" maxlength="2500" placeholder="Una o dos líneas para explicar la actividad"></textarea></label>
-          <div class="grid"><label>Fecha / semana<input id="date" maxlength="120" placeholder="Task 5 · Week 4"></label><label class="check"><input id="pinned" type="checkbox"> Fijar como referencia</label></div>
-          <div class="upload"><div class="upload-top"><span class="upload-icon" aria-hidden="true">↑</span><div><h3>El HTML de tu assignment</h3><p>Arrastra tu archivo aquí o selecciónalo. Máximo 5 MB.</p></div></div><label class="file-label">Seleccionar HTML<input id="htmlFile" type="file" accept=".html,.htm,text/html"></label><div class="file-info"><span id="fileName">Sin archivo seleccionado</span><button id="clearFile" class="text-button" type="button" hidden>Quitar archivo</button></div></div>
-          <p class="hint" id="replaceHint" hidden>Al subir un HTML nuevo se conservará el enlace actual.</p>
-          <details id="assetsSection"><summary>Mi HTML usa imágenes u otros archivos locales</summary><p class="hint">Adjunta los archivos que necesita tu HTML. Para conservar subcarpetas, selecciona la carpeta que los contiene. Máximo 30 archivos y 20 MB en total.</p><label>Archivos de apoyo<input id="assetFiles" type="file" multiple accept=".png,.jpg,.jpeg,.gif,.webp,.svg,.ico,.css,.js,.json,.pdf,.mp3,.mp4,.woff,.woff2,.txt"></label><label>O una carpeta de archivos<input id="assetFolder" type="file" webkitdirectory multiple></label><p class="hint" id="assetCount"></p></details>
-          <label id="linkLabel">Enlace de la actividad <span class="optional">Si no vas a subir un HTML</span><input id="link" type="text" maxlength="2000" placeholder="https://… o una ruta del hub"></label>
-          <div class="actions"><button id="previewButton" class="secondary" type="button">Vista previa</button><button id="publishButton" class="primary" type="submit">Publicar actividad <span aria-hidden="true">↗</span></button></div>
-          <p class="hint">Se guardará en GitHub y después se actualizará pelenlab.com.</p>
-          <button id="removeButton" class="text-button danger" type="button" hidden>Retirar actividad del hub</button>
+          <div class="grid"><label>Subject<select id="subject" required></select></label><label>Status<select id="status"><option value="now">Now · In progress</option><option value="soon">Coming up</option><option value="done">Finished</option></select></label></div>
+          <label>Title<input id="title" maxlength="180" placeholder="e.g. Build your first circuit" required></label>
+          <label>Description<textarea id="description" rows="3" maxlength="2500" placeholder="One or two lines about the assignment"></textarea></label>
+          <div class="grid"><label>Date / week<input id="date" maxlength="120" placeholder="Task 5 · Week 4"></label><label class="check"><input id="pinned" type="checkbox"> Pin as a reference</label></div>
+          <div class="upload"><div class="upload-top"><span class="upload-icon" aria-hidden="true">↑</span><div><h3>Your assignment HTML</h3><p>Drop your file here or choose it below. Maximum 5 MB.</p></div></div><label class="file-label">Choose HTML<input id="htmlFile" type="file" accept=".html,.htm,text/html"></label><div class="file-info"><span id="fileName">No file selected</span><button id="clearFile" class="text-button" type="button" hidden>Remove file</button></div></div>
+          <p class="hint" id="replaceHint" hidden>Uploading a replacement HTML will keep the current link.</p>
+          <details id="assetsSection"><summary>My HTML uses images or other local files</summary><p class="hint">Attach the files your HTML needs. Choose their folder to preserve subfolders. Maximum 30 files and 20 MB total.</p><label>Supporting files<input id="assetFiles" type="file" multiple accept=".png,.jpg,.jpeg,.gif,.webp,.svg,.ico,.css,.js,.json,.pdf,.mp3,.mp4,.woff,.woff2,.txt"></label><label>Or choose a folder<input id="assetFolder" type="file" webkitdirectory multiple></label><p class="hint" id="assetCount"></p></details>
+          <label id="linkLabel">Assignment link <span class="optional">If you are not uploading HTML</span><input id="link" type="text" maxlength="2000" placeholder="https://… or a hub path"></label>
+          <div class="actions"><button id="previewButton" class="secondary" type="button">Preview</button><button id="publishButton" class="primary" type="submit">Publish assignment <span aria-hidden="true">↗</span></button></div>
+          <p class="hint">Your changes will be saved to GitHub, then published on pelenlab.com.</p>
+          <button id="removeButton" class="text-button danger" type="button" hidden>Remove assignment from hub</button>
         </fieldset>
       </form>
     </section>
   </div>
-  <footer>PELEN CLASS HUB <span>Preparar · Revisar · Compartir</span></footer>
+  <footer>PELEN CLASS HUB <span>Prepare · Preview · Share</span></footer>
 </main>
-<dialog id="previewDialog"><div class="dialog-heading"><h2>Así se verá tu actividad</h2><button id="closePreview" class="secondary">Cerrar</button></div><article class="preview-card"><span id="previewMeta" class="eyebrow"></span><h3 id="previewTitle"></h3><p id="previewDescription"></p></article><p id="previewNote" class="hint"></p><iframe id="previewFrame" title="Vista previa aislada del HTML" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></dialog>
-<dialog id="removeDialog"><h2>¿Retirar esta actividad?</h2><p id="removeTitle"></p><p>Su tarjeta dejará de aparecer en el hub. El archivo HTML seguirá disponible en su enlace actual.</p><div class="actions"><button id="cancelRemove" class="secondary">Cancelar</button><button id="confirmRemove" class="primary">Retirar y publicar</button></div></dialog>
+<dialog id="previewDialog"><div class="dialog-heading"><h2>Preview your assignment</h2><button id="closePreview" class="secondary">Close</button></div><article class="preview-card"><span id="previewMeta" class="eyebrow"></span><h3 id="previewTitle"></h3><p id="previewDescription"></p></article><p id="previewNote" class="hint"></p><iframe id="previewFrame" title="Sandboxed HTML preview" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></dialog>
+<dialog id="removeDialog"><h2>Remove this assignment?</h2><p id="removeTitle"></p><p>Its card will be removed from the hub. The HTML file will remain available at its current link.</p><div class="actions"><button id="cancelRemove" class="secondary">Cancel</button><button id="confirmRemove" class="primary">Remove and publish</button></div></dialog>
 </body></html>

@@ -17,5 +17,5 @@ export async function onRequestPost({ request, env }) {
     const publication = preparePublication(state, input);
     const result = await repo.commitFiles(state, publication.files, publication.message);
     return json({ ...result, requestId: input.requestId, link: publication.entry.link, title: publication.entry.title }, 201);
-  } catch (error) { return json({ error: error.status ? error.message : 'La conexión se interrumpió. Reintenta para comprobar si GitHub recibió la publicación.' }, error.status || 502); }
+  } catch (error) { return json({ error: error.status ? error.message : 'The connection was interrupted. Try again to check whether GitHub received the publication.' }, error.status || 502); }
 }

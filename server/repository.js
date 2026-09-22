@@ -9,7 +9,7 @@ export function parseGroups(source) {
     const value = JSON.parse(section.match(/const GROUPS =\s*([\s\S]*);\s*\/\*__GROUPS_END__/)[1]);
     if (!value || typeof value !== 'object' || Array.isArray(value) || !Object.values(value).every(g => Array.isArray(g.activities))) throw new Error();
     return value;
-  } catch { throw new HubError('El formato del hub cambió. No se modificó ningún archivo publicado.', 409); }
+  } catch { throw new HubError('The hub format changed. No published files were modified.', 409); }
 }
 
 export function writeGroups(source, groups) {
@@ -22,7 +22,7 @@ export function github(env, fetcher = fetch) {
   const owner = env.GITHUB_OWNER || 'pelen78';
   const repo = env.GITHUB_REPO || 'pelenatshub';
   const branch = env.GITHUB_BRANCH || 'main';
-  if (![owner, repo].every(v => /^[\w.-]+$/.test(v))) throw new HubError('Repositorio mal configurado.', 503);
+  if (![owner, repo].every(v => /^[\w.-]+$/.test(v))) throw new HubError('The repository configuration is invalid.', 503);
   const root = `https://api.github.com/repos/${owner}/${repo}`;
   async function call(path, method = 'GET', body) {
     const response = await fetcher(root + path, {
@@ -30,8 +30,8 @@ export function github(env, fetcher = fetch) {
       ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(25000)
     });
     if (!response.ok) {
-      if (response.status === 409 || response.status === 422) throw new HubError('Hay cambios nuevos en GitHub. Recarga la lista antes de publicar otra vez.', 409);
-      throw new HubError(response.status === 401 || response.status === 403 ? 'GitHub no autorizó la operación. Revisa el permiso Contents: Read and write del token.' : 'No se pudo completar la conexión con GitHub. Intenta nuevamente.', 502);
+      if (response.status === 409 || response.status === 422) throw new HubError('There are new changes on GitHub. Refresh the list before publishing again.', 409);
+      throw new HubError(response.status === 401 || response.status === 403 ? 'GitHub denied the operation. Check that the token has Contents: Read and write permission.' : 'The connection to GitHub could not be completed. Try again.', 502);
     }
     return response.json();
   }
@@ -40,9 +40,9 @@ export function github(env, fetcher = fetch) {
     const revision = ref.object.sha;
     const commit = await call(`/git/commits/${revision}`);
     const tree = await call(`/git/trees/${commit.tree.sha}?recursive=1`);
-    if (tree.truncated) throw new HubError('El repositorio excede el tamaño compatible con este panel.', 409);
+    if (tree.truncated) throw new HubError('The repository exceeds the size supported by this dashboard.', 409);
     const index = tree.tree.find(f => f.path === 'index.html' && f.type === 'blob');
-    if (!index) throw new HubError('No se encontró index.html en el repositorio.', 409);
+    if (!index) throw new HubError('The repository does not contain index.html.', 409);
     const blob = await call(`/git/blobs/${index.sha}`);
     const source = new TextDecoder().decode(Uint8Array.from(atob(blob.content.replace(/\s/g, '')), c => c.charCodeAt(0)));
     return { revision, baseTree: commit.tree.sha, files: tree.tree, source, groups: parseGroups(source) };
