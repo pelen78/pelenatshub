@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Asteroids</title>
+<title>Asteroids · ATS Class Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -76,17 +76,39 @@
 
   footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
   footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  [hidden]{display:none!important}
+  select{font:inherit;min-height:44px;padding:8px 10px;border:1px solid #b8c6dd;border-radius:8px;background:#fff;color:var(--navy);max-width:100%}
+  select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .controls{justify-content:flex-start}.flight-option{display:flex;gap:10px;align-items:center;margin-right:auto;color:var(--navy-soft);font-size:15px;font-weight:700}
+  .flight-strip{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:var(--navy-soft);font-size:13px}#flightStatus{color:var(--navy);font-weight:800}
+  .touch{align-items:center}.touch .pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,52px);gap:8px}.touch .pad button{width:64px;height:52px;border-radius:10px;font-size:24px}.pad [data-k="up"]{grid-column:2}.pad [data-k="left"]{grid-row:2;grid-column:1}.pad [data-k="down"]{grid-row:2;grid-column:2}.pad [data-k="right"]{grid-row:2;grid-column:3}.touch button.fire{width:124px;height:112px;border-radius:12px;padding:8px}.touch button.on{box-shadow:inset 0 0 0 3px var(--gold)}
+  details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;color:var(--navy-soft)}summary{cursor:pointer;font-size:15px;font-weight:700}
+  dialog{width:460px;max-width:calc(100vw - 24px);padding:24px;border:1px solid var(--line);border-radius:14px;color:var(--navy);background:white}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:25px;margin:0}dialog p{font-size:15px;color:var(--navy-soft)}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+  .board{max-width:min(100%,calc((100svh - 320px)*4/3));min-width:300px;margin:auto}.overlay{overflow:auto;justify-content:safe center}
+  @media(max-width:700px){body{padding:18px 12px 40px}.card{padding:14px}.board{max-width:100%;min-width:0}.touch{display:flex}.touch .pad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,46px);gap:6px}.touch .pad button{width:48px;height:46px}.touch button.fire{width:100px;height:98px}.flight-strip{font-size:11px}.flight-option{flex-wrap:wrap;gap:6px}.controls{gap:8px}.controls button{min-height:44px;padding:8px 12px}footer{margin:28px -12px -40px}.overlay{padding:14px}.overlay p{font-size:14px}.overlay h2{font-size:27px}.scores{grid-template-columns:repeat(4,1fr);gap:6px}.score{padding:7px}.score .lbl{font-size:10px}.score .val{font-size:23px}}
+
+  /* Shared arcade heading: matches Dino Run, Tetris and Space Invaders. */
+  .hub-header{max-width:860px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;gap:14px;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.06em}
+  .hub-header small{display:block;font-size:10px;color:var(--navy-soft);letter-spacing:0}
+  .hub-header a{color:var(--navy);text-decoration:none;border:1px solid #b8c6dd;border-radius:5px;padding:6px 10px;white-space:nowrap}
+  .hub-header a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .masthead{display:flex;align-items:center;gap:16px;margin-bottom:18px;font-family:'Avenir Next',Avenir,'Trebuchet MS',sans-serif}
+  .edition{display:block;font:11px/1.5 ui-monospace,monospace;letter-spacing:.13em;color:var(--navy-soft);margin-bottom:5px}
+  .masthead h1{font-size:32px;font-weight:900;letter-spacing:-1px;line-height:1.1;margin:0}
+  .title-dot{color:var(--gold)}
+  .masthead p{font-size:14px;color:var(--navy-soft);margin:6px 0 0}
+  @media(max-width:700px){.masthead{margin-bottom:14px}.masthead h1{font-size:28px}.edition{font-size:10px}.hub-header small{font-size:9px}}
+  @media(max-width:390px){.edition{letter-spacing:.05em}.masthead p{font-size:13px}.hub-header{font-size:10px}}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Asteroids</h1>
-  <p>Fly your ship, blast the asteroids, and stay alive. Rocks split into smaller, faster pieces.</p>
-</header>
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a href="../index.html">← Class Hub</a></header>
 
 <div class="game">
   <section class="card">
+    <div class="masthead"><div><span class="edition">DEEP SPACE / ARCADE 05</span><h1>ASTEROIDS<span class="title-dot">.</span></h1><p>Fly your ship, blast the asteroids, and stay alive.</p></div></div>
     <div class="scores">
       <div class="score"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
       <div class="score"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
@@ -94,7 +116,7 @@
       <div class="score"><span class="lbl">LEVEL</span><span class="val" id="level">1</span></div>
     </div>
 
-    <div class="board" id="board">
+    <div class="board" id="board" tabindex="-1">
       <canvas id="cv" width="800" height="600" aria-label="Asteroids game board" role="img"></canvas>
       <div class="banner" id="banner"></div>
       <div class="overlay" id="overlay">
@@ -104,18 +126,20 @@
       </div>
     </div>
 
+    <div class="flight-strip"><span id="flightStatus">Ready to fly</span><span id="flightHint">Release the arrows to slow down</span></div>
     <div class="touch" aria-label="On-screen controls">
-      <div class="grp"><button type="button" data-k="left" aria-label="Turn left">◀</button><button type="button" data-k="right" aria-label="Turn right">▶</button></div>
-      <div class="grp"><button type="button" data-k="up" aria-label="Thrust">Thrust</button><button type="button" class="fire" data-k="fire" aria-label="Fire">Fire</button></div>
+      <div class="pad" aria-label="Direction controls"><button type="button" data-k="up" aria-label="Move up">↑</button><button type="button" data-k="left" aria-label="Move left">←</button><button type="button" data-k="down" aria-label="Move down">↓</button><button type="button" data-k="right" aria-label="Move right">→</button></div>
+      <button type="button" class="fire" data-k="fire" aria-label="Hold to fire">Hold to fire</button>
     </div>
-
     <div class="controls">
-      <button class="quiet" id="pauseBtn" type="button">Pause</button>
-      <button class="quiet" id="restartBtn" type="button">New game</button>
+      <label class="flight-option" for="flightMode">Controls <select id="flightMode"><option value="direct">Direct · move with arrows</option><option value="classic">Classic · turn & thrust</option></select></label>
+      <button class="quiet" id="pauseBtn" type="button">Pause</button><button class="quiet" id="restartBtn" type="button">New game</button>
     </div>
-    <p class="hint">Controls: ◀ ▶ (or A D) turn, ▲ (or W) thrust, Space fire, P pause. You wrap around the edges. After a crash you get a moment of protection. Every 5,000 points earns an extra life.</p>
+    <p class="hint" id="controlHelp">Arrow keys or WASD move the ship in that direction. It aims where you move. Release to slow down; hold Space to fire. P pauses.</p>
+    <details><summary>Flight tips & game rules</summary><p class="hint">Direct controls: arrows or WASD move in screen directions, including diagonals. The ship turns to aim in your last direction. Hold Space to fire continuously.</p><p class="hint">Classic controls: ← → / A D turn, ↑ / W accelerates, ↓ / S brakes. Releasing thrust slows the ship gradually. Keep moving and shooting together.</p><p class="hint">You wrap around screen edges. A visible shield protects you after a crash. Every 5,000 points earns an extra life. Records are separate for Direct and Classic; your old record remains in Classic.</p></details><p class="hint" id="storageNote" hidden></p>
   </section>
 </div>
+<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new game?</h2><p>Your current run will end. Your saved records stay.</p><div class="dialog-actions"><button class="quiet" id="cancelRestart">Keep this run</button><button class="big" id="confirmRestart">New game</button></div></dialog>
 
 <footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
@@ -125,8 +149,9 @@
   const W = 800, H = 600, TAU = Math.PI * 2;
   const STEP = 1 / 60;
 
-  const SHIP_R = 12, TURN = 4.2, THRUST = 280, DRAG = 0.55, MAX_V = 430;
-  const BULLET_V = 560, BULLET_LIFE = 0.95, MAX_BULLETS = 4, FIRE_GAP = 0.22;
+  const SHIP_R = 12, TURN = 3.2, THRUST = 520, DRAG = 0.12, MAX_V = 340;
+  const DIRECT_V = 300, DIRECT_RESPONSE = 12, DIRECT_STOP = 15, AIM_TURN = 12, BRAKE = 8;
+  const BULLET_V = 620, BULLET_LIFE = 0.95, MAX_BULLETS = 8, FIRE_GAP = 0.16;
   const SIZES = { 3: { r: 46, pts: 20 }, 2: { r: 26, pts: 50 }, 1: { r: 14, pts: 100 } };
   const INVULN = 2.2, RESPAWN_DELAY = 1.4, EXTRA_LIFE_EVERY = 5000;
 
@@ -137,13 +162,29 @@
 
   let state, ship, asteroids, bullets, particles, score, best, lives, level, nextLife;
   let respawnIn, levelPause, fireCd, newBest = false;
-  const keys = { left: false, right: false, up: false, fire: false };
+  const keys = { left: false, right: false, up: false, down: false, fire: false };
+  const sources=Object.fromEntries(Object.keys(keys).map(k=>[k,new Set()]));
+  function setInput(k,token,on){if(!sources[k])return;on?sources[k].add(token):sources[k].delete(token);keys[k]=sources[k].size>0;document.querySelectorAll('.touch button').forEach(b=>b.classList.toggle('on',keys[b.dataset.k]));}
+  function clearInputs(){for(const k of Object.keys(keys)){sources[k].clear();keys[k]=false;}document.querySelectorAll('.touch button').forEach(b=>b.classList.remove('on'));}
+  let flightMode='direct',pendingMode=null;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // state: ready | running | paused | over
 
   const rand = (a, b) => a + Math.random() * (b - a);
-  const BEST_KEY = 'hub-asteroids-best';
-  const loadBest = () => { try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch (_) { return 0; } };
-  const saveBest = v => { try { localStorage.setItem(BEST_KEY, String(v)); } catch (_) {} };
+  const memory=Object.create(null);let storageOK=true;
+  function read(k){try{return localStorage.getItem(k)??memory[k]??null;}catch{storageOK=false;return memory[k]??null;}}
+  function write(k,v){memory[k]=String(v);try{localStorage.setItem(k,String(v));}catch{storageOK=false;}}
+  const bestKey=()=>flightMode==='classic'?'hub-asteroids-best':'hub-asteroids-best-direct-v2';
+  const loadBest=()=>{const v=Number(read(bestKey()));return Number.isFinite(v)&&v>=0?v:0;};
+  const saveBest=v=>write(bestKey(),v);
+  $('flightMode').value=read('hub-asteroids-controls-v2')==='classic'?'classic':'direct';
+  function controlLabels(){
+    const direct=flightMode==='direct';
+    $('controlHelp').textContent=direct?'Arrow keys or WASD move the ship in that direction. It aims where you move. Release to slow down; hold Space to fire. P pauses.':'← → / A D turn. Hold ↑ / W to accelerate; ↓ / S brakes. Hold Space to fire. P pauses.';
+    $('flightHint').textContent=direct?'Release the arrows to slow down':'↓ / S brakes · ↑ / W accelerates';
+    const labels=direct?{left:'Move left',right:'Move right',up:'Move up',down:'Move down',fire:'Hold to fire'}:{left:'Turn left',right:'Turn right',up:'Thrust',down:'Brake',fire:'Hold to fire'};
+    document.querySelectorAll('.touch button').forEach(b=>{b.setAttribute('aria-label',labels[b.dataset.k]);if(['up','down'].includes(b.dataset.k))b.textContent=direct?(b.dataset.k==='up'?'↑':'↓'):(b.dataset.k==='up'?'Thrust':'Brake');b.style.fontSize=!direct&&['up','down'].includes(b.dataset.k)?'13px':'';});
+  }
 
   // static star field, drawn once per frame behind everything
   const stars = Array.from({ length: 70 }, () => ({ x: rand(0, W), y: rand(0, H), s: Math.random() < 0.15 ? 2 : 1, a: rand(0.25, 0.8) }));
@@ -153,11 +194,13 @@
     return { x: W / 2, y: H / 2, vx: 0, vy: 0, a: -Math.PI / 2, invuln: INVULN, alive: true };
   }
   function reset() {
+    flightMode=$('flightMode').value==='classic'?'classic':'direct';write('hub-asteroids-controls-v2',flightMode);controlLabels();
+    clearTimeout(bannerT);$('banner').classList.remove('on');
     score = 0; lives = 3; level = 1; nextLife = EXTRA_LIFE_EVERY;
     best = loadBest(); newBest = false;
     ship = newShip(); bullets = []; particles = []; asteroids = [];
     respawnIn = 0; levelPause = 0; fireCd = 0;
-    Object.keys(keys).forEach(k => keys[k] = false);
+    clearInputs();
     spawnWave();
     setState('ready');
     hud(true);
@@ -174,7 +217,7 @@
     asteroids = [];
     for (let i = 0; i < count; i++) {
       let x, y;
-      do { x = rand(0, W); y = rand(0, H); } while (Math.hypot(x - ship.x, y - ship.y) < 190);
+      do { x = rand(0, W); y = rand(0, H); } while (distance({x,y},ship) < 190);
       asteroids.push(makeAsteroid(x, y, 3, scale));
     }
   }
@@ -182,6 +225,9 @@
   /* ---------- HUD + overlay ---------- */
   const hudCache = {};
   function hud(force) {
+    $('storageNote').hidden=storageOK;$('storageNote').textContent='Saving unavailable — records last for this session.';
+    const moving=keys.left||keys.right||keys.up||keys.down;
+    $('flightStatus').textContent=state!=='running'?(state==='paused'?'Paused':'Ready to fly'):!ship.alive?'Respawning…':flightMode==='classic'&&keys.down?'Braking':Math.hypot(ship.vx,ship.vy)<1?'Holding position':flightMode==='direct'&&!moving?'Slowing down':flightMode==='classic'&&!keys.up?'Coasting':'Flying';
     const v = { score, best, lives, level };
     for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
   }
@@ -192,7 +238,7 @@
     $('pauseBtn').disabled = !(s === 'running' || s === 'paused');
     if (s === 'ready') {
       $('ovTitle').textContent = 'Ready?';
-      $('ovText').textContent = 'Turn with ◀ ▶, thrust with ▲, fire with Space. Press Space or the button to start.';
+      $('ovText').textContent=flightMode==='direct'?'Move with arrow keys or WASD. The ship aims where you move. Hold Space to shoot.': '← → turns. ↑ accelerates. ↓ brakes. Hold Space to shoot.';
       $('ovBtn').textContent = 'Start';
     } else if (s === 'paused') {
       $('ovTitle').textContent = 'Paused';
@@ -210,10 +256,10 @@
     clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 1400);
   }
 
-  function start() { if (state === 'ready') setState('running'); }
+  function start() { if (state === 'ready') {setState('running');$('board').focus({preventScroll:true});} }
   function togglePause() {
-    if (state === 'running') { Object.keys(keys).forEach(k => keys[k] = false); setState('paused'); }
-    else if (state === 'paused') setState('running');
+    if (state === 'running') { clearInputs(); setState('paused'); }
+    else if (state === 'paused') {setState('running');$('board').focus({preventScroll:true});}
   }
   function primary() {
     if (state === 'ready') start();
@@ -222,45 +268,41 @@
   }
 
   /* ---------- input ---------- */
-  const KEYMAP = { ArrowLeft:'left', a:'left', A:'left', ArrowRight:'right', d:'right', D:'right', ArrowUp:'up', w:'up', W:'up' };
-  document.addEventListener('keydown', e => {
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-    const k = KEYMAP[e.key];
-    if (k) { e.preventDefault(); keys[k] = true; if (state === 'ready') start(); return; }
-    if (e.key === ' ' || e.code === 'Space') {
-      if (e.target && e.target.tagName === 'BUTTON') return;          // focused buttons keep normal Space behavior
-      e.preventDefault();
-      if (state === 'running') keys.fire = true; else primary();
-      return;
-    }
-    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
-    if (e.key === 'Enter' && state !== 'running' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
+  const KEYMAP={arrowleft:'left',a:'left',arrowright:'right',d:'right',arrowup:'up',w:'up',arrowdown:'down',s:'down',' ':'fire'};
+  const keyToken=e=>'key:'+(e.code||e.key.toLowerCase());
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey||e.metaKey||e.altKey||$('restartDialog').open||e.target?.closest('select,input,textarea,summary'))return;
+    const key=e.key.toLowerCase(),action=KEYMAP[key];
+    if(e.repeat){if(action||['p','escape'].includes(key))e.preventDefault();return;}
+    // Focused buttons retain keyboard activation; the playfield receives focus when play starts.
+    if(e.target?.closest('button')&&[' ','enter'].includes(key))return;
+    if(action){e.preventDefault();if(state==='ready')start();else if(state==='over'){if(action==='fire')primary();return;}if(state==='running')setInput(action,keyToken(e),true);return;}
+    if(key==='p'||key==='escape'){e.preventDefault();togglePause();}
+    if(key==='enter'&&state!=='running'){e.preventDefault();primary();}
   });
-  document.addEventListener('keyup', e => {
-    const k = KEYMAP[e.key];
-    if (k) keys[k] = false;
-    if (e.key === ' ' || e.code === 'Space') keys.fire = false;
+  document.addEventListener('keyup',e=>{const token=keyToken(e);for(const k of Object.keys(keys))if(sources[k].has(token))setInput(k,token,false);});
+  function lostFocus(){clearInputs();if(state==='running')setState('paused');}
+  window.addEventListener('blur',lostFocus);document.addEventListener('visibilitychange',()=>{if(document.hidden)lostFocus();});
+  document.querySelectorAll('.touch button').forEach(b=>{
+    const k=b.dataset.k,buttonTokens=new Set();
+    b.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();b.setPointerCapture(e.pointerId);if(state==='ready')start();if(state==='running')setInput(k,'pointer:'+e.pointerId,true);});
+    ['pointerup','pointercancel','lostpointercapture'].forEach(type=>b.addEventListener(type,e=>setInput(k,'pointer:'+e.pointerId,false)));
+    b.addEventListener('contextmenu',e=>e.preventDefault());
+    b.addEventListener('keydown',e=>{if(![' ','Enter'].includes(e.key))return;e.preventDefault();if(e.repeat)return;if(state==='ready')start();if(state==='running'){const token=keyToken(e);buttonTokens.add(token);setInput(k,token,true);}});
+    b.addEventListener('keyup',e=>{if([' ','Enter'].includes(e.key)){e.preventDefault();setInput(k,keyToken(e),false);buttonTokens.delete(keyToken(e));}});
+    b.addEventListener('blur',()=>{for(const token of buttonTokens)setInput(k,token,false);buttonTokens.clear();});
   });
-  window.addEventListener('blur', () => { Object.keys(keys).forEach(k => keys[k] = false); if (state === 'running') setState('paused'); });
-  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') setState('paused'); });
-
-  // on-screen buttons: each finger is tracked so you can turn and fire together
-  document.querySelectorAll('.touch button').forEach(b => {
-    const k = b.dataset.k, on = e => { e.preventDefault(); keys[k] = true; b.classList.add('on'); if (state === 'ready') start(); };
-    const off = e => { e.preventDefault(); keys[k] = false; b.classList.remove('on'); };
-    b.addEventListener('pointerdown', on);
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, off));
-    b.addEventListener('contextmenu', e => e.preventDefault());
-  });
-
-  $('ovBtn').addEventListener('click', primary);
-  $('pauseBtn').addEventListener('click', togglePause);
-  $('restartBtn').addEventListener('click', reset);
+  function askRestart(){const requested=$('flightMode').value;if(state==='running'||state==='paused'){$('flightMode').value=flightMode;lostFocus();pendingMode=requested;$('restartDialog').showModal();}else reset();}
+  function finishRestart(ok){$('restartDialog').close();if(ok&&pendingMode){$('flightMode').value=pendingMode;reset();start();}pendingMode=null;}
+  $('ovBtn').addEventListener('click',primary);$('pauseBtn').addEventListener('click',togglePause);$('restartBtn').addEventListener('click',askRestart);$('flightMode').addEventListener('change',askRestart);
+  $('cancelRestart').addEventListener('click',()=>finishRestart(false));$('confirmRestart').addEventListener('click',()=>finishRestart(true));$('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
 
   /* ---------- simulation ---------- */
+  const distance=(a,b)=>{const dx=Math.abs(a.x-b.x),dy=Math.abs(a.y-b.y);return Math.hypot(Math.min(dx,W-dx),Math.min(dy,H-dy));};
   const wrap = o => { o.x = (o.x + W) % W; o.y = (o.y + H) % H; };
 
   function burst(x, y, n, speed) {
+    if(reduced)return;
     for (let i = 0; i < n; i++) {
       const a = rand(0, TAU), s = rand(speed * 0.3, speed);
       particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(0.4, 0.9), max: 0.9 });
@@ -268,8 +310,8 @@
   }
   function addScore(p) {
     score += p;
-    if (score >= nextLife) { nextLife += EXTRA_LIFE_EVERY; lives++; banner('EXTRA LIFE'); }
-    if (score > best) { best = score; newBest = true; }
+    while (score >= nextLife) { nextLife += EXTRA_LIFE_EVERY; lives++; banner('EXTRA LIFE'); }
+    if (score > best) { best = score; newBest = true;saveBest(best); }
   }
   function splitAsteroid(i, byBullet) {
     const a = asteroids[i];
@@ -282,7 +324,7 @@
     }
   }
   function killShip() {
-    ship.alive = false;
+    clearInputs();ship.alive = false;
     burst(ship.x, ship.y, 26, 220);
     lives--;
     if (lives <= 0) {
@@ -294,26 +336,31 @@
   }
 
   function update(dt) {
+    if(state!=='running')return;
     // ship
     if (ship.alive) {
-      if (keys.left) ship.a -= TURN * dt;
-      if (keys.right) ship.a += TURN * dt;
-      if (keys.up) {
-        ship.vx += Math.cos(ship.a) * THRUST * dt;
-        ship.vy += Math.sin(ship.a) * THRUST * dt;
-        if (Math.random() < 0.6) particles.push({ x: ship.x - Math.cos(ship.a) * 10, y: ship.y - Math.sin(ship.a) * 10, vx: -Math.cos(ship.a) * 90 + rand(-25, 25), vy: -Math.sin(ship.a) * 90 + rand(-25, 25), life: 0.25, max: 0.25, flame: true });
+      const dx=Number(keys.right)-Number(keys.left),dy=Number(keys.down)-Number(keys.up);
+      if(flightMode==='direct'){
+        const n=Math.hypot(dx,dy),rate=n?DIRECT_RESPONSE:DIRECT_STOP,blend=1-Math.exp(-rate*dt);
+        const tx=n?dx/n*DIRECT_V:0,ty=n?dy/n*DIRECT_V:0;
+        ship.vx+=(tx-ship.vx)*blend;ship.vy+=(ty-ship.vy)*blend;
+        if(n){const target=Math.atan2(dy,dx),angle=Math.atan2(Math.sin(target-ship.a),Math.cos(target-ship.a));ship.a+=Math.max(-AIM_TURN*dt,Math.min(AIM_TURN*dt,angle));}
+      }else{
+        ship.a+=dx*TURN*dt;
+        if(keys.up&&!keys.down){ship.vx+=Math.cos(ship.a)*THRUST*dt;ship.vy+=Math.sin(ship.a)*THRUST*dt;}
+        const drag=keys.down?Math.exp(-BRAKE*dt):Math.pow(DRAG,dt);ship.vx*=drag;ship.vy*=drag;
       }
-      const drag = Math.pow(DRAG, dt);
-      ship.vx *= drag; ship.vy *= drag;
-      const sp = Math.hypot(ship.vx, ship.vy);
-      if (sp > MAX_V) { ship.vx *= MAX_V / sp; ship.vy *= MAX_V / sp; }
+      if(Math.hypot(ship.vx,ship.vy)<.5){ship.vx=0;ship.vy=0;}
+      if(!reduced&&(flightMode==='direct'?(dx||dy):keys.up&&!keys.down)&&Math.random()<.6)particles.push({x:ship.x-Math.cos(ship.a)*10,y:ship.y-Math.sin(ship.a)*10,vx:-Math.cos(ship.a)*90+rand(-25,25),vy:-Math.sin(ship.a)*90+rand(-25,25),life:.25,max:.25,flame:true});
+      const sp=Math.hypot(ship.vx,ship.vy),cap=flightMode==='direct'?DIRECT_V:MAX_V;
+      if(sp>cap){ship.vx*=cap/sp;ship.vy*=cap/sp;}
       ship.x += ship.vx * dt; ship.y += ship.vy * dt; wrap(ship);
       if (ship.invuln > 0) ship.invuln -= dt;
 
       fireCd -= dt;
       if (keys.fire && fireCd <= 0 && bullets.length < MAX_BULLETS) {
         fireCd = FIRE_GAP;
-        bullets.push({ x: ship.x + Math.cos(ship.a) * 16, y: ship.y + Math.sin(ship.a) * 16, vx: ship.vx + Math.cos(ship.a) * BULLET_V, vy: ship.vy + Math.sin(ship.a) * BULLET_V, life: BULLET_LIFE });
+        bullets.push({ x: (ship.x + Math.cos(ship.a) * 16 + W)%W, y: (ship.y + Math.sin(ship.a) * 16 + H)%H, vx: ship.vx + Math.cos(ship.a) * BULLET_V, vy: ship.vy + Math.sin(ship.a) * BULLET_V, life: BULLET_LIFE });
       }
     } else if (state === 'running' && respawnIn > 0) {
       respawnIn -= dt;
@@ -338,13 +385,13 @@
       const b = bullets[i];
       for (let j = asteroids.length - 1; j >= 0; j--) {
         const a = asteroids[j];
-        if (Math.hypot(b.x - a.x, b.y - a.y) < a.r * 0.95) { bullets.splice(i, 1); splitAsteroid(j, true); break; }
+        if (distance(b,a) < a.r * 0.95) { bullets.splice(i, 1); splitAsteroid(j, true); break; }
       }
     }
     // ship vs asteroid
     if (ship.alive && ship.invuln <= 0) {
       for (const a of asteroids) {
-        if (Math.hypot(ship.x - a.x, ship.y - a.y) < a.r * 0.85 + SHIP_R * 0.7) { killShip(); break; }
+        if (distance(ship,a) < a.r * 0.85 + SHIP_R * 0.7) { killShip(); break; }
       }
     }
     // particles
@@ -377,7 +424,7 @@
   function drawShipAt(x, y, a, flame) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(a);
     ctx.beginPath(); ctx.moveTo(16, 0); ctx.lineTo(-11, 10); ctx.lineTo(-6, 0); ctx.lineTo(-11, -10); ctx.closePath(); ctx.stroke();
-    if (flame) { ctx.beginPath(); ctx.moveTo(-8, 5); ctx.lineTo(-17 - Math.random() * 6, 0); ctx.lineTo(-8, -5); ctx.stroke(); }
+    if (flame) { ctx.beginPath(); ctx.moveTo(-8, 5); ctx.lineTo(-17 - (reduced?3:Math.random()*6), 0); ctx.lineTo(-8, -5); ctx.stroke(); }
     ctx.restore();
   }
   function draw() {
@@ -403,11 +450,11 @@
     ctx.globalAlpha = 1;
 
     if (ship.alive) {
-      const blink = ship.invuln > 0 && Math.floor(ship.invuln * 10) % 2 === 0;
-      if (!blink) {
-        ctx.strokeStyle = '#F0B429';
-        drawWrapped(ship.x, ship.y, 18, (x, y) => drawShipAt(x, y, ship.a, keys.up && state === 'running'));
-      }
+      if(ship.invuln>0){ctx.strokeStyle='#7dd3fc';ctx.lineWidth=1.4;ctx.globalAlpha=.65;drawWrapped(ship.x,ship.y,23,(x,y)=>{ctx.beginPath();ctx.arc(x,y,23,0,TAU);ctx.stroke();});ctx.globalAlpha=1;}
+      ctx.strokeStyle='#F0B429';ctx.lineWidth=2.4;
+      const thrusting=state==='running'&&(flightMode==='direct'?(keys.up||keys.down||keys.left||keys.right):keys.up&&!keys.down);
+      drawWrapped(ship.x,ship.y,23,(x,y)=>drawShipAt(x,y,ship.a,thrusting));
+
     }
   }
 

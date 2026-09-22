@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dino Run</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Dino Run · ATS Class Hub</title>
+<meta name="theme-color" content="#0b1740">
 <style>
   :root{
     --bg:#EDF2FB;
@@ -25,7 +23,7 @@
   body{
     background:var(--bg);
     color:var(--navy);
-    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-family:'Avenir Next',Avenir,'Trebuchet MS',sans-serif;
     font-size:16px;line-height:1.5;
     min-height:100vh;padding:26px 20px 56px;
   }
@@ -95,28 +93,61 @@
 
   footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
   footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  [hidden]{display:none!important}
+  body{padding:0;display:flex;flex-direction:column;min-height:100svh}
+  .hub-header{width:min(1120px,100%);max-width:none;display:flex;justify-content:space-between;align-items:center;gap:14px;margin:auto auto 0;padding:10px 20px;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.06em}
+  .hub-header small{display:block;font-size:10px;color:var(--navy-soft);letter-spacing:0}
+  .hub-header a{color:var(--navy);text-decoration:none;border:1px solid #b8c6dd;border-radius:5px;padding:6px 10px;white-space:nowrap}
+  .game{width:calc(100% - 32px);max-width:1080px;gap:16px;margin:0 auto 20px}
+  .card{padding:18px 24px;box-shadow:0 12px 34px #16294d0c}
+  .masthead{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}
+  .edition{font:11px ui-monospace,monospace;letter-spacing:.13em;color:var(--navy-soft);display:block;margin-bottom:5px}
+  h1{font-size:32px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+  .masthead p{font-size:14px;color:var(--navy-soft);margin:6px 0 0}
+  .scores{grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .score{border:0;border-left:1px solid var(--line);border-radius:0;padding:0 16px;background:none}
+  .score:first-child{border:0;padding-left:0}.score .lbl{font:12px/1.4 ui-monospace,monospace;letter-spacing:.05em}.score .val{font-size:32px;font-weight:850}.score:nth-child(2) .val{color:#805300}
+  .board{border-radius:10px;background:#edf2fb}
+  .board-foot{display:flex;justify-content:space-between;gap:10px;margin-top:7px;font:11px ui-monospace,monospace;color:var(--navy-soft)}
+  .overlay{background:#0b1740e8;gap:10px;overflow:auto;justify-content:safe center}
+  .overlay h2{font-size:32px;letter-spacing:-1px}.overlay p{font-size:15px}.eyebrow{font:700 11px ui-monospace,monospace;letter-spacing:.14em;color:var(--gold)}
+  button{min-height:44px;border-radius:8px;padding:9px 16px;font-size:15px}button.big{border-radius:8px;font-size:18px;box-shadow:0 3px 0 #ac7a12}button.quiet{font-weight:750;border-width:1px;border-color:#b8c6dd}.controls{gap:10px;margin-top:14px}.opt{font-size:15px}select{min-height:44px;font-size:15px;border-radius:8px}
+  .challenge{margin-top:16px;background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:12px 16px;display:grid;grid-template-columns:1fr minmax(150px,30%);align-items:center;gap:20px}
+  .challenge .label{font:11px ui-monospace,monospace;color:var(--navy-soft);letter-spacing:.08em}.challenge h3{font-size:20px;margin:4px 0 0;line-height:1.2}.challenge small{font-size:13px;color:var(--navy-soft)}progress{display:block;width:100%;height:7px;border:0;accent-color:var(--gold);margin-top:6px}progress::-webkit-progress-bar{background:#d4def0;border-radius:4px}progress::-webkit-progress-value{background:var(--gold);border-radius:4px}
+  .cue{position:absolute;top:16px;left:16px;padding:7px 12px;border:1px solid #16294d33;border-radius:7px;background:#fff9;color:var(--navy);font-weight:850;font-size:16px;pointer-events:none}.cue.duck{background:#fff1cb;border-color:#f0b429}.cue.jump{background:#e4faee;border-color:#1b7f4b55}
+  .toast{position:absolute;top:16px;left:50%;transform:translateX(-50%);color:var(--navy);background:#fff6e0;padding:7px 12px;border-radius:7px;pointer-events:none;font-weight:800;font-size:14px;white-space:nowrap}
+  .result-stats{display:flex;justify-content:center;gap:18px;color:#dce4f2;font-size:13px}.result-stats strong{display:block;font-size:23px;color:#fff}
+  .touch{margin-top:12px;gap:10px}.touch button{height:54px;border-radius:8px;flex:1!important}.touch .on{box-shadow:inset 0 0 0 3px #f0b429}
+  details{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--navy-soft)}summary{cursor:pointer;font-weight:750;font-size:15px}details p{margin:8px 0 0}kbd{font:12px ui-monospace,monospace;background:var(--bg);border:1px solid #b8c6dd;border-bottom-width:2px;border-radius:4px;padding:1px 4px}
+  .leaderboard{margin:0;padding:14px 20px;background:#ffffff99;border:1px solid var(--line);border-radius:12px}.leaderboard>summary{display:flex;justify-content:space-between;gap:12px}.leaderboard>summary small{font-size:12px;font-weight:400}.leaderboard h2{font-size:20px;margin:14px 0 0}
+  footer{margin:auto 0 0;padding:25px 20px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  dialog{width:460px;max-width:calc(100vw - 24px);padding:24px;border:1px solid var(--line);border-radius:14px;color:var(--navy);background:white}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:26px;line-height:1.2;margin:0}dialog p{color:var(--navy-soft);font-size:15px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+  @media(max-width:700px){.game{width:calc(100% - 20px)}.card{padding:14px}.masthead{flex-wrap:wrap;margin-bottom:14px}.edition{font-size:10px}h1{font-size:28px}.scores{gap:6px}.score{padding:0 8px}.score .lbl{font-size:10px}.score .val{font-size:26px}.board{aspect-ratio:8/4.5}.overlay{padding:10px;gap:7px}.overlay h2{font-size:25px}.overlay p{font-size:13px}.touch{display:flex}.challenge{grid-template-columns:1fr;gap:8px;padding:10px 12px}.challenge h3{font-size:18px}.controls{gap:8px}.controls button{padding:8px 10px}.controls .spacer{display:none}.opt{margin-right:auto}.cue{font-size:13px;top:8px;left:8px;padding:5px 8px}.toast{top:auto;bottom:8px;font-size:12px}.result-stats{gap:14px;font-size:11px}.result-stats strong{font-size:20px}.board-foot{font-size:9px}.hub-header{padding:10px 14px}.hub-header small{font-size:9px}.saverow input{width:130px;font-size:13px;padding:6px 8px}.saverow button{font-size:13px;padding:6px 12px;min-height:36px}.btnrow button.big{font-size:15px;padding:7px 16px}.btnrow button.sm{font-size:12px;padding:6px 10px}.eyebrow{font-size:10px}.leaderboard>summary small{display:none}}
+  @media(max-width:390px){.board{aspect-ratio:1.3}.overlay{gap:6px}.masthead p{font-size:13px}.score .val{font-size:23px}.edition{letter-spacing:.05em}}
+
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Dino Run</h1>
-  <p>Jump the cacti, duck the birds, and run as far as you can. Beat your classmates in the Daily Challenge.</p>
-</header>
-
-<div class="game">
-  <section class="card">
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a href="../index.html">← Class Hub</a></header>
+<div class="game"><section class="card">
+<div class="masthead"><div><span class="edition">STAY LOW. GO FAR. / ARCADE 04</span><h1>DINO RUN<span style="color:var(--gold)">.</span></h1><p>Jump the ground. Duck the sky.</p></div><button class="quiet" id="soundBtn" type="button" aria-pressed="true">Sound on</button></div>
     <div class="scores">
       <div class="score"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
       <div class="score"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
+      <div class="score"><span class="lbl">BIRDS DUCKED</span><span class="val" id="ducked">0</span></div>
       <div class="score"><span class="lbl">SPEED</span><span class="val" id="speed">1.0x</span></div>
     </div>
 
-    <div class="board" id="board">
+    <div class="board" id="board" tabindex="-1">
       <canvas id="cv" width="800" height="300" aria-label="Dino Run game" role="img"></canvas>
+      <div id="cue" class="cue" hidden></div><div id="toast" class="toast" hidden></div>
       <div class="overlay" id="overlay">
+        <span class="eyebrow" id="ovEyebrow">A LITTLE RUN. A BIG CHALLENGE.</span>
         <h2 id="ovTitle">Dino Run</h2>
         <p id="ovText"></p>
+        <div id="resultStats" class="result-stats" hidden></div>
         <div class="saverow hidden" id="saveRow">
           <input id="nameIn" maxlength="14" placeholder="Your name" autocomplete="off" aria-label="Your name for the leaderboard">
           <button class="big" id="saveBtn" type="button">Save score</button>
@@ -128,32 +159,35 @@
       </div>
     </div>
 
+    <div class="board-foot"><span id="courseLabel">DAILY COURSE</span><span>↑ JUMP &nbsp; ↓ HOLD TO DUCK</span></div>
     <div class="touch" aria-label="On-screen controls">
-      <button type="button" class="duck" data-k="duck" aria-label="Duck">Duck</button>
-      <button type="button" class="jump" data-k="jump" aria-label="Jump">Jump</button>
+      <button type="button" class="duck" data-k="duck" aria-label="Hold to duck">↓ Hold to duck</button>
+      <button type="button" class="jump" data-k="jump" aria-label="Jump">↑ Jump</button>
     </div>
 
     <div class="controls">
       <label class="opt">Mode
         <select id="mode"><option value="daily" selected>Daily Challenge</option><option value="free">Free play</option></select>
       </label>
-      <button class="quiet sm" id="soundBtn" type="button" aria-pressed="true">Sound: on</button>
+
       <span class="spacer"></span>
       <button class="quiet sm" id="pauseBtn" type="button">Pause</button>
       <button class="quiet sm" id="restartBtn" type="button">New run</button>
     </div>
-    <p class="hint">Controls: Space, ▲ or W to jump (in the air, ▼ drops you faster). Hold ▼ or S to duck. P pauses. On a tablet or phone, tap the board to jump and hold Duck. Every player gets the same course in the Daily Challenge, so scores are fair to compare.</p>
+    <div class="challenge"><div><span class="label">YOUR NEXT GOAL</span><h3 id="goalTitle">Duck under 3 birds</h3></div><div><small id="goalCount">0 / 3 · +10 per bird ducked</small><progress id="goalProgress" value="0" max="3" aria-label="Goal progress"></progress></div></div>
+    <details><summary>How to play & game info</summary><p><kbd>Space</kbd>, <kbd>↑</kbd> or <kbd>W</kbd> jumps. Hold <kbd>↓</kbd> or <kbd>S</kbd> to duck under the orange birds. Release to stand. Ducking in the air makes you land faster. <kbd>P</kbd> pauses.</p><p>Jump over cacti, rocks and low red birds. Orange birds fly at head height: stay low until the entire bird or flock has passed. Watch the next-obstacle cue.</p><p>Duck under a bird for +10 points. The daily course uses the same obstacle sequence and timing for everyone playing this version on the same date. Records and names are saved on this browser.</p></details>
+    <p class="hint" id="storageNote" hidden></p>
   </section>
 
-  <section class="card">
+  <details class="leaderboard"><summary>Local leaderboard <small>Open to see the top 10 on this computer</small></summary>
     <div class="lbhead">
       <div><h2 id="lbTitle">Leaderboard</h2><p class="hint" id="lbSub"></p></div>
     </div>
-    <ol id="lb"></ol>
+    <ol id="lb"></ol><details id="legacyBoard" hidden><summary>Previous trail scores</summary><p class="hint">Saved scores from the original course, before the new birds and bonuses.</p><ol id="legacyScores"></ol></details>
     <p class="hint">This board is saved on this computer only. To compare across the class, use the same computer, or ask players to share their score with the Copy my score button.</p>
-  </section>
+  </details>
 </div>
-
+<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new run?</h2><p>Your current run will end. Saved records stay.</p><div class="dialog-actions"><button class="quiet" id="cancelRestart">Keep this run</button><button class="big" id="confirmRestart">New run</button></div></dialog><div id="announce" class="sr-only" aria-live="polite"></div>
 <footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
 <script>
@@ -163,7 +197,7 @@
   const STEP = 1 / 60;
   const DINO_X = 70, DINO_W = 44, DINO_H = 48, DUCK_W = 58, DUCK_H = 28;
   const JUMP_V = 700, GRAVITY = 2400, FALL_MULT = 2.8, BUFFER = 0.12;
-  const SPEED0 = 320, SPEED_MAX = 780, SPEED_GAIN = 7;
+  const SPEED0 = 320, SPEED_MAX = 680, SPEED_GAIN = 7;
 
   // a button clicked with the mouse must not keep focus, or Space would press it again during play
   document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button'); if (b && e.detail > 0) b.blur(); });
@@ -172,15 +206,37 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   /* ---------- storage ---------- */
+  const memory=Object.create(null);let storageOK=true;
   const store = {
-    get(k, fb) { try { const v = localStorage.getItem(k); return v == null ? fb : v; } catch (_) { return fb; } },
-    set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+    get(k,fb){try{return localStorage.getItem(k)??memory[k]??fb;}catch{storageOK=false;return memory[k]??fb;}},
+    set(k,v){memory[k]=String(v);try{localStorage.setItem(k,String(v));}catch{storageOK=false;}}
   };
+  const finite=v=>Number.isFinite(Number(v))&&Number(v)>=0?Number(v):0;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pad = n => String(n).padStart(2, '0');
   const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
-  const boardKey = () => mode() === 'daily' ? 'hub-dino-lb-daily-' + runDate : 'hub-dino-lb-free';
-  const loadBoard = () => { try { const a = JSON.parse(store.get(boardKey(), '[]')); return Array.isArray(a) ? a : []; } catch (_) { return []; } };
-  const mode = () => $('mode').value;
+  const boardKey = () => mode() === 'daily' ? 'hub-dino-v2-lb-daily-' + runDate : 'hub-dino-v2-lb-free';
+  const loadBoard = () => { try { const a = JSON.parse(store.get(boardKey(), '[]')); return Array.isArray(a) ? a.filter(e=>e&&typeof e.name==='string'&&Number.isFinite(e.score)&&e.score>=0).sort((x,y)=>y.score-x.score).slice(0,TOP_N) : []; } catch (_) { return []; } };
+  let activeMode=$('mode').value;
+  const mode = () => activeMode;
+  const bestKey=()=>mode()==='daily'?'hub-dino-v2-best-daily-'+runDate:'hub-dino-v2-best-free';
+  let spawnCount=0,groundsSinceBird=0,bonus=0,ducked=0,cleared=0,jumps=0,goalIndex=0,particles=[],toastT=0,crashReason='',startBest=0,newRecord=false;
+  const goals=[{name:'Duck under 3 birds',key:'ducked',target:3},{name:'Pass 15 obstacles',key:'cleared',target:15},{name:'Duck under 10 birds',key:'ducked',target:10}];
+  function notify(text){$('toast').textContent=text;$('toast').hidden=false;toastT=1.7;$('announce').textContent=text;}
+  function clearInputs(){keys.down=false;buffer=0;document.querySelectorAll('.touch button').forEach(b=>b.classList.remove('on'));}
+  function saveBest(){if(score>best){best=score;store.set(bestKey(),best);if(!newRecord&&startBest>0){newRecord=true;notify('NEW BEST!');}}}
+  function updateGoal(){
+    const stats={ducked,cleared};
+    while(goalIndex<goals.length&&stats[goals[goalIndex].key]>=goals[goalIndex].target){notify('GOAL COMPLETE!');sfx.milestone();goalIndex++;}
+    const g=goals[goalIndex]||{name:'Pass '+(Math.floor(cleared/20)+1)*20+' obstacles',key:'cleared',target:(Math.floor(cleared/20)+1)*20};
+    $('goalTitle').textContent=g.name;$('goalCount').textContent=stats[g.key]+' / '+g.target+' · +10 per bird ducked';$('goalProgress').value=stats[g.key];$('goalProgress').max=g.target;
+  }
+  function updateCue(){
+    const next=obstacles.find(o=>!o.passed&&o.x+o.w>DINO_X+4);
+    const visible=state==='running'&&next&&next.x<DINO_X+speed*1.5;
+    $('cue').hidden=!visible;
+    if(visible){const duck=next.kind==='bird'&&next.lane===1;$('cue').textContent=duck?'↓ HOLD TO DUCK':'↑ JUMP';$('cue').className='cue '+(duck?'duck':'jump');}
+  }
 
   /* ---------- seeded random so the daily course is identical for everyone ---------- */
   function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
@@ -189,7 +245,6 @@
 
   /* ---------- state ---------- */
   let state, dino, obstacles, clouds, stars, speed, dist, score, best, elapsed, gapLeft, runDate;
-  const sessionBest = { daily: 0, free: 0 };
   let nightT, nightTarget, buffer, overAt, lastSaved, legT, legFlip, milestoneAt, flashT;
   const keys = { down: false };
   // state: ready | running | paused | over
@@ -200,16 +255,18 @@
   };
 
   function reset() {
-    runDate = todayStr();
-    const seed = mode() === 'daily' ? hashStr('dino-' + runDate) : (Date.now() ^ (Math.random() * 1e9)) >>> 0;
+    activeMode=$('mode').value;runDate = todayStr();
+    const seed = mode() === 'daily' ? hashStr('dino-v2-' + runDate) : (Date.now() ^ (Math.random() * 1e9)) >>> 0;
     rnd = mulberry(seed);
     dino = { lift: 0, vy: 0, ducking: false };
-    obstacles = []; speed = SPEED0; dist = 0; score = 0; elapsed = 0; gapLeft = 380;
+    obstacles = []; speed = SPEED0; dist = 0; score = 0; elapsed = 0; gapLeft = 150;
+    clearInputs();spawnCount=0;groundsSinceBird=0;bonus=0;ducked=0;cleared=0;jumps=0;goalIndex=0;particles=[];toastT=0;crashReason='';newRecord=false;
+    $('toast').hidden=true;$('cue').hidden=true;$('copyBtn').textContent='Copy my score';
     clouds = [{ x: 200, y: 50, s: 1 }, { x: 520, y: 90, s: 0.8 }, { x: 760, y: 40, s: 1.1 }];
     stars = Array.from({ length: 30 }, () => ({ x: Math.random() * W, y: Math.random() * 130, a: 0.3 + Math.random() * 0.6 }));
     nightT = 0; nightTarget = 0; buffer = 0; legT = 0; legFlip = 0; milestoneAt = 100; flashT = 0; lastSaved = -1;
-    const b = loadBoard(); best = Math.max(b.length ? b[0].score : 0, sessionBest[mode()]);
-    renderBoard(); hud(true);
+    const b = loadBoard(); best = Math.max(b.length ? b[0].score : 0,finite(store.get(bestKey(),'0')));startBest=best;
+    renderBoard();updateGoal();hud(true);
     setState('ready');
   }
 
@@ -219,6 +276,7 @@
     if (!soundOn) return;
     try {
       audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      if(audio.state==='suspended')audio.resume().catch(()=>{});
       const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
       o.type = type || 'square'; o.frequency.setValueAtTime(freq, t);
       if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
@@ -232,7 +290,9 @@
   /* ---------- HUD, overlay, leaderboard ---------- */
   const hudCache = {};
   function hud(force) {
-    const v = { score, best, speed: (speed / SPEED0).toFixed(1) + 'x' };
+    saveBest();
+    $('storageNote').hidden=storageOK;$('storageNote').textContent='Saving unavailable — results last for this session.';
+    const v = { score, best, ducked, speed: (speed / SPEED0).toFixed(1) + 'x' };
     for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
   }
   const shownScore = () => String(score).padStart(5, '0');
@@ -242,21 +302,25 @@
     $('overlay').classList.toggle('hidden', s === 'running');
     $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
     $('pauseBtn').disabled = !(s === 'running' || s === 'paused');
+    $('resultStats').hidden=s!=='over';$('cue').hidden=s!=='running';
+    $('courseLabel').textContent=mode()==='daily'?'DAILY · '+runDate:'FREE PLAY';
+    $('ovEyebrow').textContent=s==='over'?'ONE MORE RUN?':s==='paused'?'TAKE A BREATHER':'JUMP. DUCK. REPEAT.';
     const showSave = s === 'over' && qualifies();
     $('saveRow').classList.toggle('hidden', !showSave);
     $('copyBtn').classList.toggle('hidden', s !== 'over');
     if (s === 'ready') {
       $('ovTitle').textContent = mode() === 'daily' ? 'Daily Challenge' : 'Free play';
       $('ovText').textContent = mode() === 'daily'
-        ? 'Everyone runs the same course today (' + runDate + '). Press Space or the button to start.'
-        : 'A new random course every run. Press Space or the button to start.';
+        ? 'Same course today. Jump the cacti. Hold ↓ when the orange birds arrive.'
+        : 'A fresh trail every run. Jump the ground. Duck the orange birds.';
       $('ovBtn').textContent = 'Start';
     } else if (s === 'paused') {
       $('ovTitle').textContent = 'Paused'; $('ovText').textContent = 'Press P to keep running.'; $('ovBtn').textContent = 'Resume';
     } else if (s === 'over') {
-      $('ovTitle').textContent = 'Game over';
+      $('ovTitle').textContent = score.toLocaleString()+' points';
+      $('resultStats').innerHTML='<div><strong>'+Math.floor(elapsed)+'s</strong>Time</div><div><strong>'+cleared+'</strong>Obstacles</div><div><strong>'+ducked+'</strong>Birds ducked</div>';
       const rank = qualifies() ? rankOf(score) : 0;
-      $('ovText').innerHTML = 'Score: <b>' + score + '</b>' + (rank ? '<br><span class="gold">That is #' + rank + ' on the ' + (mode() === 'daily' ? "today's" : 'free play') + ' board! Add your name:</span>' : '');
+      $('ovText').innerHTML=esc(crashReason)+(score>startBest?'<br><span class="gold">New best!</span>':'')+(rank?' · #'+rank+' locally':'');
       $('ovBtn').textContent = 'Run again';
       if (showSave) { $('nameIn').value = store.get('hub-dino-name', ''); setTimeout(() => $('nameIn').focus(), 30); }
     }
@@ -269,6 +333,7 @@
   const rankOf = sc => loadBoard().filter(e => e.score >= sc).length + 1;
 
   function saveScore() {
+    if(state!=='over'||!qualifies())return;
     const name = ($('nameIn').value.trim() || 'Player').slice(0, 14);
     store.set('hub-dino-name', name);
     let b = loadBoard();
@@ -278,25 +343,28 @@
     b.sort((x, y) => y.score - x.score); b = b.slice(0, TOP_N);
     store.set(boardKey(), JSON.stringify(b));
     lastSaved = name.toLowerCase();
-    best = Math.max(b[0].score, sessionBest[mode()]);
+    best = Math.max(b[0].score,finite(store.get(bestKey(),'0')));
     $('saveRow').classList.add('hidden');
     $('ovText').innerHTML = 'Score: <b>' + score + '</b><br><span class="gold">Saved, ' + esc(name) + '!</span>';
-    renderBoard(); hud(true);
+    renderBoard();updateGoal();hud(true);
     $('ovBtn').focus();
   }
 
   function renderBoard() {
     const b = loadBoard(), d = mode() === 'daily';
+    let legacy=[];try{const old=JSON.parse(store.get(d?'hub-dino-lb-daily-'+runDate:'hub-dino-lb-free','[]'));if(Array.isArray(old))legacy=old.filter(e=>e&&typeof e.name==='string'&&Number.isFinite(e.score)&&e.score>=0).sort((a,b)=>b.score-a.score).slice(0,TOP_N);}catch{}
+    $('legacyBoard').hidden=legacy.length===0;
+    $('legacyScores').innerHTML=legacy.map(e=>'<li><span class="nm">'+esc(e.name)+'</span><span class="pt">'+e.score+'</span></li>').join('');
     $('lbTitle').textContent = d ? 'Daily Challenge leaderboard' : 'Free play leaderboard';
     $('lbSub').textContent = d ? 'Same course for everyone · ' + runDate + ' · resets every day' : 'All-time top 10 on this computer';
     $('lb').innerHTML = b.length ? b.map(e => '<li class="' + (e.name.toLowerCase() === lastSaved ? 'me' : '') + '"><span class="nm">' + esc(e.name) + '</span><span class="pt">' + e.score + '</span></li>').join('')
       : '<div class="empty">No scores yet. Be the first to run!</div>';
   }
 
-  function start() { if (state === 'ready') { setState('running'); jump(); } }
+  function start() { if (state === 'ready') { setState('running');$('board').focus({preventScroll:true}); } }
   function togglePause() {
-    if (state === 'running') { keys.down = false; setState('paused'); }
-    else if (state === 'paused') setState('running');
+    if (state === 'running') { clearInputs(); setState('paused'); }
+    else if (state === 'paused') {setState('running');$('board').focus({preventScroll:true});}
   }
   function primary() {
     if (state === 'ready') start();
@@ -307,11 +375,12 @@
   /* ---------- input ---------- */
   function jump() {
     if (state !== 'running') return;
-    if (dino.lift <= 0.5) { dino.vy = JUMP_V; dino.lift = 0.6; buffer = 0; sfx.jump(); }
+    if (dino.lift <= 0.5) { dino.vy = JUMP_V; dino.lift = 0.6;dino.ducking=false; buffer = 0;jumps++; sfx.jump(); }
     else buffer = BUFFER;                                        // pressed a moment early: jump on landing
   }
   const isTyping = e => e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT');
   document.addEventListener('keydown', e => {
+    if($('restartDialog').open||e.target?.closest('summary'))return;
     if (isTyping(e)) { if (e.key === 'Enter' && e.target.id === 'nameIn') { e.preventDefault(); saveScore(); } return; }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === ' ' || e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
@@ -321,13 +390,14 @@
       if (state === 'running') jump(); else primary();
       return;
     }
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); keys.down = true; if (state === 'ready') start(); return; }
-    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault();if(state==='ready')start();if(state==='running')keys.down=true;return; }
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault();if(!e.repeat)togglePause(); }
     if (e.key === 'Enter' && state !== 'running' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
   });
   document.addEventListener('keyup', e => { if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = false; });
-  window.addEventListener('blur', () => { keys.down = false; if (state === 'running') setState('paused'); });
-  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') setState('paused'); });
+  function lostFocus(){clearInputs();if(state==='running')setState('paused');}
+  window.addEventListener('blur',lostFocus);
+  document.addEventListener('visibilitychange', () => { if(document.hidden)lostFocus(); });
 
   $('board').addEventListener('pointerdown', e => {
     if (e.target.closest('.overlay button, .overlay input')) return;
@@ -336,22 +406,30 @@
   });
   document.querySelectorAll('.touch button').forEach(b => {
     const k = b.dataset.k;
-    const on = e => { e.preventDefault(); b.classList.add('on'); if (k === 'jump') { if (state === 'running') jump(); else primary(); } else { keys.down = true; if (state === 'ready') start(); } };
+    const on = e => {if(e.button!==0)return;e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('on'); if (k === 'jump') { if (state === 'running') jump(); else primary(); } else {if(state==='ready')start();if(state==='running')keys.down=true;} };
     const off = e => { e.preventDefault(); b.classList.remove('on'); if (k === 'duck') keys.down = false; };
     b.addEventListener('pointerdown', on);
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, off));
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => b.addEventListener(ev, off));
     b.addEventListener('contextmenu', e => e.preventDefault());
   });
 
   $('ovBtn').addEventListener('click', primary);
   $('saveBtn').addEventListener('click', saveScore);
   $('pauseBtn').addEventListener('click', togglePause);
-  $('restartBtn').addEventListener('click', reset);
-  $('mode').addEventListener('change', e => { e.target.blur(); reset(); });
+  let pendingMode=null;
+  function askRestart(){
+    const requested=$('mode').value;
+    if(state==='running'||state==='paused'){$('mode').value=activeMode;lostFocus();pendingMode=requested;$('restartDialog').showModal();}
+    else{reset();}
+  }
+  function finishRestart(ok){$('restartDialog').close();if(ok&&pendingMode){$('mode').value=pendingMode;reset();start();}pendingMode=null;}
+  $('restartBtn').addEventListener('click',askRestart);$('mode').addEventListener('change',askRestart);
+  $('cancelRestart').addEventListener('click',()=>finishRestart(false));$('confirmRestart').addEventListener('click',()=>finishRestart(true));
+  $('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
   $('soundBtn').addEventListener('click', () => { soundOn = !soundOn; store.set('hub-dino-sound', soundOn ? '1' : '0'); updateSoundBtn(); if (soundOn) sfx.milestone(); });
   $('copyBtn').addEventListener('click', async () => {
     const who = store.get('hub-dino-name', '') || 'I';
-    const text = 'Dino Run ' + (mode() === 'daily' ? 'Daily Challenge ' + runDate : 'Free play') + ': ' + score + ' points (' + who + '). Can you beat it?';
+    const text = 'Dino Run · Jump & Duck trail · ' + (mode() === 'daily' ? 'Daily Challenge ' + runDate : 'Free play') + ': ' + score + ' points (' + who + '). Can you beat it?';
     let ok = false;
     try { await navigator.clipboard.writeText(text); ok = true; } catch (_) {
       try { const t = document.createElement('textarea'); t.value = text; document.body.append(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (_) {}
@@ -362,41 +440,54 @@
 
   /* ---------- simulation ---------- */
   function spawn() {
-    const birdOk = score >= 300 && rnd() < 0.28;
-    if (birdOk) {
-      const lane = Math.floor(rnd() * 3);                    // 0 low (jump), 1 middle (duck or jump), 2 high (run under)
-      const ys = [GROUND - 34, GROUND - 62, GROUND - 104];
-      obstacles.push({ kind: 'bird', x: W + 30, y: ys[lane], w: 42, h: 28, lane });
-      return 42;
+    spawnCount++;
+    // Course decisions use spawn count and seeded randomness, never points or player actions.
+    const bird=spawnCount===3||(spawnCount>3&&(groundsSinceBird>=2||(groundsSinceBird>=1&&rnd()<.45)));
+    if(bird){
+      groundsSinceBird=0;
+      const lane=spawnCount<9||rnd()<.8?1:0;
+      const count=spawnCount>=10&&lane===1&&rnd()<.4?2:1;
+      const spacing=125;
+      for(let i=0;i<count;i++)obstacles.push({kind:'bird',x:W+30+i*spacing,y:lane===1?GROUND-58:GROUND-29,w:48,h:28,lane,passed:false,duckSafe:true});
+      return 48+(count-1)*spacing;
     }
-    const big = rnd() < 0.45, n = 1 + Math.floor(rnd() * (score > 150 ? 3 : 2));
-    const cw = big ? 28 : 20, ch = big ? 54 : 38, total = n * cw + (n - 1) * 4;
-    obstacles.push({ kind: 'cactus', x: W + 30, y: GROUND - ch, w: total, h: ch, n, cw });
-    return total;
+    groundsSinceBird++;
+    if(spawnCount>5&&rnd()<.25){const w=38+Math.floor(rnd()*18);obstacles.push({kind:'rock',x:W+30,y:GROUND-30,w,h:30,passed:false});return w;}
+    const big=spawnCount>1&&rnd()<.45,n=spawnCount<5?1:1+Math.floor(rnd()*2);
+    const cw=big?28:20,ch=big?50:36,total=n*cw+(n-1)*4;
+    obstacles.push({kind:'cactus',x:W+30,y:GROUND-ch,w:total,h:ch,n,cw,passed:false});return total;
   }
+  function obstacleBox(o){
+    if(o.kind==='bird')return {x:o.x+4,y:o.y+8,w:o.w-8,h:14};
+    return {x:o.x+3,y:o.y+3,w:o.w-6,h:o.h-6};
+  }
+  const overlaps=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 
   function hitbox() {
     return dino.ducking
       ? { x: DINO_X + 4, y: GROUND - dino.lift - DUCK_H + 4, w: DUCK_W - 10, h: DUCK_H - 8 }
       : { x: DINO_X + 8, y: GROUND - dino.lift - DINO_H + 4, w: DINO_W - 16, h: DINO_H - 8 };
   }
-  function crash() {
+  function crash(o) {
+    clearInputs();crashReason=o?.kind==='bird'?(o.lane===1?'Hold ↓ to duck under the orange birds.':'Jump over the low red birds.'):'Jump a little earlier over ground obstacles.';
     state = 'over'; overAt = performance.now(); sfx.die();
-    sessionBest[mode()] = Math.max(sessionBest[mode()], score);
-    best = Math.max(best, score);
+    saveBest();
     hud(true);
     setState('over');
   }
 
   function update(dt) {
+    if(state!=='running')return;
     elapsed += dt;
+    toastT=Math.max(0,toastT-dt);$('toast').hidden=toastT<=0;
+    particles=particles.filter(p=>p.life>dt);for(const p of particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;}
     speed = Math.min(SPEED_MAX, SPEED0 + elapsed * SPEED_GAIN);
     dist += speed * dt;
-    const s = Math.floor(dist * 0.03);
+    const s = Math.floor(dist * 0.03)+bonus;
     if (s !== score) {
       score = s;
       if (score >= milestoneAt) { milestoneAt += 100; flashT = 0.7; sfx.milestone(); }
-      nightTarget = Math.floor(score / 700) % 2 === 1 ? 1 : 0;
+      nightTarget = Math.floor(dist * .03 / 350) % 2 === 1 ? 1 : 0;
     }
     nightT += Math.sign(nightTarget - nightT) * Math.min(Math.abs(nightTarget - nightT), dt * 1.5);
 
@@ -407,6 +498,7 @@
       dino.lift += dino.vy * dt;
       if (dino.lift <= 0) { dino.lift = 0; dino.vy = 0; if (buffer > 0) jump(); }
     }
+    dino.ducking=keys.down&&dino.lift<=.5;
     if (buffer > 0) buffer -= dt;
     legT += dt; if (legT > 0.09) { legT = 0; legFlip ^= 1; }
 
@@ -416,17 +508,26 @@
     gapLeft -= speed * dt;
     if (gapLeft <= 0) {
       const w = spawn();
-      gapLeft = w + speed * 0.72 + rnd() * speed * 0.85;     // always leaves room to land and jump again
+      gapLeft = w + speed * (spawnCount<4?1.2:1.0) + rnd() * speed * 0.65;     // always leaves room to land and jump again
     }
     for (const c of clouds) { c.x -= speed * 0.12 * dt * c.s; if (c.x < -60) { c.x = W + 40; c.y = 30 + Math.random() * 80; } }
 
-    // collision
-    const h = hitbox();
-    for (const o of obstacles) {
-      const pad = o.kind === 'bird' ? 6 : 3;
-      if (h.x < o.x + o.w - pad && h.x + h.w > o.x + pad && h.y < o.y + o.h - pad && h.y + h.h > o.y + pad) { crash(); return; }
+    // Check after physics so crouching changes the collision box immediately on landing.
+    const h=hitbox();
+    for(const o of obstacles){
+      const box=obstacleBox(o);
+      if(overlaps(h,box)){crash(o);return;}
+      if(o.kind==='bird'&&o.lane===1&&box.x<DINO_X+DUCK_W&&box.x+box.w>DINO_X+4&&!dino.ducking)o.duckSafe=false;
+      if(!o.passed&&o.x+o.w<DINO_X){
+        o.passed=true;cleared++;
+        if(o.kind==='bird'&&o.lane===1&&o.duckSafe){ducked++;bonus+=10;score=Math.floor(dist*.03)+bonus;notify('NICE DUCK! +10');beep(620,.07,'triangle',.035,920);
+          if(!reduced)for(let i=0;i<10;i++)particles.push({x:DINO_X+25,y:GROUND-20,vx:(Math.random()-.5)*100,vy:-30-Math.random()*60,life:.45});
+        }
+        updateGoal();
+      }
     }
-    if (flashT > 0) { flashT -= dt; $('score').classList.toggle('flash', Math.floor(flashT * 8) % 2 === 0 && flashT > 0); } else $('score').classList.remove('flash');
+    updateCue();
+    if(!reduced && flashT > 0) { flashT -= dt; $('score').classList.toggle('flash', Math.floor(flashT * 8) % 2 === 0 && flashT > 0); } else $('score').classList.remove('flash');
     hud();
   }
 
@@ -466,22 +567,20 @@
       ctx.fillRect(sx + sw, o.y + o.h * 0.5, 6, 5); ctx.fillRect(sx + sw + 1, o.y + o.h * 0.32, 5, o.h * 0.22);
     }
   }
-  function drawBird(o, th) {
-    ctx.fillStyle = th.bird;
-    ctx.fillRect(o.x + 8, o.y + 10, 26, 10);                // body
-    ctx.fillRect(o.x, o.y + 12, 10, 5);                     // tail
-    ctx.fillRect(o.x + 32, o.y + 8, 10, 8);                 // head
-    ctx.fillStyle = th.fg; ctx.fillRect(o.x + 40, o.y + 12, 6, 3);   // beak
-    ctx.fillStyle = th.bird;
-    const up = Math.floor(performance.now() / 130) % 2 === 0;
-    ctx.beginPath();
-    if (up) { ctx.moveTo(o.x + 14, o.y + 10); ctx.lineTo(o.x + 28, o.y + 10); ctx.lineTo(o.x + 22, o.y - 2); }
-    else { ctx.moveTo(o.x + 14, o.y + 20); ctx.lineTo(o.x + 28, o.y + 20); ctx.lineTo(o.x + 22, o.y + 30); }
-    ctx.fill();
+  function drawBird(o,th){
+    const color=o.lane===1?'#cf7908':th.bird;
+    // Facing left, towards the runner. Solid body matches the collision zone; wings are forgiving.
+    ctx.fillStyle=color;ctx.fillRect(o.x+10,o.y+10,29,11);ctx.fillRect(o.x+4,o.y+8,16,12);
+    ctx.beginPath();ctx.moveTo(o.x+7,o.y+11);ctx.lineTo(o.x-4,o.y+17);ctx.lineTo(o.x+7,o.y+17);ctx.fill();
+    ctx.fillRect(o.x+38,o.y+12,10,5);ctx.fillStyle=th.bg;ctx.fillRect(o.x+8,o.y+10,3,3);ctx.fillStyle=color;
+    const up=reduced||Math.floor(elapsed/.13)%2===0;
+    ctx.beginPath();ctx.moveTo(o.x+19,o.y+14);ctx.lineTo(o.x+36,o.y+14);ctx.lineTo(o.x+29,up?o.y-5:o.y+29);ctx.fill();
+    if(o.lane===1){ctx.fillStyle='#f0b429';ctx.fillRect(o.x+20,o.y+10,13,3);}
   }
+  function drawRock(o,th){ctx.fillStyle=th.line;ctx.beginPath();ctx.moveTo(o.x,o.y+o.h);ctx.lineTo(o.x+4,o.y+12);ctx.lineTo(o.x+16,o.y);ctx.lineTo(o.x+o.w-10,o.y+3);ctx.lineTo(o.x+o.w,o.y+o.h);ctx.closePath();ctx.fill();ctx.fillStyle=th.cloud;ctx.fillRect(o.x+14,o.y+7,13,4);}
   function draw() {
     const th = theme(nightT);
-    ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, cv.height);ctx.save();ctx.translate(0,cv.height-H);
     if (nightT > 0.05) for (const s of stars) { ctx.globalAlpha = s.a * nightT; ctx.fillStyle = '#fff'; ctx.fillRect(s.x, s.y, 2, 2); }
     ctx.globalAlpha = 1;
     // sun / moon
@@ -490,16 +589,21 @@
     if (nightT > 0.5) { ctx.fillStyle = th.bg; ctx.beginPath(); ctx.arc(707, 44, 14, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = th.cloud;
     for (const c of clouds) { ctx.fillRect(c.x, c.y, 44 * c.s, 10); ctx.fillRect(c.x + 10 * c.s, c.y - 8, 22 * c.s, 10); ctx.fillRect(c.x + 26 * c.s, c.y + 8, 30 * c.s, 6); }
+    // A quiet parallax ridge gives the course depth without hiding hazards.
+    ctx.fillStyle=th.cloud;ctx.beginPath();ctx.moveTo(0,GROUND);
+    const ridge=(dist*.055)%240;for(let x=-240-ridge;x<W+240;x+=240){ctx.lineTo(x+80,GROUND-48);ctx.lineTo(x+155,GROUND-20);ctx.lineTo(x+210,GROUND-64);ctx.lineTo(x+240,GROUND);}ctx.lineTo(W,GROUND);ctx.closePath();ctx.fill();
     // ground with moving specks
     ctx.fillStyle = th.line; ctx.fillRect(0, GROUND, W, 2);
     const off = (dist * 0.9) % 160;
     for (let x = -off; x < W; x += 80) { ctx.fillRect(x + 20, GROUND + 8, 14, 2); ctx.fillRect(x + 56, GROUND + 15, 6, 2); }
 
-    for (const o of obstacles) o.kind === 'bird' ? drawBird(o, th) : drawCactus(o, th);
+    for (const o of obstacles) o.kind === 'bird' ? drawBird(o, th) : o.kind==='rock'?drawRock(o,th):drawCactus(o, th);
+    ctx.globalAlpha=.12;ctx.fillStyle=th.fg;ctx.beginPath();ctx.ellipse(DINO_X+22,GROUND+4,24-Math.min(12,dino.lift*.1),3,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
     drawDino(th);
+    for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*3);ctx.fillStyle='#f0b429';ctx.fillRect(p.x,p.y,4,4);}ctx.globalAlpha=1;
 
     ctx.fillStyle = th.fg; ctx.font = '700 22px "JetBrains Mono",monospace'; ctx.textAlign = 'right';
-    ctx.fillText(shownScore(), W - 16, 32);
+    ctx.fillText(shownScore(), W - 16, 32);ctx.restore();
   }
 
   /* ---------- main loop ---------- */
@@ -514,6 +618,7 @@
     requestAnimationFrame(frame);
   }
 
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{const r=entries[0].contentRect;if(r.width>0)cv.height=Math.round(W*r.height/r.width);}).observe($('board'));
   updateSoundBtn();
   reset();
   requestAnimationFrame(frame);

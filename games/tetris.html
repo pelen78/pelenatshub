@@ -1,158 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tetris</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#0b1740"><title>Tetris · ATS Class Hub</title>
 <style>
-  :root{
-    --bg:#EDF2FB;
-    --card:#FFFFFF;
-    --navy:#16294D;
-    --navy-soft:#41537A;
-    --gold:#F0B429;
-    --red:#D6303A;
-    --green:#1B7F4B;
-    --navy-deep:#0b1740;
-    --line:#DCE4F2;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg);
-    color:var(--navy);
-    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
-    font-size:16px;line-height:1.5;
-    min-height:100vh;padding:26px 20px 56px;
-  }
-  .hidden{display:none!important}
-  header{max-width:860px;margin:0 auto 20px}
-  h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;margin:0;letter-spacing:-.01em}
-  header p{margin:4px 0 0;color:var(--navy-soft);font-size:16px}
-
-  .game{max-width:860px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-
-  .tetris{display:grid;grid-template-columns:150px 300px 150px;gap:16px;justify-content:center;align-items:start;grid-template-areas:"left board right"}
-  .left{grid-area:left}.right{grid-area:right}.boardwrap{grid-area:board}
-  .side{display:grid;gap:10px}
-  .box{background:#F1F6FF;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--navy-soft);margin-bottom:4px}
-  .box .val{display:block;font-size:24px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
-  .box .sub{display:block;font-size:12px;color:var(--navy-soft);font-weight:600}
-  .box canvas{display:block;width:100%;height:auto;margin-top:2px}
-
-  .board{position:relative;width:100%;aspect-ratio:1/2;border-radius:12px;overflow:hidden;border:2px solid var(--navy);background:var(--navy-deep);touch-action:none;user-select:none;-webkit-user-select:none}
-  .board canvas{display:block;width:100%;height:100%}
-  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;background:rgba(11,23,64,.86);color:#fff}
-  .overlay h2{margin:0;font-size:clamp(26px,5vw,34px);font-weight:800}
-  .overlay p{margin:0;color:#C9D4EC;font-size:15px}
-  .overlay .keys{font-size:13px;text-align:left;line-height:1.7;color:#C9D4EC;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 12px}
-  .overlay .keys b{color:#fff;font-family:'JetBrains Mono',monospace;font-weight:700}
-  .overlay .newbest{color:var(--gold);font-weight:800}
-  .banner{position:absolute;left:0;right:0;top:16%;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.1em;color:var(--gold);font-size:22px;pointer-events:none;opacity:0;transition:opacity .2s;text-shadow:0 2px 8px #0b1740;line-height:1.3}
-  .banner.on{opacity:1}
-  .banner small{display:block;font-size:13px;color:#fff;letter-spacing:.06em}
-
-  button,select{font:inherit}
-  button{
-    font-weight:800;cursor:pointer;border:2px solid transparent;
-    border-radius:12px;padding:12px 24px;font-size:17px;
-    background:var(--navy);color:#fff;transition:filter .12s ease;
-  }
-  button:hover{filter:brightness(1.12)}
-  button:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  button.big{background:var(--gold);color:var(--navy);font-size:19px;padding:12px 36px;border-radius:999px;margin-top:4px}
-  button.quiet{background:transparent;color:var(--navy-soft);border-color:var(--line);font-weight:600;font-size:15px;padding:9px 16px}
-  button.quiet:hover{border-color:var(--navy-soft);filter:none}
-  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
-  select{font-weight:800;font-size:14px;color:var(--navy);border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#FAFCFF;cursor:pointer}
-
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px;justify-content:center}
-  .opt{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--navy-soft)}
-
-  .touch{display:none;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
-  .touch button{width:72px;height:64px;padding:0;font-size:22px;border-radius:16px;touch-action:none}
-  .touch button.wide{width:96px;font-size:15px}
-  .touch button.gold{background:var(--gold);color:var(--navy)}
-  .touch button.on{filter:brightness(1.35)}
-  @media (pointer:coarse){.touch{display:flex}}
-
-  .hint{color:var(--navy-soft);font-size:14px;margin:14px 0 0}
-
-  @media (max-width:660px){
-    .tetris{grid-template-columns:1fr 1fr;grid-template-areas:"right left" "board board"}
-    .boardwrap{max-width:300px;margin:0 auto;width:100%}
-    .left .box canvas,.right .box canvas{max-width:104px}
-  }
-
-  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;margin:40px -20px -56px}
-  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
-</style>
-</head>
-<body>
-
-<header>
-  <h1>Tetris</h1>
-  <p>Marathon mode: clear lines to level up and reach level 15. Plan ahead with the next pieces, and use Hold to save one for later.</p>
-</header>
-
-<div class="game">
-  <section class="card">
-    <div class="tetris">
-      <div class="left side">
-        <div class="box"><span class="lbl">HOLD</span><canvas id="holdCv" width="104" height="64" aria-label="Held piece"></canvas></div>
-        <div class="box"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
-        <div class="box"><span class="lbl">BEST</span><span class="val" id="best">0</span></div>
-        <div class="box"><span class="lbl">LEVEL</span><span class="val" id="level">1</span></div>
-        <div class="box"><span class="lbl">LINES</span><span class="val" id="lines">0</span><span class="sub" id="goal">goal: 150</span></div>
-      </div>
-
-      <div class="boardwrap">
-        <div class="board" id="board">
-          <canvas id="cv" width="300" height="600" aria-label="Tetris board" role="img"></canvas>
-          <div class="banner" id="banner"></div>
-          <div class="overlay" id="overlay">
-            <h2 id="ovTitle">Tetris</h2>
-            <p id="ovText"></p>
-            <div class="keys" id="ovKeys"><b>◀ ▶</b> move &nbsp; <b>▼</b> soft drop<br><b>▲ / X</b> rotate &nbsp; <b>Z</b> rotate back<br><b>Space</b> hard drop &nbsp; <b>C / Shift</b> hold<br><b>P</b> pause</div>
-            <button class="big" id="ovBtn" type="button">Start</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="right side">
-        <div class="box"><span class="lbl">NEXT</span><canvas id="nextCv" width="104" height="192" aria-label="Next pieces"></canvas></div>
-      </div>
-    </div>
-
-    <div class="touch" aria-label="On-screen controls">
-      <button type="button" data-a="left" aria-label="Move left">◀</button>
-      <button type="button" data-a="down" aria-label="Soft drop">▼</button>
-      <button type="button" data-a="right" aria-label="Move right">▶</button>
-      <button type="button" data-a="rotCCW" aria-label="Rotate left">↺</button>
-      <button type="button" data-a="rotCW" aria-label="Rotate right">↻</button>
-      <button type="button" class="wide" data-a="hold" aria-label="Hold piece">Hold</button>
-      <button type="button" class="wide gold" data-a="hard" aria-label="Hard drop">Drop</button>
-    </div>
-
-    <div class="controls">
-      <label class="opt">Start level
-        <select id="startLevel"></select>
-      </label>
-      <button class="quiet" id="pauseBtn" type="button">Pause</button>
-      <button class="quiet" id="restartBtn" type="button">New game</button>
-    </div>
-    <p class="hint">The faded outline shows where your piece will land. You can hold one piece at a time, once per piece. Scoring: 1 line = 100, 2 = 300, 3 = 500, 4 (Tetris) = 800, times your level. Back-to-back Tetrises and combos earn extra. Finish 150 lines from level 1 to complete the Marathon.</p>
-  </section>
-</div>
-
-<footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
-
+:root{--bg:#edf2fb;--navy:#16294d;--deep:#0b1740;--soft:#41537a;--gold:#f0b429;--line:#dce4f2}*{box-sizing:border-box}[hidden],.hidden{display:none!important}body{margin:0;min-height:100svh;background:var(--bg);color:var(--navy);font:16px/1.5 'Avenir Next',Avenir,'Trebuchet MS',sans-serif;display:flex;flex-direction:column}button,select{font:inherit}button,summary,select{cursor:pointer}button{min-height:44px;border:1px solid #b8c6dd;border-radius:8px;padding:9px 14px;background:white;color:var(--navy);font-weight:750;font-size:15px}button:hover:not(:disabled){background:var(--bg)}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.hub-header{width:min(1120px,100%);margin:auto auto 0;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.06em}.hub-header small{display:block;color:var(--soft);font-size:10px;letter-spacing:0}.hub-header a{color:var(--navy);text-decoration:none;border:1px solid #b8c6dd;padding:6px 10px;border-radius:5px;white-space:nowrap}.arcade{width:calc(100% - 32px);max-width:1080px;margin:0 auto 20px;padding:18px 24px;background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 34px #16294d0c}.masthead{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}.edition{display:block;font:11px ui-monospace,monospace;letter-spacing:.13em;color:var(--soft);margin-bottom:5px}h1{font-size:32px;letter-spacing:-1px;line-height:1.1;margin:0;font-weight:900}.actions{display:flex;gap:8px}.layout{display:grid;grid-template-columns:128px minmax(220px,300px) minmax(245px,310px);gap:24px;justify-content:center;align-items:start}.previews{display:grid;gap:12px}.preview{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px}.label{display:block;font:12px/1.4 ui-monospace,monospace;color:var(--soft);letter-spacing:.06em}.preview canvas{width:104px;max-width:100%;display:block}.preview small{font-size:12px;color:var(--soft)}.boardwrap{width:100%;max-width:calc((100svh - 285px)/2);min-width:220px;justify-self:center}.board{position:relative;width:100%;aspect-ratio:1/2;background:var(--deep);border:2px solid var(--navy);border-radius:10px;overflow:hidden;touch-action:none;user-select:none}.board>canvas{display:block;width:100%;height:100%}.board-foot{display:flex;justify-content:space-between;gap:6px;margin-top:7px;font:11px ui-monospace,monospace;color:var(--soft)}.overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;padding:20px;text-align:center;background:#0b1740e8;color:white;overflow:auto;justify-content:safe center;z-index:2}.eyebrow{font:700 11px ui-monospace,monospace;letter-spacing:.14em;color:var(--gold)}.overlay h2{font-size:32px;letter-spacing:-1px;line-height:1.1;margin:0}.overlay p{color:#dce4f2;margin:0;font-size:15px}.overlay .keys{font-size:13px;line-height:1.9;color:#c9d4ec}.primary{background:var(--gold);color:var(--deep);border:0;font-size:18px;padding:11px 22px;box-shadow:0 3px 0 #ac7a12}.primary:hover:not(:disabled){background:#ffd36b}.block-mark{display:grid;grid-template-columns:repeat(3,20px);gap:3px;margin-bottom:8px}.block-mark i{width:20px;height:20px;background:var(--gold);box-shadow:inset 3px 3px #ffffff50,inset -3px -3px #0002}.block-mark i:first-child{grid-column:2}.block-mark i:nth-child(2){grid-column:1}.banner{position:absolute;top:20%;left:6%;right:6%;color:var(--gold);text-align:center;font-size:24px;font-weight:900;line-height:1.2;text-shadow:0 2px 8px #0b1740;pointer-events:none;opacity:0;background:#0b1740de;border-radius:8px;padding:12px 4px;z-index:1}.banner.on{opacity:1}.banner small{display:block;font-size:13px;color:white;margin-top:6px}.sidebar{display:grid;gap:14px;min-width:0}.scores{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}.value{display:block;font-size:32px;font-weight:850;line-height:1.2;font-variant-numeric:tabular-nums}.score-total .value{font-size:40px}.best .value{color:#805300}.mission{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:12px 14px}.mission h3{font-size:21px;line-height:1.25;margin:7px 0 12px}.mission progress{width:100%;height:7px;border:0;display:block;accent-color:var(--gold)}progress::-webkit-progress-bar{background:#d4def0;border-radius:5px}progress::-webkit-progress-value{background:var(--gold);border-radius:5px}.mission-meta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:var(--soft);font:12px ui-monospace,monospace}.mode-row{display:grid;grid-template-columns:1fr 80px;gap:10px}label .label{margin-bottom:5px}select{min-width:0;width:100%;min-height:44px;border:1px solid #b8c6dd;border-radius:7px;background:white;color:var(--navy);font-weight:700;padding:6px 8px;font-size:15px}.controls{display:flex;gap:10px}.controls button{flex:1}#pauseBtn{background:var(--navy);color:white}details{border-top:1px solid var(--line);padding-top:10px;color:var(--soft);font-size:14px}summary{font-size:15px;font-weight:750}.help{display:grid;gap:10px;padding-top:10px}.help p{margin:0}kbd{font:12px ui-monospace,monospace;background:var(--bg);border:1px solid #b8c6dd;border-bottom-width:2px;border-radius:4px;padding:1px 4px;color:var(--navy)}.touch{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.touch button{min-height:48px;touch-action:none;padding:4px;font-size:20px}.touch .wide{font-size:14px}.touch .gold{background:var(--gold)}.touch .on{box-shadow:inset 0 0 0 2px var(--gold);background:var(--bg)}.touch .drop{grid-column:span 2}.results{width:100%}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;background:#16294d;border:1px solid #41537a;border-radius:8px}.result-grid strong{font-size:23px;display:block}.result-grid span{font-size:11px;color:#dce4f2}.results p{font-size:13px;margin-top:10px}.newbest{color:#ffd36b!important}.footer{margin:auto 0 0;padding:25px 20px;background:var(--deep);color:#ffffffcc;text-align:center;font:12px/1.5 'JetBrains Mono',ui-monospace,monospace}.footer .who{display:block;margin-top:6px;color:#ffffff99}dialog{width:480px;max-width:calc(100vw - 24px);max-height:85svh;overflow:auto;padding:24px;background:white;color:var(--navy);border:1px solid var(--line);border-radius:14px}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:26px;line-height:1.2;margin:0 0 10px}dialog p{color:var(--soft);font-size:15px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.looks{display:grid;gap:10px}.look{text-align:left;display:grid;grid-template-columns:55px 1fr;gap:12px;align-items:center}.look[aria-pressed=true]{border:2px solid #a47710}.look small{display:block;font-weight:400;color:var(--soft);font-size:13px}.swatch{height:35px;background:var(--swatch);border:4px solid #ffffff55;box-shadow:inset -5px -5px #0002}.note{margin:0;font-size:12px;color:var(--soft)}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(pointer:coarse){.touch{display:grid}}@media(min-width:801px) and (max-height:760px){.arcade{padding:12px 18px}.masthead{margin-bottom:12px}.edition{display:none}.sidebar{gap:10px}.scores{gap:8px;padding-bottom:10px}.mission{padding:10px 12px}.value{font-size:28px}.score-total .value{font-size:34px}.boardwrap{max-width:calc((100svh - 265px)/2)}}
+@media(max-width:800px){.arcade{padding:16px;width:calc(100% - 20px)}.layout{grid-template-columns:100px minmax(0,300px);gap:14px}.sidebar{grid-column:1/-1}.boardwrap{max-width:300px;min-width:0}.previews{gap:10px}.preview{padding:8px}.masthead{flex-wrap:wrap}.edition{font-size:10px}h1{font-size:28px}.scores{grid-template-columns:repeat(4,1fr);gap:10px}.value,.score-total .value{font-size:27px}.touch{display:grid}.overlay{padding:12px;gap:12px}.overlay h2{font-size:27px}.overlay p{font-size:14px}.hub-header{padding:10px 14px}.hub-header small{font-size:9px}}
+@media(max-width:420px){.layout{grid-template-columns:72px minmax(0,1fr);gap:10px}.preview{padding:7px 4px}.preview .label{font-size:10px}.preview small{font-size:10px}.overlay{gap:8px;padding:10px}.overlay h2{font-size:23px}.overlay p{font-size:13px}.overlay .keys{font-size:11px}.block-mark{margin-bottom:3px;transform:scale(.8)}.overlay .primary{font-size:16px;padding:9px 15px}.result-grid{gap:6px;padding:7px}.result-grid strong{font-size:20px}.results p{font-size:12px}.scores .label{font-size:10px}.value,.score-total .value{font-size:24px}.actions button{font-size:13px;padding:8px 10px}.board-foot{font-size:9px}}
+</style></head><body>
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a href="../index.html">← Class Hub</a></header>
+<main class="arcade"><div class="masthead"><div><span class="edition">FIND YOUR FLOW / ARCADE 03</span><h1>TETRIS<span style="color:var(--gold)">.</span></h1></div><div class="actions"><button id="soundBtn" aria-pressed="true">Sound on</button><button id="looksBtn">Your blocks</button></div></div>
+<div class="layout"><aside class="previews" aria-label="Piece previews"><div class="preview"><span class="label">HOLD / C</span><canvas id="holdCv" width="104" height="64" role="img" aria-label="No held piece"></canvas><small id="holdNote">Save a piece</small></div><div class="preview"><span class="label">UP NEXT</span><canvas id="nextCv" width="104" height="192" role="img" aria-label="Next three pieces"></canvas></div></aside>
+<section class="boardwrap" aria-label="Tetris game"><div class="board" id="board" tabindex="-1"><canvas id="cv" width="300" height="600" role="img" aria-label="Tetris playfield. Keyboard controls are listed below."></canvas><div class="banner" id="banner"></div><div class="overlay" id="overlay"><div class="block-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div><span class="eyebrow" id="ovEyebrow">ONE MORE LINE</span><h2 id="ovTitle">Marathon</h2><p id="ovText"></p><div class="keys" id="ovKeys">← → move · ↑ rotate<br>Space drops · C holds<br>P pauses your game</div><div class="results" id="results" hidden></div><button class="primary" id="ovBtn">Let's play</button></div></div><div class="board-foot"><span id="boardMode">MARATHON</span><span>10 × 20</span></div>
+<div class="touch" aria-label="Touch controls"><button data-a="left" aria-label="Move left">←</button><button data-a="down" aria-label="Soft drop">↓</button><button data-a="right" aria-label="Move right">→</button><button data-a="rotCW" aria-label="Rotate clockwise">↻</button><button data-a="rotCCW" aria-label="Rotate counterclockwise">↺</button><button class="wide" data-a="hold">Hold</button><button class="wide gold drop" data-a="hard">Drop ↓</button></div></section>
+<aside class="sidebar"><div class="scores"><div class="score-total"><span class="label">SCORE</span><strong class="value" id="score">0</strong></div><div class="best"><span class="label" id="bestLabel">BEST SCORE</span><strong class="value" id="best">0</strong></div><div><span class="label">LEVEL / LINES</span><strong class="value"><span id="level">1</span> <span style="font-size:17px;color:var(--soft)">/ <span id="lines">0</span></span></strong></div><div><span class="label" id="timeLabel">TIME</span><strong class="value" id="time">0:00</strong></div></div>
+<div class="mission"><span class="label">YOUR NEXT GOAL</span><h3 id="goalTitle">Clear 5 lines</h3><progress id="goalProgress" max="5" value="0" aria-label="Current goal progress"></progress><div class="mission-meta"><span id="goalCount">0 / 5</span><span id="goal">150 to finish</span></div></div>
+<div class="mode-row"><label><span class="label">GAME MODE</span><select id="mode"><option value="marathon">Marathon</option><option value="sprint">Sprint · 40 lines</option><option value="ultra">Ultra · 90 sec</option></select></label><label><span class="label">LEVEL</span><select id="startLevel"></select></label></div><div class="controls"><button id="pauseBtn">Pause</button><button id="restartBtn">New game</button></div>
+<details><summary>How to play & game info</summary><div class="help"><p><kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> move. <kbd>↓</kbd> soft drop. <kbd>↑</kbd> / <kbd>X</kbd> rotate right; <kbd>Z</kbd> rotates left.</p><p><kbd>Space</kbd> drops instantly. <kbd>C</kbd> / <kbd>Shift</kbd> holds a piece once per turn. <kbd>P</kbd> / <kbd>Esc</kbd> pauses.</p><p>The outline shows your landing position. Clear 1 / 2 / 3 / 4 lines for 100 / 300 / 500 / 800 points × level. Consecutive clears and back-to-back Tetrises earn bonuses.</p><p>Marathon: reach the line goal. Sprint: clear 40 lines as fast as possible. Ultra: score as much as you can in 90 seconds. Sprint and Ultra start at level 1.</p><p>Records and block designs are saved on this browser. Marathon records are separate for each starting level.</p></div></details><p class="note" id="storageNote"></p></aside></div></main>
+<footer class="footer">// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a fresh game?</h2><p>Your current run will end. Your saved records and unlocked designs will stay.</p><div class="dialog-actions"><button id="cancelRestart">Keep playing</button><button class="primary" id="confirmRestart">New game</button></div></dialog>
+<dialog id="looksDialog" aria-labelledby="looksTitle"><h2 id="looksTitle">Your blocks</h2><p>Earn a new finish as you play. Every design plays the same.</p><div class="looks" id="looks"></div><div class="dialog-actions"><button id="closeLooks">Done</button></div></dialog><div id="announce" class="sr-only" aria-live="polite"></div>
 <script>
+
 (() => {
   'use strict';
   const COLS = 10, ROWS = 22, HIDDEN = 2, CELL = 30, MAX_LEVEL = 15;
@@ -198,9 +67,43 @@
   let dasDir = 0, dasT = 0, arrT = 0;
   // state: ready | running | paused | clearing | over | won
 
+  let mode = 'marathon', elapsed = 0, pieces = 0, tetrises = 0, maxCombo = 0, startBest = 0, bestTime = 0;
+  let particles = [], dropTrail = null, runUnlocks = [], goalTarget = 5, storageOK = true;
+  const memory = Object.create(null);
+  function read(k) { try { return localStorage.getItem(k) ?? memory[k] ?? null; } catch { storageOK = false; return memory[k] ?? null; } }
+  function write(k,v) { memory[k] = String(v); try { localStorage.setItem(k,String(v)); } catch { storageOK = false; } }
+  const number = v => Number.isFinite(Number(v)) && Number(v) >= 0 ? Number(v) : 0;
+  const recordKey = () => 'hub-tetris-v2-best-' + mode + (mode === 'marathon' ? '-' + startLvl : '');
+  const timeKey = 'hub-tetris-v2-sprint-time';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const profile = { skin:'classic', unlocked:['classic'], sound:true };
+  try { const p=JSON.parse(read('hub-tetris-profile-v2')); if(p) { profile.unlocked=['classic',...['glass','blueprint'].filter(x=>p.unlocked?.includes(x))]; profile.skin=profile.unlocked.includes(p.skin)?p.skin:'classic'; profile.sound=p.sound!==false; } } catch {}
+  const saveProfile = () => write('hub-tetris-profile-v2',JSON.stringify(profile));
+  const clock = t => Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0');
+  const precise = t => clock(t) + '.' + Math.floor((t%1)*10);
+  let audio;
+  function sound(kind) {
+    if(!profile.sound)return;
+    try { audio ||= new (window.AudioContext || window.webkitAudioContext)(); if(audio.state==='suspended')audio.resume().catch(()=>{});
+      const notes={rotate:[320],hold:[260,390],drop:[140,90],clear:[440,550,660],tetris:[440,550,660,880],goal:[660,880],end:[300,220,150],start:[330,440]};
+      (notes[kind]||[200]).forEach((hz,i)=>{const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime+i*.065;o.type='triangle';o.frequency.value=hz;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.07,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.13);});
+    } catch {}
+  }
+  function clearInputs() { held.left=held.right=held.down=false;dasDir=0;dasT=arrT=0; document.querySelectorAll('.touch button').forEach(b=>b.classList.remove('on')); }
+  function record() { if(score>best) {best=score;newBest=true;saveBest(best);} }
+  function unlock(id) { if(profile.unlocked.includes(id))return;profile.unlocked.push(id);runUnlocks.push(id);saveProfile();$('announce').textContent='New block design unlocked: '+id; }
+  function syncGoals() {
+    if(lines>=5)unlock('glass'); if(tetrises>=1)unlock('blueprint');
+    while(lines>=goalTarget)goalTarget+=5;
+    const target=Math.min(goalTarget,goal),base=Math.max(0,goalTarget-5);
+    $('goalTitle').textContent='Clear '+target+' lines';$('goalCount').textContent=lines+' / '+target;
+    $('goalProgress').max=Math.max(1,target-base);$('goalProgress').value=Math.max(0,lines-base);
+  }
   const BEST_KEY = 'hub-tetris-best';
-  const loadBest = () => { try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch (_) { return 0; } };
-  const saveBest = v => { try { localStorage.setItem(BEST_KEY, String(v)); } catch (_) {} };
+  const loadBest = () => number(read(recordKey()));
+  const saveBest = v => write(recordKey(),v);
+  // The old record mixed starting levels; preserve it as a legacy record, without assigning it to a new category.
+  const legacyBest = number(read(BEST_KEY));
 
   /* ---------- helpers ---------- */
   const clone = m => m.map(r => r.slice());
@@ -234,9 +137,13 @@
   function reset() {
     grid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     queue = []; holdT = 0; canHold = true;
-    score = 0; lines = 0; startLvl = Number($('startLevel').value) || 1; level = startLvl;
-    goal = (MAX_LEVEL + 1 - startLvl) * 10;
-    best = loadBest(); newBest = false; overReason = '';
+    mode=$('mode').value;
+    score = 0; lines = 0; startLvl = mode==='marathon' ? Math.max(1,Math.min(10,Number($('startLevel').value)||1)) : 1; level = startLvl;
+    $('startLevel').value=String(startLvl);$('startLevel').disabled=mode!=='marathon';
+    goal = mode==='sprint' ? 40 : mode==='ultra' ? Infinity : (MAX_LEVEL + 1 - startLvl) * 10;
+    best = loadBest();startBest=best;bestTime=number(read(timeKey));newBest = false; overReason = '';
+    elapsed=0;pieces=0;tetrises=0;maxCombo=0;goalTarget=5;particles=[];dropTrail=null;runUnlocks=[];
+    clearTimeout(bannerT);$('banner').classList.remove('on');clearInputs();
     combo = -1; b2b = false; clearRows = []; clearT = 0;
     dropT = 0; lockT = 0; lockResets = 0;
     held.left = held.right = held.down = false; dasDir = 0; dasT = 0; arrT = 0;
@@ -257,9 +164,15 @@
   /* ---------- HUD + overlay ---------- */
   const hudCache = {};
   function hud(force) {
-    const v = { score, best, level, lines };
+    record(); syncGoals();
+    const v = { score, best:mode==='sprint' ? (bestTime?precise(bestTime):'—') : best, level, lines };
     for (const k in v) if (force || hudCache[k] !== v[k]) { hudCache[k] = v[k]; $(k).textContent = v[k]; }
-    $('goal').textContent = 'goal: ' + goal;
+    $('goal').textContent = mode==='ultra' ? '90-second run' : Math.max(0,goal-lines)+' to finish';
+    $('time').textContent=clock(mode==='ultra'?Math.ceil(Math.max(0,90-elapsed)):elapsed);
+    $('timeLabel').textContent=mode==='ultra'?'TIME LEFT':'TIME';
+    $('bestLabel').textContent=mode==='sprint'?'BEST TIME':'BEST SCORE';
+    $('boardMode').textContent=mode.toUpperCase();
+    $('storageNote').textContent=!storageOK?'Saving unavailable — records last for this session.':legacyBest?'Previous version best: '+legacyBest.toLocaleString()+' points.':'';
   }
   function setState(s) {
     state = s;
@@ -267,34 +180,39 @@
     $('ovKeys').classList.toggle('hidden', s === 'over' || s === 'won');
     $('pauseBtn').textContent = s === 'paused' ? 'Resume' : 'Pause';
     $('pauseBtn').disabled = !(s === 'running' || s === 'paused' || s === 'clearing');
+    $('results').hidden=!(s==='over'||s==='won');
+    $('ovEyebrow').textContent=s==='paused'?'TAKE A BREATHER':s==='won'?'NICELY DONE':s==='over'?'ONE MORE TRY':'ONE MORE LINE';
     if (s === 'ready') {
-      $('ovTitle').textContent = 'Marathon';
-      $('ovText').textContent = 'Clear ' + goal + ' lines to finish. Press Space or the button to start.';
-      $('ovBtn').textContent = 'Start';
+      $('ovTitle').textContent = {marathon:'Marathon',sprint:'40-line sprint',ultra:'90-second rush'}[mode];
+      $('ovText').textContent = mode==='ultra'?'How many points can you score in 90 seconds?':mode==='sprint'?'Clear 40 lines. Race your best time.':'Find your rhythm. Clear '+goal+' lines to finish.';
+      $('ovBtn').textContent = "Let's play";
     } else if (s === 'paused') {
       $('ovTitle').textContent = 'Paused'; $('ovText').textContent = 'Press P to keep playing.'; $('ovBtn').textContent = 'Resume';
     } else if (s === 'over' || s === 'won') {
-      $('ovTitle').textContent = s === 'won' ? 'Marathon complete!' : 'Game over';
-      $('ovText').innerHTML = (overReason ? overReason + '<br>' : '') + 'Score: <b>' + score + '</b> · Level: <b>' + level + '</b> · Lines: <b>' + lines + '</b>' + (newBest ? '<br><span class="newbest">New best score!</span>' : '');
+      $('ovTitle').textContent = s==='won' ? (mode==='sprint'?precise(elapsed):mode==='ultra'?score.toLocaleString()+' points':'You did it!') : 'Nice run!';
+      $('ovText').textContent = overReason;
+      const gap=mode==='sprint' ? (s!=='won'?'Finish 40 lines to set a time.':newBest?'New fastest time!':'Best time: '+precise(bestTime)) : newBest?'New best score!':(Math.max(1,startBest-score+1)).toLocaleString()+' points to a new best.';
+      $('results').innerHTML='<div class="result-grid"><div><strong>'+score.toLocaleString()+'</strong><span>Points</span></div><div><strong>'+lines+'</strong><span>Lines cleared</span></div><div><strong>'+clock(elapsed)+'</strong><span>Time played</span></div><div><strong>'+tetrises+'</strong><span>Tetrises</span></div></div><p class="'+(newBest?'newbest':'')+'">'+gap+'</p><p>'+pieces+' pieces · Best combo '+maxCombo+'</p>'+(runUnlocks.length?'<p class="newbest">Unlocked: '+runUnlocks.join(' & ')+'</p>':'');
       $('ovBtn').textContent = 'Play again';
     }
   }
   let bannerT;
   function banner(main, sub) {
     const b = $('banner'); b.innerHTML = main + (sub ? '<small>' + sub + '</small>' : ''); b.classList.add('on');
+    $('announce').textContent=main+(sub?' — '+sub:'');
     clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 1300);
   }
   function endGame(kind, reason) {
     overReason = reason || '';
-    if (score > best) { best = score; newBest = true; }
-    if (newBest) saveBest(best);
-    hud(true); setState(kind);
+    record();clearInputs();
+    if(mode==='sprint') {newBest=kind==='won'&&(!bestTime||elapsed<bestTime);if(newBest){bestTime=elapsed;write(timeKey,bestTime);}}
+    sound(kind==='won'?'goal':'end');hud(true); setState(kind);
   }
 
-  function start() { if (state === 'ready') setState('running'); }
+  function start() { if (state === 'ready') {sound('start');setState('running');$('board').focus({preventScroll:true});} }
   function togglePause() {
-    if (state === 'running' || state === 'clearing') { held.left = held.right = held.down = false; dasDir = 0; pausedFrom = state; setState('paused'); }
-    else if (state === 'paused') setState(pausedFrom);
+    if (state === 'running' || state === 'clearing') { clearInputs(); pausedFrom = state; setState('paused'); }
+    else if (state === 'paused') {setState(pausedFrom);$('board').focus({preventScroll:true});}
   }
   function primary() {
     if (state === 'ready') start();
@@ -316,18 +234,20 @@
     const to = (cur.r + dir + 4) % 4, nm = rotateM(cur.m, dir);
     const kicks = (cur.t === 1 ? KICKS_I : KICKS_JLSTZ)['' + cur.r + to];
     for (const [kx, ky] of kicks) {
-      if (!collides(nm, cur.x + kx, cur.y - ky)) { cur.m = nm; cur.r = to; cur.x += kx; cur.y -= ky; onMoved(); return true; }
+      if (!collides(nm, cur.x + kx, cur.y - ky)) { cur.m = nm; cur.r = to; cur.x += kx; cur.y -= ky; onMoved(); sound('rotate'); return true; }
     }
     return false;
   }
   function ghostY() { let y = cur.y; while (!collides(cur.m, cur.x, y + 1)) y++; return y; }
   function hardDrop() {
     if (!cur) return;
-    const gy = ghostY(); score += (gy - cur.y) * 2; cur.y = gy; lockPiece();
+    const gy = ghostY();
+    if(!reduced)dropTrail={x:cur.x*CELL,y:(cur.y-HIDDEN)*CELL,to:(gy-HIDDEN)*CELL,m:clone(cur.m),color:COLORS[cur.t],life:.16};
+    score += (gy - cur.y) * 2; cur.y = gy; sound('drop');lockPiece();hud();
   }
   function holdPiece() {
     if (!cur || !canHold) return;
-    canHold = false;
+    canHold = false;sound('hold');
     const t = cur.t;
     if (holdT === 0) { holdT = t; spawn(takeNext()); }
     else { const back = holdT; holdT = t; spawn(back); }
@@ -335,6 +255,7 @@
   }
 
   function press(a) {
+    if(state!=='running'&&state!=='clearing')return;
     if (a === 'left') { held.left = true; dasDir = -1; dasT = 0; arrT = 0; if (state === 'running') move(-1); }
     else if (a === 'right') { held.right = true; dasDir = 1; dasT = 0; arrT = 0; if (state === 'running') move(1); }
     else if (a === 'down') held.down = true;
@@ -359,11 +280,13 @@
       if (gy >= 0) grid[gy][gx] = cur.t;
       if (gy >= HIDDEN) allHidden = false;
     }
-    const t = cur.t; cur = null; canHold = true;
+    pieces++;cur = null; canHold = true;
     if (allHidden) { endGame('over', 'Locked out!'); return; }
     const full = [];
     for (let r = 0; r < ROWS; r++) if (grid[r].every(v => v)) full.push(r);
-    if (full.length) { clearRows = full; clearT = CLEAR_TIME; setState('clearing'); }
+    if (full.length) {
+      if(!reduced)for(const r of full)for(let i=0;i<18;i++)particles.push({x:Math.random()*300,y:(r-HIDDEN+.5)*CELL,vx:(Math.random()-.5)*110,vy:-30-Math.random()*70,life:.5,color:COLORS[1+Math.floor(Math.random()*7)]});
+      sound(full.length===4?'tetris':'clear');clearRows = full; clearT = CLEAR_TIME; setState('clearing'); }
     else { combo = -1; spawn(takeNext()); }
   }
 
@@ -372,17 +295,17 @@
     grid = grid.filter((_, r) => !clearRows.includes(r));
     while (grid.length < ROWS) grid.unshift(Array(COLS).fill(0));
     clearRows = [];
-    combo++;
+    combo++;maxCombo=Math.max(maxCombo,combo);
     let pts = LINE_POINTS[n] * level;
-    const tetris = n === 4;
+    const tetris = n === 4;if(tetris)tetrises++;
     let sub = '';
     if (tetris && b2b) { pts = Math.floor(pts * 1.5); sub = 'BACK-TO-BACK'; }
     b2b = tetris ? true : (n > 0 ? false : b2b);
     if (combo > 0) { pts += 50 * combo * level; sub += (sub ? ' · ' : '') + combo + 'x COMBO'; }
     score += pts;
     lines += n;
-    if (score > best) { best = score; newBest = true; }
-    banner(LINE_NAMES[n], sub);
+    record();
+    banner(LINE_NAMES[n], '+'+pts.toLocaleString()+(sub?' · '+sub:''));
     const newLevel = Math.min(MAX_LEVEL, startLvl + Math.floor(lines / 10));
     if (newLevel > level) { level = newLevel; banner('LEVEL ' + level, LINE_NAMES[n]); }
     hud();
@@ -393,6 +316,12 @@
 
   /* ---------- simulation ---------- */
   function update(dt) {
+    if(state!=='running'&&state!=='clearing')return;
+    elapsed+=dt;
+    if(dropTrail){dropTrail.life-=dt;if(dropTrail.life<=0)dropTrail=null;}
+    particles=particles.filter(p=>p.life>dt);for(const p of particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=160*dt;}
+    if(mode==='ultra'&&elapsed>=90){elapsed=90;if(state==='clearing'){finishClear();}endGame('won',"Time's up. Great stacking!");return;}
+    hud();
     if (state === 'clearing') { clearT -= dt; if (clearT <= 0) finishClear(); return; }
     if (state !== 'running' || !cur) return;
 
@@ -415,14 +344,16 @@
     // lock delay
     if (grounded()) { lockT += dt; if (lockT >= LOCK_DELAY) lockPiece(); }
     else lockT = 0;
-    if (score > best) { best = score; newBest = true; }
+    record();
     hud();
   }
 
   /* ---------- drawing ---------- */
   function cell(c, x, y, size, color, alpha) {
     c.globalAlpha = alpha == null ? 1 : alpha;
-    c.fillStyle = color; c.fillRect(x, y, size, size);
+    if(profile.skin==='blueprint'){c.fillStyle='#16294d';c.fillRect(x+1,y+1,size-2,size-2);c.strokeStyle=color;c.lineWidth=2;c.strokeRect(x+3,y+3,size-6,size-6);c.fillStyle=color;c.fillRect(x+size/2-2,y+size/2-2,4,4);c.globalAlpha=1;return;}
+    c.fillStyle = color; c.fillRect(x+1, y+1, size-2, size-2);
+    if(profile.skin==='glass'){c.fillStyle='#ffffff66';c.fillRect(x+4,y+4,size-8,size*.3);c.strokeStyle='#ffffff99';c.lineWidth=1;c.strokeRect(x+2,y+2,size-4,size-4);c.globalAlpha=1;return;}
     c.fillStyle = 'rgba(255,255,255,.28)'; c.fillRect(x, y, size, Math.max(2, size * 0.14)); c.fillRect(x, y, Math.max(2, size * 0.14), size);
     c.fillStyle = 'rgba(0,0,0,.22)'; c.fillRect(x, y + size - Math.max(2, size * 0.14), size, Math.max(2, size * 0.14)); c.fillRect(x + size - Math.max(2, size * 0.14), y, Math.max(2, size * 0.14), size);
     c.globalAlpha = 1;
@@ -443,8 +374,10 @@
         const yy = cur.y + r - HIDDEN; if (yy >= -0.99) cell(ctx, (cur.x + c) * CELL, yy * CELL, CELL, COLORS[cur.t]);
       }
     }
+    if(dropTrail){ctx.globalAlpha=dropTrail.life*.9;ctx.fillStyle=dropTrail.color;for(let c=0;c<dropTrail.m.length;c++)if(dropTrail.m.some(r=>r[c]))ctx.fillRect(dropTrail.x+c*CELL,Math.max(0,dropTrail.y),CELL,dropTrail.to-dropTrail.y+CELL);ctx.globalAlpha=1;}
+    for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*2);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,4,4);}ctx.globalAlpha=1;
     if (state === 'clearing') {
-      const a = 0.35 + 0.65 * Math.abs(Math.sin(clearT * 30));
+      const a = reduced ? .25 : 0.35 + 0.65 * Math.abs(Math.sin(clearT * 30));
       ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(2) + ')';
       for (const r of clearRows) ctx.fillRect(0, (r - HIDDEN) * CELL, 300, CELL);
     }
@@ -461,6 +394,9 @@
     drawMini(holdCtx, holdT, 0, 0, 104, 64, 24, !canHold);
     nextCtx.clearRect(0, 0, 104, 192);
     refillQueue();
+    $('holdCv').setAttribute('aria-label',holdT?'Held '+NAMES[holdT]+' piece':'No held piece');
+    $('nextCv').setAttribute('aria-label','Next pieces: '+queue.slice(0,3).map(t=>NAMES[t]).join(', '));
+    $('holdNote').textContent=canHold?'Save a piece':'Used this turn';
     for (let i = 0; i < 3; i++) drawMini(nextCtx, queue[i], 0, i * 64, 104, 64, i === 0 ? 24 : 20, false);
   }
 
@@ -471,7 +407,7 @@
     ' ': 'hard', c: 'hold', C: 'hold', Shift: 'hold'
   };
   document.addEventListener('keydown', e => {
-    if (e.target && e.target.tagName === 'SELECT') return;
+    if ($('restartDialog').open || $('looksDialog').open || e.target?.closest('select,input,textarea,summary')) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const a = KEYMAP[e.key];
     if (a) {
@@ -482,25 +418,47 @@
       else if (state !== 'running' && state !== 'clearing') { if (a === 'hard') primary(); return; }
       press(a); return;
     }
-    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); togglePause(); }
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { e.preventDefault(); if(!e.repeat)togglePause(); }
     if (e.key === 'Enter' && state !== 'running' && state !== 'clearing' && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); primary(); }
   });
   document.addEventListener('keyup', e => { const a = KEYMAP[e.key]; if (a) release(a); });
-  window.addEventListener('blur', () => { held.left = held.right = held.down = false; dasDir = 0; if (state === 'running') togglePause(); });
-  document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'running') togglePause(); });
-
-  document.querySelectorAll('.touch button').forEach(b => {
-    const a = b.dataset.a;
-    b.addEventListener('pointerdown', e => { e.preventDefault(); b.classList.add('on'); if (state === 'ready') start(); press(a); });
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, e => { e.preventDefault(); b.classList.remove('on'); release(a); }));
-    b.addEventListener('contextmenu', e => e.preventDefault());
+  function lostFocus() {clearInputs();if(state==='running'||state==='clearing')togglePause();}
+  window.addEventListener('blur',lostFocus);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)lostFocus();});
+  document.querySelectorAll('.touch button').forEach(b=>{
+    const a=b.dataset.a;
+    b.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('on');if(state==='ready')start();press(a);});
+    ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>{b.classList.remove('on');release(a);}));
+    b.addEventListener('contextmenu',e=>e.preventDefault());
+    b.addEventListener('click',e=>{if(e.detail===0){if(state==='ready')start();press(a);release(a);}});
   });
-
-  $('ovBtn').addEventListener('click', primary);
-  $('pauseBtn').addEventListener('click', togglePause);
-  $('restartBtn').addEventListener('click', reset);
-  const sel = $('startLevel'); for (let i = 1; i <= 10; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i; sel.appendChild(o); }
-  sel.addEventListener('change', e => { e.target.blur(); reset(); });
+  $('ovBtn').addEventListener('click',primary);$('pauseBtn').addEventListener('click',togglePause);
+  const sel=$('startLevel');for(let i=1;i<=10;i++){const o=document.createElement('option');o.value=i;o.textContent=i;sel.appendChild(o);}
+  let pending=null;
+  function askRestart() {
+    const requested={mode:$('mode').value,level:$('startLevel').value};
+    if(state==='running'||state==='clearing'||state==='paused'){
+      $('mode').value=mode;$('startLevel').value=startLvl;
+      if(state!=='paused')togglePause();pending=requested;$('restartDialog').showModal();
+    }else{reset();start();}
+  }
+  function finishRestart(ok) {
+    $('restartDialog').close();
+    if(ok&&pending){$('mode').value=pending.mode;$('startLevel').value=pending.level;reset();start();}
+    pending=null;
+  }
+  $('restartBtn').addEventListener('click',askRestart);$('mode').addEventListener('change',askRestart);sel.addEventListener('change',askRestart);
+  $('cancelRestart').addEventListener('click',()=>finishRestart(false));$('confirmRestart').addEventListener('click',()=>finishRestart(true));
+  $('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
+  const skins=[{id:'classic',name:'Classic',desc:'The original arcade blocks',color:'#f0b429'},{id:'glass',name:'Glass',desc:'Clear 5 lines in one run',color:'#38bdf8'},{id:'blueprint',name:'Blueprint',desc:'Clear 4 lines at once',color:'#16294d'}];
+  function renderLooks(){
+    $('looks').replaceChildren();for(const s of skins){const b=document.createElement('button');b.className='look';b.disabled=!profile.unlocked.includes(s.id);b.setAttribute('aria-pressed',String(profile.skin===s.id));b.innerHTML='<span class="swatch" style="--swatch:'+s.color+'"></span><span>'+s.name+'<small>'+(b.disabled?'Locked · ':'')+s.desc+'</small></span>';b.addEventListener('click',()=>{profile.skin=s.id;saveProfile();renderLooks();drawSide();});$('looks').appendChild(b);}
+  }
+  $('looksBtn').addEventListener('click',()=>{lostFocus();renderLooks();$('looksDialog').showModal();});
+  $('closeLooks').addEventListener('click',()=>$('looksDialog').close());
+  function soundLabel(){$('soundBtn').textContent=profile.sound?'Sound on':'Sound off';$('soundBtn').setAttribute('aria-pressed',String(profile.sound));}
+  $('soundBtn').addEventListener('click',()=>{profile.sound=!profile.sound;saveProfile();soundLabel();if(profile.sound)sound('rotate');});
+  soundLabel();
 
   /* ---------- main loop ---------- */
   let last = 0, acc = 0;
@@ -517,6 +475,5 @@
   reset();
   requestAnimationFrame(frame);
 })();
-</script>
-</body>
-</html>
+
+</script></body></html>
