@@ -3,31 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lab Reboot: Arduino Missions</title>
+<meta name="theme-color" content="#0b1740">
+<title>Lab Reboot: Arduino Missions · ATS Class Hub</title>
 <style>
 :root{
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#E4EBE4; --surface:#FFFFFF; --ink:#12302B; --muted:#4A655E;
-  --copper:#955514; --on-copper:#FFFFFF; --pad:#BFCAC3; --line:#C4D0C8;
-  --ok:#1C7C47; --bad:#B8331F; --focus:#0068B5;
-  --codebg:#0B3B34; --codeink:#EAF2EA; --codecm:#8FB5A9;
-  --w-gnd:#23292B;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0A2E29; --surface:#0F3D36; --ink:#EAF2EA; --muted:#A3BDB4;
-    --copper:#DA9750; --on-copper:#1B1206; --pad:#2C6A5F; --line:#1F5A50;
-    --ok:#62D891; --bad:#FF8A7A; --focus:#7CC4FF;
-    --codebg:#072520; --w-gnd:#A6AFAC;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0A2E29; --surface:#0F3D36; --ink:#EAF2EA; --muted:#A3BDB4;
-  --copper:#DA9750; --on-copper:#1B1206; --pad:#2C6A5F; --line:#1F5A50;
-  --ok:#62D891; --bad:#FF8A7A; --focus:#7CC4FF;
-  --codebg:#072520; --w-gnd:#A6AFAC;
+  box-sizing:border-box;color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#edf2fb;--surface:#fff;--ink:#16294d;--muted:#526687;
+  --copper:#ad760c;--on-copper:#fff;--pad:#cad6e9;--line:#dce4f2;
+  --ok:#246a41;--bad:#b43427;--focus:#2469bd;
+  --codebg:#0b1740;--codeink:#edf2fb;--codecm:#a1b5d8;--w-gnd:#272e34;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -218,22 +203,51 @@ pre.code select.wrong{border:2px solid #FF8A7A}
 .experiment-badge{display:inline-block;color:var(--ok);font-weight:700;margin:.5rem 0}
 @media(max-width:650px){.learning-totals{grid-template-columns:repeat(2,1fr)}.hint-heading{gap:.2rem}}
 
+/* ATS arcade visual system */
+body{min-height:100svh;display:flex;flex-direction:column;font-family:'Avenir Next',Avenir,'Trebuchet MS',sans-serif;font-size:17px}
+h1,h2,h3,.brand{font-family:'Avenir Next',Avenir,'Trebuchet MS',sans-serif;font-weight:850;letter-spacing:-.035em;line-height:1.15}
+.hub-header{width:100%;max-width:1380px;margin:0 auto;padding:15px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px;font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.08em}
+.hub-header small{display:block;color:var(--muted);font-size:10px;letter-spacing:.025em;margin-top:3px}
+.hub-header a{color:var(--ink);text-decoration:none;border:1px solid #bac8dd;border-radius:7px;padding:8px 12px;min-height:40px;display:flex;align-items:center;white-space:nowrap}
+.hub-header a:hover{background:#fff}
+.wrap,.wrap:has(.workbench){width:calc(100% - 40px);max-width:1320px;margin:0 auto 28px;padding:0 26px 26px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 38px #16294d0b}
+header.top{padding:21px 0;margin-bottom:24px;border-bottom:1px solid var(--line);gap:14px}
+.brand{text-align:left;font-size:29px;line-height:1.05}.brand small{display:block;font:700 10px/1.5 ui-monospace,monospace;letter-spacing:.15em;color:var(--muted);margin-bottom:5px}.brand .brand-dot{color:#bd840b}
+.status{gap:8px}.chip{border:1px solid #d3ddef;background:#f1f5fc;border-radius:8px;padding:8px 12px;font-size:14px}.chip#total{color:#805300;background:#fff5d9;border-color:#ead5a4}
+.btn{background:#f0b429;border-color:#f0b429;color:#0b1740;border-radius:9px;font-weight:800;min-height:46px;padding:10px 18px;transition:background .15s,transform .15s,box-shadow .15s}.btn:not(.ghost){box-shadow:0 3px 0 #b27b0e}.btn:hover:not(:disabled){background:#ffd36b;border-color:#ffd36b;transform:translateY(-1px)}.btn:active:not(:disabled){transform:translateY(1px);box-shadow:none}.btn.ghost{background:#fff;color:var(--ink);border-color:#c8d3e5}.btn.ghost:hover:not(:disabled){background:#edf2fb;border-color:#9cacc6}.btn.small{min-height:42px;font-size:14px;padding:7px 12px}:focus-visible{outline:3px solid #2469bd;outline-offset:4px}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr);gap:32px;align-items:center;background:#0b1740;color:#fff;border-radius:14px;padding:32px 36px;overflow:hidden}.hero-copy{position:relative;z-index:1}.eyebrow{font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}.hero .eyebrow{color:#f6c65b;display:flex;gap:9px;align-items:center}.signal-dot{width:7px;height:7px;display:inline-block;border-radius:50%;background:#f0b429;box-shadow:0 0 0 4px #f0b4291c}.hero h1{font-size:clamp(36px,4.5vw,60px);letter-spacing:-.055em;line-height:1.02;max-width:13ch;margin:15px 0}.hero h1 em{color:#f6c65b;font-style:normal}.hero p{color:#c6d3ef;max-width:46ch;font-size:17px;line-height:1.6}.hero .actions{margin-top:23px}.hero .btn{font-size:17px;padding:12px 22px}.mission-flow{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px;font:12px/1.5 ui-monospace,monospace;color:#c6d3ef}.mission-flow b{color:#f6c65b;font-weight:400}
+.lab-console{align-self:stretch;min-height:285px;border:1px solid #40537a;border-radius:12px;padding:20px;background:#16294d;position:relative;overflow:hidden;background-image:radial-gradient(#7589b326 .8px,transparent .8px);background-size:14px 14px;display:flex;flex-direction:column;justify-content:space-between}.console-top,.console-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;font:10px/1.4 ui-monospace,monospace;color:#b9c9e7;letter-spacing:.09em}.console-top b{color:#f6c65b;font-weight:500}.circuit-art{display:block;width:100%;height:160px;margin:9px 0}.circuit-art .trace{fill:none;stroke:#7896c0;stroke-width:2}.circuit-art .powered{stroke:#f0b429}.circuit-art .power-light{fill:#f0b429;filter:drop-shadow(0 0 5px #f0b42988)}.console-bottom{border-top:1px solid #40537a;padding-top:12px}.console-bottom strong{font:800 28px/1 'Avenir Next',sans-serif;letter-spacing:-1px;color:#fff}.console-bottom strong small{font-size:14px;color:#b9c9e7}.console-bottom span{max-width:130px;text-align:right}
+.mission-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:27px 0 15px}.mission-heading h2{font-size:24px}.mission-heading p{font:12px/1.5 ui-monospace,monospace;color:var(--muted);margin:0}.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0}.map::before{display:none}.mrow{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:start;gap:12px 16px;padding:21px;background:#f8faff;border:1px solid #d8e2f1;border-radius:12px;transition:border-color .15s,box-shadow .15s;overflow:hidden}.mrow.current{background:#fffbef;border-color:#d9ae46;box-shadow:inset 4px 0 0 #f0b429}.mrow.completed{background:#f5f9ff}.mrow:hover{border-color:#9dadc6;box-shadow:0 5px 14px #16294d08}.mrow.current:hover{border-color:#b17c0f}.pad{width:52px;height:52px;border:1px solid #d6e0ef;border-radius:12px;background:#e8eef9;color:#365580}.pad svg{width:28px;height:28px}.pad.done{background:#16294d;color:#f6c65b;border-color:#16294d}.pad.locked{background:#edf1f7;color:#677b9d;border-color:#d8e2f1}.current .pad{background:#f0b429;color:#0b1740;border-color:#f0b429}.mrow h3{font-size:23px;margin:3px 0 5px}.mrow p{font-size:15px;line-height:1.5}.mrow.locked h3,.mrow.locked p{opacity:1}.mission-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font:10px/1.4 ui-monospace,monospace;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}.mission-state{font-weight:700;letter-spacing:.02em}.current .mission-state{color:#805300}.completed .mission-state{color:#25663f}.rowend.actions{grid-column:2;gap:10px;margin-top:2px;min-height:44px}.rowend .btn{min-height:42px;font-size:14px;padding:7px 16px}.locked-label{font:12px ui-monospace,monospace;display:flex;align-items:center;gap:6px;color:#536687}.locked-label svg{width:14px;height:14px}.stars{color:#916100}.stars .off{color:#8291aa;opacity:.55}
+.teacher{margin-top:24px;padding:18px 0 0;border-top:1px solid var(--line);gap:12px;font-size:14px}.teacher label{margin-right:auto}.teacher input{width:18px;height:18px;accent-color:#16294d}#resetBtn{border-color:transparent;color:var(--muted)}
+.footer{margin:auto 0 0;background:#0b1740;color:#c6d3ef;text-align:center;padding:24px 18px;font:12px/1.6 ui-monospace,monospace}.footer .who{display:block;color:#a6b8da;margin-top:5px}
+.mhead{gap:15px}.mhead h2{font-size:clamp(24px,3vw,35px)}.steps{background:#f1f5fc;border:1px solid var(--line);border-radius:12px;padding:16px 20px;counter-reset:step}.steps li{counter-increment:step}.sdot{display:grid;place-items:center;width:32px;height:32px;border-width:1px;border-color:#c6d2e6;color:#526687;background:#fff}.sdot::after{content:counter(step);font:800 13px 'Avenir Next',sans-serif}.sdot.on{background:#f0b429;color:#0b1740;box-shadow:0 0 0 4px #f0b42926}.sdot.done{background:#16294d;color:#fff;border-color:#16294d}.sdot.done::after{content:'✓'}.slabel{font-size:15px;margin:0 10px}.strace{height:2px;margin-right:14px;background:#cfdaed}.strace.done{background:#16294d}.panel{border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 3px 14px #16294d04}.brief{border-left-color:#f0b429;background:#f1f5fc;border-radius:0 8px 8px 0;padding:14px 18px;max-width:none}.how{font-size:16px}.feedback{font-size:16px}.hint-card{background:#f8faff;border-left-color:#f0b429;border-radius:9px}.hint-number{background:#16294d;color:#fff}.hint-heading strong{font-size:17px}
+.workbench{border-color:#bccbe1;background:#edf2fb;border-radius:12px}.benchbar,.bench-status{background:#f6f8fc;color:#243b60;border-color:#cbd7e8}.bench-title i{background:#d39a1d;box-shadow:0 0 0 4px #fff0c4}.bench-tools button{color:#16294d;border-color:#bdcbe1;border-radius:6px;min-width:40px;min-height:40px}.bench-tools button:hover:not(:disabled){background:#e5ecf9}.scroll{background-color:#edf2fb;background-image:radial-gradient(#b5c4de .8px,transparent .8px);scrollbar-color:#8c9fbe #edf2fb}.bench-count{color:#526687}.bench-status.selecting{background:#fff4d4}.bench-silk{fill:#536687}.bench-help{font-size:13px}.bench-help summary{padding:6px 0}
+pre.code{background:#0b1740;border:1px solid #304974;padding:24px;border-radius:12px;font-size:15px}pre.code select{background:#263f6c;border-color:#f0b429;color:#fff;min-height:34px;padding:1px 6px;border-radius:5px}pre.code select.right{border-color:#70dfa2}pre.code select.wrong{border-color:#ff9e93}.quiz{gap:10px;max-width:75ch}.opt{background:#f5f8fd;border:1px solid #cbd7e8;border-radius:10px;padding:15px 18px;transition:background .15s}.opt:hover:not(:disabled){background:#e8effb;border-color:#8ea6c9}.opt.right{background:#eaf7ef;border-width:2px}.opt.wrong{background:#fff0ec;border-width:2px}.qtext{font-size:22px}.sim{border-radius:12px}.knob input{accent-color:#f0b429}.learning-totals>div{background:#f0f4fc;border:1px solid #d8e2f1;border-radius:10px}.learning-totals strong{color:#16294d}.docs-view{max-width:1000px;margin:0 auto}.docs-view section{padding:18px 0;margin:0;border-bottom:1px solid var(--line)}.docs-view section:last-child{border:0}.docs-view h3{font-size:23px}.done-view{margin:24px auto;padding:30px;border:1px solid #e3cc91;border-top:5px solid #f0b429;border-radius:14px;background:#fffbef}.done-view h2{font-size:clamp(32px,5vw,48px)}
+@keyframes lab-arrive{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}.hero,.mrow{animation:lab-arrive .35s ease-out both}.mrow:nth-child(2){animation-delay:40ms}.mrow:nth-child(3){animation-delay:80ms}.mrow:nth-child(4){animation-delay:120ms}.mrow:nth-child(5){animation-delay:160ms}.mrow:nth-child(6){animation-delay:200ms}
+@media(min-width:1450px){.hero{padding:36px 44px}.hero h1{font-size:60px}}
+@media(max-width:900px){.hero{padding:28px;gap:22px;grid-template-columns:1fr 300px}.hero h1{font-size:42px}.wrap,.wrap:has(.workbench){padding:0 20px 22px}.status{gap:6px}.brand{font-size:25px}.mrow{padding:16px;gap:12px}.mrow h3{font-size:21px}.mission-meta{flex-wrap:wrap}}
+@media(max-width:720px){.hero{grid-template-columns:1fr;padding:25px}.hero h1{max-width:15ch;font-size:46px}.hero p{max-width:52ch}.lab-console{min-height:0;padding:16px}.circuit-art{height:120px;margin:4px 0}.console-bottom strong{font-size:24px}.map{grid-template-columns:1fr}.mrow{grid-template-columns:48px minmax(0,1fr);padding:18px}.pad{width:48px;height:48px}.mrow h3{font-size:23px}.mission-meta{flex-wrap:nowrap}.mrow .rowend{grid-column:2}.wrap,.wrap:has(.workbench){width:calc(100% - 20px);padding:0 14px 20px;border-radius:14px}.hub-header{padding:12px 16px}.hub-header small{font-size:8px;max-width:230px}.hub-header a{font-size:10px;padding:7px 9px}.brand{font-size:28px}header.top{padding:18px 0;margin-bottom:18px;align-items:flex-start}.status{width:100%;gap:7px}.chip{font-size:13px;padding:8px 10px}.status #docsBtn{margin-left:auto}.status .btn.small{font-size:13px;padding:7px 10px}.panel{padding:16px}.steps{padding:13px 10px}.slabel{font-size:13px;margin:0 6px}.strace{margin-right:7px}.teacher{font-size:13px}.teacher label{width:100%}.mission-heading{align-items:baseline}.mission-heading h2{font-size:22px}.mission-heading p{font-size:10px}.footer{font-size:10px}.mhead h2{font-size:26px}.brief{padding:12px}.hint-card{padding:13px}.done-view{padding:22px}.qtext{font-size:20px}}
+@media(max-width:400px){.hero{padding:22px}.hero h1{font-size:40px}.mission-flow{font-size:11px;gap:6px}.mission-meta{font-size:9px}.status{gap:5px}.chip{padding:7px 8px}.status .btn.small{padding:7px 8px}.mission-heading p{max-width:100px;text-align:right}.hub-header small{max-width:180px}.mrow{padding:15px;gap:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
+<header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a href="../index.html">← Class Hub</a></header>
 <div class="wrap">
   <header class="top">
-    <button class="brand" id="brand">Lab Reboot</button>
+    <button class="brand" id="brand" aria-label="Lab Reboot — mission map"><small>ARDUINO MISSIONS / MAKERSPACE</small>LAB REBOOT<span class="brand-dot">.</span></button>
     <div class="status">
       <span class="chip" id="rank"></span>
       <span class="chip" id="total"></span>
-      <button class="btn ghost small" id="docsBtn">Docs</button>
+      <button class="btn ghost small" id="docsBtn">Game guide</button>
       <button class="btn ghost small" id="soundBtn"></button>
     </div>
   </header>
   <main id="app"></main>
 </div>
 
+<footer class="footer">// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 <script>
 const GND = ['GND1','GND2','GND3'];
 
@@ -500,6 +514,7 @@ function renderHeader(){
   document.getElementById('rank').textContent = rankName(n);
   document.getElementById('total').textContent = `★ ${n} / ${MISSIONS.length*3}`;
   document.getElementById('soundBtn').textContent = store.sound ? 'Sound on' : 'Sound off';
+  document.getElementById('soundBtn').setAttribute('aria-pressed',String(store.sound));
 }
 document.getElementById('soundBtn').onclick = ()=>{ store.sound=!store.sound;if(!store.sound)stopTones(); save(); renderHeader(); };
 document.getElementById('brand').onclick = ()=>go({name:'home'});
@@ -561,27 +576,63 @@ function renderDocs(){
 }
 
 /* ---------- home ---------- */
+function missionIcon(i){
+  const paths=[
+    '<path d="M8 15V9a4 4 0 0 1 8 0v6M7 15h10M10 15v6m4-6v6M12 1v1M3 7l2 1m16-1-2 1"/><path d="M11 8h2"/>',
+    '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="12" cy="12" r="4"/><path d="M7 1v3m10-3v3M7 20v3m10-3v3"/>',
+    '<path d="m9 5-5 4H2v6h2l5 4V5Zm4 3a6 6 0 0 1 0 8m4-12a11 11 0 0 1 0 16"/>',
+    '<path d="M9 17V5l11-3v12M9 8l11-3"/><ellipse cx="6" cy="18" rx="3" ry="3"/><ellipse cx="17" cy="15" rx="3" ry="3"/>',
+    '<rect x="2" y="5" width="20" height="14" rx="3"/><path d="m10 9 5 3-5 3V9Z"/>',
+    '<circle cx="12" cy="12" r="6"/><path d="m12 12 3-3M12 1v2m0 18v2M1 12h2m18 0h2M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/>'
+  ];
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[i]}</svg>`;
+}
+function labConsole(){
+  const complete=MISSIONS.filter(m=>store.stars[m.id]!=null).length;
+  const lights=MISSIONS.map((m,i)=>{
+    const x=30+i*54,done=store.stars[m.id]!=null;
+    return `<g><path class="trace ${done?'powered':''}" d="M${x} 125v-16L${139+i*9} 84"/><circle cx="${x}" cy="135" r="8" fill="${done?'#f0b429':'#203756'}" stroke="${done?'#f6c65b':'#7896c0'}" stroke-width="2"/><text x="${x}" y="159" fill="#b9c9e7" text-anchor="middle" font-size="10" font-family="monospace">0${i+1}</text></g>`;
+  }).join('');
+  return `<aside class="lab-console" aria-label="Lab status: ${complete} of ${MISSIONS.length} systems online">
+    <div class="console-top"><span>LB6 / CONTROL BOARD</span><b>${complete===MISSIONS.length?'ALL SYSTEMS ONLINE':'REBOOT IN PROGRESS'}</b></div>
+    <svg class="circuit-art" viewBox="0 0 330 170" aria-hidden="true">
+      <path class="trace" d="M18 20h76l20 20m198-20h-76l-20 20M18 45h38l18 18h40m198-18h-38l-18 18h-40"/>
+      <rect x="114" y="16" width="102" height="72" rx="9" fill="#0b1740" stroke="#f0b429" stroke-width="2"/>
+      <path stroke="#f0b429" stroke-width="3" d="M104 30h10m-10 14h10m-10 14h10m-10 14h10m102-42h10m-10 14h10m-10 14h10m-10 14h10"/>
+      <text x="165" y="47" fill="#f6c65b" text-anchor="middle" font-size="15" font-weight="700" font-family="monospace">LB6</text>
+      <text x="165" y="66" fill="#b9c9e7" text-anchor="middle" font-size="9" font-family="monospace" letter-spacing="2">LAB REBOOT</text>
+      <circle class="power-light" cx="18" cy="20" r="3"/><circle class="power-light" cx="312" cy="20" r="3"/>${lights}
+    </svg>
+    <div class="console-bottom"><strong>${String(complete).padStart(2,'0')} <small>/ ${String(MISSIONS.length).padStart(2,'0')}</small></strong><span>SYSTEMS BACK ONLINE</span></div>
+  </aside>`;
+}
 function renderHome(){
   const next = MISSIONS.findIndex((m,i)=>unlocked(i) && store.stars[m.id]==null);
+  const completed=MISSIONS.filter(m=>store.stars[m.id]!=null).length;
+  const lock='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/></svg>';
   let rows = MISSIONS.map((m,i)=>{
     const st = store.stars[m.id], open = unlocked(i), done = st!=null;
     const padCls = done?'done':open?'':'locked';
-    const btn = !open ? `<span class="stars" aria-label="Locked">Locked</span>`
-      : `<button class="btn ${done?'ghost':''}" data-start="${i}">${done?'Replay':'Start'}</button>`;
-    return `<li class="mrow ${open?'':'locked'}">
-      <span class="pad ${padCls}" aria-hidden="true">${i+1}</span>
-      <div><h3>${esc(m.title)}</h3><p>${esc(m.goal)}</p></div>
+    const btn = !open ? `<span class="locked-label">${lock}Complete mission ${i} to unlock</span>`
+      : `<button class="btn ${done?'ghost':''}" data-start="${i}" aria-label="${done?'Replay':'Start'} mission ${i+1}: ${esc(m.title)}">${done?'Replay':'Start mission →'}</button>`;
+    return `<li class="mrow ${done?'completed':open?'':'locked'} ${i===next?'current':''}">
+      <span class="pad ${padCls}" aria-hidden="true">${missionIcon(i)}</span>
+      <div><div class="mission-meta"><span>MISSION ${String(i+1).padStart(2,'0')}</span><span class="mission-state">${done?'✓ Online':open?'Ready to reboot':'Offline'}</span></div><h3>${esc(m.title)}</h3><p>${esc(m.goal)}</p></div>
       <div class="rowend actions">${done?starsHTML(st):''}${btn}${done?`<button class="btn ghost small" data-bonus="${i}">Bonus${store.learning?.[m.id]?.challengeDone?' ✓':''}</button>`:''}</div>
     </li>`;
   }).join('');
-  const allDone = MISSIONS.every(m=>store.stars[m.id]!=null);
+  const allDone = completed===MISSIONS.length;
   app.innerHTML = `
   <section class="hero">
-    <h1>${allDone ? 'Lab LB6 is back online.' : 'Lab LB6 is dark.'}</h1>
-    <p>${allDone ? 'Every system works. Replay any mission to earn 3 stars on all of them.' :
-      'Six systems are offline. For each one, wire the circuit, write the code, answer a quick check, and test it on the board.'}</p>
-    ${next>=0 ? `<div class="actions" style="margin-top:1rem"><button class="btn" data-start="${next}">${next===0 && totalStars()===0?'Start mission 1':'Continue: '+esc(MISSIONS[next].title)}</button></div>`:''}
+    <div class="hero-copy"><div class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>${allDone?'MISSION ACCOMPLISHED':'YOUR LAB. YOUR NEXT MISSION.'}</div>
+    <h1>${allDone ? 'Lab LB6 is<br><em>back online.</em>' : 'Bring the lab<br><em>back to life.</em>'}</h1>
+    <p>${allDone ? 'Every system works. Replay your missions, collect every star, and take on the bonus challenges.' :
+      'Six systems. One maker. Wire real circuits, bring your code to life, and reboot Lab LB6 — one mission at a time.'}</p>
+    ${next>=0 ? `<div class="actions"><button class="btn" data-start="${next}">${next===0 && totalStars()===0?'Start mission 1':'Continue: '+esc(MISSIONS[next].title)} →</button></div>`:''}
+    <div class="mission-flow"><span>01 Wire</span><b>→</b><span>02 Code</span><b>→</b><span>03 Check</span><b>→</b><span>04 Run</span></div></div>
+    ${labConsole()}
   </section>
+  <div class="mission-heading"><h2>Your missions<span style="color:#ad760c">.</span></h2><p>${completed} / ${MISSIONS.length} SYSTEMS ONLINE · ${totalStars()} / ${MISSIONS.length*3} ★</p></div>
   <ol class="map" aria-label="Missions">${rows}</ol>
   <div class="teacher">
     <label><input type="checkbox" id="unlockAll" ${store.unlockAll?'checked':''}> Teacher mode: unlock all missions</label>
@@ -604,7 +655,7 @@ function renderMission(){
   const steps = STEPS.map((s,i)=>{
     const cls = i<V.step?'done':i===V.step?'on':'';
     const tr = i<STEPS.length-1 ? `<span class="strace ${i<V.step?'done':''}"></span>` : '';
-    return `<li><span class="sdot ${cls}" aria-hidden="true"></span><span class="slabel ${i===V.step?'on':''}">${s}</span>${tr}</li>`;
+    return `<li aria-label="${s}"${i===V.step?' aria-current="step"':''}><span class="sdot ${cls}" aria-hidden="true"></span><span class="slabel ${i===V.step?'on':''}">${s}</span>${tr}</li>`;
   }).join('');
   app.innerHTML = `
   <div class="mhead">
