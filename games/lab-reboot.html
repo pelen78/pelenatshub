@@ -205,6 +205,10 @@ pre.code select.wrong{border:2px solid #FF8A7A}
 .learning-table td,.learning-table th{padding:.8rem;border-bottom:1px solid var(--line);vertical-align:top}
 .learning-table thead{background:var(--bg)}
 .teacher-view h2{font-size:2rem}
+.docs-view section{margin:1.25rem 0}
+.docs-view h3{font-size:1.3rem;margin-bottom:.4rem}
+.docs-view ul{padding-left:1.2rem;display:grid;gap:.4rem;margin:0 0 .6rem}
+.docs-view code{background:var(--bg);padding:.1rem .35rem;border-radius:4px;font-size:.9em}
 .bonus-invite{border-top:1px solid var(--line);padding-top:1rem;margin-top:1.5rem}
 .bonus-invite h3{font-size:1.6rem}
 .experiment-fields{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
@@ -223,6 +227,7 @@ pre.code select.wrong{border:2px solid #FF8A7A}
     <div class="status">
       <span class="chip" id="rank"></span>
       <span class="chip" id="total"></span>
+      <button class="btn ghost small" id="docsBtn">Docs</button>
       <button class="btn ghost small" id="soundBtn"></button>
     </div>
   </header>
@@ -498,6 +503,7 @@ function renderHeader(){
 }
 document.getElementById('soundBtn').onclick = ()=>{ store.sound=!store.sound;if(!store.sound)stopTones(); save(); renderHeader(); };
 document.getElementById('brand').onclick = ()=>go({name:'home'});
+document.getElementById('docsBtn').onclick = ()=>go({name:'docs'});
 
 function starsHTML(n){ let s=''; for(let i=0;i<3;i++) s+= i<n?'★':'<span class="off">★</span>'; return `<span class="stars" aria-label="${n} of 3 stars">${s}</span>`; }
 function unlocked(i){ return store.unlockAll || i===0 || store.stars[MISSIONS[i-1].id]!=null; }
@@ -509,6 +515,49 @@ function render(){
   else if(V.name==='mission') renderMission();
   else if(V.name==='teacher') renderTeacher();
   else if(V.name==='challenge') renderChallenge();
+  else if(V.name==='docs') renderDocs();
+}
+
+/* ---------- documentation ---------- */
+function renderDocs(){
+  const parts = MISSIONS.map((m,i)=>`<li><strong>${i+1}. ${esc(m.title)}</strong> · ${esc(m.goal)}</li>`).join('');
+  app.innerHTML = `<section class="panel docs-view">
+    <div class="mhead"><button class="btn ghost small" id="docsBack">Missions</button><h2>About Lab Reboot</h2></div>
+
+    <section>
+      <h3>Goal</h3>
+      <p class="how">Lab LB6 has gone dark. You play a new lab intern who has to bring six systems back online, one at a time: build the real circuit on a breadboard, write the matching Arduino sketch, and pass a short concept check before the system is marked fixed. Each mission can earn up to 3 stars, for 18 stars total.</p>
+    </section>
+
+    <section>
+      <h3>Parts of the game</h3>
+      <ul>${parts}</ul>
+      <p class="how">After a mission is completed once, its <em>Bonus</em> challenge unlocks: a small variation on the same circuit that asks you to change the code, not the wiring. A <em>Learning dashboard</em> (from the home screen) tracks attempts, hints used and common mistakes per mission, and a <em>Teacher mode</em> toggle can unlock every mission for demoing or review.</p>
+    </section>
+
+    <section>
+      <h3>Arduino parts used</h3>
+      <ul>
+        <li><strong>Arduino Uno</strong> and breadboard, wired with jumper leads.</li>
+        <li><strong>LED + resistor</strong> — digital output (missions 1, 2) and PWM brightness control (mission 6).</li>
+        <li><strong>Pushbutton</strong> — digital input, read with <code>digitalRead()</code> (missions 2, 5).</li>
+        <li><strong>Active buzzer</strong> — a single-tone alarm driven with <code>digitalWrite()</code> (mission 3).</li>
+        <li><strong>Passive buzzer</strong> — plays a melody with <code>tone()</code> (missions 4, 5).</li>
+        <li><strong>Potentiometer</strong> — analog input read with <code>analogRead()</code> and mapped to output (mission 6).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Scoring and ranks</h3>
+      <p class="how">Each mission is scored out of 3 stars based on wiring accuracy, code correctness and the concept check, for 18 stars in total. Your total star count sets your rank, shown at the top of the page: Intern, Technician, Engineer, then Chief maker.</p>
+    </section>
+
+    <section>
+      <h3>Credits</h3>
+      <p class="how">Designed for the ATS Makerspace, part of the pelenatshub Class Hub, to teach the fundamentals of circuits and Arduino programming (wiring, code and debugging) through short, self-paced, hands-on missions instead of a lecture.</p>
+    </section>
+  </section>`;
+  document.getElementById('docsBack').onclick=()=>go({name:'home'});
 }
 
 /* ---------- home ---------- */
