@@ -5,12 +5,13 @@
 @media(max-width:850px){.hub-header{padding:12px 18px}.app{padding:8px 18px 22px}.selection-bar{grid-template-columns:minmax(130px,180px) minmax(0,1fr);gap:12px;padding:15px}.selection-bar button{grid-column:1/-1;justify-self:end;min-height:42px}.learning-grid{grid-template-columns:1fr}.target-panel{border-right:0;border-bottom:1px solid var(--line);padding:24px}.criteria-panel{padding:24px}.target{font-size:25px}.criteria li{font-size:20px}.board-head{padding:22px 24px}.board-head h2{font-size:31px}.board-foot{padding:15px 24px}.projecting .board-head h2{font-size:36px}.projecting .criteria li{font-size:24px}.projecting .target{font-size:30px}}
 @media(max-width:520px){.hub-header{padding:12px 14px}.hub-header small{font-size:9px}.app{padding:6px 12px 20px}.masthead{margin-bottom:18px}.masthead h1{font-size:33px}.masthead p{font-size:14px}.eyebrow{font-size:10px}.selection-bar{grid-template-columns:1fr;padding:14px}.selection-bar button{width:100%;justify-self:stretch}.board-head{padding:19px 20px}.board-meta{align-items:flex-start;gap:10px;flex-wrap:wrap}.class-name{font-size:11px}.task-tag{font-size:10px}.board-head h2{font-size:28px;margin-top:14px}.target-panel,.criteria-panel{padding:22px 20px}.target{font-size:24px}.section-label{font-size:32px;margin-bottom:20px;padding:14px 18px;border-radius:14px}.criteria li{font-size:19px;gap:9px}.board-foot{padding:14px 20px;flex-wrap:wrap;font-size:10px}.teacher-note{display:block}.teacher-note p+p{margin-top:8px}.projecting .app{padding:0 10px 18px}.projecting .projection-tools{padding:10px 20px}.projecting .projection-tools>span{font-size:10px}.projecting .board-head{padding:12px 12px 20px}.projecting .board-head h2{font-size:30px}.projecting .class-name{font-size:12px}.projecting .target-panel,.projecting .criteria-panel{padding:24px 20px}.projecting .target{font-size:27px}.projecting .criteria li{font-size:22px}.projecting .section-label{font-size:38px}}
 @media print{body{background:white}.hub-header,.masthead,.selection-bar,.projection-tools,.teacher-note,.footer,.message{display:none!important}.app{padding:0;max-width:none}.classboard{border:0;box-shadow:none}.learning-grid{grid-template-columns:1fr}.target-panel{border-right:0;border-bottom:1px solid var(--line);background:white}.board-head h2{font-size:30px}.target{font-size:25px}.criteria li{font-size:20px;break-inside:avoid}.board-foot a{display:none}}
+.board-meta{flex-wrap:wrap}.task-tag{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}.fullscreen-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 12px;background:var(--gold);border-color:var(--gold);color:var(--deep);border-radius:9px;font:750 13px/1.2 'Avenir Next',Avenir,'Trebuchet MS',sans-serif;white-space:nowrap}.fullscreen-btn:hover{background:#ffd36b}.fullscreen-btn svg{flex-shrink:0}.fullscreen-btn .collapse-icon{display:none}.fullscreen-btn[aria-pressed="true"] .expand-icon{display:none}.fullscreen-btn[aria-pressed="true"] .collapse-icon{display:block}@media print{.fullscreen-btn{display:none!important}}
 </style></head><body>
 <header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a id="hubLink" href="../index.html#resources">← Class Hub</a></header>
 <div class="projection-tools"><span>ATS / CLASS HUB · ROOM LB6</span><button id="backBtn">← Choose another assignment</button></div>
 <main class="app"><div class="masthead"><div><span class="eyebrow">ONE CLASS. ONE CLEAR GOAL.</span><h1>Today's Class<span>.</span></h1><p>Choose your classroom and assignment. Your learning goals are ready.</p></div></div>
 <section class="selection-bar" aria-label="Choose what to display"><div><label for="classroom"><span class="number">01</span>Classroom</label><select id="classroom"></select></div><div><label for="assignment"><span class="number">02</span>Assignment</label><select id="assignment"></select></div><button id="projectBtn" class="primary">Project ↗</button></section>
-<article class="classboard" id="board" tabindex="-1" aria-label="Learning target and success criteria"><header class="board-head"><div class="board-meta"><span class="class-name" id="className"></span><div class="task-tag"><span id="taskLabel"></span><span id="taskStatus" class="status"></span></div></div><h2 id="assignmentTitle"></h2></header>
+<article class="classboard" id="board" tabindex="-1" aria-label="Learning target and success criteria"><header class="board-head"><div class="board-meta"><span class="class-name" id="className"></span><div class="task-tag"><span id="taskLabel"></span><span id="taskStatus" class="status"></span><button type="button" id="fullscreenBtn" class="fullscreen-btn" aria-label="Enter full screen" aria-pressed="false" title="Enter full screen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="expand-icon" d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><path class="collapse-icon" d="M3 8h5V3m13 5h-5V3M8 21v-5H3m13 5v-5h5"/></svg><span id="fullscreenLabel">Full screen</span></button></div></div><h2 id="assignmentTitle"></h2></header>
 <div class="learning-grid"><section class="target-panel" aria-labelledby="targetLabel"><h3 class="section-label" id="targetLabel">Learning Target</h3><p class="target" id="target"></p></section><section class="criteria-panel" aria-labelledby="criteriaLabel"><h3 class="section-label" id="criteriaLabel">Success Criteria</h3><ol class="criteria" id="criteria"></ol></section></div>
 <footer class="board-foot"><span>Ms. Ma. Elena Montes · <strong>Ms. Pelen</strong></span><a id="sourceLink" href="#" target="_blank" rel="noopener">Open assignment ↗</a></footer></article>
 <div class="load-error" id="loadError" hidden>These learning goals could not be loaded. Please reopen Today's Class from your hub.</div>
@@ -253,12 +254,37 @@
   function render(){const c=classroom(),a=current();$('className').textContent=c.name;$('assignmentTitle').textContent=a.title;$('taskLabel').textContent=a.label;$('taskStatus').textContent=STATUS[a.status];$('taskStatus').classList.toggle('current',a.status==='now');$('target').textContent=a.learningTarget;$('criteria').replaceChildren();for(const text of a.successCriteria){const li=document.createElement('li'),span=document.createElement('span');span.textContent=text;li.appendChild(span);$('criteria').appendChild(li);}$('sourceLink').href=new URL(a.path,base).href;$('sourceLink').setAttribute('aria-label','Open assignment: '+a.title);}
   function changeClass(id){if(!catalog.classrooms.some(c=>c.id===id))return;selection.classroom=id;$('classroom').value=id;fillAssignments();save();render();}
   function changeAssignment(id){if(!classroom().assignments.some(a=>a.id===id))return;selection.assignments[selection.classroom]=id;$('assignment').value=id;save();render();}
-  async function project(){projecting=true;document.body.classList.add('projecting');$('board').focus({preventScroll:true});window.scrollTo(0,0);$('message').textContent='';if(document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen();}catch{/* Projection layout also works when native full screen is unavailable. */}}}
-  function back(){projecting=false;document.body.classList.remove('projecting');if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});$('assignment').focus();}
+  let projectionOpener=null;
+  function syncProjectionButton(){
+    const label=projecting?(document.fullscreenElement?'Exit full screen':'Exit presentation'):'Full screen';
+    $('fullscreenLabel').textContent=label;
+    $('fullscreenBtn').setAttribute('aria-pressed',String(projecting));
+    $('fullscreenBtn').setAttribute('aria-label',projecting?label:'Enter full screen');
+    $('fullscreenBtn').setAttribute('title',projecting?label+' (Esc)':'Enter full screen');
+  }
+  async function project(){
+    if(projecting)return;
+    projectionOpener=document.activeElement;
+    projecting=true;document.body.classList.add('projecting');syncProjectionButton();
+    $('board').focus({preventScroll:true});window.scrollTo(0,0);$('message').textContent='';
+    if(document.documentElement.requestFullscreen){
+      try{
+        await document.documentElement.requestFullscreen();
+        if(!projecting&&document.fullscreenElement&&document.exitFullscreen)await document.exitFullscreen();
+      }catch{/* Keep the presentation layout when native full screen is unavailable. */}
+    }
+    syncProjectionButton();
+  }
+  function back(){
+    projecting=false;document.body.classList.remove('projecting');syncProjectionButton();
+    if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});
+    const opener=projectionOpener;projectionOpener=null;
+    (opener&&opener!==document.body&&typeof opener.focus==='function'?opener:$('assignment')).focus();
+  }
   for(const c of catalog.classrooms){const option=document.createElement('option');option.value=c.id;option.textContent=c.name;$('classroom').appendChild(option);}
-  $('classroom').addEventListener('change',e=>changeClass(e.target.value));$('assignment').addEventListener('change',e=>changeAssignment(e.target.value));$('projectBtn').addEventListener('click',project);$('backBtn').addEventListener('click',back);
+  $('classroom').addEventListener('change',e=>changeClass(e.target.value));$('assignment').addEventListener('change',e=>changeAssignment(e.target.value));$('projectBtn').addEventListener('click',project);$('backBtn').addEventListener('click',back);$('fullscreenBtn').addEventListener('click',()=>projecting?back():project());
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&projecting){e.preventDefault();back();}});
-  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&projecting)back();});
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&projecting)back();else syncProjectionButton();});
   changeClass(selection.classroom);
 })();
 
