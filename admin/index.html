@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publicar actividades · Pelen Class Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/publisher.css">
+<script type="module" src="/admin/publisher.js"></script>
+</head>
+<body>
+<header class="masthead"><a class="brand" href="/">PELEN / CLASS HUB<span>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</span></a><div class="account"><span id="account">Panel de profesor</span><a href="/cdn-cgi/access/logout">Salir ↗</a></div></header>
+<main>
+  <div class="heading"><div><p class="eyebrow">TU ESPACIO DE PUBLICACIÓN</p><h1>Una actividad más.<span>Todo en su lugar.</span></h1><p class="intro">Agrega tu assignment al portafolio y lleva su enlace a Classroom.</p></div><a class="hub-link" href="/" target="_blank" rel="noopener">Ver el hub ↗</a></div>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+  <div id="publication" class="publication" role="status" aria-live="polite" hidden><span id="publicationText"></span><a id="publishedLink" hidden target="_blank" rel="noopener">Abrir actividad ↗</a><button id="copyLink" class="secondary" hidden>Copiar enlace para Classroom</button><button id="checkPublication" class="text-button" hidden>Comprobar de nuevo</button></div>
+  <div class="workspace">
+    <aside class="catalog"><div class="catalog-title"><h2>Actividades</h2><button id="refresh" class="text-button" type="button">Actualizar</button></div><label class="sr-only" for="search">Buscar actividades</label><input id="search" type="search" placeholder="Buscar una actividad…"><label class="sr-only" for="filter">Filtrar por materia</label><select id="filter"><option value="">Todas las materias</option></select><div id="activities" class="activities"><p class="empty">Cargando tus actividades…</p></div></aside>
+    <section class="editor"><div class="editor-heading"><div><p class="eyebrow" id="modeLabel">NUEVA ACTIVIDAD</p><h2 id="editorTitle">¿Qué sigue en clase?</h2></div><button id="newActivity" class="secondary" type="button">+ ADD</button></div>
+      <form id="editorForm">
+        <fieldset id="fields" disabled>
+          <div class="grid"><label>Materia<select id="subject" required></select></label><label>Estado<select id="status"><option value="now">Now · En curso</option><option value="soon">Coming up · Próximamente</option><option value="done">Finished · Finalizada</option></select></label></div>
+          <label>Título<input id="title" maxlength="180" placeholder="Ej. Build your first circuit" required></label>
+          <label>Descripción<textarea id="description" rows="3" maxlength="2500" placeholder="Una o dos líneas para explicar la actividad"></textarea></label>
+          <div class="grid"><label>Fecha / semana<input id="date" maxlength="120" placeholder="Task 5 · Week 4"></label><label class="check"><input id="pinned" type="checkbox"> Fijar como referencia</label></div>
+          <div class="upload"><div class="upload-top"><span class="upload-icon" aria-hidden="true">↑</span><div><h3>El HTML de tu assignment</h3><p>Arrastra tu archivo aquí o selecciónalo. Máximo 5 MB.</p></div></div><label class="file-label">Seleccionar HTML<input id="htmlFile" type="file" accept=".html,.htm,text/html"></label><div class="file-info"><span id="fileName">Sin archivo seleccionado</span><button id="clearFile" class="text-button" type="button" hidden>Quitar archivo</button></div></div>
+          <p class="hint" id="replaceHint" hidden>Al subir un HTML nuevo se conservará el enlace actual.</p>
+          <details id="assetsSection"><summary>Mi HTML usa imágenes u otros archivos locales</summary><p class="hint">Adjunta los archivos que necesita tu HTML. Para conservar subcarpetas, selecciona la carpeta que los contiene. Máximo 30 archivos y 20 MB en total.</p><label>Archivos de apoyo<input id="assetFiles" type="file" multiple accept=".png,.jpg,.jpeg,.gif,.webp,.svg,.ico,.css,.js,.json,.pdf,.mp3,.mp4,.woff,.woff2,.txt"></label><label>O una carpeta de archivos<input id="assetFolder" type="file" webkitdirectory multiple></label><p class="hint" id="assetCount"></p></details>
+          <label id="linkLabel">Enlace de la actividad <span class="optional">Si no vas a subir un HTML</span><input id="link" type="text" maxlength="2000" placeholder="https://… o una ruta del hub"></label>
+          <div class="actions"><button id="previewButton" class="secondary" type="button">Vista previa</button><button id="publishButton" class="primary" type="submit">Publicar actividad <span aria-hidden="true">↗</span></button></div>
+          <p class="hint">Se guardará en GitHub y después se actualizará pelenlab.com.</p>
+          <button id="removeButton" class="text-button danger" type="button" hidden>Retirar actividad del hub</button>
+        </fieldset>
+      </form>
+    </section>
+  </div>
+  <footer>PELEN CLASS HUB <span>Preparar · Revisar · Compartir</span></footer>
+</main>
+<dialog id="previewDialog"><div class="dialog-heading"><h2>Así se verá tu actividad</h2><button id="closePreview" class="secondary">Cerrar</button></div><article class="preview-card"><span id="previewMeta" class="eyebrow"></span><h3 id="previewTitle"></h3><p id="previewDescription"></p></article><p id="previewNote" class="hint"></p><iframe id="previewFrame" title="Vista previa aislada del HTML" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></dialog>
+<dialog id="removeDialog"><h2>¿Retirar esta actividad?</h2><p id="removeTitle"></p><p>Su tarjeta dejará de aparecer en el hub. El archivo HTML seguirá disponible en su enlace actual.</p><div class="actions"><button id="cancelRemove" class="secondary">Cancelar</button><button id="confirmRemove" class="primary">Retirar y publicar</button></div></dialog>
+</body></html>
