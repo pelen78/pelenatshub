@@ -123,6 +123,7 @@
   .leaderboard{margin:0;padding:14px 20px;background:#ffffff99;border:1px solid var(--line);border-radius:12px}.leaderboard>summary{display:flex;justify-content:space-between;gap:12px}.leaderboard>summary small{font-size:12px;font-weight:400}.leaderboard h2{font-size:20px;margin:14px 0 0}
   footer{margin:auto 0 0;padding:25px 20px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
   dialog{width:460px;max-width:calc(100vw - 24px);padding:24px;border:1px solid var(--line);border-radius:14px;color:var(--navy);background:white}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:26px;line-height:1.2;margin:0}dialog p{color:var(--navy-soft);font-size:15px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+  .guide-dialog{width:620px;max-height:85vh;overflow:auto}.guide-body{display:grid;gap:16px;margin:16px 0}.guide-body section{border-top:1px solid var(--line);padding-top:14px}.guide-body section:first-child{border-top:0;padding-top:0}.guide-body h3{margin:0 0 6px;font-size:18px}.guide-body p,.guide-body li{color:var(--navy-soft);font-size:15px;line-height:1.5}.guide-body ul{margin:0;padding-left:20px;display:grid;gap:6px}
   @media(max-width:700px){.game{width:calc(100% - 20px)}.card{padding:14px}.masthead{flex-wrap:wrap;margin-bottom:14px}.edition{font-size:10px}h1{font-size:28px}.scores{gap:6px}.score{padding:0 8px}.score .lbl{font-size:10px}.score .val{font-size:26px}.board{aspect-ratio:8/4.5}.overlay{padding:10px;gap:7px}.overlay h2{font-size:25px}.overlay p{font-size:13px}.touch{display:flex}.challenge{grid-template-columns:1fr;gap:8px;padding:10px 12px}.challenge h3{font-size:18px}.controls{gap:8px}.controls button{padding:8px 10px}.controls .spacer{display:none}.opt{margin-right:auto}.cue{font-size:13px;top:8px;left:8px;padding:5px 8px}.toast{top:auto;bottom:8px;font-size:12px}.result-stats{gap:14px;font-size:11px}.result-stats strong{font-size:20px}.board-foot{font-size:9px}.hub-header{padding:10px 14px}.hub-header small{font-size:9px}.saverow input{width:130px;font-size:13px;padding:6px 8px}.saverow button{font-size:13px;padding:6px 12px;min-height:36px}.btnrow button.big{font-size:15px;padding:7px 16px}.btnrow button.sm{font-size:12px;padding:6px 10px}.eyebrow{font-size:10px}.leaderboard>summary small{display:none}}
   @media(max-width:390px){.board{aspect-ratio:1.3}.overlay{gap:6px}.masthead p{font-size:13px}.score .val{font-size:23px}.edition{letter-spacing:.05em}}
 
@@ -171,6 +172,7 @@
       </label>
 
       <span class="spacer"></span>
+      <button class="quiet sm" id="guideBtn" type="button">Game guide</button>
       <button class="quiet sm" id="pauseBtn" type="button">Pause</button>
       <button class="quiet sm" id="restartBtn" type="button">New run</button>
     </div>
@@ -187,7 +189,34 @@
     <p class="hint">This board is saved on this computer only. To compare across the class, use the same computer, or ask players to share their score with the Copy my score button.</p>
   </details>
 </div>
-<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new run?</h2><p>Your current run will end. Saved records stay.</p><div class="dialog-actions"><button class="quiet" id="cancelRestart">Keep this run</button><button class="big" id="confirmRestart">New run</button></div></dialog><div id="announce" class="sr-only" aria-live="polite"></div>
+<dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new run?</h2><p>Your current run will end. Saved records stay.</p><div class="dialog-actions"><button class="quiet" id="cancelRestart">Keep this run</button><button class="big" id="confirmRestart">New run</button></div></dialog>
+<dialog id="guideDialog" class="guide-dialog" aria-labelledby="guideTitle">
+  <h2 id="guideTitle">Dino Run: game guide</h2>
+  <div class="guide-body">
+    <section>
+      <h3>Goal</h3>
+      <p>Run as far as you can without hitting anything. Jump ground obstacles, duck under low-flying birds, and rack up points as the course speeds up. One hit ends the run.</p>
+    </section>
+    <section>
+      <h3>Controls</h3>
+      <ul>
+        <li><strong>Space</strong>, <strong>↑</strong> or <strong>W</strong> jumps.</li>
+        <li>Hold <strong>↓</strong> or <strong>S</strong> to duck under orange birds; release to stand back up.</li>
+        <li><strong>P</strong> pauses. On touch devices, use the on-screen Jump and Hold to duck buttons.</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Modes and scoring</h3>
+      <p>Score grows with distance run, plus 10 bonus points for each bird you correctly duck under. <strong>Daily Challenge</strong> gives everyone the exact same obstacle sequence for the day, so scores are fair to compare; <strong>Free play</strong> generates a new random trail every run. The "Your next goal" panel tracks a running target (like ducking a set number of birds), and the local leaderboard keeps the top 10 scores saved on this computer, separately for each mode.</p>
+    </section>
+    <section>
+      <h3>Credits</h3>
+      <p>Built by Ms. Ma. Elena Montes (Ms. Pelen) for the ATS Class Hub games collection.</p>
+    </section>
+  </div>
+  <div class="dialog-actions"><button class="quiet" id="closeGuide" type="button">Close</button></div>
+</dialog>
+<div id="announce" class="sr-only" aria-live="polite"></div>
 <footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
 <script>
@@ -380,7 +409,7 @@
   }
   const isTyping = e => e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT');
   document.addEventListener('keydown', e => {
-    if($('restartDialog').open||e.target?.closest('summary'))return;
+    if($('restartDialog').open||$('guideDialog').open||e.target?.closest('summary'))return;
     if (isTyping(e)) { if (e.key === 'Enter' && e.target.id === 'nameIn') { e.preventDefault(); saveScore(); } return; }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === ' ' || e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
@@ -426,6 +455,7 @@
   $('restartBtn').addEventListener('click',askRestart);$('mode').addEventListener('change',askRestart);
   $('cancelRestart').addEventListener('click',()=>finishRestart(false));$('confirmRestart').addEventListener('click',()=>finishRestart(true));
   $('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
+  $('guideBtn').addEventListener('click',()=>{lostFocus();$('guideDialog').showModal();});$('closeGuide').addEventListener('click',()=>$('guideDialog').close());
   $('soundBtn').addEventListener('click', () => { soundOn = !soundOn; store.set('hub-dino-sound', soundOn ? '1' : '0'); updateSoundBtn(); if (soundOn) sfx.milestone(); });
   $('copyBtn').addEventListener('click', async () => {
     const who = store.get('hub-dino-name', '') || 'I';

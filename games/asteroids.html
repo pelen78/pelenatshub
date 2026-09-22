@@ -85,6 +85,7 @@
   .touch{align-items:center}.touch .pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,52px);gap:8px}.touch .pad button{width:64px;height:52px;border-radius:10px;font-size:24px}.pad [data-k="up"]{grid-column:2}.pad [data-k="left"]{grid-row:2;grid-column:1}.pad [data-k="down"]{grid-row:2;grid-column:2}.pad [data-k="right"]{grid-row:2;grid-column:3}.touch button.fire{width:124px;height:112px;border-radius:12px;padding:8px}.touch button.on{box-shadow:inset 0 0 0 3px var(--gold)}
   details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;color:var(--navy-soft)}summary{cursor:pointer;font-size:15px;font-weight:700}
   dialog{width:460px;max-width:calc(100vw - 24px);padding:24px;border:1px solid var(--line);border-radius:14px;color:var(--navy);background:white}dialog::backdrop{background:#0b1740b8}dialog h2{font-size:25px;margin:0}dialog p{font-size:15px;color:var(--navy-soft)}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+  .guide-dialog{width:620px;max-height:85vh;overflow:auto}.guide-body{display:grid;gap:16px;margin:16px 0}.guide-body section{border-top:1px solid var(--line);padding-top:14px}.guide-body section:first-child{border-top:0;padding-top:0}.guide-body h3{margin:0 0 6px;font-size:18px}.guide-body p,.guide-body li{color:var(--navy-soft);font-size:15px;line-height:1.5}.guide-body ul{margin:0;padding-left:20px;display:grid;gap:6px}.guide-body code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:.92em}
   .board{max-width:min(100%,calc((100svh - 320px)*4/3));min-width:300px;margin:auto}.overlay{overflow:auto;justify-content:safe center}
   @media(max-width:700px){body{padding:18px 12px 40px}.card{padding:14px}.board{max-width:100%;min-width:0}.touch{display:flex}.touch .pad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,46px);gap:6px}.touch .pad button{width:48px;height:46px}.touch button.fire{width:100px;height:98px}.flight-strip{font-size:11px}.flight-option{flex-wrap:wrap;gap:6px}.controls{gap:8px}.controls button{min-height:44px;padding:8px 12px}footer{margin:28px -12px -40px}.overlay{padding:14px}.overlay p{font-size:14px}.overlay h2{font-size:27px}.scores{grid-template-columns:repeat(4,1fr);gap:6px}.score{padding:7px}.score .lbl{font-size:10px}.score .val{font-size:23px}}
 
@@ -133,13 +134,39 @@
     </div>
     <div class="controls">
       <label class="flight-option" for="flightMode">Controls <select id="flightMode"><option value="direct">Direct · move with arrows</option><option value="classic">Classic · turn & thrust</option></select></label>
-      <button class="quiet" id="pauseBtn" type="button">Pause</button><button class="quiet" id="restartBtn" type="button">New game</button>
+      <button class="quiet" id="guideBtn" type="button">Game guide</button><button class="quiet" id="pauseBtn" type="button">Pause</button><button class="quiet" id="restartBtn" type="button">New game</button>
     </div>
     <p class="hint" id="controlHelp">Arrow keys or WASD move the ship in that direction. It aims where you move. Release to slow down; hold Space to fire. P pauses.</p>
     <details><summary>Flight tips & game rules</summary><p class="hint">Direct controls: arrows or WASD move in screen directions, including diagonals. The ship turns to aim in your last direction. Hold Space to fire continuously.</p><p class="hint">Classic controls: ← → / A D turn, ↑ / W accelerates, ↓ / S brakes. Releasing thrust slows the ship gradually. Keep moving and shooting together.</p><p class="hint">You wrap around screen edges. A visible shield protects you after a crash. Every 5,000 points earns an extra life. Records are separate for Direct and Classic; your old record remains in Classic.</p></details><p class="hint" id="storageNote" hidden></p>
   </section>
 </div>
 <dialog id="restartDialog" aria-labelledby="restartTitle"><h2 id="restartTitle">Start a new game?</h2><p>Your current run will end. Your saved records stay.</p><div class="dialog-actions"><button class="quiet" id="cancelRestart">Keep this run</button><button class="big" id="confirmRestart">New game</button></div></dialog>
+<dialog id="guideDialog" class="guide-dialog" aria-labelledby="guideTitle">
+  <h2 id="guideTitle">Asteroids: game guide</h2>
+  <div class="guide-body">
+    <section>
+      <h3>Goal</h3>
+      <p>Fly your ship through an asteroid field, blast the rocks before they hit you, and survive as many levels as you can. Losing all three lives ends the run.</p>
+    </section>
+    <section>
+      <h3>Controls</h3>
+      <ul>
+        <li><strong>Direct mode</strong>: arrow keys or WASD move the ship in that direction, and it aims where you move. Release the keys to coast to a stop.</li>
+        <li><strong>Classic mode</strong>: ← → / A D turn the ship, ↑ / W thrusts forward, ↓ / S brakes. Momentum carries between frames, just like the original arcade game.</li>
+        <li><strong>Space</strong> fires (hold for continuous fire), <strong>P</strong> pauses. On touch devices, use the on-screen direction pad and the Hold to fire button.</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Scoring and levels</h3>
+      <p>Large asteroids are worth 20 points, medium ones 50, small ones 100. Shooting a large or medium asteroid splits it into two smaller ones instead of destroying it outright. Clearing every asteroid on screen starts the next level with more, faster rocks. Every 5,000 points earns an extra life, and Direct and Classic controls keep separate best scores.</p>
+    </section>
+    <section>
+      <h3>Credits</h3>
+      <p>Built by Ms. Ma. Elena Montes (Ms. Pelen) for the ATS Class Hub games collection.</p>
+    </section>
+  </div>
+  <div class="dialog-actions"><button class="quiet" id="closeGuide" type="button">Close</button></div>
+</dialog>
 
 <footer>// Games · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
 
@@ -271,7 +298,7 @@
   const KEYMAP={arrowleft:'left',a:'left',arrowright:'right',d:'right',arrowup:'up',w:'up',arrowdown:'down',s:'down',' ':'fire'};
   const keyToken=e=>'key:'+(e.code||e.key.toLowerCase());
   document.addEventListener('keydown',e=>{
-    if(e.ctrlKey||e.metaKey||e.altKey||$('restartDialog').open||e.target?.closest('select,input,textarea,summary'))return;
+    if(e.ctrlKey||e.metaKey||e.altKey||$('restartDialog').open||$('guideDialog').open||e.target?.closest('select,input,textarea,summary'))return;
     const key=e.key.toLowerCase(),action=KEYMAP[key];
     if(e.repeat){if(action||['p','escape'].includes(key))e.preventDefault();return;}
     // Focused buttons retain keyboard activation; the playfield receives focus when play starts.
@@ -296,6 +323,7 @@
   function finishRestart(ok){$('restartDialog').close();if(ok&&pendingMode){$('flightMode').value=pendingMode;reset();start();}pendingMode=null;}
   $('ovBtn').addEventListener('click',primary);$('pauseBtn').addEventListener('click',togglePause);$('restartBtn').addEventListener('click',askRestart);$('flightMode').addEventListener('change',askRestart);
   $('cancelRestart').addEventListener('click',()=>finishRestart(false));$('confirmRestart').addEventListener('click',()=>finishRestart(true));$('restartDialog').addEventListener('cancel',e=>{e.preventDefault();finishRestart(false);});
+  $('guideBtn').addEventListener('click',()=>{lostFocus();$('guideDialog').showModal();});$('closeGuide').addEventListener('click',()=>$('guideDialog').close());
 
   /* ---------- simulation ---------- */
   const distance=(a,b)=>{const dx=Math.abs(a.x-b.x),dy=Math.abs(a.y-b.y);return Math.hypot(Math.min(dx,W-dx),Math.min(dy,H-dy));};

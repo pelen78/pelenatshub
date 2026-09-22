@@ -8,7 +8,7 @@
 <style>
 :root{color-scheme:light;--navy:#16294d;--gold:#f0b429;--paper:#edf2fb;--ink:#edf6f4;--soft:#9bb2bc;--line:#304452;--mint:#8fedb5;--arena:min(600px,calc(100svh - 208px),calc(100vw - 366px))}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--navy);font-family:'Avenir Next',Avenir,'Trebuchet MS',sans-serif;line-height:1.45}button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button,select{min-height:40px}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}[hidden]{display:none!important}
-.hub-header{max-width:1060px;margin:auto;padding:15px 22px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px}.hub-mark{font-family:ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.14em}.hub-mark span{display:block;font-size:10px;letter-spacing:.06em;color:#61718e;margin-top:3px}.hub-label{border:1px solid #bac8dd;border-radius:5px;padding:5px 9px;font-size:10px;letter-spacing:.12em;font-weight:700}
+.hub-header{max-width:1060px;margin:auto;padding:15px 22px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px}.hub-mark{font-family:ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.14em}.hub-mark span{display:block;font-size:10px;letter-spacing:.06em;color:#61718e;margin-top:3px}.hub-label{border:1px solid #bac8dd;border-radius:5px;padding:5px 9px;font-size:10px;letter-spacing:.12em;font-weight:700}.hub-header a{color:var(--navy);text-decoration:none;border:1px solid #b8c6dd;border-radius:5px;padding:6px 10px;font-size:10px;letter-spacing:.12em;font-weight:700;white-space:nowrap}.hub-header a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .arcade{max-width:1016px;margin:0 auto;background:#101e2c;color:var(--ink);border-radius:18px;padding:18px 22px 16px;box-shadow:0 12px 34px #16294d18;border:1px solid #263a4d}.masthead{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:14px}.title-row{display:flex;align-items:baseline;gap:14px}h1{font-family:'Arial Black','Avenir Next',sans-serif;font-size:36px;font-weight:900;letter-spacing:-2px;line-height:1;margin:0}.edition{font-family:ui-monospace,monospace;letter-spacing:.18em;font-size:10px;color:var(--mint)}.mast-actions{display:flex;gap:8px}.quiet{border:1px solid var(--line);background:transparent;color:var(--ink);padding:7px 12px;border-radius:7px;font-weight:600;font-size:12px}.quiet:hover:not(:disabled){background:#203443}.modes{display:flex;gap:5px;padding:4px;background:#091522;border:1px solid #26394a;border-radius:9px;margin-bottom:14px}.mode{flex:1;border:0;background:none;color:var(--soft);border-radius:5px;padding:7px 10px;font-size:12px;font-weight:700}.mode[aria-pressed="true"]{background:var(--mint);color:#132c22}.mode small{margin-left:5px;font-size:10px;opacity:.7}
 .play-layout{display:grid;grid-template-columns:minmax(0,var(--arena)) minmax(230px,1fr);gap:20px;justify-content:center}.play-column{min-width:0}.board{position:relative;aspect-ratio:1;width:100%;border:1px solid #3a5260;border-radius:10px;overflow:hidden;background:#0b1720;touch-action:none;user-select:none;-webkit-user-select:none;isolation:isolate}canvas{width:100%;height:100%;display:block}.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:10px;background:linear-gradient(#0a1722de,#101e2ce8);overflow:auto}.overlay.hidden{display:none}.eyebrow{color:var(--mint);font:700 10px ui-monospace,monospace;letter-spacing:.2em}.overlay h2{font-size:clamp(25px,4vw,42px);line-height:1.03;letter-spacing:-1.3px;margin:0}.overlay p{max-width:330px;font-size:13px;color:#b5c6ce;margin:0}.big{background:var(--mint);border:0;color:#153526;border-radius:8px;padding:11px 24px;font-size:15px;font-weight:800;box-shadow:0 4px 0 #487e65;min-width:170px;margin-top:4px}.big:hover{background:#b1f8cd}.big:active{transform:translateY(2px);box-shadow:0 2px 0 #487e65}.toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:2;background:#ebf7db;color:#254236;border:1px solid #a8d7aa;padding:7px 12px;border-radius:6px;font-size:11px;font-weight:800;max-width:90%;text-align:center;pointer-events:none}.board-foot{display:flex;justify-content:space-between;gap:10px;margin-top:7px;color:var(--soft);font:10px ui-monospace,monospace}.board-foot b{color:var(--mint);font-weight:500}
 .sidebar{min-width:0;display:flex;flex-direction:column;gap:14px}.score-main{border-bottom:1px solid var(--line);padding:0 0 12px}.label{display:block;text-transform:uppercase;letter-spacing:.14em;font:10px ui-monospace,monospace;color:var(--soft)}.score-main strong{font-size:clamp(44px,5vw,64px);font-weight:800;line-height:1.15;letter-spacing:-2px;font-variant-numeric:tabular-nums}.score-main .points{font:10px ui-monospace,monospace;color:var(--mint);margin-left:8px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stats strong{font-size:22px;font-variant-numeric:tabular-nums;font-weight:700}.stats .best strong{color:var(--gold)}.mission-card{border:1px solid #405244;border-radius:8px;background:#1a302b;padding:12px}.mission-card .label{color:#acd8bb}.mission-card h3{font-size:15px;margin:6px 0;font-weight:700}.mission-card p{font-size:11px;color:#bed0c6;margin:7px 0 0}.mission-card progress{display:block;width:100%;height:6px;border:0;border-radius:5px;overflow:hidden;background:#354b42;accent-color:var(--mint)}progress::-webkit-progress-bar{background:#354b42}progress::-webkit-progress-value{background:var(--mint)}progress::-moz-progress-bar{background:var(--mint)}.goal-meta{display:flex;justify-content:space-between;gap:8px;margin-top:7px;color:#a9c4b5;font:10px ui-monospace,monospace}.settings{display:flex;gap:10px}.settings label{flex:1;color:var(--soft);font-size:11px}.settings select{display:block;width:100%;background:#172a39;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px;font-size:12px;margin-top:4px;color-scheme:dark}.settings select:disabled{opacity:.65}.mode-note{font-size:11px;color:var(--soft);margin:0}.play-actions{display:flex;gap:8px}.play-actions button{flex:1}.shortcuts{font-size:11px;color:var(--soft);margin:0}kbd{font:10px ui-monospace,monospace;border:1px solid #3a4a57;border-bottom-width:2px;padding:1px 4px;border-radius:3px;color:#d5e1e5}.storage-note{font-size:10px;color:#8ca0ab;margin:auto 0 0}.dpad{display:none;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px);gap:4px;justify-content:center;margin-top:8px}.dpad button{min-height:44px;padding:0;touch-action:manipulation}.up{grid-column:2}.left{grid-column:1}.dpad .down,.dpad .right{grid-row:2}.dpad .down{grid-column:2}.dpad .right{grid-column:3}
@@ -86,15 +86,16 @@ dialog p,.collection-group h3{color:var(--soft)}
 .cosmetic{background:var(--paper);color:var(--navy);border-color:var(--line)}
 .cosmetic small{color:var(--soft)}
 .cosmetic[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.guide-dialog{width:620px;max-height:85vh;overflow:auto}.guide-body{display:grid;gap:16px;margin:16px 0}.guide-body section{border-top:1px solid var(--line);padding-top:14px}.guide-body section:first-child{border-top:0;padding-top:0}.guide-body h3{margin:0 0 6px;font-size:18px;color:var(--navy)}.guide-body p,.guide-body li{color:var(--soft);font-size:15px;line-height:1.5}.guide-body ul{margin:0;padding-left:20px;display:grid;gap:6px}
 .footer{display:block;flex-shrink:0;width:100%;max-width:none;margin:auto 0 0;background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px 20px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;line-height:1.5}
 .footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6);font-family:inherit}
 @media(max-width:760px){.arcade{width:calc(100% - 20px)}}
 </style>
 </head>
 <body>
-<header class="hub-header"><div class="hub-mark">ATS / CLASS HUB<span>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</span></div><span class="hub-label">GAMES</span></header>
+<header class="hub-header"><div class="hub-mark">ATS / CLASS HUB<span>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</span></div><a href="../index.html">← Class Hub</a></header>
 <main class="arcade">
-  <div class="masthead"><div class="title-row"><h1>SNAKE<span style="color:var(--mint)">.</span></h1><span class="edition">ARCADE / 01</span></div><div class="mast-actions"><button id="soundBtn" class="quiet" aria-pressed="true">Sound on</button><button id="looksBtn" class="quiet">Your looks</button></div></div>
+  <div class="masthead"><div class="title-row"><h1>SNAKE<span style="color:var(--mint)">.</span></h1><span class="edition">ARCADE / 01</span></div><div class="mast-actions"><button id="guideBtn" class="quiet">Game guide</button><button id="soundBtn" class="quiet" aria-pressed="true">Sound on</button><button id="looksBtn" class="quiet">Your looks</button></div></div>
   <nav class="modes" aria-label="Game mode"><button class="mode" data-mode="classic" aria-pressed="true">Classic <small>NO TIME LIMIT</small></button><button class="mode" data-mode="sprint" aria-pressed="false">90-second sprint</button><button class="mode" data-mode="daily" aria-pressed="false">Daily challenge</button></nav>
   <div class="play-layout">
     <section class="play-column" aria-label="Game arena">
@@ -128,6 +129,36 @@ dialog p,.collection-group h3{color:var(--soft)}
 <div id="announce" class="sr-only" role="status" aria-live="polite"></div>
 <dialog id="changeDialog" aria-labelledby="changeTitle"><h2 id="changeTitle">Start a new run?</h2><p id="changeText"></p><div class="dialog-actions"><button class="quiet" id="changeCancel">Keep playing</button><button class="big" id="changeConfirm">Start new run</button></div></dialog>
 <dialog id="looksDialog" aria-labelledby="looksTitle"><div class="dialog-top"><h2 id="looksTitle">Make it yours.</h2><button class="quiet" id="looksClose">Done</button></div><p>Complete goals to unlock looks. All designs play exactly the same.</p><div id="collection"></div></dialog>
+<dialog id="guideDialog" class="guide-dialog" aria-labelledby="guideTitle">
+  <h2 id="guideTitle">Snake: game guide</h2>
+  <div class="guide-body">
+    <section>
+      <h3>Goal</h3>
+      <p>Steer the snake to eat food, grow longer, and avoid crashing into the walls or your own body. Fill the whole board and you win outright.</p>
+    </section>
+    <section>
+      <h3>Controls</h3>
+      <ul>
+        <li><strong>↑ ↓ ← →</strong> or <strong>W A S D</strong> to steer.</li>
+        <li><strong>Space</strong> to pause and resume.</li>
+        <li>On touch devices, swipe on the board or use the on-screen direction pad.</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Modes and scoring</h3>
+      <p>Each food eaten is worth 10 points, and the snake speeds up slightly every 5 foods. <strong>Classic</strong> has no time limit; <strong>90-second sprint</strong> ends the run when the clock hits zero; <strong>Daily challenge</strong> uses the same food sequence for everyone that day, with normal speed and solid walls, so scores are comparable. Speed and wall settings (solid or wrap-around) can be changed for Classic and Sprint. Best scores are saved separately for each mode, speed and wall combination.</p>
+    </section>
+    <section>
+      <h3>Goals and looks</h3>
+      <p>The "Next goal" panel gives you a running challenge, like eating a number of foods in one run or surviving 60 seconds, which unlocks a new snake, food or board look. Open <strong>Your looks</strong> to see what is unlocked and equip a different style; all looks play exactly the same.</p>
+    </section>
+    <section>
+      <h3>Credits</h3>
+      <p>Built by Ms. Ma. Elena Montes (Ms. Pelen) for the ATS Class Hub games collection.</p>
+    </section>
+  </div>
+  <div class="dialog-actions"><button class="quiet" id="closeGuide" type="button">Close</button></div>
+</dialog>
 <script>
 (() => {
 'use strict';
@@ -403,7 +434,12 @@ document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',(
   const next={...config,mode:b.dataset.mode,...(config.mode==='daily'?classicSettings:{})};
   if(config.mode!=='daily')classicSettings={speed:config.speed,walls:config.walls};requestChange(next);
 }));
-function modalOpen(){return $('changeDialog').open||$('looksDialog').open;}
+function modalOpen(){return $('changeDialog').open||$('looksDialog').open||$('guideDialog').open;}
+let guideResume=false;
+function openGuide(){guideResume=game.state==='running';if(guideResume)pause();$('guideDialog').showModal();}
+function closeGuide(){const resume=guideResume;guideResume=false;$('guideDialog').close();if(resume)start();}
+$('guideBtn').addEventListener('click',openGuide);$('closeGuide').addEventListener('click',closeGuide);
+$('guideDialog').addEventListener('cancel',e=>{e.preventDefault();closeGuide();});
 function steer(direction){if(modalOpen()||game.state==='over'||game.state==='paused')return;initAudio();game.turn(direction);if(game.state==='ready')start();}
 const keys={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};
 document.addEventListener('keydown',e=>{
@@ -431,7 +467,7 @@ $('board').addEventListener('pointermove',e=>{
   e.preventDefault();steer(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');gesture.x=e.clientX;gesture.y=e.clientY;
 });
 for(const event of ['pointerup','pointercancel','lostpointercapture'])$('board').addEventListener(event,()=>gesture=null);
-function lostFocus(){gesture=null;if(pending)pending.resume=false;looksResume=false;if(game.state==='running')pause();}
+function lostFocus(){gesture=null;if(pending)pending.resume=false;looksResume=false;guideResume=false;if(game.state==='running')pause();}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)lostFocus();});window.addEventListener('blur',lostFocus);
 function roundRect(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
 function render(now,dt){

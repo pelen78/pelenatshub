@@ -236,7 +236,7 @@ pre.code{background:#0b1740;border:1px solid #304974;padding:24px;border-radius:
 <header class="hub-header"><div>ATS / CLASS HUB<small>THE AMERICAN SCHOOL OF TAMPICO · ROOM LB6</small></div><a href="../index.html">← Class Hub</a></header>
 <div class="wrap">
   <header class="top">
-    <button class="brand" id="brand" aria-label="Lab Reboot — mission map"><small>ARDUINO MISSIONS / MAKERSPACE</small>LAB REBOOT<span class="brand-dot">.</span></button>
+    <button class="brand" id="brand" aria-label="Lab Reboot: mission map"><small>ARDUINO MISSIONS / MAKERSPACE</small>LAB REBOOT<span class="brand-dot">.</span></button>
     <div class="status">
       <span class="chip" id="rank"></span>
       <span class="chip" id="total"></span>
@@ -554,11 +554,11 @@ function renderDocs(){
       <h3>Arduino parts used</h3>
       <ul>
         <li><strong>Arduino Uno</strong> and breadboard, wired with jumper leads.</li>
-        <li><strong>LED + resistor</strong> — digital output (missions 1, 2) and PWM brightness control (mission 6).</li>
-        <li><strong>Pushbutton</strong> — digital input, read with <code>digitalRead()</code> (missions 2, 5).</li>
-        <li><strong>Active buzzer</strong> — a single-tone alarm driven with <code>digitalWrite()</code> (mission 3).</li>
-        <li><strong>Passive buzzer</strong> — plays a melody with <code>tone()</code> (missions 4, 5).</li>
-        <li><strong>Potentiometer</strong> — analog input read with <code>analogRead()</code> and mapped to output (mission 6).</li>
+        <li><strong>LED + resistor</strong> · digital output (missions 1, 2) and PWM brightness control (mission 6).</li>
+        <li><strong>Pushbutton</strong> · digital input, read with <code>digitalRead()</code> (missions 2, 5).</li>
+        <li><strong>Active buzzer</strong> · a single-tone alarm driven with <code>digitalWrite()</code> (mission 3).</li>
+        <li><strong>Passive buzzer</strong> · plays a melody with <code>tone()</code> (missions 4, 5).</li>
+        <li><strong>Potentiometer</strong> · analog input read with <code>analogRead()</code> and mapped to output (mission 6).</li>
       </ul>
     </section>
 
@@ -627,7 +627,7 @@ function renderHome(){
     <div class="hero-copy"><div class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>${allDone?'MISSION ACCOMPLISHED':'YOUR LAB. YOUR NEXT MISSION.'}</div>
     <h1>${allDone ? 'Lab LB6 is<br><em>back online.</em>' : 'Bring the lab<br><em>back to life.</em>'}</h1>
     <p>${allDone ? 'Every system works. Replay your missions, collect every star, and take on the bonus challenges.' :
-      'Six systems. One maker. Wire real circuits, bring your code to life, and reboot Lab LB6 — one mission at a time.'}</p>
+      'Six systems. One maker. Wire real circuits, bring your code to life, and reboot Lab LB6, one mission at a time.'}</p>
     ${next>=0 ? `<div class="actions"><button class="btn" data-start="${next}">${next===0 && totalStars()===0?'Start mission 1':'Continue: '+esc(MISSIONS[next].title)} →</button></div>`:''}
     <div class="mission-flow"><span>01 Wire</span><b>→</b><span>02 Code</span><b>→</b><span>03 Check</span><b>→</b><span>04 Run</span></div></div>
     ${labConsole()}
@@ -1301,7 +1301,7 @@ function renderChallenge(){
   const m=MISSIONS[V.idx],c=CHALLENGES[V.idx];
   app.innerHTML=`<div class="mhead"><button class="btn ghost small" id="bonusBack">Missions</button><h2>Bonus: ${esc(c.title)}</h2></div><section class="panel" style="margin-top:1.25rem" id="experimentPanel">
     <div class="brief"><strong>${esc(c.goal)}</strong>Change the code values, run the experiment, and observe the circuit. Your mission stars are already saved.</div>
-    ${learningRecord(m.id).challengeDone?'<p class="experiment-badge">✓ Experiment completed previously — keep exploring.</p>':''}
+    ${learningRecord(m.id).challengeDone?'<p class="experiment-badge">✓ Experiment completed previously, keep exploring.</p>':''}
     <div class="experiment-fields">${c.fields.map(([key,label,value,min,max,step])=>`<label>${esc(label)}${Array.isArray(min)?`<select data-setting="${key}">${min.map(v=>`<option ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select>`:`<input type="number" data-setting="${key}" value="${value}" min="${min}" max="${max}" step="${step}" required>`}</label>`).join('')}</div>
     <pre class="code experiment-code" id="experimentCode"></pre>
     ${liveWorkbenchHTML(m,V.reference)}
