@@ -602,7 +602,7 @@ function visibleActivities(name){
     const okFilter = a.pinned || activeFilter==='all' || a.status===activeFilter;
     const okQuery  = !q || (a.title+' '+a.description+' '+a.date).toLowerCase().includes(q);
     return okFilter && okQuery;
-  });
+  }).sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)); // pinned entries always stay on top
 }
 
 function render(){
