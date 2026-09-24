@@ -308,11 +308,11 @@
 /*__GROUPS_START__*/
 const GROUPS = {
   "Comp Apps": {
-    "note": "// The year runs top to bottom. Gold = happening now.",
+    "note": "// Pinned references first, then Now, Coming up, and Finished. Gold = happening now.",
     "activities": [
       {
         "title": "Introduction to Coding",
-        "date": "Task 4 · TBA",
+        "date": "Task 4",
         "description": "Before we start coding in CodeHS, research the big ideas behind it: programming, algorithms, flowcharts, programming languages, debugging and binary code. Answer 7 questions in your own words in a Google Doc.",
         "status": "soon",
         "link": "comp-apps/task-04-intro-to-coding/task.html",
@@ -327,7 +327,7 @@ const GROUPS = {
       },
       {
         "title": "Files, Folders and Extensions",
-        "date": "Task 3 · TBA",
+        "date": "Task 3",
         "description": "Watch a short video and read our drives-and-paths reference, then dig into a folder of mystery files: build a file table, export your Doc as a PDF, and prove you can rename and move files to the right place.",
         "status": "now",
         "link": "comp-apps/task-03-file-management/task.html",
@@ -341,7 +341,7 @@ const GROUPS = {
       },
       {
         "title": "Google Tools: Video Tutorial Project",
-        "date": "Task 2 · TBA",
+        "date": "Task 2",
         "description": "Record a screen-captured tutorial for your assigned Google tool (YouTube, Gmail, Forms, Calendar, Sites, or Drive), explained with subtitles only, and submit it as an unlisted YouTube link.",
         "status": "done",
         "link": "comp-apps/task-02-youtube-tutorial/task.html",
@@ -382,11 +382,11 @@ const GROUPS = {
     ]
   },
   "MakerSpace": {
-    "note": "// The year runs top to bottom. Gold = happening now.",
+    "note": "// Pinned references first, then Now, Coming up, and Finished. Gold = happening now.",
     "activities": [
       {
         "title": "Echo Alert: Ultrasonic Sensor",
-        "date": "Task 4 · TBA",
+        "date": "Task 4",
         "description": "Research how an ultrasonic sensor measures distance, then build a circuit that turns on an LED when something gets too close. Turn in a Google Doc with your answers and a presentation with your circuit.",
         "status": "soon",
         "link": "makerspace/task-04-echo-alert/task.html",
@@ -401,7 +401,7 @@ const GROUPS = {
       },
       {
         "title": "Blinking LED: Arduino Challenge",
-        "date": "Task 3 · TBA",
+        "date": "Task 3",
         "description": "Build a blinking LED circuit through a series of challenges, simulating each one in Tinkercad before building it for real.",
         "status": "now",
         "link": "makerspace/task-03-blinking-led/task.html",
@@ -416,7 +416,7 @@ const GROUPS = {
       },
       {
         "title": "Teach the Class: Arduino Basics",
-        "date": "Task 2 · TBA",
+        "date": "Task 2",
         "description": "Get assigned one Arduino topic, research it from at least two reliable sources (no AI research), and teach a short 5-minute mini lesson to the class.",
         "status": "done",
         "link": "makerspace/task-02-arduino-mini-lesson/task.html",
@@ -457,13 +457,13 @@ const GROUPS = {
     ]
   },
   "AP CS Principles": {
-    "note": "// The year runs top to bottom. Gold = happening now.",
+    "note": "// Pinned references first, then Now, Coming up, and Finished. Gold = happening now.",
     "activities": [
       {
         "id": "c46d1ddb-ee75-4e37-8beb-febbd7d8c914",
         "title": "CodeHS Unit 2: Programming Paint!",
         "description": "In this unit you will use programming as a tool for creativity. You will break a big picture into smaller parts, write functions for each part, and share your finished program with an audience.",
-        "date": "TBA",
+        "date": "",
         "status": "soon",
         "link": "assignments/c46d1ddb-ee75-4e37-8beb-febbd7d8c914/index.html",
         "pinned": false,
@@ -678,7 +678,13 @@ function visibleActivities(name){
     const okFilter = a.pinned || activeFilter==='all' || a.status===activeFilter;
     const okQuery  = !q || (a.title+' '+a.description+' '+a.date).toLowerCase().includes(q);
     return okFilter && okQuery;
-  }).sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)); // pinned entries always stay on top
+  }).sort((a,b)=>{
+    // Keep references pinned and preserve the existing order within each status.
+    const pinnedOrder = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
+    if(pinnedOrder || (a.pinned && b.pinned)) return pinnedOrder;
+    const statusOrder = {now:0, soon:1, done:2};
+    return (statusOrder[a.status] ?? 3) - (statusOrder[b.status] ?? 3);
+  });
 }
 
 function render(){
