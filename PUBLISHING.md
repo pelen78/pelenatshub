@@ -1,4 +1,4 @@
-# Panel de publicación de Pelen Class Hub
+# Panel de publicación de Pelen Hub
 
 El portafolio permanece en `/`. El panel privado está en `/admin/`. Los enlaces directos a los assignments siguen siendo públicos para compartirlos en Classroom.
 
