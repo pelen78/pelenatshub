@@ -1,4 +1,5 @@
 import { HubError, writeGroups } from './repository.js';
+import { addBackLink } from './back-link.js';
 
 const ROOTS = ['assignments', 'comp-apps', 'makerspace', 'ap-cs-principles', 'games', 'resources'];
 export function safeLink(value) {
@@ -60,7 +61,7 @@ export function preparePublication(state, input) {
         entry.link = `assignments/${entry.id}/index.html`;
         if (state.files.some(f => f.path === entry.link)) throw new HubError('The destination already exists. Refresh and try again.', 409);
       }
-      files.push({ path: entry.link, content: input.html });
+      files.push({ path: entry.link, content: addBackLink(input.html, entry.link, groupName) });
     }
     if (!Array.isArray(input.assets || [])) throw new HubError('Invalid attachments.');
     const assets = input.assets || [];
