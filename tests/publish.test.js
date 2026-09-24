@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { preparePublication, safeLink, readInput } from '../server/publish.js';
 import { parseGroups, writeGroups, github } from '../server/repository.js';
+import { addBackLink } from '../server/back-link.js';
 const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const revision = 'a'.repeat(40);
 function state() {
@@ -10,6 +11,29 @@ function state() {
   return { source, groups, revision, baseTree: 'b'.repeat(40), files: Object.values(groups).flatMap(g => g.activities).filter(a => a.link && !a.link.startsWith('http')).map(a => ({ path: a.link, type: 'blob', mode: '100644' })) };
 }
 function input() { return { action: 'save', revision, requestId: crypto.randomUUID(), group: 'Comp Apps', entry: { title: 'Una actividad nueva', description: 'Descripción con acentos', date: 'Week 4', status: 'now', link: '', pinned: false }, html: '<!doctype html><html><body>Hola</body></html>' }; }
+
+test('student subjects publish without a hub button, including reuploaded legacy HTML', () => {
+  const plain = '<html><body><a href="reading.html">Reading</a><style>body{color:red}</style></body></html>';
+  const legacy = addBackLink(plain, 'assignments/old/index.html', 'Resources');
+  for (const group of ['Comp Apps', 'MakerSpace', 'AP CS Principles']) {
+    for (const html of [plain, legacy]) {
+      const result = preparePublication(state(), { ...input(), group, html });
+      const page = result.files.find(f => f.path === result.entry.link).content;
+      assert.doesNotMatch(page, /data-hub-back|Pelen Hub/);
+      assert.ok(page.includes('<a href="reading.html">Reading</a><style>body{color:red}</style>'));
+    }
+  }
+});
+test('other groups keep their hub button when publishing or reuploading', () => {
+  for (const group of ['Resources', 'Games']) {
+    const value = { ...input(), group };
+    const result = preparePublication(state(), value);
+    const page = result.files.find(f => f.path === result.entry.link).content;
+    assert.match(page, /<a data-hub-back href="\.\.\/\.\.\/index.html#/);
+    const replacement = preparePublication(state(), { ...value, html: page });
+    assert.equal(replacement.files.find(f => f.path === replacement.entry.link).content, page);
+  }
+});
 
 test('new HTML, metadata and publication marker are written together; existing entries survive', () => {
   const initial = state(); const result = preparePublication(initial, input());
