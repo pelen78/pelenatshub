@@ -3,8 +3,8 @@ const slug = s => s.toLowerCase().replace(/·/g, '').replace(/[^a-z0-9]+/g, '-')
 
 export function hubHref(link, group) {
   const up = '../'.repeat(link.split('/').length - 1);
-  // Resources are teacher tools; everything else returns to the student view of that subject.
-  return group === 'Resources' ? `${up}index.html#resources` : `${up}index.html?class=${slug(group)}`;
+  // Opens the full hub with this subject's tab selected.
+  return `${up}index.html#${slug(group)}`;
 }
 
 export function addBackLink(html, link, group) {
