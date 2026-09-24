@@ -15,7 +15,7 @@ function safePath(value) {
 export function learningCatalogue(groups) {
   return { schema: 1, source: 'Published project learning goals in the Pelen Hub', classrooms: CLASSROOMS.map(course => ({
     id: course.id, name: course.name,
-    assignments: (groups[course.group]?.activities || []).filter(a => a.id && safePath(a.link)).map(a => ({
+    assignments: (groups[course.group]?.activities || []).filter(a => a.id && !a.pinned && safePath(a.link)).map(a => ({
       id: a.id, title: a.title, label: a.date || '', status: ['now', 'soon', 'done'].includes(a.status) ? a.status : 'soon', path: a.link,
       learningTarget: text(a.plc?.learningTarget),
       successCriteria: text(a.plc?.successCriteria).split(/\r?\n/).map(s => s.trim()).filter(Boolean)
