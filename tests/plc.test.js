@@ -49,7 +49,7 @@ test('catalogue uses stable IDs, maps subjects, suggests NOW and excludes refere
   const result=catalogue(groups,'revision');assert.equal(result.length,3);
   assert.equal(result[0].projects[0].status,'now');assert.ok(result[0].projects[0].id);
   assert.ok(!result[2].projects.some(p=>p.title==='Class Important Info'));
-  const p=result[0].projects.find(p=>p.title.includes('Digital Passport'));assert.ok(p.successCriteria.includes('Navigation'));
+  const p=result[0].projects.find(p=>p.title.includes('Digital Passport'));assert.ok(p.successCriteria.includes('I can make navigation, text and layout work on both desktop and mobile.'));
   const e=newEntry(result[0].id,'2026-09-23',[p]);p.successCriteria='Changed catalogue';assert.notEqual(e.projects[0].successCriteria,p.successCriteria);
 });
 test('HTML extraction copies recognized text and ignores scripts, unknown sections and missing criteria',()=>{

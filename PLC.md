@@ -31,3 +31,11 @@ Use **Import backup** for the original PLC JSON file. No original teacher notes 
 ## Validation
 
 Run `npm test`, `npm run build`, and `npx wrangler pages functions build --outdir .wrangler/functions --build-output-directory dist`. Automated tests cover actual SQLite writes through a D1-shaped adapter, owner isolation, optimistic concurrency, recovery, date validation, curriculum snapshots, legacy conversion, and publication preservation. Verify desktop/mobile layout and the save/reload/import/conflict flows in a local test harness; production authentication must never be bypassed to preview.
+
+## Today’s Class and shared learning goals
+
+Edit a project's public **Learning target** and **Success criteria** in the teacher dashboard, under **Today’s Class + PLC · Learning goals**. Put each criterion on a separate line. These fields feed new PLC snapshots and the classroom projection. The existing concise classroom goals have been preserved in the project catalogue.
+
+`npm run build` generates the embedded public catalogue in `dist/resources/today-class.html` from `index.html` using `scripts/learning-catalog.mjs`. It never reads private PLC records. Every successful Pages deployment refreshes the board automatically, including newly added projects. Open the built `dist/` version for local use; the source HTML is a template. Do not edit generated embedded data.
+
+Each selected project in a PLC links to **Project Today’s Class**, with the project ID preselected. The screen keeps its original typography, layout, and fullscreen controls. It shows the current published goals; private weekly edits and reflections stay in the PLC. Existing weekly snapshots are never rewritten by curriculum changes. A retired project's link displays an explicit message instead of silently projecting a different assignment. Projects missing learning goals display a notice until those fields are completed in the teacher dashboard.
