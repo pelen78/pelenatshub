@@ -2,26 +2,17 @@
 
 The private teacher workspace is `/admin/plc/`, linked from `/admin/`. It uses the existing Access authentication and `/api/admin/*` origin checks. Each authorized email has its own PLC records. Assignment metadata remains public curriculum information; observations and evidence never go into GitHub or static HTML.
 
-## Enable private cloud saving
+## Private cloud saving
 
-1. Create a Cloudflare D1 database named `pelen-plc`.
-2. Run `migrations/0001_plc.sql` on that database. It only creates the private `plc_entries` table.
-3. Add a production Pages D1 binding named **PLC_DB** pointing to that database. Because this project uses Wrangler configuration, add its actual database ID to `wrangler.toml`:
+The `pelen-plc` D1 database and `plc_entries` table are provisioned. `wrangler.toml` binds **PLC_DB** only under `env.production`; preview environments do not access production observations. Deploy the `main` branch to activate this binding. Keep the existing Access settings for `/admin` and `/api/admin`.
 
-```toml
-[[d1_databases]]
-binding = "PLC_DB"
-database_name = "pelen-plc"
-database_id = "REPLACE_WITH_THE_CREATED_DATABASE_ID"
-migrations_dir = "migrations"
-```
+For a new Cloudflare account, create a D1 database, run `migrations/0001_plc.sql`, and replace the production database ID in `wrangler.toml`. Do not put the production binding at the top level, where preview deployments would inherit it.
 
-4. Redeploy the Pages project. Keep the existing Access settings for `/admin` and `/api/admin`. Do not reuse the production database for preview environments. The existing API middleware rejects non-production origins.
-5. Sign in, create a PLC, wait for **Saved to private cloud**, then open it in another signed-in browser with the same email. Test with a different authorized email to confirm its list is separate.
+After deployment, sign in, create a PLC, wait for **Saved to private cloud**, then open it in another signed-in browser with the same email. Different authorized emails have separate records.
 
 Without the binding or migration, the app explicitly reports unavailable cloud storage and retains browser drafts; it never claims that these drafts are backed up in the cloud. Browser data alone is not a backup. Export remains available.
 
-Reference: https://developers.cloudflare.com/pages/functions/bindings/#d1-databases
+Reference: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 
 ## Curriculum and weekly records
 

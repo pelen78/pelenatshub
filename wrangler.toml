@@ -1,3 +1,10 @@
 name = "pelenlab"
 compatibility_date = "2026-09-01"
 pages_build_output_dir = "./dist"
+
+# Private PLC storage is bound only in production.
+[[env.production.d1_databases]]
+binding = "PLC_DB"
+database_name = "pelen-plc"
+database_id = "515d095c-f9a3-4c37-af20-fe18f7a0c88a"
+migrations_dir = "migrations"
