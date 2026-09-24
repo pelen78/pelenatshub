@@ -713,7 +713,7 @@ function render(){
         <h3>${escapeHtml(a.title)}</h3>
         <p class="desc">${escapeHtml(a.description)}</p>
         ${a.link
-          ? `<a class="go" href="${escapeHtml(a.link)}" target="_blank" rel="noopener">Open activity →</a>`
+          ? `<a class="go" href="${escapeHtml(a.link)}"${/^(games\/|https?:)/.test(a.link) ? ' target="_blank" rel="noopener"' : ''}>Open activity →</a>`
           : `<a class="go disabled">Link coming soon</a>`}
 
       </div>
