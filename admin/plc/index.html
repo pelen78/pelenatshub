@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly PLC · Pelen Class Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/plc/plc.css"><script type="module" src="/admin/plc/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#workspace">Skip to PLC</a>
+<header class="cover"><div class="masthead"><a class="brand" href="/admin/">PELEN / CLASS HUB<span>TEACHER WORKSPACE · ROOM LB6</span></a><nav aria-label="Teacher navigation"><a href="/admin/">Assignments</a><a aria-current="page" href="/admin/plc/">Weekly PLC</a><a href="/cdn-cgi/access/logout">Sign out ↗</a></nav></div>
+<div class="heading"><div><p class="eyebrow">OBSERVE. REFLECT. TRY AGAIN.</p><h1>Small changes.<br><span>Better learning.</span></h1><p class="intro">Your projects are here. Bring what happened in class.</p></div><div class="cover-note"><span class="week-label" id="todayWeek"></span><p>One week at a time.<br>A clearer next step.</p></div></div></header>
+<main id="workspace" tabindex="-1">
+<div class="utility"><span id="account">Loading your workspace…</span><div><span id="saveStatus" role="status" aria-live="polite">Connecting…</span><button id="retry" class="text-button" hidden>Retry saving</button></div></div>
+<div id="notice" role="status" aria-live="polite" hidden></div>
+<div class="shell"><aside class="sidebar"><div class="side-title"><h2>Your weeks</h2><button class="primary" id="newWeek" disabled>+ New PLC</button></div><label for="courseFilter">Subject</label><select id="courseFilter"><option value="all">All subjects</option></select><div id="weekList" class="week-list"></div><div class="side-footer"><button id="export" class="text-button" disabled>Download backup</button><label class="text-button import-label">Import backup<input id="importFile" type="file" accept=".json,application/json" disabled></label><button id="refresh" class="text-button" disabled>Refresh projects</button><button id="recoverDrafts" class="text-button" disabled>Recover browser drafts</button><button id="showTrash" class="text-button" disabled>View trash</button><p>Your reflections are private.<br>Project information comes from the Hub.</p></div></aside>
+<section id="content" class="content" aria-label="Weekly PLC"><div class="empty"><p class="eyebrow">YOUR TEACHING JOURNAL</p><h2>Loading your weeks…</h2></div></section></div>
+</main>
+<footer>PELEN / WEEKLY PLC <span>THE AMERICAN SCHOOL OF TAMPICO</span></footer>
+<dialog id="newDialog"><form id="newForm"><div class="dialog-heading"><div><p class="eyebrow">A FRESH PAGE</p><h2>Start this week’s PLC.</h2></div><button type="button" class="icon-button" data-close="newDialog" aria-label="Close">×</button></div><div class="grid"><label>Subject<select id="newCourse" required></select></label><label>Week of<input id="newDate" type="date" required></label></div><fieldset><legend>Projects for this week</legend><p class="hint">Current projects are suggested. Select more than one if needed.</p><div id="projectChoices"></div></fieldset><p id="newError" class="error" role="alert"></p><div class="actions"><button type="button" class="secondary" data-close="newDialog">Cancel</button><button class="primary" type="submit">Create PLC →</button></div></form></dialog>
+<dialog id="conflictDialog"><div class="dialog-heading"><h2>Two versions of this week</h2><button class="icon-button" data-close="conflictDialog" aria-label="Close">×</button></div><p>Another tab or device saved this PLC while you were working. Compare the changed fields below.</p><div id="conflictDetails"></div><div class="actions"><button class="secondary" id="useCloud">Use cloud version</button><button class="primary" id="keepCopy">Keep my draft as another PLC</button></div><p class="hint">Your draft is downloaded as a backup before either action.</p></dialog>
+</body></html>

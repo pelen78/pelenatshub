@@ -51,6 +51,10 @@ export function preparePublication(state, input) {
       link: safeLink(input.entry.link),
       pinned: Boolean(input.entry.pinned)
     };
+    if (input.entry.plc !== undefined) {
+      if (!input.entry.plc || typeof input.entry.plc !== 'object' || Array.isArray(input.entry.plc)) throw new HubError('Invalid PLC project information.');
+      entry.plc = Object.fromEntries(['unit', 'learningTarget', 'successCriteria', 'requirements'].map(key => [key, text(input.entry.plc[key] ?? '', 'PLC ' + key, 12000)]));
+    }
     if (input.html !== undefined && input.html !== null) {
       if (typeof input.html !== 'string' || !input.html.trim() || new TextEncoder().encode(input.html).length > 5 * 1024 * 1024 || !/<(?:!doctype\s+html|html|body)\b/i.test(input.html)) throw new HubError('Choose a valid HTML document up to 5 MB.');
       if (previous && uploadPath(previous.link)) {

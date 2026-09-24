@@ -1,7 +1,9 @@
+import { extractProjectFields } from './plc/extract.js';
 const $ = id => document.getElementById(id);
 let state, selectedId = null, dirty = false, busy = false, selectedHtml = null;
 let pendingPayload = null, pendingSignature = '', publication = null, pollTimer, pollCount = 0;
 const blobUrls = [];
+const plcIds = { unit: 'plcUnit', learningTarget: 'plcLearningTarget', successCriteria: 'plcSuccessCriteria', requirements: 'plcRequirements' };
 const statusNames = { now: 'In progress', soon: 'Coming up', done: 'Finished' };
 
 function notice(message = '', error = false) {
@@ -72,6 +74,7 @@ function selectActivity(group, a) {
   resetForm(false); selectedId = a.id; $('subject').value = group;
   for (const key of ['title', 'description', 'date', 'status', 'link']) $(key).value = a[key] || '';
   $('pinned').checked = Boolean(a.pinned);
+  for (const [key, id] of Object.entries(plcIds)) $(id).value = a.plc?.[key] || '';
   $('modeLabel').textContent = 'EDIT ASSIGNMENT'; $('editorTitle').textContent = 'Ready for an update.';
   $('removeButton').hidden = false;
   const local = /^(assignments|comp-apps|makerspace|ap-cs-principles|games|resources)\//.test(a.link || '');
@@ -85,6 +88,10 @@ async function chooseHtml(file) {
   selectedHtml = file; dirty = true; pendingPayload = null;
   $('fileName').textContent = `${file.name} · ${Math.ceil(file.size / 1024)} KB`;
   $('clearFile').hidden = false; $('link').disabled = true; notice();
+  const extracted = extractProjectFields(await file.text());
+  let filled = 0;
+  for (const [key, value] of Object.entries(extracted)) { const field = $(plcIds[key]); if (!field.value.trim() && value) { field.value = value; filled++; } }
+  if (filled) { $('plcMetadata').open = true; notice('Assignment sections copied into ' + filled + ' empty PLC fields. Review them before publishing.'); }
 }
 function assetSelection() {
   return [...$('assetFiles').files, ...$('assetFolder').files]
@@ -105,6 +112,7 @@ async function formPayload() {
   if (assets.length > 30 || assets.reduce((s, a) => s + a.file.size, selectedHtml?.size || 0) > 20 * 1024 * 1024) throw new Error('Use no more than 30 files and 20 MB total.');
   if (assets.length && !selectedHtml) throw new Error('Choose the HTML file along with its supporting files.');
   const entry = Object.fromEntries(['title', 'description', 'date', 'status', 'link'].map(key => [key, $(key).value.trim()]));
+  entry.plc = Object.fromEntries(Object.entries(plcIds).map(([key, id]) => [key, $(id).value.trim()]));
   entry.pinned = $('pinned').checked; if (!selectedHtml) validateLink(entry.link);
   if (!entry.title) throw new Error('Enter an assignment title.');
   if (selectedHtml) entry.link = '';
