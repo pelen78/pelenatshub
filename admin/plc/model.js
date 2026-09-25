@@ -55,6 +55,8 @@ export function newEntry(courseId, weekOf, projects, previous) {
   e.reassess.previousResponse = previous?.commitment?.action || '';
   return e;
 }
+// Each new PLC evaluates one project. Older PLCs that share answers across several projects never count as that project's PLC.
+export const projectPLC = (entries, courseId, weekOf, projectId) => entries.find(e => !e.deleted && e.courseId === courseId && e.weekOf === weekOf && e.projects.length === 1 && e.projects[0].id === projectId);
 export function completion(entry) {
   // Completion measures documented reflection, not imported assignment metadata.
   const done = STAGES.map(s => s.key === 'reassess' && entry.firstEntry || stageFields(s).filter(f => f.quick).every(f => Boolean(get(entry, f.path)?.trim())));

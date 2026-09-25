@@ -1,5 +1,5 @@
 import { STAGES, COMMITMENT_FIELDS, CLASSROOM_FIELDS } from './fields.js';
-import { COURSES, FIELDS, PROJECT_FIELDS, get, set, stageFields, monday, isoDate, safeURL, normalizeEntry, newEntry, completion, projectSnapshot } from './model.js';
+import { COURSES, FIELDS, PROJECT_FIELDS, get, set, stageFields, monday, isoDate, safeURL, normalizeEntry, newEntry, completion, projectSnapshot, projectPLC } from './model.js';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -16,6 +16,8 @@ const courseName = id => COURSES.find(c => c.id === id)?.name || id;
 const current = () => records.get(selected);
 const sorted = () => [...records.values()].filter(e => Boolean(e.deleted) === trash && (filter === 'all' || e.courseId === filter)).sort((a,b) => b.weekOf.localeCompare(a.weekOf) || b.createdAt - a.createdAt);
 const dateLabel = value => new Date(value + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const projectTitle = e => e.projects.map(p => p.title).join(' + ') || 'No project selected';
+const shared = e => e.projects.length > 1;
 function notice(message = '') { $('notice').textContent = message; $('notice').hidden = !message; }
 async function api(path, options = {}) {
   const response = await fetch('/api/admin/plc/' + path, { ...options, cache: 'no-store', credentials: 'same-origin', headers: { 'X-Hub-Request': '1', ...options.headers } });
@@ -119,7 +121,7 @@ async function start() {
 function render() { renderWeeks(); renderContent(); }
 function select(id) { selected = id; trash = false; history.replaceState(null, '', id ? '#entry=' + encodeURIComponent(id) : location.pathname); render(); }
 function renderWeeks() {
-  $('weekList').innerHTML = sorted().map(e => `<button class="week-item" data-select="${esc(e.id)}" ${e.id === selected ? 'aria-current="page"' : ''}><strong>${esc(dateLabel(e.weekOf))}</strong><small>${esc(courseName(e.courseId))}</small><small>${esc(e.projects.map(p => p.title).join(' · ') || 'Projects to select')}</small><small>${pending.has(e.id) ? 'Draft · ' : ''}${completion(e).complete ? 'Complete' : completion(e).count + '/6 stages'}</small></button>`).join('') || '<p class="hint">No weeks here yet.</p>';
+  $('weekList').innerHTML = sorted().map(e => `<button class="week-item" data-select="${esc(e.id)}" ${e.id === selected ? 'aria-current="page"' : ''}><strong>${esc(projectTitle(e))}</strong><small>${esc(courseName(e.courseId))} · ${esc(dateLabel(e.weekOf))}</small>${shared(e) ? '<small>Shared answers · several projects</small>' : ''}<small>${pending.has(e.id) ? 'Draft · ' : ''}${completion(e).complete ? 'Complete' : completion(e).count + '/6 stages'}</small></button>`).join('') || '<p class="hint">No weeks here yet.</p>';
 }
 function field(f, value) {
   return `<label class="field ${f.wide ? 'wide' : ''}">${esc(f.label)}${f.quick ? '<em>ESSENTIAL</em>' : ''}${f.short || f.type === 'date' || f.type === 'url' ? `<input type="${f.type || 'text'}" data-field="${esc(f.path)}" value="${esc(value)}" maxlength="12000">` : `<textarea rows="3" data-field="${esc(f.path)}" maxlength="12000" placeholder="${esc(f.prompt || '')}">${esc(value)}</textarea>`}${f.short || f.type ? `<small>${esc(f.prompt || '')}</small>` : ''}</label>`;
@@ -139,10 +141,10 @@ function renderContent() {
   const wasSame = root.dataset.entry === e.id; root.dataset.entry = e.id;
   root.innerHTML = `<div class="toolbar"><button class="text-button" data-action="home">← Overview</button><div><button class="mode" data-action="mode" aria-pressed="${fullMode}">${fullMode ? 'Full reflection' : 'Quick reflection'} ↔</button><button class="secondary" data-action="print">Print / PDF</button><button class="text-button danger" data-action="remove">Move to trash</button></div></div>
     ${conflicts.has(e.id) ? '<div class="conflict-banner">Another version was saved elsewhere. Your draft is safe. <button class="text-button" data-action="resolve">Compare versions</button></div>' : ''}
-    <header class="entry-head"><div><p class="eyebrow">${esc(courseName(e.courseId))}</p><h2>Week of ${esc(dateLabel(e.weekOf))}</h2><p>${esc(e.projects.map(x => x.title).join(' · ') || 'No project selected')}</p></div><div class="progress" id="progress"></div></header>
-    <section class="project-panel"><div class="panel-title"><h3>Project information</h3><span class="tag">FROM YOUR HUB</span></div><p class="hint">A snapshot for this week. Refreshing the catalogue never changes your historical notes. You can adapt these fields for this PLC.</p><button class="text-button" data-action="projects">Add or change projects</button>${e.projects.map((project, index) => `<details class="project"><summary>${esc(project.title)} <small>View objectives & requirements</small></summary><p class="hint">${project.url ? `<a href="${esc(project.url)}" target="_blank" rel="noopener">Open assignment ↗</a>` : 'No assignment link'}</p>${courses.find(c => c.id === e.courseId)?.projects.some(p => p.id === project.id) ? `<p><a class="secondary" href="/resources/today-class.html?project=${encodeURIComponent(project.id)}" target="_blank" rel="noopener noreferrer">Project Today’s Class ↗</a></p><p class="hint">Opens current published learning goals only. This week’s snapshot and private notes stay here.</p>` : ''}${PROJECT_FIELDS.map(key => `<label class="field">${esc(names[key])}<textarea rows="3" data-project="${index}" data-key="${key}" maxlength="12000" placeholder="Not provided in the assignment. Add it here if needed.">${esc(project[key])}</textarea></label>`).join('')}${courses.find(c => c.id === e.courseId)?.projects.some(p => p.id && p.id === project.id && PROJECT_FIELDS.some(k => p[k] !== project[k])) ? '<p class="hint">Your snapshot differs from the current catalogue. Your version is preserved.</p>' : ''}</details>`).join('')}</section>
+    <header class="entry-head"><div><p class="eyebrow">${esc(courseName(e.courseId))} · WEEK OF ${esc(dateLabel(e.weekOf).toUpperCase())}</p><h2>${esc(projectTitle(e))}</h2><p>${shared(e) ? 'Older PLC: these projects share one set of answers. Its content is kept as is.' : 'Project evaluated in this PLC'}</p></div><div class="progress" id="progress"></div></header>
+    <section class="project-panel"><div class="panel-title"><h3>Project information</h3><span class="tag">FROM YOUR HUB</span></div><p class="hint">A snapshot for this week. Refreshing the catalogue never changes your historical notes. You can adapt these fields for this PLC.</p><p class="hint">Each PLC keeps its own observations, stages and commitment. To reflect on another project, start a separate PLC; this one stays unchanged.</p><button class="text-button" data-action="another">+ PLC for another project this week</button>${e.projects.map((project, index) => `<details class="project"><summary>${esc(project.title)} <small>View objectives & requirements</small></summary><p class="hint">${project.url ? `<a href="${esc(project.url)}" target="_blank" rel="noopener">Open assignment ↗</a>` : 'No assignment link'}</p>${courses.find(c => c.id === e.courseId)?.projects.some(p => p.id === project.id) ? `<p><a class="secondary" href="/resources/today-class.html?project=${encodeURIComponent(project.id)}" target="_blank" rel="noopener noreferrer">Project Today’s Class ↗</a></p><p class="hint">Opens current published learning goals only. This week’s snapshot and private notes stay here.</p>` : ''}${PROJECT_FIELDS.map(key => `<label class="field">${esc(names[key])}<textarea rows="3" data-project="${index}" data-key="${key}" maxlength="12000" placeholder="Not provided in the assignment. Add it here if needed.">${esc(project[key])}</textarea></label>`).join('')}${courses.find(c => c.id === e.courseId)?.projects.some(p => p.id && p.id === project.id && PROJECT_FIELDS.some(k => p[k] !== project[k])) ? '<p class="hint">Your snapshot differs from the current catalogue. Your version is preserved.</p>' : ''}</details>`).join('')}</section>
     <section class="evidence-panel"><div class="panel-title"><h3>What happened in class?</h3><span class="tag">YOUR OBSERVATIONS</span></div><p class="hint">Use group descriptions and links to student work. Nothing here is posted to the public Hub.</p><div class="grid">${CLASSROOM_FIELDS.filter((f,i) => fullMode || i < 3 || get(e,'classroom.' + f.key)).map(f => field({ ...f, path:'classroom.'+f.key }, get(e,'classroom.'+f.key))).join('')}</div><div id="evidenceList">${e.evidence.map((ev,i) => `<div class="evidence-item"><div class="grid"><label class="field">Evidence title<input data-evidence="${i}" data-key="title" value="${esc(ev.title)}" maxlength="300"></label><label class="field">Evidence link<input type="url" data-evidence="${i}" data-key="url" value="${esc(ev.url)}" placeholder="https://…"></label><label class="field wide">What does this evidence show?<textarea data-evidence="${i}" data-key="note" maxlength="12000">${esc(ev.note)}</textarea></label></div>${ev.image ? `<p><a href="${esc(ev.image)}" target="_blank" rel="noopener">Image evidence ↗</a></p>` : ''}<div class="actions"><button class="text-button danger" data-remove-evidence="${i}">Remove evidence</button></div></div>`).join('')}</div><button class="secondary" data-action="evidence">+ Add evidence</button></section>
-    ${STAGES.map((s,i) => `<details class="stage" data-stage="${s.key}" style="--accent:${colors[i]}" ${(wasSame ? openStages.has(s.key) : i === Math.max(0,p.done.indexOf(false))) ? 'open' : ''}><summary><span class="stage-number">0${i+1}</span><span><span class="stage-name">${s.title}</span><span class="stage-question">${esc(s.question)}</span></span><span class="stage-check" id="check-${s.key}"></span></summary><div class="stage-body"><p class="hint">${esc(s.description)}</p>${s.key === 'reassess' ? `${previous?.commitment.action ? `<div class="previous"><b>Previous commitment · ${esc(dateLabel(previous.weekOf))}</b>\n${esc(previous.commitment.action)}</div>` : ''}<label class="check"><input type="checkbox" data-field="firstEntry" ${e.firstEntry ? 'checked' : ''}> No previous response to reassess this week</label>` : ''}${s.groups.map(g => { const fs = g.fields.map(f => ({...f,path:[s.key,g.key,f.key].filter(Boolean).join('.')})).filter(f => fullMode || f.quick || get(e,f.path));return fs.length ? `${g.title ? `<h4>${g.title}</h4>` : ''}<div class="grid">${fs.map(f=>field(f,get(e,f.path))).join('')}</div>` : ''; }).join('')}</div></details>`).join('')}
+    ${STAGES.map((s,i) => `<details class="stage" data-stage="${s.key}" style="--accent:${colors[i]}" ${(wasSame ? openStages.has(s.key) : i === Math.max(0,p.done.indexOf(false))) ? 'open' : ''}><summary><span class="stage-number">0${i+1}</span><span><span class="stage-name">${s.title}</span><span class="stage-question">${esc(s.question)}</span></span><span class="stage-check" id="check-${s.key}"></span></summary><div class="stage-body"><p class="hint">${esc(s.description)}</p>${s.key === 'reassess' ? `${previous?.commitment.action ? `<div class="previous"><b>Previous commitment · ${esc(dateLabel(previous.weekOf))}</b>\n${esc(previous.commitment.action)}</div>` : ''}<label class="check"><input type="checkbox" data-field="firstEntry" ${e.firstEntry ? 'checked' : ''}> No previous response to reassess this week</label>` : ''}${s.key === 'plan' ? `<div class="previous"><b>Looking ahead · next learning</b>\nPlan can name a later project or learning target. It does not change the project evaluated here: ${esc(projectTitle(e))}.</div>` : ''}${s.groups.map(g => { const fs = g.fields.map(f => ({...f,path:[s.key,g.key,f.key].filter(Boolean).join('.')})).filter(f => fullMode || f.quick || get(e,f.path));return fs.length ? `${g.title ? `<h4>${g.title}</h4>` : ''}<div class="grid">${fs.map(f=>field(f,get(e,f.path))).join('')}</div>` : ''; }).join('')}</div></details>`).join('')}
     <section class="commitment"><div class="panel-title"><h3>Next week, I will…</h3><span class="tag">CLOSE THE LOOP</span></div><p class="hint">Your action and reassessment date are required to mark this PLC complete.</p><div class="grid">${COMMITMENT_FIELDS.filter(f => fullMode || f.quick || get(e,'commitment.'+f.key)).map(f => field({...f,path:'commitment.'+f.key},get(e,'commitment.'+f.key))).join('')}</div></section>`;
   updateProgress();
 }
@@ -152,41 +154,32 @@ function updateProgress() {
   $('progress').innerHTML = `<strong>${p.count}<small>/6</small></strong>${p.complete ? 'Complete' : p.count === 6 ? 'Add next action & date' : 'Stages documented'}<div class="progress-track"><span style="width:${p.count/6*100}%"></span></div>`;
   STAGES.forEach((s,i) => { const el=$('check-'+s.key); if(el) { const missing=stageFields(s).filter(f=>f.quick && !get(e,f.path)?.trim()).length; el.textContent=p.done[i] ? (s.key==='reassess' && e.firstEntry ? 'N/A ✓' : 'Ready ✓') : `${missing} to fill`; } });
 }
-let editingProjects = false;
-function openNew(courseId, editProjects = false) {
-  editingProjects = editProjects; $('newForm').reset(); $('newError').textContent='';
+function openNew(courseId, weekOf) {
+  $('newForm').reset(); $('newError').textContent='';
   $('newCourse').value = courseId || current()?.courseId || (filter === 'all' ? COURSES[0].id : filter);
-  $('newDate').value = editProjects ? current().weekOf : monday();
-  $('newCourse').disabled = editProjects; $('newDate').disabled = editProjects;
-  $('newDialog').querySelector('h2').textContent = editProjects ? 'Projects for this week.' : 'Start this week’s PLC.';
-  $('newForm').querySelector('[type=submit]').textContent = editProjects ? 'Update project selection' : 'Create PLC →';
+  $('newDate').value = weekOf || monday();
   renderChoices(); $('newDialog').showModal();
 }
 function renderChoices() {
   const projects = courses.find(c=>c.id===$('newCourse').value)?.projects || [];
-  const selectedIds = editingProjects ? current().projects.map(p=>p.id) : projects.filter(p=>p.status==='now').map(p=>p.id);
-  $('projectChoices').innerHTML = projects.map(p=>`<label class="project-choice"><input type="checkbox" value="${esc(p.id)}" ${selectedIds.includes(p.id)?'checked':''}><span><strong>${esc(p.title)}</strong><small>${statusNames[p.status] || ''} · ${esc(p.date)}</small><small>${esc(p.description)}</small></span></label>`).join('') || '<p>No projects found. Add an assignment in the teacher dashboard first.</p>';
-  if(editingProjects) {
-    for(const p of current().projects.filter(p=>!projects.some(x=>x.id===p.id))) $('projectChoices').insertAdjacentHTML('beforeend',`<label class="project-choice"><input type="checkbox" value="${esc(p.id)}" checked><span><strong>${esc(p.title)}</strong><small>Saved historical project · no longer in catalogue</small></span></label>`);
-  }
+  const weekOf = isoDate($('newDate').value) ? monday($('newDate').value) : '';
+  const started = p => projectPLC([...records.values()], $('newCourse').value, weekOf, p.id);
+  const suggested = projects.find(p => p.status === 'now' && !started(p))?.id;
+  $('projectChoices').innerHTML = projects.map(p=>`<label class="project-choice"><input type="radio" name="newProject" value="${esc(p.id)}" ${p.id===suggested?'checked':''}><span><strong>${esc(p.title)}</strong><small>${statusNames[p.status] || ''} · ${esc(p.date)}</small>${started(p) ? '<small>PLC already started for this week · choosing it opens that PLC</small>' : ''}<small>${esc(p.description)}</small></span></label>`).join('') || '<p>No projects found. Add an assignment in the teacher dashboard first.</p>';
 }
-$('newCourse').onchange=renderChoices;
+$('newCourse').onchange=renderChoices;$('newDate').onchange=renderChoices;
 $('newForm').onsubmit=event=>{
   event.preventDefault();
   if(!isoDate($('newDate').value)) { $('newError').textContent='Choose a valid week.';return; }
   const courseId=$('newCourse').value, weekOf=monday($('newDate').value);
-  const ids=[...$('projectChoices').querySelectorAll('input:checked')].map(x=>x.value);
-  if(!ids.length) { $('newError').textContent='Select at least one project.';return; }
+  const id=$('projectChoices').querySelector('input:checked')?.value;
+  if(!id) { $('newError').textContent='Select the project to evaluate.';return; }
+  const existing=projectPLC([...records.values()],courseId,weekOf,id);
+  if(existing) { $('newDialog').close(); select(existing.id); notice('This project already has a PLC for this week. It was opened with its answers unchanged.'); return; }
   const catalogue=courses.find(c=>c.id===courseId).projects;
-  if(editingProjects) {
-    const e=current(); e.projects=ids.map(id=>e.projects.find(p=>p.id===id)||projectSnapshot(catalogue.find(p=>p.id===id))); changed(e,true);
-  } else {
-    const existing=[...records.values()].find(e=>!e.deleted&&e.courseId===courseId&&e.weekOf===weekOf);
-    if(existing) { $('newError').textContent='A PLC already exists for this subject and week. Open it from Your weeks to add more projects.';return; }
-    const previous=[...records.values()].filter(e=>!e.deleted&&e.courseId===courseId&&e.weekOf<weekOf).sort((a,b)=>b.weekOf.localeCompare(a.weekOf))[0];
-    const e=newEntry(courseId,weekOf,ids.map(id=>projectSnapshot(catalogue.find(p=>p.id===id))),previous);
-    records.set(e.id,e);revisions.set(e.id,0);selected=e.id;changed(e);select(e.id);
-  }
+  const previous=[...records.values()].filter(e=>!e.deleted&&e.courseId===courseId&&e.weekOf<weekOf).sort((a,b)=>b.weekOf.localeCompare(a.weekOf))[0];
+  const e=newEntry(courseId,weekOf,[projectSnapshot(catalogue.find(p=>p.id===id))],previous);
+  records.set(e.id,e);revisions.set(e.id,0);selected=e.id;changed(e);select(e.id);
   $('newDialog').close();
 };
 function download(entries, name='plc-backup') {
@@ -232,7 +225,7 @@ document.addEventListener('click',event=>{
   switch(button.dataset.action){
     case 'home':select(null);break;
     case 'new':openNew();break;
-    case 'projects':openNew(e.courseId,true);break;
+    case 'another':openNew(e.courseId,e.weekOf);break;
     case 'mode':fullMode=!fullMode;renderContent();break;
     case 'evidence':e.evidence.push({id:crypto.randomUUID(),type:'Student Work',title:'',url:'',image:'',note:''});changed(e,true);break;
     case 'remove':if(confirm('Move this PLC to trash? You can restore it later.')){e.deleted=true;changed(e);selected=null;render();}break;

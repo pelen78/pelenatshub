@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 import { plcStore, readPLCInput } from '../server/plc.js';
-import { catalogue, newEntry, normalizeEntry, completion, set, FIELDS } from '../admin/plc/model.js';
+import { catalogue, newEntry, normalizeEntry, completion, set, FIELDS, projectPLC } from '../admin/plc/model.js';
 import { extractProjectFields } from '../admin/plc/extract.js';
 import { parseGroups } from '../server/repository.js';
 import { preparePublication } from '../server/publish.js';
@@ -76,4 +76,27 @@ test('API uses authenticated identity, reports unavailable storage and limits re
   const missing=await onRequestGet({env:{},data:{identity:{email:'owner'}}});assert.equal(missing.status,503);assert.equal(missing.headers.get('Cache-Control'),'no-store');
   const tooLarge=new Request('https://example.test',{method:'PUT',headers:{'Content-Type':'application/json'},body:'x'.repeat(250001)});
   await assert.rejects(()=>readPLCInput(tooLarge),{status:413});
+});
+test('projects in the same subject and week keep separate PLC answers',async()=>{
+  const store=plcStore(database()),week='2026-09-21';
+  const a=newEntry('computer-applications',week,[{id:'project-a',title:'Project A'}]),b=newEntry('computer-applications',week,[{id:'project-b',title:'Project B'}]);
+  a.analyze.strengths='Only A';a.plan.priorityTarget='After A';b.analyze.strengths='Only B';b.commitment.reassessDate='2026-09-28';
+  await store.save('owner',{entry:a,revision:0});await store.save('owner',{entry:b,revision:0});
+  const byId=async()=>new Map((await store.list('owner')).map(r=>[r.entry.id,r]));
+  let saved=await byId();const editedA=saved.get(a.id).entry;editedA.analyze.strengths='A edited';
+  await store.save('owner',{entry:editedA,revision:saved.get(a.id).revision});
+  saved=await byId();
+  assert.equal(saved.get(a.id).entry.analyze.strengths,'A edited');assert.equal(saved.get(a.id).entry.plan.priorityTarget,'After A');
+  assert.equal(saved.get(b.id).entry.analyze.strengths,'Only B');assert.equal(saved.get(b.id).entry.plan.priorityTarget,'');assert.equal(saved.get(b.id).revision,1);
+  const entries=[...saved.values()].map(r=>r.entry);
+  assert.equal(projectPLC(entries,'computer-applications',week,'project-a').id,a.id);assert.equal(projectPLC(entries,'computer-applications',week,'project-b').id,b.id);
+  assert.equal(projectPLC(entries,'computer-applications','2026-09-28','project-a'),undefined);
+});
+test('older PLCs with several projects stay intact and do not block a PLC per project',async()=>{
+  const store=plcStore(database()),legacy=newEntry('computer-applications','2026-09-21',[{id:'project-a',title:'Project A'},{id:'project-b',title:'Project B'}]);
+  legacy.classroom.observed='Shared observation';await store.save('owner',{entry:legacy,revision:0});
+  const [row]=await store.list('owner');assert.equal(row.entry.projects.length,2);assert.equal(row.entry.classroom.observed,'Shared observation');
+  assert.equal(projectPLC([row.entry],'computer-applications','2026-09-21','project-a'),undefined);
+  const trashed={...normalizeEntry(newEntry('computer-applications','2026-09-21',[{id:'project-a',title:'Project A'}])),deleted:true};
+  assert.equal(projectPLC([trashed],'computer-applications','2026-09-21','project-a'),undefined);
 });
