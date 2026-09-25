@@ -18,3 +18,14 @@ nav{flex-wrap:wrap}nav a[aria-current]{color:var(--gold-soft)}
 @media(max-width:1050px){.shell{grid-template-columns:230px minmax(0,1fr)}main{padding-left:24px;padding-right:24px}.course-cards{grid-template-columns:1fr}.stage-body{padding-left:22px}}@media(max-width:760px){.cover{padding:0 20px}.masthead{align-items:flex-start;flex-direction:column}nav{gap:18px}.cover-note{display:none}.heading{padding:28px 0}.shell{grid-template-columns:1fr}.sidebar{position:static}.week-list{max-height:190px}.side-footer p{display:none}.grid{grid-template-columns:1fr}.entry-head{align-items:flex-start;padding:20px}.entry-head h2{font-size:27px}.utility{font-size:10px;flex-wrap:wrap}.stage>summary{padding:17px}.stage-question{display:block}.course-cards{grid-template-columns:1fr}.empty{padding:30px 23px}footer{gap:20px;flex-wrap:wrap}.progress{min-width:84px}}
 @media(prefers-reduced-motion:no-preference){button{transition:background .15s,border-color .15s}dialog[open]{animation:appear .15s ease-out}@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}}
 @media print{@page{margin:16mm}body{background:white;color:#111;font-size:11pt}.cover,.utility,.sidebar,.toolbar,.side-footer,#notice,footer,dialog,.skip,button,.no-print,.tag{display:none!important}main{padding:0;max-width:none}.shell{display:block}.entry-head{border:0;padding:0;margin-bottom:18px}.project-panel,.evidence-panel,.commitment,.stage{border:1px solid #ccc;background:white;border-radius:0;box-shadow:none;break-inside:auto}.stage>summary,.panel-title,.project summary{break-after:avoid}.stage-body{padding:8px 18px}.stage-body h4{break-after:avoid}.grid{display:block}.field{break-inside:avoid}input,textarea,select{display:none!important}.print-value{white-space:pre-wrap;font:11pt/1.45 var(--sans);margin:6px 0 15px;overflow-wrap:anywhere}.print-only{display:block}.progress{display:none}.hint{font-size:9pt}.project{background:white}.project .grid{display:block}}
+
+/* Keep the actual save state readable throughout the reflection. */
+@media screen {
+  .utility{position:sticky;top:0;z-index:10;align-items:center;padding:12px 0;background:var(--paper);border-bottom:1px solid var(--line);margin-bottom:16px}
+  .utility>div{flex:1;justify-content:flex-end;flex-wrap:wrap;min-width:0}
+  #saveStatus{display:block;max-width:100%;padding:12px 18px;border:2px solid var(--navy);border-radius:10px;background:var(--navy);color:#fff;font:800 18px/1.4 var(--sans);overflow-wrap:anywhere;box-shadow:0 3px 10px #12275c1a}
+  #retry{font-size:14px;min-height:44px;color:var(--navy);font-weight:700}
+  .sidebar{top:110px}
+  .stage{scroll-margin-top:120px}
+  @media(max-width:760px){.utility{gap:6px}.utility>div{flex-basis:100%;justify-content:flex-start}#saveStatus{width:100%;font-size:17px;padding:10px 14px}}
+}
