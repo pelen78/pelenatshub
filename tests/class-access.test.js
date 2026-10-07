@@ -22,17 +22,32 @@ async function login(code = '1953', next = '/', configuration = env, headers = {
 }
 const cookieFrom = response => response.headers.get('set-cookie').split(';')[0];
 
-test('all public paths, including direct downloads, require the code on first visit', async () => {
+test('tasks, subject resources and direct downloads require the code on first visit', async () => {
   const routes = JSON.parse(await readFile(new URL('../_routes.json', import.meta.url)));
   assert.deepEqual(routes.include, ['/*']);
   assert.deepEqual(routes.exclude, []);
-  for (const path of ['/', '/index.html', '/assignments/example/', '/comp-apps/test.html', '/makerspace/test.html', '/ap-cs-principles/syllabus.pdf', '/resources/example.docx', '/games/test.html', '/resources/example.zip']) {
+  for (const path of ['/assignments/example/', '/comp-apps/test.html', '/makerspace/test.html', '/ap-cs-principles/syllabus.pdf', '/resources/example.docx', '/games/test.html', '/resources/example.zip', '/index/other', '/index.html/other']) {
     const { response, reached } = await visit(path);
     assert.equal(reached, false, path);
     assert.equal(response.status, 401, path);
     assert.match(await response.text(), /Enter class code/);
     assert.equal(response.headers.get('cache-control'), 'private, no-store');
   }
+});
+
+test('the hub and subject tabs are public without unlocking tasks or showing a second code dialog', async () => {
+  for (const path of ['/', '/index', '/index.html', '/?subject=MakerSpace', '/#resources']) {
+    for (const method of ['GET', 'HEAD']) {
+      const { response, reached } = await visit(path, { method }, {});
+      assert.equal(reached, true, path);
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.has('set-cookie'), false);
+    }
+  }
+  assert.equal((await visit('/resources/today-class.html')).reached, false);
+  const hub = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.ok(!hub.includes('id="gate"'));
+  assert.ok(!hub.includes('pelenhub-unlocked'));
 });
 
 test('wrong code stays locked; correct code returns to the requested resource', async () => {
@@ -51,7 +66,7 @@ test('wrong code stays locked; correct code returns to the requested resource', 
 
 test('one accepted code unlocks later visits across subjects and downloads without a public cache', async () => {
   const Cookie = cookieFrom((await login()).response);
-  for (const path of ['/', '/assignments/example/', '/makerspace/test.html', '/resources/test.pdf', '/games/example/']) {
+  for (const path of ['/assignments/example/', '/makerspace/test.html', '/resources/test.pdf', '/games/example/']) {
     const { response, reached } = await visit(path, { headers: { Cookie } });
     assert.equal(reached, true);
     assert.equal(await response.text(), 'RESOURCE');
@@ -75,8 +90,8 @@ test('forged, duplicate, expired and previous-code cookies cannot unlock resourc
   const derived = await crypto.subtle.digest('SHA-256', bytes.encode(`pelenhub/class-access/v1\0${env.GITHUB_TOKEN}`));
   const key = await crypto.subtle.importKey('raw', derived, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const mac = Buffer.from(await crypto.subtle.sign('HMAC', key, bytes.encode(`${payload}\0${1953}`))).toString('base64url');
-  assert.equal((await visit('/', { headers: { Cookie: `${cookieName}=${payload}.${mac}` } })).reached, false);
-  assert.equal((await visit('/', { headers: { Cookie } }, { ...env, CLASS_CODE: '4321' })).reached, false);
+  assert.equal((await visit('/resources/test.pdf', { headers: { Cookie: `${cookieName}=${payload}.${mac}` } })).reached, false);
+  assert.equal((await visit('/resources/test.pdf', { headers: { Cookie } }, { ...env, CLASS_CODE: '4321' })).reached, false);
 });
 
 test('teacher authentication and publication polling retain their existing handlers', async () => {
@@ -93,12 +108,12 @@ test('rejects cross-origin and malformed submissions and unsafe redirect targets
   for (const next of ['https://other.example', '//other.example/path', '/\\other.example', '/__class_access', '/%0a/../../__class_access']) {
     assert.equal((await login('1953', next)).response.headers.get('location'), '/');
   }
-  const { response } = await visit('/?q=%22%3E%3Cscript%3Ealert(1)%3C/script%3E');
+  const { response } = await visit('/resources/test.pdf?q=%22%3E%3Cscript%3Ealert(1)%3C/script%3E');
   assert.ok(!(await response.text()).includes('<script>alert(1)'));
 });
 
 test('missing server configuration fails closed and HEAD reveals no content', async () => {
-  assert.equal((await visit('/', {}, {})).response.status, 503);
+  assert.equal((await visit('/resources/test.pdf', {}, {})).response.status, 503);
   const { response, reached } = await visit('/resources/test.pdf', { method: 'HEAD' });
   assert.equal(reached, false);
   assert.equal(response.status, 401);
