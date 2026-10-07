@@ -1,4 +1,4 @@
-// One class-code check covers the hub, direct assignment links and downloads.
+// The hub is public; one class-code check covers tasks, resources and downloads.
 // Teacher administration keeps its existing Cloudflare Access authentication.
 const COOKIE = '__Host-pelenhub-class';
 const LIFETIME = 365 * 24 * 60 * 60;
@@ -70,6 +70,8 @@ export async function onRequest(context) {
   }
   // Publication status is non-content metadata used by the teacher dashboard.
   if (isTeacherPath(url.pathname) || url.pathname.startsWith('/cdn-cgi/') || url.pathname === '/publication.json') return context.next();
+  // Browsing the hub and its subject tabs never grants access to any resource.
+  if (['GET', 'HEAD'].includes(request.method) && ['/', '/index', '/index.html'].includes(url.pathname)) return context.next();
   const key = await signingKey(env);
   if (!key) return privateResponse('Class access is temporarily unavailable. Please contact your teacher.', 503, { 'Content-Type': 'text/plain; charset=utf-8' });
   if (url.pathname === '/__class_access') {
@@ -88,14 +90,7 @@ export async function onRequest(context) {
     const response = gate(url.pathname + url.search);
     return request.method === 'HEAD' ? new Response(null, response) : response;
   }
-  let response = await context.next();
-  // Keep the old hub click dialog from asking a second time after server login.
-  // This flag is only a UI compatibility bridge; the server never trusts it.
-  if ((url.pathname === '/' || url.pathname === '/index.html') && response.headers.get('Content-Type')?.includes('text/html')) {
-    response = new HTMLRewriter().on('head', { element(element) {
-      element.append(`<script>try{localStorage.setItem('pelenhub-unlocked','1')}catch(e){try{sessionStorage.setItem('pelenhub-unlocked','1')}catch(_){}}</script>`, { html: true });
-    } }).transform(response);
-  }
+  const response = await context.next();
   const secured = new Response(response.body, response);
   secured.headers.set('Cache-Control', 'private, no-store');
   secured.headers.append('Vary', 'Cookie');
