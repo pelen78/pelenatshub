@@ -56,7 +56,7 @@
   :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
   strong{font-weight:700}
 
-  /* ---------- Activity header ---------- */
+  /* ---------- Passport cover (hero) ---------- */
   .cover{
     position:relative;
     overflow:hidden;
@@ -71,20 +71,33 @@
   }
   .cover::before{
     content:"";position:absolute;inset:0;
-    background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
-    background-size:48px 48px;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
     opacity:.55;pointer-events:none;
   }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+
   .cover-frame{
     position:relative;
-    max-width:700px;
+    max-width:660px;
     margin:0 auto;
     border:3px solid var(--gold);
-    border-radius:14px;
+    border-radius:22px;
     padding:44px 26px 36px;
     background:rgba(255,255,255,.05);
     box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
   }
   .cover .eyebrow{
     font-family:'JetBrains Mono',monospace;
@@ -99,7 +112,7 @@
     line-height:.98;
     text-shadow:0 4px 0 rgba(0,0,0,.22);
   }
-  .cover h1 .pop{display:block;color:var(--gold)}
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
   .cover .subtitle{
     font-family:'Fredoka',sans-serif;
     font-weight:400;
@@ -122,13 +135,28 @@
     margin-top:20px;
     color:rgba(255,255,255,.65);
   }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
   /* ---------- Layout ---------- */
   main{max-width:860px;margin:0 auto;padding:24px 24px 0}
   section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
   section:last-of-type{border-bottom:none}
 
-  /* Section labels, matching the other course activities */
-  .section-label{
+  /* stamp-style section headers */
+  .stamp{
     display:inline-block;
     font-family:'JetBrains Mono',monospace;
     font-weight:700;
@@ -136,11 +164,14 @@
     letter-spacing:.16em;
     text-transform:uppercase;
     color:var(--navy);
-    border:2px solid var(--navy);
-    border-radius:5px;
+    border:2px dashed var(--navy);
+    border-radius:8px;
     padding:8px 16px;
+    transform:rotate(-1.6deg);
     margin-bottom:22px;
   }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
 
   h3{
     font-family:'Fredoka',sans-serif;font-weight:600;
@@ -335,8 +366,13 @@
     .pass{grid-template-columns:1fr}
     .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
   }
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
   }
   .card ol{margin:6px 0 0 18px}
   .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
@@ -363,13 +399,14 @@
       <span>Export to .JPG</span>
     </div>
     <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">Edited</div>
   </div>
 </header>
 
 <main>
 
   <section id="mission">
-    <h2 class="section-label">Your Task</h2>
+    <span class="stamp">Your Mission</span>
     <p class="lead">In this lesson, you will learn some basic tools of GIMP to edit and improve images. By the end of the activity, you will be able to change the orientation of an image, crop it, and change its size.</p>
     <p>You will find all the image files <strong>attached to this assignment in Google Classroom</strong>. Download them first. Every exercise tells you which file to use.</p>
     <p><strong>Why does this matter?</strong> Big images make websites slow, fill up your Drive, and sometimes can't even be uploaded. Knowing how to make an image smaller without ruining it is something you will use all year.</p>
@@ -387,7 +424,7 @@
   </section>
 
   <section id="setup">
-    <h2 class="section-label">Getting Ready</h2>
+    <span class="stamp">Check-In · Getting ready</span>
     <p>Do these steps before you start editing. Organized files now means no lost work later.</p>
     <ol class="steps">
       <li><strong>Download</strong> all the files attached to this assignment: Germany, HorseheadIR-Hubble, Flower Poster, Natural Sunset, Tennis, Golf, Chess and Beach.</li>
@@ -400,9 +437,9 @@
   </section>
 
   <section id="exercises">
-    <h2 class="section-label">Exercises</h2>
+    <span class="stamp">The Exercises</span>
     <p>Do the exercises in order. Every exercise ends the same way: export the <span class="code">.jpg</span> into your <span class="code">Desktop › GIMP › crop_resize_rotate</span> folder.</p>
-    <h3>Exercise 01 · Crop</h3>
+    <h3>Exercise 01 · Crop & Rotate</h3>
     <div class="cards">
       <div class="card">
         <h4>Flip horizontally</h4>
@@ -425,6 +462,7 @@
       <div class="card">
         <h4>Crop into 12 images</h4>
         <span class="file">File: Flower Poster</span>
+<<<<<<< HEAD
         <figure style="display:flex;align-items:center;gap:12px;margin:4px 0 14px">
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAkCAYAAAAQC8MVAAABeGlDQ1BJQ0MgUHJvZmlsZQAAeJytkU8rRFEYxn93/M8UacJCukWymNFgMWbYjFGGLDQo7O7cuYa6M3O6czR8ADsbFmJD+ApiY2EpCxZKqclnUEpJujpzY1bYeDbn9z69ve9zzgGfNISwa4FcXjqpyXF9cWlZbyjTjJ82YnQYZlHEZ2dn+FGvD2jqvA+pWStTb49jW6Wjs/rpg+6YDPK7mjNW0QStETAzRTMHmg0ETeFI0PaBUEkKxddAwFlcWgatrDjr8bPidIV96ioBZz6VAF8n0Jr2uF9x1uMRxeaqkQFfUu3yMlTUlJzQI+FoKM4/K2evf+1Qr+W38gtzKgfQRZIJdCKEiRIiLq0NqRoTBbHprGVXpR4Xwrb0RCEn1qXlBPWpvDkQ1IfCg2HVp/7MG/2SqkzX2u+qXuEYoj1Qs1310ntwcQmdN1Wv9xBaRuH8VhiO8R1ce639qy6uDA957B+HuifXfemDhl342HHd9xPX/TiFmjJc2Z8kd2ngKPtQKQAAAftJREFUeJzVmL+y8UAYxp99GSo6KilcAQ0Ftc41KIyL0IXOVSg0bkCnxrgCdWZopEPDiD3z7pw4cU58nw0i+c3s5M++m33mzWY3+4hKpSLhw263w36/h5S+1W9FCIFMJoNsNntzP+kXbNs2jscjiEg15BIWUkpVOFmsIZfLXevod7AblEgkQhfKcH+cJO6fdbCeu2L51XNwFCAiHA6Hn2tEHOn5ZsivMuxXfw/W8U+xj5DP59FsNtUxTJJBGg0GAxiGAcuy0Ol0EGmx7XYbnyCpO4ZqtdrN3KeLbduYz+eBFhstsfV6HaZp4llM01SCdfnI1FUoFAK108rsbDZDr9dDsVjU7qhUKqFcLuMZtMTyOGPBXHQ5nU7hinWZTqfX80ajgbAgxAhCjCDECEKMIMQIQowgxAhCjEg++wDvAnGPxp2FYzgcotvtYrvdvi+z5/MZr8AwDFSr1YfjA4kdjUYvEWxZFpbL5XuHwXg8VkWHzWbz51x3SyT6/b6cTCbXG+v1WhkMr0Z87zL4z22xWDy8U3Ac5/r/K1arlWy1Wm8XGxSvWPrfXv3TCI+H4fuBRUXs5XK5ESt+W55shHGJwlBwHEfZnq71+SezXJFOp1Wgaz+GiZRSZZT7T6VSNx6t79TFvgBnlx08t3FYiG+b9WEzmfGmPyrQpwXo8AVrx9QQZ7c/sQAAAABJRU5ErkJggg==" alt="GIMP Crop Tool icon" width="86" height="72" style="display:block;flex-shrink:0;border-radius:6px">
           <figcaption style="font-size:15px;line-height:1.4"><strong>Crop Tool</strong><br>Look for this icon.</figcaption>
@@ -432,6 +470,11 @@
         <ol>
           <li>Select the <strong>Crop Tool</strong> in the Toolbox by clicking the <strong>crop icon</strong> shown above.</li>
           <li>Click and drag to draw a box around <strong>one</strong> flower. Then press <strong>Enter</strong> to crop it.</li>
+=======
+        <ol>
+          <li>Select the <strong>Crop Tool</strong> in the Toolbox.</li>
+          <li>Draw a box around <strong>one</strong> flower and click inside the box to crop it.</li>
+>>>>>>> 726f353e9917b769267693cc5547c28ebf44b11b
           <li>Export it as a <span class="code">.jpg</span>.</li>
           <li>Go to <span class="menu">Edit › Undo</span> to go back to the full poster.</li>
           <li>Repeat until you have <strong>12 separate images</strong>.</li>
@@ -440,24 +483,28 @@
     </div>
 
     <h3>Exercise 02 · Resize</h3>
-    <p>For this exercise, use only <strong>Tennis, Golf and Beach</strong>. Reduce each image to the <strong>file-size range shown in the table</strong>. Use <span class="menu">Image › Scale Image</span> and change the width. Keep the chain icon <strong>closed</strong> so the image doesn't get stretched.</p>
+    <p>Make each image weigh between <strong>400 and 500 KB</strong>. Use <span class="menu">Image › Scale Image</span> and change the width. Keep the chain icon <strong>closed</strong> so the image doesn't get stretched.</p>
     <table>
       <thead>
-        <tr><th>File</th><th>Your goal</th></tr>
+        <tr><th>File</th><th>Original size</th><th>Your goal</th></tr>
       </thead>
       <tbody>
-        <tr><td>Tennis</td><td>200–300 KB</td></tr>
-        <tr><td>Golf</td><td>300–400 KB</td></tr>
-        <tr><td>Beach</td><td>400–500 KB</td></tr>
+        <tr><td>Natural Sunset</td><td>2.36 MB</td><td>400–500 KB</td></tr>
+        <tr><td>Flower Poster</td><td>4.27 MB</td><td>400–500 KB</td></tr>
+        <tr><td>Germany</td><td>672 KB</td><td>400–500 KB</td></tr>
+        <tr><td>Tennis</td><td>You find it ✎</td><td>400–500 KB</td></tr>
+        <tr><td>Golf</td><td>You find it ✎</td><td>400–500 KB</td></tr>
+        <tr><td>Chess</td><td>You find it ✎</td><td>400–500 KB</td></tr>
+        <tr><td>Beach</td><td>You find it ✎</td><td>400–500 KB</td></tr>
       </tbody>
     </table>
     <div class="exception">
-      <p><strong>✎ Find the original size yourself.</strong> For Tennis, Golf and Beach, open <strong>File Explorer</strong> and go to your <span class="code">crop_resize_rotate</span> folder. If you don't see the size of the files, click <span class="menu">View › Details</span>: the <strong>Size</strong> column shows how much each file weighs. <strong>Write the original size of each one in the private comments</strong> of this assignment in Google Classroom.</p>
+      <p><strong>✎ Find the original size yourself.</strong> For Tennis, Golf, Chess and Beach, open <strong>File Explorer</strong> and go to your <span class="code">crop_resize_rotate</span> folder. If you don't see the size of the files, click <span class="menu">View › Details</span>: the <strong>Size</strong> column shows how much each file weighs. <strong>Write the original size of each one in the private comments</strong> of this assignment in Google Classroom.</p>
     </div>
   </section>
 
   <section id="export">
-    <h2 class="section-label">Export to JPG</h2>
+    <span class="stamp gold">Developing · Export to .JPG</span>
     <p>Every finished image must be a <span class="code">.jpg</span> file.</p>
     <ol class="steps">
       <li>Go to <span class="menu">File › Export As</span>.</li>
@@ -468,14 +515,14 @@
   </section>
 
   <section id="submit">
-    <h2 class="section-label">Submission</h2>
+    <span class="stamp">Turning it in</span>
     <p>You turn in the <strong>link to your folder</strong>, not loose files.</p>
     <ol class="steps">
       <li>Make sure your <span class="code">Desktop › GIMP › crop_resize_rotate</span> folder has all your <span class="code">.jpg</span> files.</li>
       <li>Open <strong>Google Drive</strong> and drag your whole <span class="code">GIMP</span> folder from the Desktop into <strong>My Drive</strong>. Wait until the upload finishes.</li>
-      <li>Check that your <span class="code">crop_resize_rotate</span> folder has <strong>17 final JPG files</strong>.</li>
+      <li>Check that your <span class="code">crop_resize_rotate</span> folder has <strong>22 files</strong>.</li>
       <li>In Google Drive, open your <span class="code">GIMP</span> folder, right click the <span class="code">crop_resize_rotate</span> folder, click <strong>Share › Copy link</strong>, and submit the link to Google Classroom.</li>
-      <li>Don't forget to write the original sizes of Tennis, Golf and Beach in the <strong>private comments</strong>.</li>
+      <li>Don't forget to write the original sizes of Tennis, Golf, Chess and Beach in the <strong>private comments</strong>.</li>
     </ol>
     <div class="exception">
       <p><strong>Upload the whole GIMP folder, but share the link to crop_resize_rotate.</strong> Your next GIMP exercises will go inside the same GIMP folder, each one in its own subfolder. A folder I can't open counts as not turned in.</p>
