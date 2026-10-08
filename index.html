@@ -322,7 +322,7 @@ const GROUPS = {
           "unit": "",
           "learningTarget": "I can use basic tools in an image editor program to edit images. I can flip and rotate an image, crop one image into several smaller images, and resize a file to its assigned file-size range without stretching it. I can also check a file's size in File Explorer, export my work as a .jpg, and keep all my files organized in the correct folder.",
           "successCriteria": "I can flip an image horizontally in an image editor program.\nI can rotate an image in the direction I need.\nI can crop parts of an image and save them as separate images.\nI can resize an image to make its file size smaller without stretching it.\nI can find a file's size in File Explorer.\nI can export my work as a .jpg file.\nI can save and organize my files in folders.\nI can share a folder link to turn in my work.",
-          "requirements": "You turn in the link to your folder , not loose files.\nMake sure your Desktop › GIMP › crop_resize_rotate folder has all your .jpg files.\nOpen Google Drive and drag your whole GIMP folder from the Desktop into My Drive . Wait until the upload finishes.\nCheck that your crop_resize_rotate folder has 22 files .\nIn Google Drive, open your GIMP folder, right click the crop_resize_rotate folder, click Share › Copy link , and submit the link to Google Classroom.\nDon't forget to write the original sizes of Tennis, Golf and Beach in the private comments .\nUpload the whole GIMP folder, but share the link to crop_resize_rotate. Your next GIMP exercises will go inside the same GIMP folder, each one in its own subfolder. A folder I can't open counts as not turned in."
+          "requirements": "You turn in the link to your folder , not loose files.\nMake sure your Desktop › GIMP › crop_resize_rotate folder has all your .jpg files.\nOpen Google Drive and drag your whole GIMP folder from the Desktop into My Drive . Wait until the upload finishes.\nCheck that your crop_resize_rotate folder has 17 final JPG files .\nIn Google Drive, open your GIMP folder, right click the crop_resize_rotate folder, click Share › Copy link , and submit the link to Google Classroom.\nDon't forget to write the original sizes of Tennis, Golf and Beach in the private comments .\nUpload the whole GIMP folder, but share the link to crop_resize_rotate. Your next GIMP exercises will go inside the same GIMP folder, each one in its own subfolder. A folder I can't open counts as not turned in."
         }
       },
       {
@@ -856,69 +856,5 @@ window.addEventListener('hashchange',()=>{
 });
 </script>
 
-<!-- ===== Entry code gate: asked once per browser, then remembered ===== -->
-<style>
-  #gate{border:none;padding:0;background:transparent;max-width:none;max-height:none;margin:auto}
-  #gate::backdrop{background:rgba(11,23,64,.55);backdrop-filter:blur(3px)}
-  #gate .box{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-top:4px solid var(--gold);
-    border-radius:14px;box-shadow:var(--shadow);padding:28px 26px 24px;width:min(360px,calc(100vw - 32px));text-align:center}
-  #gate h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;color:var(--navy);margin-bottom:6px}
-  #gate p{color:var(--muted);font-size:.95rem;margin-bottom:18px}
-  #gate input{font-family:'JetBrains Mono',monospace;font-size:1.6rem;letter-spacing:.5em;text-align:center;
-    width:100%;padding:10px 0 10px .5em;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
-  #gate input:focus{outline:none;border-color:var(--gold)}
-  #gate .err{color:#c0392b;font-size:.85rem;min-height:1.3em;margin:8px 0 6px}
-  #gate .row{display:flex;gap:10px}
-  #gate button{flex:1;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.08em;font-size:.85rem;
-    padding:11px 0;border-radius:8px;cursor:pointer;border:1.5px solid var(--line);background:transparent;color:var(--muted)}
-  #gate button[type=submit]{background:var(--navy);border-color:var(--navy);color:#fff}
-  @media (prefers-color-scheme: dark){#gate button[type=submit]{color:var(--navy-deep)}}
-  #gate.shake .box{animation:gshake .35s}
-  @keyframes gshake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
-</style>
-<dialog id="gate" aria-labelledby="gate-title">
-  <form class="box" method="dialog" novalidate>
-    <h2 id="gate-title">Enter class code</h2>
-    <p>Type the code your teacher gave you. You only need to do this once.</p>
-    <input id="gate-code" type="password" inputmode="numeric" autocomplete="off" maxlength="4" aria-label="Class code">
-    <div class="err" id="gate-err" role="alert"></div>
-    <div class="row">
-      <button type="button" id="gate-cancel">CANCEL</button>
-      <button type="submit">ENTER</button>
-    </div>
-  </form>
-</dialog>
-<script>
-(()=>{
-  const CODE='1953', KEY='pelenhub-unlocked';
-  const isOpen=()=>{ try{ return localStorage.getItem(KEY)==='1'; }catch(e){ return sessionStorage.getItem?.(KEY)==='1'; } };
-  const remember=()=>{ try{ localStorage.setItem(KEY,'1'); }catch(e){ try{ sessionStorage.setItem(KEY,'1'); }catch(_){} } };
-  const dlg=document.getElementById('gate'), input=document.getElementById('gate-code'), err=document.getElementById('gate-err');
-  let pending=null;
-
-  document.getElementById('cards').addEventListener('click',e=>{
-    const a=e.target.closest('a.go[href]');
-    if(!a || isOpen()) return;
-    e.preventDefault();
-    pending={href:a.href, blank:a.target==='_blank'};
-    input.value=''; err.textContent='';
-    dlg.showModal(); input.focus();
-  });
-
-  dlg.querySelector('form').addEventListener('submit',e=>{
-    e.preventDefault();
-    if(input.value.trim()===CODE){
-      remember(); dlg.close();
-      if(pending){ pending.blank ? window.open(pending.href,'_blank','noopener') : (location.href=pending.href); }
-      pending=null;
-    }else{
-      err.textContent='That code is not right. Try again.';
-      input.select();
-      dlg.classList.remove('shake'); void dlg.offsetWidth; dlg.classList.add('shake');
-    }
-  });
-  document.getElementById('gate-cancel').onclick=()=>{ pending=null; dlg.close(); };
-})();
-</script>
 </body>
 </html>

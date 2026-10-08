@@ -56,7 +56,7 @@
   :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
   strong{font-weight:700}
 
-  /* ---------- Passport cover (hero) ---------- */
+  /* ---------- Activity header ---------- */
   .cover{
     position:relative;
     overflow:hidden;
@@ -71,33 +71,20 @@
   }
   .cover::before{
     content:"";position:absolute;inset:0;
-    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
-    background-size:22px 22px;
+    background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+    background-size:48px 48px;
     opacity:.55;pointer-events:none;
   }
-  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
-                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
-                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
-  @media (prefers-reduced-motion:no-preference){
-    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
-  }
-
   .cover-frame{
     position:relative;
-    max-width:660px;
+    max-width:700px;
     margin:0 auto;
     border:3px solid var(--gold);
-    border-radius:22px;
+    border-radius:14px;
     padding:44px 26px 36px;
     background:rgba(255,255,255,.05);
     box-shadow:0 18px 44px rgba(0,0,0,.30);
-  }
-  .cover-frame::before{
-    content:"";
-    position:absolute;inset:8px;
-    border:2px dashed rgba(243,183,0,.45);
-    border-radius:15px;
-    pointer-events:none;
   }
   .cover .eyebrow{
     font-family:'JetBrains Mono',monospace;
@@ -112,7 +99,7 @@
     line-height:.98;
     text-shadow:0 4px 0 rgba(0,0,0,.22);
   }
-  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover h1 .pop{display:block;color:var(--gold)}
   .cover .subtitle{
     font-family:'Fredoka',sans-serif;
     font-weight:400;
@@ -135,28 +122,13 @@
     margin-top:20px;
     color:rgba(255,255,255,.65);
   }
-  .approved{
-    position:absolute;right:-4px;bottom:-22px;
-    font-family:'JetBrains Mono',monospace;
-    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--gold-soft);
-    border:3px double var(--gold-soft);
-    border-radius:10px;
-    padding:8px 14px;
-    background:rgba(11,23,64,.9);
-    transform:rotate(-11deg);
-  }
-  @media (max-width:560px){
-    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
-  }
-
   /* ---------- Layout ---------- */
   main{max-width:860px;margin:0 auto;padding:24px 24px 0}
   section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
   section:last-of-type{border-bottom:none}
 
-  /* stamp-style section headers */
-  .stamp{
+  /* Section labels, matching the other course activities */
+  .section-label{
     display:inline-block;
     font-family:'JetBrains Mono',monospace;
     font-weight:700;
@@ -164,14 +136,11 @@
     letter-spacing:.16em;
     text-transform:uppercase;
     color:var(--navy);
-    border:2px dashed var(--navy);
-    border-radius:8px;
+    border:2px solid var(--navy);
+    border-radius:5px;
     padding:8px 16px;
-    transform:rotate(-1.6deg);
     margin-bottom:22px;
   }
-  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
-  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
 
   h3{
     font-family:'Fredoka',sans-serif;font-weight:600;
@@ -366,13 +335,8 @@
     .pass{grid-template-columns:1fr}
     .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
   }
-  @media (prefers-reduced-motion:no-preference){
-    .stamp{transition:transform .2s ease}
-    .stamp:hover{transform:rotate(0deg)}
-  }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    .stamp{transform:none}
   }
   .card ol{margin:6px 0 0 18px}
   .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
@@ -399,14 +363,13 @@
       <span>Export to .JPG</span>
     </div>
     <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
-    <div class="approved">Edited</div>
   </div>
 </header>
 
 <main>
 
   <section id="mission">
-    <span class="stamp">Your Mission</span>
+    <h2 class="section-label">Your Task</h2>
     <p class="lead">In this lesson, you will learn some basic tools of GIMP to edit and improve images. By the end of the activity, you will be able to change the orientation of an image, crop it, and change its size.</p>
     <p>You will find all the image files <strong>attached to this assignment in Google Classroom</strong>. Download them first. Every exercise tells you which file to use.</p>
     <p><strong>Why does this matter?</strong> Big images make websites slow, fill up your Drive, and sometimes can't even be uploaded. Knowing how to make an image smaller without ruining it is something you will use all year.</p>
@@ -424,7 +387,7 @@
   </section>
 
   <section id="setup">
-    <span class="stamp">Check-In · Getting ready</span>
+    <h2 class="section-label">Getting Ready</h2>
     <p>Do these steps before you start editing. Organized files now means no lost work later.</p>
     <ol class="steps">
       <li><strong>Download</strong> all the files attached to this assignment: Germany, HorseheadIR-Hubble, Flower Poster, Natural Sunset, Tennis, Golf, Chess and Beach.</li>
@@ -437,7 +400,7 @@
   </section>
 
   <section id="exercises">
-    <span class="stamp">The Exercises</span>
+    <h2 class="section-label">Exercises</h2>
     <p>Do the exercises in order. Every exercise ends the same way: export the <span class="code">.jpg</span> into your <span class="code">Desktop › GIMP › crop_resize_rotate</span> folder.</p>
     <h3>Exercise 01 · Crop</h3>
     <div class="cards">
@@ -494,7 +457,7 @@
   </section>
 
   <section id="export">
-    <span class="stamp gold">Developing · Export to .JPG</span>
+    <h2 class="section-label">Export to JPG</h2>
     <p>Every finished image must be a <span class="code">.jpg</span> file.</p>
     <ol class="steps">
       <li>Go to <span class="menu">File › Export As</span>.</li>
@@ -505,12 +468,12 @@
   </section>
 
   <section id="submit">
-    <span class="stamp">Turning it in</span>
+    <h2 class="section-label">Submission</h2>
     <p>You turn in the <strong>link to your folder</strong>, not loose files.</p>
     <ol class="steps">
       <li>Make sure your <span class="code">Desktop › GIMP › crop_resize_rotate</span> folder has all your <span class="code">.jpg</span> files.</li>
       <li>Open <strong>Google Drive</strong> and drag your whole <span class="code">GIMP</span> folder from the Desktop into <strong>My Drive</strong>. Wait until the upload finishes.</li>
-      <li>Check that your <span class="code">crop_resize_rotate</span> folder has <strong>22 files</strong>.</li>
+      <li>Check that your <span class="code">crop_resize_rotate</span> folder has <strong>17 final JPG files</strong>.</li>
       <li>In Google Drive, open your <span class="code">GIMP</span> folder, right click the <span class="code">crop_resize_rotate</span> folder, click <strong>Share › Copy link</strong>, and submit the link to Google Classroom.</li>
       <li>Don't forget to write the original sizes of Tennis, Golf and Beach in the <strong>private comments</strong>.</li>
     </ol>
