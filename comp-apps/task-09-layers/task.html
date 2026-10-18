@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layers &amp; the Burger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Structure cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .card ul{list-style:none;margin-top:4px}
+  .card ul li{font-size:15.5px;padding:5px 0 5px 22px;position:relative;line-height:1.45}
+  .card ul li::before{content:"→";position:absolute;left:0;color:var(--teal);font-weight:700}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered setup steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+
+  /* ---------- Prompt box ---------- */
+  .prompt-box{
+    background:var(--panel);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:16px 0 18px;
+  }
+  .prompt-box .plabel{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:10px;
+  }
+  .prompt-box .ptext{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;line-height:1.7;
+    color:#fff;margin:0;max-width:none;
+  }
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Prompts ---------- */
+  .prompts{list-style:none;margin:14px 0 24px}
+  .prompts li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .prompts li:last-child{border-bottom:none}
+  .prompts .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  /* ---------- Usability test ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Rubric table ---------- */
+  table{width:100%;border-collapse:collapse;margin:14px 0 26px;font-size:16px}
+  th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:left;color:var(--navy);
+    padding:10px 12px;border-bottom:2px solid var(--navy);
+  }
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;white-space:normal}
+
+  /* ---------- Boarding passes (schedule) ---------- */
+  .passes{display:grid;gap:14px;margin:14px 0 26px}
+  .pass{
+    display:grid;grid-template-columns:110px 1fr;
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .pass .side{
+    background:var(--panel);
+    color:var(--gold-soft);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+    padding:14px 8px;
+    border-right:2px dashed var(--paper);
+  }
+  .pass .body{padding:14px 18px}
+  .pass .body p{margin-bottom:0;font-size:16px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .pass{grid-template-columns:1fr}
+    .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
+  }
+  .card ol{margin:6px 0 0 18px}
+  .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
+  .file{
+    display:inline-block;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:3px 10px;
+  }
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  td .code{white-space:normal}
+
+  /* ---------- Comparison tables ---------- */
+  .compare{table-layout:fixed}
+  .compare th:first-child{width:24%}
+  .compare td:not(:first-child){font-size:15.5px}
+  @media (max-width:560px){
+    table{font-size:14.5px}
+    th,td{padding:9px 7px}
+    .compare{table-layout:auto}
+    .compare th:first-child{width:auto}
+    .compare td:not(:first-child){font-size:14px}
+    td{overflow-wrap:anywhere}
+    .code{white-space:normal}
+  }
+  .cards.quad{grid-template-columns:repeat(2,1fr)}
+  .cards.four{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  @media (max-width:560px){.cards.quad{grid-template-columns:1fr}}
+  .tool-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .tool-head h4{margin-bottom:0}
+  .tool-icon{width:44px;height:44px;border-radius:8px;flex:none;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Before & After slide mockup (fixed colors, it's a slide) ---------- */
+  .mock-wrap{margin:20px 0 10px}
+  .mock{
+    max-width:560px;margin:0 auto;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    padding:4.5% 5% 5%;
+    display:grid;grid-template-rows:auto 1fr;gap:4%;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(255,255,255,.35), transparent 30%),
+      linear-gradient(135deg,#7b2ff7 0%,#f107a3 55%,#ff9a3c 100%);
+    box-shadow:0 14px 34px rgba(11,23,64,.28);
+    color:#fff;
+  }
+  .mock .mtitle{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(15px,3.6vw,26px);line-height:1.1;
+    text-shadow:0 2px 0 rgba(0,0,0,.18);
+  }
+  .mock .mtitle small{
+    display:block;font-family:'JetBrains Mono',monospace;font-weight:500;
+    font-size:clamp(9px,1.6vw,11.5px);letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-bottom:4px;
+  }
+  .mock .panes{display:grid;grid-template-columns:1fr 1fr;gap:6%;min-height:0}
+  .pane{position:relative;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+  .pane.before{
+    background:
+      radial-gradient(circle at 78% 24%, #ffe066 0 9%, transparent 10%),
+      linear-gradient(#8ecae6 0 58%, #74b85a 58% 100%);
+    box-shadow:0 6px 16px rgba(0,0,0,.22);
+  }
+  .pane svg{height:82%;width:auto;display:block}
+  .pane svg *{fill:#12275C}
+  .ptag{
+    position:absolute;top:-8px;left:8px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:clamp(8px,1.5vw,11px);letter-spacing:.16em;
+    background:#fff;color:#12275C;border-radius:999px;padding:3px 9px;
+  }
+  .mock-cap{font-size:15px;color:var(--muted);text-align:center;margin:12px auto 0;max-width:56ch}
+
+  /* ---------- Template site cards ---------- */
+  .card .site{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--teal)}
+</style>
+</head>
+<body>
+
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Unit 4 · Image Editing</p>
+    <h1>Layers <span class="pop">&amp; the Burger</span></h1>
+    <p class="subtitle">Layers in GIMP.</p>
+    <div class="chips">
+      <span>5 layers</span>
+      <span>Burger Layers Lab</span>
+      <span>.XCF vs .PNG</span>
+      <span>Google Forms quiz</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">Stacked</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="mission">
+    <span class="stamp">Your Mission</span>
+    <p class="lead">In this lesson, you will learn what a layer is and why every part of a picture should live on its own layer. You will practice in the Burger Layers Lab, build a cheeseburger in GIMP with one part on each layer, and answer a short quiz. At the end, you will answer the <strong>Google Forms quiz</strong>, with your personal <strong>Lab code</strong> in the first question, and turn in <strong>one link</strong> in Google Classroom: the link to your <span class="code">Layers</span> folder in Google Drive.</p>
+
+    <div class="cards">
+      <div class="card">
+        <p class="label">You will learn</p>
+        <ul>
+          <li>What a layer is</li>
+          <li>The order of the layers and the eye feature</li>
+          <li>.XCF vs .PNG</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>Everything you need is in the <strong>Burger Layers Lab</strong>: the practice, the step-by-step guide for GIMP and a review video. The link is also in Google Classroom.</p>
+    <a class="example-link" href="https://pelenlab.com/comp-apps/task-09-layers/" target="_blank" rel="noopener">Open the Burger Layers Lab →</a>
+  </section>
+
+  <section id="setup">
+    <span class="stamp">Check-In · Getting ready</span>
+    <p>Do these steps before you start. Organized files now means no lost work later.</p>
+    <ol class="steps">
+      <li>On your computer's <strong>Desktop</strong>, open your <span class="code">GIMP</span> folder. If you don't have it, create a folder called <span class="code">GIMP</span>.</li>
+      <li>Inside it, create a subfolder called <span class="code">Layers</span>. Write it exactly like that: capital L, no spaces. Your burger files go here.</li>
+      <li>Open the <strong>Burger Layers Lab</strong> in your browser.</li>
+      <li>Open <strong>GIMP</strong>. Put the Lab and GIMP side by side so you can follow the steps while you work.</li>
+    </ol>
+  </section>
+
+  <section id="toolkit">
+    <span class="stamp">Your Toolkit</span>
+    <p>These are the tools you will use. Find them in the <strong>Toolbox</strong> or press their keyboard shortcut.</p>
+    <div class="cards quad">
+      <div class="card">
+        <p class="label">Panel · Right side</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Layers panel icon: stacked sheets"><rect width="44" height="44" fill="#3a3a3a"/><g fill="none" stroke="#dcdcdc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9l13 6.5-13 6.5-13-6.5z"/><path d="M9 22l13 6.5 13-6.5"/><path d="M9 28.5l13 6.5 13-6.5"/></g><path d="M40 36v4h-4z" fill="#dcdcdc"/></svg><h4>Layers panel</h4></div>
+        <p>Every layer in your image is listed here. The layer at the top of the list is the front of the picture.</p>
+        <ul>
+          <li>The <strong>eye</strong> hides or shows a layer.</li>
+          <li><strong>Drag</strong> a layer up or down to change the order.</li>
+          <li><strong>Double-click</strong> a name to rename it.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut E</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Ellipse Select icon: a dashed oval"><rect width="44" height="44" fill="#3a3a3a"/><g fill="none" stroke="#dcdcdc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="22" cy="22" rx="13" ry="10" stroke-dasharray="4 3"/></g><path d="M40 36v4h-4z" fill="#dcdcdc"/></svg><h4>Ellipse Select</h4></div>
+        <p>Selects a circle or an oval. You will use it for the bun.</p>
+        <ul>
+          <li>Type <strong>Position</strong> and <strong>Size</strong> in Tool Options for an exact circle.</li>
+          <li>Hold <strong>Shift</strong> while you drag to keep it round.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut R</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Rectangle Select icon: a dashed rectangle"><rect width="44" height="44" fill="#3a3a3a"/><g fill="none" stroke="#dcdcdc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="11" width="26" height="22" stroke-dasharray="4 3"/></g><path d="M40 36v4h-4z" fill="#dcdcdc"/></svg><h4>Rectangle Select</h4></div>
+        <p>Selects a square or a rectangle. You will use it for the meat and the cheese.</p>
+        <ul>
+          <li>Same <strong>Position</strong> and <strong>Size</strong> fields as Ellipse Select.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut F</p>
+        <div class="tool-head"><img class="tool-icon" src="data:image/png;base64,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" alt="Free Select icon: a lasso"><h4>Free Select (Lasso)</h4></div>
+        <p>You draw the selection yourself. You will use it for the lettuce.</p>
+        <ul>
+          <li>Click and drag a wavy line around the bun.</li>
+          <li>End on your first point, then press <strong>Enter</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut Shift + B</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Bucket Fill icon: a paint bucket"><rect width="44" height="44" fill="#3a3a3a"/><g fill="none" stroke="#dcdcdc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 22l10-10 11 11-10 10z"/><path d="M16 18l-3-3"/><path d="M33 27c1.6 2.6 2.6 4 2.6 5.4a2.6 2.6 0 0 1-5.2 0c0-1.4 1-2.8 2.6-5.4z" fill="#dcdcdc"/></g><path d="M40 36v4h-4z" fill="#dcdcdc"/></svg><h4>Bucket Fill</h4></div>
+        <p>Fills your selection with the foreground color.</p>
+        <ul>
+          <li>In Tool Options, set <strong>Affected area</strong> to <strong>Fill whole selection</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut Shift + R</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Rotate icon: a circular arrow"><rect width="44" height="44" fill="#3a3a3a"/><g fill="none" stroke="#dcdcdc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M33 22a11 11 0 1 1-3.2-7.8"/><path d="M31 8v7h-7"/></g><path d="M40 36v4h-4z" fill="#dcdcdc"/></svg><h4>Rotate</h4></div>
+        <p>Turns the selected layer. You will use it to turn the cheese.</p>
+        <ul>
+          <li>Click the canvas, type <strong>Angle 45</strong> and click <strong>Rotate</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="submit">
+    <span class="stamp">Turning it in</span>
+    <p>Upload your <span class="code">Layers</span> folder to Google Drive. Then turn in <strong>one link</strong> in Google Classroom:</p>
+    <ol class="steps">
+      <li>The link to your <span class="code">Layers</span> folder in <strong>Google Drive</strong>, with your <strong>2 files</strong>: <span class="code">.xcf</span> and <span class="code">.png</span>.</li>
+    </ol>
+    <div class="exception">
+      <p><strong>Your code and your quiz go in the Google Form, not in Classroom.</strong> When you submit the form, I get your answers. Check your folder link before you turn in: a link I can't open counts as not turned in.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+</body>
+</html>

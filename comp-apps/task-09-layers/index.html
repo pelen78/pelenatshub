@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Learn GIMP layers with a cheeseburger: play with the layers, build it step by step in GIMP 3 and watch the review video.">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Burger Layers Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one lesson column in four parts (Play, Build, Watch, Check); the GIMP mock keeps GIMP 3's dark look in both themes. */
+:root {
+  --bg: #edf0f5;
+  --surface: #ffffff;
+  --surface-2: #f5f7fa;
+  --ink: #17202c;
+  --muted: #536074;
+  --line: #d3d9e3;
+  --accent: #f2b33d;
+  --accent-ink: #8d5a00;
+  --on-accent: #1d1608;
+  --ketchup: #c4402a;
+  --good: #23824a;
+  --good-soft: #e3f3e8;
+  --bad-soft: #fbe9e5;
+  --focus: #2f6fd6;
+  --glass: rgba(255,255,255,.2);
+  --glass-line: rgba(23,32,44,.35);
+  --tag: #17202c;
+  --code-bg: #17202c;
+  --code-fg: #ffffff;
+  --code-lbl: #f2b33d;
+
+  /* GIMP 3 mock: same in both themes on purpose */
+  --g-bg: #2a2c30;
+  --g-head: #232528;
+  --g-row-hover: #33363b;
+  --g-sel: #3f5f8d;
+  --g-text: #e6e6e6;
+  --g-muted: #a2a7ae;
+  --g-line: #3c3f45;
+  --check-a: #999999;
+  --check-b: #6b6b6b;
+  --guide: #2aa5ff;
+
+  --bun: #d4873a;
+  --meat: #6e3b1f;
+  --lettuce: #3e9f3a;
+  --cheese: #f5c02e;
+
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151b; --surface: #1a1f27; --surface-2: #212732; --ink: #e8edf4; --muted: #9ca8ba;
+    --line: #2d3644; --accent: #f2b33d; --accent-ink: #f4c766; --on-accent: #1d1608; --ketchup: #f0765d;
+    --good: #5cc47e; --good-soft: #17301f; --bad-soft: #3a1d18; --focus: #7fb0ff;
+    --glass: rgba(255,255,255,.05); --glass-line: rgba(232,237,244,.45); --tag: #e8edf4;
+    --code-bg: #26354d; --code-fg: #e8edf4; --code-lbl: #f4c766;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151b; --surface: #1a1f27; --surface-2: #212732; --ink: #e8edf4; --muted: #9ca8ba;
+  --line: #2d3644; --accent: #f2b33d; --accent-ink: #f4c766; --on-accent: #1d1608; --ketchup: #f0765d;
+  --good: #5cc47e; --good-soft: #17301f; --bad-soft: #3a1d18; --focus: #7fb0ff;
+  --glass: rgba(255,255,255,.05); --glass-line: rgba(232,237,244,.45); --tag: #e8edf4;
+  --code-bg: #26354d; --code-fg: #e8edf4; --code-lbl: #f4c766;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.1; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); font-weight: 800; }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 800; }
+h3 { font-size: 1.3rem; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent-ink); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+button { font: inherit; color: inherit; }
+kbd {
+  font-family: var(--f-mono); font-size: .78em; font-weight: 600;
+  padding: .08em .45em; border-radius: 6px; white-space: nowrap;
+  border: 1px solid var(--line); border-bottom-width: 2px; background: var(--surface-2);
+}
+code { font-family: var(--f-mono); font-size: .85em; padding: .05em .35em; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); white-space: nowrap; }
+.menu {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .1em .35em;
+  font-family: var(--f-mono); font-size: .8em; font-weight: 600;
+  padding: .12em .5em; border-radius: 6px; background: var(--g-bg); color: var(--g-text);
+}
+.menu i { font-style: normal; color: var(--accent); }
+.eyebrow { font-family: var(--f-mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 600; }
+
+/* Header */
+.top { padding-block: 40px 24px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+.top .lede { font-size: 1.15rem; color: var(--muted); max-width: 52ch; margin-top: 16px; }
+.parts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+.parts a {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink);
+  padding: 8px 14px 8px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-weight: 700;
+}
+.parts a span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-family: var(--f-mono); font-size: .8rem; }
+.parts a:hover { border-color: var(--accent-ink); }
+.stack-legend { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.stack-legend li { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+.stack-legend .chip { height: 18px; border-radius: 4px; }
+.stack-legend b { font-family: var(--f-display); font-weight: 600; }
+.stack-legend small { color: var(--muted); display: block; font-size: .85rem; line-height: 1.3; }
+.legend-cap { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: .75rem; color: var(--muted); margin: 4px 4px 0; }
+
+section { padding-block: 40px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 24px; max-width: 70ch; }
+.sec-head p { color: var(--muted); }
+
+/* ---------- Play ---------- */
+.play { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; }
+.stage-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: grid; gap: 12px; min-width: 0; }
+.stage-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+.seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-weight: 700; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.hint { font-size: .88rem; color: var(--muted); }
+.stage {
+  position: relative; width: 100%; max-width: 640px; margin: 0 auto; aspect-ratio: 1 / 1;
+  perspective: 1500px; perspective-origin: 50% 40%; overflow: hidden; border-radius: 10px;
+  background: radial-gradient(120% 90% at 50% 30%, var(--surface-2), var(--surface));
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.stage.can-move { cursor: move; }
+.stack {
+  position: absolute; left: 50%; top: 50%; height: 86%; aspect-ratio: 7 / 10;
+  transform: translate(-50%, -50%); transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.2,.75,.2,1);
+}
+.stack.exploded { transform: translate(-50%, -38%) rotateX(57deg) rotateZ(-36deg) scale(.66); }
+.plate, .sheet { position: absolute; inset: 0; }
+.plate { background: repeating-conic-gradient(var(--check-a) 0 25%, var(--check-b) 0 50%) 0 0 / 16px 16px; transition: opacity .5s; }
+.stack.exploded .plate { opacity: 0; }
+.sheet { transition: transform .55s cubic-bezier(.2,.75,.2,1); pointer-events: none; }
+.sheet svg { width: 100%; height: 100%; display: block; overflow: hidden; }
+.sheet .glass { fill: var(--glass); stroke: var(--glass-line); stroke-width: 4; opacity: 0; transition: opacity .5s; }
+.sheet .tag { font-family: var(--f-display); font-weight: 800; font-size: 64px; fill: var(--tag); opacity: 0; transition: opacity .5s; }
+.stack.exploded .sheet .glass, .stack.exploded .sheet .tag { opacity: 1; }
+.sheet .art { transition: opacity .3s; }
+.sheet.is-hidden .art { opacity: 0; }
+.stack.exploded .sheet.is-hidden .art { opacity: .16; }
+.stack.exploded .sheet.is-hidden .glass { stroke-dasharray: 18 14; }
+.sheet .bounds { fill: none; stroke-width: 6; stroke-dasharray: 22 16; opacity: 0; }
+.sheet .bounds.b1 { stroke: #111; }
+.sheet .bounds.b2 { stroke: #ffd400; stroke-dashoffset: 19; }
+.sheet.is-sel .bounds { opacity: 1; }
+.stack.exploded .sheet.is-sel .glass { stroke: var(--accent); stroke-width: 10; }
+.stack.exploded .sheet .bounds { opacity: 0; }
+
+.say {
+  min-height: 3.2em; padding: 10px 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line);
+  font-size: .98rem;
+}
+.say b { font-family: var(--f-display); font-weight: 600; }
+
+.side { display: grid; gap: 16px; min-width: 0; }
+
+/* GIMP Layers panel mock */
+.gpanel { background: var(--g-bg); color: var(--g-text); border-radius: 10px; overflow: hidden; border: 1px solid #1b1c1f; font-family: "Segoe UI", system-ui, sans-serif; font-size: 14px; }
+.gp-head { display: flex; justify-content: space-between; align-items: center; background: var(--g-head); padding: 8px 12px; }
+.gp-head strong { font-weight: 600; }
+.gp-head span { color: var(--g-muted); font-size: 12px; }
+.gp-mode { display: flex; gap: 14px; padding: 7px 12px; color: var(--g-muted); font-size: 12px; border-bottom: 1px solid var(--g-line); }
+.gp-list { list-style: none; margin: 0; padding: 4px 0; position: relative; }
+.gp-row {
+  display: grid; grid-template-columns: 34px 44px 1fr 18px; align-items: center; gap: 8px;
+  height: 52px; padding: 0 10px 0 4px; cursor: grab; touch-action: none; position: relative;
+  transition: transform .18s ease;
+}
+.gp-row:hover { background: var(--g-row-hover); }
+.gp-row[aria-selected="true"] { background: var(--g-sel); }
+.gp-list.no-anim .gp-row { transition: none; }
+.gp-row.dragging { transition: none; z-index: 2; background: var(--g-sel); box-shadow: 0 8px 22px rgba(0,0,0,.45); cursor: grabbing; }
+.gp-row:focus-visible { outline: 2px solid #9cc3ff; outline-offset: -2px; border-radius: 0; }
+.eye { width: 30px; height: 30px; border: 0; background: transparent; border-radius: 6px; display: grid; place-items: center; cursor: pointer; color: var(--g-text); }
+.eye:hover { background: rgba(255,255,255,.08); }
+.eye svg { width: 20px; height: 20px; }
+.eye[aria-pressed="false"] { color: #6c7078; }
+.thumb { width: 36px; height: 44px; border-radius: 3px; overflow: hidden; border: 1px solid #111; background: repeating-conic-gradient(var(--check-a) 0 25%, var(--check-b) 0 50%) 0 0 / 8px 8px; justify-self: center; }
+.thumb svg { width: 100%; height: 100%; display: block; }
+.gp-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gp-row.is-hidden .gp-name { color: var(--g-muted); }
+.grip { color: var(--g-muted); font-size: 14px; letter-spacing: -2px; }
+.gp-foot { display: flex; gap: 4px; padding: 6px 8px; border-top: 1px solid var(--g-line); background: var(--g-head); align-items: center; }
+.gbtn { border: 1px solid transparent; background: transparent; color: var(--g-text); border-radius: 6px; height: 32px; min-width: 34px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font-size: 13px; }
+.gbtn:hover { background: rgba(255,255,255,.08); }
+.gbtn[aria-pressed="true"] { background: var(--g-sel); border-color: #6f8fbf; }
+.gbtn svg { width: 18px; height: 18px; }
+.gp-foot .spacer { flex: 1; }
+
+.tasks { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; }
+.tasks-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.tasks-head span { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); }
+.tasks ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.tasks li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; font-size: .95rem; line-height: 1.4; }
+.tick { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-family: var(--f-mono); font-size: .72rem; color: var(--muted); font-weight: 600; }
+.tasks li.done .tick { background: var(--good); border-color: var(--good); color: #fff; }
+.tasks li.done .task-text { color: var(--muted); }
+.tasks .win { padding: 10px 12px; border-radius: 10px; background: var(--good-soft); font-size: .95rem; }
+
+/* student email + code */
+.who { display: grid; gap: 8px; padding: 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+.who label { font-weight: 700; font-size: .92rem; }
+.who-row { display: flex; gap: 8px; }
+.who-row input { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.who-note { font-size: .85rem; color: var(--muted); line-height: 1.35; }
+.who-note.err { color: var(--ketchup); }
+.who-set { font-size: .9rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; line-height: 1.35; }
+.who-set b { color: var(--ink); overflow-wrap: anywhere; }
+.linkbtn { border: 0; background: none; color: var(--accent-ink); text-decoration: underline; cursor: pointer; padding: 0; font-weight: 700; font-size: .9rem; }
+.code-card { padding: 14px; border-radius: 12px; background: var(--code-bg); color: var(--code-fg); display: grid; gap: 8px; }
+.code-lbl { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--code-lbl); font-weight: 600; }
+.code-row { display: flex; gap: 8px; align-items: center; }
+.code-row input { flex: 1; min-width: 0; font: 600 1.3rem var(--f-mono); letter-spacing: .05em; background: transparent; border: 0; color: var(--code-fg); padding: 0; }
+.code-card .btn { background: var(--accent); border-color: var(--accent); color: var(--on-accent); padding: 7px 14px; }
+.code-for { font-size: .85rem; opacity: .88; line-height: 1.35; }
+.code-for b { overflow-wrap: anywhere; }
+
+/* turn in */
+.turnin { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; max-width: 820px; }
+.ti { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ti-n { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font: 600 1rem var(--f-mono); }
+.ti h3 { margin-bottom: 6px; }
+.ti p { color: var(--muted); max-width: 62ch; }
+.code-mini { margin-top: 12px; display: inline-block; font: 600 1.1rem var(--f-mono); padding: 6px 12px; border-radius: 8px; background: var(--surface-2); border: 1px dashed var(--muted); overflow-wrap: anywhere; }
+.code-mini.empty { font: italic .95rem var(--f-body); color: var(--muted); }
+.ti .btn { display: inline-block; margin-top: 12px; text-decoration: none; }
+
+/* ---------- Build ---------- */
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.bar { flex: 1; height: 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--good); transition: width .4s; }
+.progress span { font-family: var(--f-mono); font-size: .82rem; color: var(--muted); white-space: nowrap; }
+.build { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.steps button {
+  width: 100%; text-align: left; display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center;
+  padding: 8px 10px; border: 1px solid transparent; border-radius: 10px; background: transparent; cursor: pointer; line-height: 1.25; font-size: .95rem;
+}
+.steps button:hover { background: var(--surface); }
+.steps button[aria-current="step"] { background: var(--surface); border-color: var(--line); font-weight: 700; }
+.steps .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-mono); font-size: .8rem; font-weight: 600; border: 2px solid var(--line); color: var(--muted); background: var(--surface); }
+.steps button[aria-current="step"] .n { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.steps button.done .n { border-color: var(--good); background: var(--good); color: #fff; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(16px, 3vw, 28px); display: grid; gap: 20px; min-width: 0; }
+.card-head { display: grid; gap: 6px; }
+.card-body { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 24px; align-items: start; }
+.do { margin: 0; padding-left: 1.4em; display: grid; gap: 10px; }
+.do li { padding-left: 4px; }
+.do li::marker { font-family: var(--f-mono); font-weight: 600; color: var(--accent-ink); }
+.why { margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: var(--surface-2); border-left: 4px solid var(--accent); font-size: .96rem; }
+.why b { font-family: var(--f-display); font-weight: 600; display: block; margin-bottom: 2px; }
+.math { margin-top: 10px; font-size: .9rem; color: var(--muted); }
+.preview { display: grid; gap: 10px; }
+.mini { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.mini-canvas { width: 100%; max-width: 250px; aspect-ratio: 7 / 10; border-radius: 6px; overflow: hidden; background: repeating-conic-gradient(var(--check-a) 0 25%, var(--check-b) 0 50%) 0 0 / 12px 12px; border: 1px solid var(--line); }
+.mini-canvas svg { width: 100%; height: 100%; display: block; }
+.mini-layers { background: var(--g-bg); color: var(--g-text); border-radius: 8px; padding: 4px 0; font: 13px "Segoe UI", system-ui, sans-serif; max-width: 250px; }
+.mini-layers div { display: grid; grid-template-columns: 22px 26px 1fr; gap: 8px; align-items: center; padding: 3px 8px; }
+.mini-layers div.on { background: var(--g-sel); }
+.mini-layers div.off span:last-child { color: var(--g-muted); }
+.mini-layers svg.e { width: 16px; height: 16px; }
+.mini-layers .t { width: 22px; height: 28px; border: 1px solid #111; background: repeating-conic-gradient(var(--check-a) 0 25%, var(--check-b) 0 50%) 0 0 / 6px 6px; }
+.mini-layers .t svg { width: 100%; height: 100%; display: block; }
+.preview figcaption { font-size: .82rem; color: var(--muted); }
+.files { display: flex; gap: 8px; flex-wrap: wrap; }
+.file { flex: 1 1 110px; border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--surface-2); font-size: .85rem; line-height: 1.35; }
+.file b { font-family: var(--f-mono); display: block; font-size: .95rem; }
+.card-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 16px; }
+.check { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; }
+.check input { width: 22px; height: 22px; accent-color: var(--good); }
+.nav { display: flex; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 9px 16px; cursor: pointer; font-weight: 700; }
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+/* ---------- Watch ---------- */
+.watch { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.watch video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); background: #0d1014; display: block; }
+.chapters { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.chapters button { width: 100%; text-align: left; display: grid; grid-template-columns: 52px 1fr; gap: 8px; padding: 7px 10px; border-radius: 8px; border: 0; background: transparent; cursor: pointer; font-size: .95rem; }
+.chapters button:hover { background: var(--surface); }
+.chapters time { font-family: var(--f-mono); font-size: .82rem; color: var(--accent-ink); padding-top: 2px; }
+
+/* ---------- Check ---------- */
+.quiz { display: grid; gap: 16px; max-width: 760px; counter-reset: q; }
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin: 0; display: grid; gap: 12px; min-width: 0; }
+.q legend { font-weight: 700; font-size: 1.05rem; padding: 0; display: contents; }
+.q-title { display: grid; grid-template-columns: 34px 1fr; gap: 10px; font-weight: 700; font-size: 1.05rem; }
+.q-title::before { counter-increment: q; content: counter(q); font-family: var(--f-mono); font-size: .85rem; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); }
+.opts { display: grid; gap: 8px; }
+.opt { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); cursor: pointer; background: var(--surface); }
+.opt:hover { border-color: var(--muted); }
+.opt input { margin: 3px 0 0; width: 18px; height: 18px; accent-color: var(--ink); }
+.opt.right { border-color: var(--good); background: var(--good-soft); }
+.opt.wrong { border-color: var(--ketchup); background: var(--bad-soft); }
+.fb { font-size: .95rem; }
+.fb:empty { display: none; }
+.fb.right { color: var(--good); }
+.fb.wrong { color: var(--ketchup); }
+.score { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 16px 18px; border-radius: var(--radius); background: var(--ink); color: var(--surface); }
+.score strong { font-family: var(--f-display); font-size: 1.4rem; }
+.score .btn { background: transparent; color: var(--surface); border-color: color-mix(in srgb, var(--surface) 40%, transparent); }
+
+footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 900px) {
+  .top { grid-template-columns: 1fr; }
+  .play { grid-template-columns: 1fr; }
+  .build { grid-template-columns: 1fr; }
+  .steps { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 6px; }
+  .steps li { flex: 0 0 auto; }
+  .steps button { grid-template-columns: 28px; padding: 6px; }
+  .steps button .lbl { display: none; }
+  .watch { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .card-body { grid-template-columns: 1fr; }
+  .preview { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .preview figcaption, .preview .files { grid-column: 1 / -1; }
+  .gp-row { height: 48px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">GIMP 3 · Image editing</p>
+      <h1 style="margin-top:10px">A layer is one slice of the burger.</h1>
+      <p class="lede">In GIMP, each part of a picture can live on its own layer. Layers stack like the parts of a cheeseburger: whatever sits higher in the stack covers whatever is under it.</p>
+      <ul class="parts">
+        <li><a href="#play"><span>1</span>Play</a></li>
+        <li><a href="#build"><span>2</span>Build it in GIMP</a></li>
+        <li><a href="#watch"><span>3</span>Watch</a></li>
+        <li><a href="#turnin"><span>4</span>Turn it in</a></li>
+      </ul>
+    </div>
+    <div>
+      <ol class="stack-legend" aria-label="The burger stack from top to bottom">
+        <li><span class="chip" style="background:var(--bun)"></span><span><b>Top bun</b><small>Top of the list, front of the picture</small></span></li>
+        <li><span class="chip" style="background:var(--cheese)"></span><span><b>Cheese</b><small>Turned 45° so the corners stick out</small></span></li>
+        <li><span class="chip" style="background:var(--lettuce)"></span><span><b>Lettuce</b><small>Drawn by hand with Free Select</small></span></li>
+        <li><span class="chip" style="background:var(--meat)"></span><span><b>Meat</b><small>A square from Rectangle Select</small></span></li>
+        <li><span class="chip" style="background:var(--bun)"></span><span><b>Bottom bun</b><small>Bottom of the list, back of the picture</small></span></li>
+      </ol>
+      <p class="legend-cap"><span>↑ front</span><span>Layers panel order</span><span>back ↓</span></p>
+    </div>
+  </header>
+
+  <!-- ============ PLAY ============ -->
+  <section id="play" aria-labelledby="play-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 1</p>
+      <h2 id="play-h">Play with the layers</h2>
+      <p>This works like the Layers panel in GIMP. Click a layer to select it, drag a row to change the order, and click the eye to hide it. Switch between <b>Exploded</b> (how the layers stack) and <b>Flat</b> (what GIMP shows you).</p>
+    </div>
+    <div class="play">
+      <div class="stage-card">
+        <div class="stage-bar">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" id="vExploded" aria-pressed="true">Exploded</button>
+            <button type="button" id="vFlat" aria-pressed="false">Flat</button>
+          </div>
+          <span class="hint" id="moveHint">In Flat view, drag on the picture to move the selected layers.</span>
+        </div>
+        <div class="stage" id="stage" aria-label="Burger canvas">
+          <div class="stack exploded" id="stack"><div class="plate"></div></div>
+        </div>
+        <p class="say" id="say" aria-live="polite">Each layer is a clear sheet the size of the canvas. Stack them and you get the burger.</p>
+      </div>
+
+      <div class="side">
+        <div class="gpanel" role="region" aria-label="Layers panel">
+          <div class="gp-head"><strong>Layers</strong><span>burger.xcf</span></div>
+          <div class="gp-mode"><span>Mode: Normal</span><span>Opacity: 100.0</span></div>
+          <ul class="gp-list" id="gpList" role="listbox" aria-label="Layers" aria-multiselectable="true"></ul>
+          <div class="gp-foot">
+            <button class="gbtn" type="button" id="raise" title="Raise layer (Shift+click: to top)" aria-label="Raise selected layer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+            <button class="gbtn" type="button" id="lower" title="Lower layer (Shift+click: to bottom)" aria-label="Lower selected layer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>
+            <button class="gbtn" type="button" id="ctrl" aria-pressed="false" title="Works like holding Ctrl: click layers to add them to the selection">Ctrl</button>
+            <span class="spacer"></span>
+            <button class="gbtn" type="button" id="reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="tasks">
+          <div class="tasks-head"><h3>Try this</h3><span id="taskCount">0 of 5</span></div>
+          <div class="who" id="whoBox">
+            <label for="email">Your school email</label>
+            <div class="who-row"><input id="email" type="email" autocomplete="email" placeholder="Same one you use for Classroom"><button class="btn" type="button" id="emailSave">Start</button></div>
+            <p class="who-note" id="whoNote">Type it first. Your challenges only count after that, and your code only works with this email.</p>
+          </div>
+          <p class="who-set" id="whoSet" hidden><span>Counting for <b id="whoEmail"></b></span><button class="linkbtn" type="button" id="emailChange">Change</button></p>
+          <ol id="taskList">
+            <li data-t="hide"><span class="tick">1</span><span class="task-text">Hide the <b>Top bun</b> with its eye. What can you see now?</span></li>
+            <li data-t="lettuce"><span class="tick">2</span><span class="task-text">Drag <b>Lettuce</b> above <b>Cheese</b>.</span></li>
+            <li data-t="meat"><span class="tick">3</span><span class="task-text">Drag <b>Meat</b> to the very top of the list. What happens?</span></li>
+            <li data-t="link"><span class="tick">4</span><span class="task-text">Move two layers at once. Click <b>Meat</b>, then hold <kbd>Ctrl</kbd> and click <b>Cheese</b> so both turn blue when they are selected. Click <b>Flat</b> mode and drag the burger with your mouse: only the meat and the cheese move.</span></li>
+            <li data-t="fix"><span class="tick">5</span><span class="task-text">Fix the burger: Top bun, Cheese, Lettuce, Meat, Bottom bun, all visible.</span></li>
+          </ol>
+          <p class="win" id="win" hidden>All five done. You just used the three big layer skills: order, visibility, and selecting layers. Now build it for real in Part 2.</p>
+          <div class="code-card" id="codeCard" hidden>
+            <p class="code-lbl">Your personal code</p>
+            <div class="code-row"><input id="codeText" readonly aria-label="Your personal code"><button class="btn" type="button" id="copyCode">Copy</button></div>
+            <p class="code-for">Only works for <b id="codeFor"></b>. Paste it in the first question of the Google Forms quiz.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BUILD ============ -->
+  <section id="build" aria-labelledby="build-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 2</p>
+      <h2 id="build-h">Build the burger in GIMP</h2>
+      <p>Open GIMP 3 and follow the steps in order. Each part of the burger goes on its own layer. The picture on the right shows what your canvas and Layers panel should look like after the step.</p>
+    </div>
+    <div class="progress"><div class="bar"><i id="barFill"></i></div><span id="barText">0 of 10 steps done</span></div>
+    <div class="build">
+      <ol class="steps" id="stepList" aria-label="Steps"></ol>
+      <article class="card" id="stepCard" aria-live="polite"></article>
+    </div>
+  </section>
+
+  <!-- ============ WATCH ============ -->
+  <section id="watch" aria-labelledby="watch-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 3</p>
+      <h2 id="watch-h">Watch the review</h2>
+      <p>A 2½-minute silent video with captions. Watch it before you start, or jump to the step where you got stuck.</p>
+    </div>
+    <div class="watch">
+      <video id="vid" controls preload="metadata" playsinline poster="burger-layers-poster.jpg"><source src="burger-layers-review.mp4" type="video/mp4"><source src="burger-layers-review.webm" type="video/webm"></video>
+      <ol class="chapters" id="chapters" aria-label="Video chapters"></ol>
+    </div>
+  </section>
+
+  <!-- ============ TURN IN ============ -->
+  <section id="turnin" aria-labelledby="turnin-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 4</p>
+      <h2 id="turnin-h">Turn it in</h2>
+      <p>Three things count for this task. Check each one before you turn in.</p>
+    </div>
+    <ol class="turnin">
+      <li class="ti"><span class="ti-n">1</span><div>
+        <h3>Your Lab code</h3>
+        <p>Do the 5 challenges in Part 1 after typing your school email. Your personal code appears when you finish. Copy it: you will paste it in the quiz you open in step 2.</p>
+        <div class="code-mini empty" id="tiCode">No code yet. Finish the 5 challenges in Part 1.</div>
+      </div></li>
+      <li class="ti"><span class="ti-n">2</span><div>
+        <h3>The quiz in Google Forms</h3>
+        <p>Sign in with your school account, paste your code in the first question, then answer the 7 questions. You get one try.</p>
+        <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe_Xr7nUSHJw5IAeY8dhYL5f5bnXY3EZc1l7xIiAj_3K9cPag/viewform" target="_blank" rel="noopener">Open the quiz →</a>
+      </div></li>
+      <li class="ti"><span class="ti-n">3</span><div>
+        <h3>Your burger files</h3>
+        <p>Put <code>burger_yourname.xcf</code> and <code>burger_yourname.png</code> in your <code>Layers</code> folder in Google Drive, then turn in the link to that folder.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>Based on the cheeseburger demo for GIMP layers. Steps written for GIMP 3 on Windows. Colors are suggestions: any bun color works.</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  // ---------- storage helpers ----------
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('bll:' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem('bll:' + k, JSON.stringify(v)); } catch (e) {} }
+  };
+
+  // ---------- burger art (image is 700 x 1000 px, center 350, 500) ----------
+  const COL = { bun: '#d4873a', meat: '#6e3b1f', lettuce: '#3e9f3a', cheese: '#f5c02e', purple: '#8e4fc7' };
+  const LETTUCE = (() => {
+    const p = [];
+    for (let i = 0; i < 144; i++) {
+      const a = i / 144 * Math.PI * 2;
+      const r = 246 + 13 * Math.sin(a * 9) + 7 * Math.sin(a * 17 + 1.3) + 4 * Math.sin(a * 5 + .4);
+      p.push((350 + r * Math.cos(a)).toFixed(0) + ' ' + (500 + r * Math.sin(a)).toFixed(0));
+    }
+    return 'M' + p.join('L') + 'Z';
+  })();
+  const ART = {
+    top: c => `<circle cx="350" cy="500" r="220" fill="${c || COL.bun}"/>`,
+    cheese: (c, flat) => `<rect x="130" y="280" width="440" height="440" fill="${c || COL.cheese}"${flat ? '' : ' transform="rotate(45 350 500)"'}/>`,
+    lettuce: c => `<path d="${LETTUCE}" fill="${c || COL.lettuce}"/>`,
+    meat: c => `<rect x="130" y="280" width="440" height="440" fill="${c || COL.meat}"/>`,
+    bottom: c => `<circle cx="350" cy="500" r="220" fill="${c || COL.bun}"/>`
+  };
+  const NAME = { top: 'Top bun', cheese: 'Cheese', lettuce: 'Lettuce', meat: 'Meat', bottom: 'Bottom bun' };
+  const DEFAULT = ['top', 'cheese', 'lettuce', 'meat', 'bottom'];
+  const EYE_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".55"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.5 0 10.5 7 10.5 7a17 17 0 0 1-3.1 3.8M6.2 6.6A17.4 17.4 0 0 0 1.5 12s4 7 10.5 7a10 10 0 0 0 4.2-.9"/></svg>';
+
+  // =========================================================
+  // PART 1: simulator
+  // =========================================================
+  const sim = {
+    order: DEFAULT.slice(), hidden: new Set(), sel: new Set(['top']), anchor: 'top',
+    off: { top: [0, 0], cheese: [0, 0], lettuce: [0, 0], meat: [0, 0], bottom: [0, 0] },
+    view: 'exploded', ctrl: false, done: new Set(), changedOrder: false, linked: false, email: ''
+  };
+  const $ = id => document.getElementById(id);
+  const stack = $('stack'), stage = $('stage'), list = $('gpList'), say = $('say');
+  const sheets = {}, rows = {};
+
+  DEFAULT.forEach(id => {
+    const s = document.createElement('div');
+    s.className = 'sheet'; s.dataset.id = id;
+    s.innerHTML = `<svg viewBox="0 0 700 1000" aria-hidden="true">
+      <rect class="glass" x="2" y="2" width="696" height="996" rx="6"/>
+      <g class="art">${ART[id]()}</g>
+      <g class="bwrap"><rect class="bounds b1" x="3" y="3" width="694" height="994"/><rect class="bounds b2" x="3" y="3" width="694" height="994"/></g>
+      <text class="tag" x="672" y="962" text-anchor="end">${NAME[id]}</text></svg>`;
+    stack.appendChild(s); sheets[id] = s;
+
+    const li = document.createElement('li');
+    li.className = 'gp-row'; li.dataset.id = id; li.tabIndex = 0; li.setAttribute('role', 'option');
+    li.innerHTML = `<button type="button" class="eye" aria-pressed="true" aria-label="Hide ${NAME[id]}">${EYE_ON}</button>
+      <span class="thumb"><svg viewBox="0 0 700 1000" aria-hidden="true">${ART[id]()}</svg></span>
+      <span class="gp-name">${NAME[id]}</span><span class="grip" aria-hidden="true">⋮⋮</span>`;
+    list.appendChild(li); rows[id] = li;
+  });
+
+  function syncRows() {
+    list.classList.add('no-anim');
+    sim.order.forEach((id, i) => {
+      rows[id].style.transform = '';
+      if (list.children[i] !== rows[id]) list.insertBefore(rows[id], list.children[i]);
+    });
+    void list.offsetHeight;
+    list.classList.remove('no-anim');
+  }
+
+  function render() {
+    const n = sim.order.length;
+    const gap = sim.view === 'exploded' ? Math.max(40, stage.clientWidth * .115) : 1;
+    sim.order.forEach((id, i) => {
+      const s = sheets[id];
+      // depth decides what covers what, in both views
+      s.style.transform = `translateZ(${(n - 1 - i) * gap}px)`;
+      s.classList.toggle('is-hidden', sim.hidden.has(id));
+      s.classList.toggle('is-sel', sim.sel.has(id));
+      const [dx, dy] = sim.off[id];
+      s.querySelector('.art').setAttribute('transform', `translate(${dx} ${dy})`);
+      s.querySelector('.bwrap').setAttribute('transform', `translate(${dx} ${dy})`);
+    });
+    if (!drag) syncRows();
+    sim.order.forEach(id => {
+      const r = rows[id];
+      const vis = !sim.hidden.has(id);
+      r.setAttribute('aria-selected', sim.sel.has(id) ? 'true' : 'false');
+      r.classList.toggle('is-hidden', !vis);
+      const eye = r.querySelector('.eye');
+      eye.setAttribute('aria-pressed', vis ? 'true' : 'false');
+      eye.setAttribute('aria-label', (vis ? 'Hide ' : 'Show ') + NAME[id]);
+      eye.innerHTML = vis ? EYE_ON : EYE_OFF;
+    });
+    stack.classList.toggle('exploded', sim.view === 'exploded');
+    stage.classList.toggle('can-move', sim.view === 'flat');
+    $('vExploded').setAttribute('aria-pressed', sim.view === 'exploded');
+    $('vFlat').setAttribute('aria-pressed', sim.view === 'flat');
+    $('ctrl').setAttribute('aria-pressed', sim.ctrl);
+    $('moveHint').textContent = sim.view === 'flat'
+      ? 'Drag on the picture to move the selected layers (like the Move tool).'
+      : 'Switch to Flat to move layers on the canvas.';
+  }
+
+  const names = ids => {
+    const a = ids.map(i => NAME[i]);
+    return a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+  };
+  function tell(html) { say.innerHTML = html; }
+
+  function covers(id) {
+    const i = sim.order.indexOf(id);
+    const below = sim.order.slice(i + 1).filter(x => !sim.hidden.has(x));
+    const above = sim.order.slice(0, i).filter(x => !sim.hidden.has(x));
+    return { below, above };
+  }
+
+  function explainMove(id) {
+    const i = sim.order.indexOf(id);
+    const { below, above } = covers(id);
+    if (i === 0) return `<b>${NAME[id]}</b> is now at the top of the list, so it is in front of everything else.`;
+    if (i === sim.order.length - 1) return `<b>${NAME[id]}</b> is now at the bottom of the list, so everything else covers it.`;
+    return `<b>${NAME[id]}</b> is now under ${names(sim.order.slice(0, i))} and over ${names(sim.order.slice(i + 1))}. Higher in the list means closer to you.`;
+  }
+
+  function moveTo(id, idx) {
+    const from = sim.order.indexOf(id);
+    if (from === idx) return false;
+    sim.order.splice(from, 1); sim.order.splice(idx, 0, id);
+    sim.changedOrder = true;
+    return true;
+  }
+
+  // ---- selection ----
+  function selectRow(id, e) {
+    const add = (e && (e.ctrlKey || e.metaKey)) || sim.ctrl;
+    if (e && e.shiftKey && sim.anchor) {
+      const a = sim.order.indexOf(sim.anchor), b = sim.order.indexOf(id);
+      sim.sel = new Set(sim.order.slice(Math.min(a, b), Math.max(a, b) + 1));
+    } else if (add) {
+      if (sim.sel.has(id) && sim.sel.size > 1) sim.sel.delete(id); else sim.sel.add(id);
+      sim.anchor = id;
+    } else {
+      sim.sel = new Set([id]); sim.anchor = id;
+    }
+    render();
+    const ids = sim.order.filter(x => sim.sel.has(x));
+    tell(ids.length > 1
+      ? `Selected <b>${names(ids)}</b>. Anything you do with the Move tool now happens to all of them together.`
+      : `Selected <b>${NAME[id]}</b>. In GIMP, painting and filling only happen on the selected layer.`);
+    check();
+  }
+
+  // ---- eye ----
+  function toggleEye(id) {
+    if (sim.hidden.has(id)) sim.hidden.delete(id); else sim.hidden.add(id);
+    render();
+    if (sim.hidden.has(id)) {
+      const { below } = covers(id);
+      tell(`<b>${NAME[id]}</b> is hidden. It is still in the list, just invisible.${below.length ? ' Now you can see more of ' + names(below.slice(0, 2)) + '.' : ''}`);
+    } else {
+      tell(`<b>${NAME[id]}</b> is visible again. Hiding never deletes a layer.`);
+    }
+    check();
+  }
+
+  // ---- drag to reorder ----
+  let drag = null;
+  list.addEventListener('pointerdown', e => {
+    const row = e.target.closest('.gp-row');
+    if (!row || e.target.closest('.eye') || e.button > 0) return;
+    const id = row.dataset.id;
+    drag = { id, row, y0: e.clientY, i0: sim.order.indexOf(id), i: sim.order.indexOf(id), moved: false, h: row.getBoundingClientRect().height, e };
+    row.setPointerCapture(e.pointerId);
+  });
+  list.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dy = e.clientY - drag.y0;
+    if (!drag.moved && Math.abs(dy) < 6) return;
+    drag.moved = true;
+    drag.row.classList.add('dragging');
+    const target = Math.max(0, Math.min(sim.order.length - 1, Math.round(drag.i0 + dy / drag.h)));
+    if (target !== drag.i) { moveTo(drag.id, target); drag.i = target; render(); }
+    // DOM stays put while dragging; other rows slide to their new slots
+    [...list.children].forEach((r, di) => {
+      if (r === drag.row) return;
+      const ni = sim.order.indexOf(r.dataset.id);
+      r.style.transform = ni !== di ? `translateY(${(ni - di) * drag.h}px)` : '';
+    });
+    drag.row.style.transform = `translateY(${dy}px)`;
+  });
+  const endDrag = e => {
+    if (!drag) return;
+    const d = drag; drag = null;
+    d.row.classList.remove('dragging');
+    syncRows();
+    if (!d.moved) { selectRow(d.id, e); return; }
+    if (d.i !== d.i0) tell(explainMove(d.id));
+    check();
+  };
+  list.addEventListener('pointerup', endDrag);
+  list.addEventListener('pointercancel', () => { if (drag) { drag.row.classList.remove('dragging'); drag = null; syncRows(); } });
+  list.addEventListener('click', e => {
+    const eye = e.target.closest('.eye');
+    if (eye) toggleEye(eye.closest('.gp-row').dataset.id);
+  });
+  list.addEventListener('keydown', e => {
+    const row = e.target.closest('.gp-row');
+    if (!row || e.target.closest('.eye')) return;
+    const id = row.dataset.id, i = sim.order.indexOf(id);
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectRow(id, e); }
+    else if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+      e.preventDefault();
+      if (moveTo(id, Math.max(0, Math.min(sim.order.length - 1, i + (e.key === 'ArrowUp' ? -1 : 1))))) { render(); tell(explainMove(id)); check(); }
+      row.focus();
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const j = Math.max(0, Math.min(sim.order.length - 1, i + (e.key === 'ArrowUp' ? -1 : 1)));
+      rows[sim.order[j]].focus();
+    }
+  });
+
+  function step(dir, all) {
+    const id = sim.anchor && sim.sel.has(sim.anchor) ? sim.anchor : sim.order.find(x => sim.sel.has(x));
+    if (!id) return;
+    const i = sim.order.indexOf(id);
+    const t = all ? (dir < 0 ? 0 : sim.order.length - 1) : Math.max(0, Math.min(sim.order.length - 1, i + dir));
+    if (moveTo(id, t)) { render(); tell(explainMove(id)); check(); }
+    else tell(`<b>${NAME[id]}</b> is already at the ${dir < 0 ? 'top' : 'bottom'} of the list.`);
+  }
+  $('raise').addEventListener('click', e => step(-1, e.shiftKey));
+  $('lower').addEventListener('click', e => step(1, e.shiftKey));
+  $('ctrl').addEventListener('click', () => {
+    sim.ctrl = !sim.ctrl; render();
+    tell(sim.ctrl ? 'Ctrl is on: each layer you click is added to the selection. Click Ctrl again to turn it off.' : 'Ctrl is off: clicking a layer selects only that layer.');
+  });
+  $('reset').addEventListener('click', () => {
+    sim.order = DEFAULT.slice(); sim.hidden.clear(); sim.sel = new Set(['top']); sim.anchor = 'top';
+    Object.keys(sim.off).forEach(k => sim.off[k] = [0, 0]);
+    sim.changedOrder = false;
+    render(); tell('Back to the original burger. Your finished tasks stay checked.');
+  });
+  $('vExploded').addEventListener('click', () => { sim.view = 'exploded'; render(); tell('Exploded view: each layer is a clear sheet the size of the canvas. The top of the list is the sheet closest to you.'); });
+  $('vFlat').addEventListener('click', () => { sim.view = 'flat'; render(); tell('Flat view: this is what GIMP shows you. The gray checkerboard means transparent: no layer has anything there.'); check(); });
+
+  // ---- move tool on the canvas ----
+  let mv = null;
+  stage.addEventListener('pointerdown', e => {
+    if (sim.view !== 'flat' || e.button > 0) return;
+    const r = stack.getBoundingClientRect();
+    mv = { x: e.clientX, y: e.clientY, k: 700 / r.width, start: {}, ids: sim.order.filter(x => sim.sel.has(x)) };
+    mv.ids.forEach(id => mv.start[id] = sim.off[id].slice());
+    stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener('pointermove', e => {
+    if (!mv) return;
+    const dx = (e.clientX - mv.x) * mv.k, dy = (e.clientY - mv.y) * mv.k;
+    mv.ids.forEach(id => {
+      sim.off[id] = [Math.max(-450, Math.min(450, mv.start[id][0] + dx)), Math.max(-600, Math.min(600, mv.start[id][1] + dy))];
+    });
+    mv.dist = Math.hypot(dx, dy);
+    render();
+  });
+  stage.addEventListener('pointerup', () => {
+    if (!mv) return;
+    const m = mv; mv = null;
+    if ((m.dist || 0) > 15) {
+      tell(`Moved <b>${names(m.ids)}</b>. The other layers did not move. Click <b>Reset</b> to put everything back.`);
+      if (m.ids.includes('meat') && m.ids.includes('cheese')) sim.linked = true;
+      check();
+    }
+  });
+
+  // ---- tasks ----
+  function check() {
+    const o = sim.order;
+    if (sim.email) {
+    if (sim.hidden.has('top')) sim.done.add('hide');
+    if (o.indexOf('lettuce') < o.indexOf('cheese')) sim.done.add('lettuce');
+    if (o[0] === 'meat') {
+      if (!sim.done.has('meat')) setTimeout(() => tell('<b>Meat</b> is at the top now, so the brown square covers everything below it. The top of the list is the front of the picture.'), 0);
+      sim.done.add('meat');
+    }
+    if (sim.linked) sim.done.add('link');
+    if (sim.changedOrder && o.join() === DEFAULT.join() && sim.hidden.size === 0 && (sim.done.has('lettuce') || sim.done.has('meat'))) sim.done.add('fix');
+    store.set('tasks:' + sim.email, [...sim.done]);
+    }
+    let c = 0;
+    document.querySelectorAll('#taskList li').forEach(li => {
+      const d = sim.done.has(li.dataset.t); li.classList.toggle('done', d);
+      li.querySelector('.tick').textContent = d ? '✓' : li.querySelector('.tick').dataset.n;
+      if (d) c++;
+    });
+    $('taskCount').textContent = `${c} of 5`;
+    $('win').hidden = c < 5;
+    const code = c === 5 && sim.email ? layerCode(sim.email) : '';
+    $('codeCard').hidden = !code;
+    $('codeText').value = code;
+    $('codeFor').textContent = sim.email;
+    const ti = $('tiCode');
+    ti.textContent = code ? code : 'No code yet. Finish the 5 challenges in Part 1.';
+    ti.classList.toggle('empty', !code);
+  }
+
+  // ---- personal code (same formula as the teacher's checker in Google Apps Script) ----
+  function cyrb53(str, seed) {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) {
+      ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+    h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+    h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  }
+  function layerCode(email) {
+    const e = String(email || '').trim().toLowerCase();
+    let n = cyrb53(e + '|burger-layers-lab|v1', 7319);
+    const A = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    let s = '';
+    for (let i = 0; i < 8; i++) { s += A[n % 32]; n = Math.floor(n / 32); }
+    return 'LYR-' + s.slice(0, 4) + '-' + s.slice(4);
+  }
+
+  // ---- student email ----
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function renderWho() {
+    $('whoBox').hidden = !!sim.email;
+    $('whoSet').hidden = !sim.email;
+    $('whoEmail').textContent = sim.email;
+  }
+  function resetBoard() {
+    sim.order = DEFAULT.slice(); sim.hidden.clear(); sim.sel = new Set(['top']); sim.anchor = 'top';
+    Object.keys(sim.off).forEach(k => sim.off[k] = [0, 0]);
+    sim.changedOrder = false; sim.linked = false;
+  }
+  function saveEmail() {
+    const v = $('email').value.trim().toLowerCase();
+    const note = $('whoNote');
+    if (!EMAIL_RE.test(v)) {
+      note.textContent = 'Type your full school email, the same one you use for Google Classroom.';
+      note.classList.add('err'); $('email').focus(); return;
+    }
+    note.classList.remove('err');
+    sim.email = v; store.set('email', v);
+    resetBoard();
+    sim.done = new Set(store.get('tasks:' + v, []));
+    render(); renderWho(); check();
+    tell(`Your challenges now count for <b>${v}</b>. Start with challenge 1.`);
+  }
+  $('emailSave').addEventListener('click', saveEmail);
+  $('email').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveEmail(); } });
+  $('emailChange').addEventListener('click', () => {
+    $('email').value = sim.email;
+    sim.email = ''; sim.done = new Set();
+    renderWho(); check();
+    $('whoNote').textContent = 'Changing the email starts the challenges again for that email.';
+    $('email').focus();
+  });
+  $('copyCode').addEventListener('click', () => {
+    const inp = $('codeText'), btn = $('copyCode');
+    const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy', 1600); };
+    try {
+      navigator.clipboard.writeText(inp.value).then(done, () => { inp.select(); btn.textContent = 'Press Ctrl+C'; });
+    } catch (err) { inp.select(); btn.textContent = 'Press Ctrl+C'; }
+  });
+  sim.email = store.get('email', '');
+  if (sim.email) sim.done = new Set(store.get('tasks:' + sim.email, []));
+  renderWho();
+  document.querySelectorAll('#taskList .tick').forEach(t => t.dataset.n = t.textContent);
+
+  render(); check();
+  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(render, 120); });
+
+  // =========================================================
+  // PART 2: build steps (GIMP 3, Windows)
+  // =========================================================
+  const M = (...p) => `<span class="menu">${p.join('<i>›</i>')}</span>`;
+  const K = (...k) => k.map(x => `<kbd>${x}</kbd>`).join('+');
+  const SEL_CIRCLE = '<circle cx="350" cy="500" r="220" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="16 12"/><circle cx="350" cy="500" r="220" fill="none" stroke="#000" stroke-width="5" stroke-dasharray="16 12" stroke-dashoffset="14"/>';
+
+  const STEPS = [
+    {
+      t: 'Make a transparent canvas',
+      layers: [['Background', '', true]], guides: false,
+      do: [
+        `Open GIMP and go to ${M('File', 'New…')} (${K('Ctrl', 'N')}).`,
+        `Set <b>Width</b> to <code>700</code> and <b>Height</b> to <code>1000</code> pixels.`,
+        `Click <b>Advanced Options</b>. Set <b>Fill with</b> to <b>Transparency</b>, then click <b>OK</b>.`
+      ],
+      why: ['The checkerboard means “nothing here”', 'Gray squares show transparent pixels. Every new layer starts as a clear sheet like this one.']
+    },
+    {
+      t: 'Mark the center with guides',
+      layers: [['Background', '', true]], guides: true,
+      do: [
+        `Go to ${M('Image', 'Guides', 'New Guide (by Percent)…')}.`,
+        `Choose <b>Horizontal</b>, type <code>50</code>, click <b>OK</b>.`,
+        `Do it again with <b>Vertical</b> and <code>50</code>. The two blue lines cross at the center.`,
+        `Tip: you can also drag a guide out of the ruler at the top or left.`
+      ],
+      why: ['Guides are not on any layer', 'They are helper lines for lining things up. They do not show when you export.']
+    },
+    {
+      t: 'Draw the bottom bun',
+      layers: [['Bottom bun', 'bottom', true]], guides: true,
+      do: [
+        `In the Layers panel, double-click the name <b>Background</b>, type <b>Bottom bun</b>, press ${K('Enter')}.`,
+        `Pick the <b>Ellipse Select</b> tool (${K('E')}) and drag any circle on the canvas.`,
+        `In <b>Tool Options</b>, type Position <code>130</code>, <code>280</code> and Size <code>440</code> × <code>440</code>.`,
+        `Click the foreground color square and type <code>d4873a</code> in <b>HTML notation</b>.`,
+        `Pick <b>Bucket Fill</b> (${K('Shift', 'B')}). Set <b>Affected area</b> to <b>Fill whole selection</b>, then click inside the circle.`,
+        `${M('Select', 'None')} (${K('Shift', 'Ctrl', 'A')}).`
+      ],
+      math: 'Why 130, 280? The center is 350, 500. Half of 440 is 220. So 350 − 220 = 130 and 500 − 220 = 280.',
+      why: ['Name every layer', 'With 5 layers (or 50), the names tell you where each part lives.']
+    },
+    {
+      t: 'Add the meat on a new layer',
+      layers: [['Meat', 'meat', true], ['Bottom bun', 'bottom']], guides: true,
+      do: [
+        `${M('Layer', 'New Layer…')} (${K('Shift', 'Ctrl', 'N')}). Name it <b>Meat</b>, set <b>Fill with</b> to <b>Transparency</b>, click <b>OK</b>.`,
+        `Check that <b>Meat</b> is highlighted in the Layers panel.`,
+        `Pick <b>Rectangle Select</b> (${K('R')}). Position <code>130</code>, <code>280</code>, Size <code>440</code> × <code>440</code>.`,
+        `Foreground color <code>6e3b1f</code>, Bucket Fill inside the square, then ${M('Select', 'None')}.`
+      ],
+      why: ['GIMP paints on the highlighted layer only', 'If the brown lands on the bun, the wrong layer was selected. Press ' + K('Ctrl', 'Z') + ', click Meat, and fill again.']
+    },
+    {
+      t: 'Cut out the lettuce',
+      layers: [['Lettuce', 'lettuce', true], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true,
+      do: [
+        `${M('Layer', 'New Layer…')}. Name it <b>Lettuce</b>, Fill with <b>Transparency</b>.`,
+        `Pick <b>Free Select</b> (${K('F')}). Click and drag a wavy line around the bun, a little bigger than the bun.`,
+        `Finish on your starting point, then press ${K('Enter')}.`,
+        `Foreground color <code>3e9f3a</code>, Bucket Fill inside, then ${M('Select', 'None')}.`
+      ],
+      why: ['Above covers below', 'The lettuce hides most of the meat because Lettuce is above Meat in the list.']
+    },
+    {
+      t: 'Add the cheese and turn it',
+      layers: [['Cheese', 'cheese', true], ['Lettuce', 'lettuce'], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true,
+      do: [
+        `New layer named <b>Cheese</b> (Transparency).`,
+        `Rectangle Select: Position <code>130</code>, <code>280</code>, Size <code>440</code> × <code>440</code>.`,
+        `Foreground color <code>f5c02e</code>, Bucket Fill, then ${M('Select', 'None')}.`,
+        `Pick the <b>Rotate</b> tool (${K('Shift', 'R')}) and click the canvas. Set <b>Angle</b> to <code>45</code>, then click <b>Rotate</b>.`
+      ],
+      why: ['Only the cheese turns', 'The other parts stay still because each one is on its own layer.']
+    },
+    {
+      t: 'Make the top bun',
+      layers: [['Top bun', 'top', true], ['Cheese', 'cheese'], ['Lettuce', 'lettuce'], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true,
+      do: [
+        `Click <b>Bottom bun</b> in the Layers panel.`,
+        `${M('Layer', 'Duplicate Layer')} (${K('Shift', 'Ctrl', 'D')}).`,
+        `Double-click the copy's name and rename it <b>Top bun</b>.`,
+        `Drag <b>Top bun</b> to the top of the list, or use ${M('Layer', 'Stack', 'Layer to Top')}.`
+      ],
+      why: ['Same circle, different job', 'At the bottom of the list it sits behind everything. At the top it covers everything.']
+    },
+    {
+      t: 'Check your stack',
+      layers: [['Top bun', 'top', false, true], ['Cheese', 'cheese', true], ['Lettuce', 'lettuce'], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true,
+      do: [
+        `Your list should read, top to bottom: <b>Top bun, Cheese, Lettuce, Meat, Bottom bun</b>.`,
+        `Click the eye next to <b>Top bun</b> to hide it. You can see the cheese and lettuce underneath.`,
+        `Click the eye again to show it. Try it with each layer.`
+      ],
+      why: ['Hiding is not deleting', 'A hidden layer is still in your file, ready to show again.']
+    },
+    {
+      t: 'Change one part only',
+      layers: [['Top bun', 'top'], ['Cheese', 'cheese'], ['Lettuce', 'lettuce', true], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true, purple: true, selLettuce: true,
+      do: [
+        `Right-click <b>Lettuce</b> in the Layers panel and choose <b>Alpha to Selection</b>. Only the lettuce is selected now.`,
+        `Pick a new foreground color, like <code>8e4fc7</code> for purple lettuce.`,
+        `${M('Edit', 'Fill with FG Color')} (${K('Ctrl', ',')}), then ${M('Select', 'None')}.`
+      ],
+      why: ['This is why layers matter', 'On one flat image you would have to select every leaf by hand. With layers it takes three clicks.']
+    },
+    {
+      t: 'Save and export',
+      layers: [['Top bun', 'top', true], ['Cheese', 'cheese'], ['Lettuce', 'lettuce'], ['Meat', 'meat'], ['Bottom bun', 'bottom']], guides: true, purple: true, files: true,
+      do: [
+        `${M('File', 'Save As…')} and name it <code>burger_yourname.xcf</code>.`,
+        `${M('File', 'Export As…')} and name it <code>burger_yourname.png</code>. Click <b>Export</b> twice.`
+      ],
+      why: ['Keep the .xcf, share the .png', 'XCF keeps every layer so you can edit later. PNG flattens everything into one picture.']
+    }
+  ];
+
+  function miniCanvas(s) {
+    const map = { 'Top bun': 'top', 'Cheese': 'cheese', 'Lettuce': 'lettuce', 'Meat': 'meat', 'Bottom bun': 'bottom' };
+    const parts = s.layers.slice().reverse().filter(l => l[1] && !l[3]).map(l => ART[l[1]](l[1] === 'lettuce' && s.purple ? COL.purple : '')).join('');
+    const guides = s.guides ? '<line x1="350" y1="0" x2="350" y2="1000" stroke="#2aa5ff" stroke-width="4" stroke-dasharray="14 8"/><line x1="0" y1="500" x2="700" y2="500" stroke="#2aa5ff" stroke-width="4" stroke-dasharray="14 8"/>' : '';
+    const sel = s.selLettuce ? `<path d="${LETTUCE}" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="16 12"/><path d="${LETTUCE}" fill="none" stroke="#000" stroke-width="5" stroke-dasharray="16 12" stroke-dashoffset="14"/>` : '';
+    return `<svg viewBox="0 0 700 1000" role="img" aria-label="Canvas after this step">${parts}${guides}${sel}</svg>`;
+  }
+  function miniLayers(s) {
+    return s.layers.map(l => {
+      const art = l[1] ? ART[l[1]](l[1] === 'lettuce' && s.purple ? COL.purple : '') : '';
+      return `<div class="${l[2] ? 'on' : ''} ${l[3] ? 'off' : ''}"><span>${l[3] ? EYE_OFF.replace('<svg', '<svg class="e"') : EYE_ON.replace('<svg', '<svg class="e"')}</span><span class="t"><svg viewBox="0 0 700 1000">${art}</svg></span><span>${l[0]}</span></div>`;
+    }).join('');
+  }
+
+  let cur = Math.min(store.get('step', 0), STEPS.length - 1);
+  const doneSteps = new Set(store.get('stepsDone', []));
+  const stepList = $('stepList'), card = $('stepCard');
+
+  STEPS.forEach((s, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button type="button" data-i="${i}"><span class="n">${i + 1}</span><span class="lbl">${s.t}</span></button>`;
+    li.querySelector('button').setAttribute('aria-label', `Step ${i + 1}: ${s.t}`);
+    stepList.appendChild(li);
+  });
+  stepList.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { cur = +b.dataset.i; drawStep(true); } });
+
+  function drawStep(scroll) {
+    const s = STEPS[cur];
+    store.set('step', cur);
+    stepList.querySelectorAll('button').forEach((b, i) => {
+      b.toggleAttribute('aria-current', false);
+      if (i === cur) b.setAttribute('aria-current', 'step');
+      b.classList.toggle('done', doneSteps.has(i));
+      b.querySelector('.n').textContent = doneSteps.has(i) ? '✓' : i + 1;
+    });
+    card.innerHTML = `
+      <div class="card-head"><p class="eyebrow">Step ${cur + 1} of ${STEPS.length}</p><h3 style="font-size:1.6rem">${s.t}</h3></div>
+      <div class="card-body">
+        <div>
+          <ol class="do">${s.do.map(d => `<li>${d}</li>`).join('')}</ol>
+          ${s.math ? `<p class="math">${s.math}</p>` : ''}
+          <p class="why"><b>${s.why[0]}</b>${s.why[1]}</p>
+        </div>
+        <figure class="preview" style="margin:0">
+          <div class="mini-canvas">${miniCanvas(s)}</div>
+          <div class="mini-layers" aria-label="Layers panel after this step">${miniLayers(s)}</div>
+          ${s.files ? '<div class="files"><div class="file"><b>.xcf</b>All 5 layers, editable</div><div class="file"><b>.png</b>One flat picture</div></div>' : ''}
+          <figcaption>Your canvas and Layers panel after this step.</figcaption>
+        </figure>
+      </div>
+      <div class="card-foot">
+        <label class="check"><input type="checkbox" id="stepDone" ${doneSteps.has(cur) ? 'checked' : ''}> I did this step in GIMP</label>
+        <div class="nav">
+          <button class="btn" type="button" id="prevStep" ${cur === 0 ? 'disabled' : ''}>Back</button>
+          <button class="btn primary" type="button" id="nextStep" ${cur === STEPS.length - 1 ? 'disabled' : ''}>Next step</button>
+        </div>
+      </div>`;
+    $('stepDone').addEventListener('change', e => {
+      if (e.target.checked) doneSteps.add(cur); else doneSteps.delete(cur);
+      store.set('stepsDone', [...doneSteps]); progress(); drawStepListOnly();
+    });
+    $('prevStep').addEventListener('click', () => { cur--; drawStep(true); });
+    $('nextStep').addEventListener('click', () => { if (!doneSteps.has(cur)) { doneSteps.add(cur); store.set('stepsDone', [...doneSteps]); progress(); } cur++; drawStep(true); });
+    if (scroll && card.getBoundingClientRect().top < 0) card.scrollIntoView({ block: 'start' });
+  }
+  function drawStepListOnly() {
+    stepList.querySelectorAll('button').forEach((b, i) => {
+      b.classList.toggle('done', doneSteps.has(i));
+      b.querySelector('.n').textContent = doneSteps.has(i) ? '✓' : i + 1;
+    });
+  }
+  function progress() {
+    $('barFill').style.width = (doneSteps.size / STEPS.length * 100) + '%';
+    $('barText').textContent = `${doneSteps.size} of ${STEPS.length} steps done`;
+  }
+  drawStep(false); progress();
+
+  // =========================================================
+  // PART 3: video chapters
+  // =========================================================
+  const CHAPTERS = [[0,'What is a layer?'],[16,'Top of the list is the front'],[26,'The eye icon'],[36,'Step 1 · Transparent canvas'],[46,'Step 2 · Guides'],[55,'Step 3 · Bottom bun'],[69,'Step 4 · Meat'],[81,'Step 5 · Lettuce'],[93,'Step 6 · Cheese'],[106,'Step 7 · Top bun'],[117,'Step 8 · Check the stack'],[126,'Step 9 · Change one part'],[137,'Step 10 · Save and export'],[146,'Recap']];
+  const vid = $('vid');
+  $('chapters').innerHTML = CHAPTERS.map(c => {
+    const m = Math.floor(c[0] / 60), s = String(Math.floor(c[0] % 60)).padStart(2, '0');
+    return `<li><button type="button" data-t="${c[0]}"><time>${m}:${s}</time><span>${c[1]}</span></button></li>`;
+  }).join('');
+  $('chapters').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    try { vid.currentTime = +b.dataset.t; vid.play().catch(() => {}); } catch (err) {}
+  });
+
+})();
+</script>
+
+</body>
+</html>
