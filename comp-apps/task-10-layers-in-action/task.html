@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Computer Applications GIMP Layers in Action assignment: create an original layered scene and document the editing process with screenshots.">
+  <title>Layers in Action · GIMP | Computer Applications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Structure cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .card ul{list-style:none;margin-top:4px}
+  .card ul li{font-size:15.5px;padding:5px 0 5px 22px;position:relative;line-height:1.45}
+  .card ul li::before{content:"→";position:absolute;left:0;color:var(--teal);font-weight:700}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered setup steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+
+  /* ---------- Prompt box ---------- */
+  .prompt-box{
+    background:var(--panel);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:16px 0 18px;
+  }
+  .prompt-box .plabel{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:10px;
+  }
+  .prompt-box .ptext{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;line-height:1.7;
+    color:#fff;margin:0;max-width:none;
+  }
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Prompts ---------- */
+  .prompts{list-style:none;margin:14px 0 24px}
+  .prompts li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .prompts li:last-child{border-bottom:none}
+  .prompts .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  /* ---------- Usability test ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Rubric table ---------- */
+  table{width:100%;border-collapse:collapse;margin:14px 0 26px;font-size:16px}
+  th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:left;color:var(--navy);
+    padding:10px 12px;border-bottom:2px solid var(--navy);
+  }
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;white-space:normal}
+
+  /* ---------- Boarding passes (schedule) ---------- */
+  .passes{display:grid;gap:14px;margin:14px 0 26px}
+  .pass{
+    display:grid;grid-template-columns:110px 1fr;
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .pass .side{
+    background:var(--panel);
+    color:var(--gold-soft);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+    padding:14px 8px;
+    border-right:2px dashed var(--paper);
+  }
+  .pass .body{padding:14px 18px}
+  .pass .body p{margin-bottom:0;font-size:16px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .pass{grid-template-columns:1fr}
+    .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
+  }
+  .card ol{margin:6px 0 0 18px}
+  .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
+  .file{
+    display:inline-block;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:3px 10px;
+  }
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  td .code{white-space:normal}
+
+  /* ---------- Comparison tables ---------- */
+  .compare{table-layout:fixed}
+  .compare th:first-child{width:24%}
+  .compare td:not(:first-child){font-size:15.5px}
+  @media (max-width:560px){
+    table{font-size:14.5px}
+    th,td{padding:9px 7px}
+    .compare{table-layout:auto}
+    .compare th:first-child{width:auto}
+    .compare td:not(:first-child){font-size:14px}
+    td{overflow-wrap:anywhere}
+    .code{white-space:normal}
+  }
+  .cards.quad{grid-template-columns:repeat(2,1fr)}
+  .cards.four{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  @media (max-width:560px){.cards.quad{grid-template-columns:1fr}}
+  .tool-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .tool-head h4{margin-bottom:0}
+  .tool-icon{width:44px;height:44px;border-radius:8px;flex:none;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Before & After slide mockup (fixed colors, it's a slide) ---------- */
+  .mock-wrap{margin:20px 0 10px}
+  .mock{
+    max-width:560px;margin:0 auto;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    padding:4.5% 5% 5%;
+    display:grid;grid-template-rows:auto 1fr;gap:4%;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(255,255,255,.35), transparent 30%),
+      linear-gradient(135deg,#7b2ff7 0%,#f107a3 55%,#ff9a3c 100%);
+    box-shadow:0 14px 34px rgba(11,23,64,.28);
+    color:#fff;
+  }
+  .mock .mtitle{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(15px,3.6vw,26px);line-height:1.1;
+    text-shadow:0 2px 0 rgba(0,0,0,.18);
+  }
+  .mock .mtitle small{
+    display:block;font-family:'JetBrains Mono',monospace;font-weight:500;
+    font-size:clamp(9px,1.6vw,11.5px);letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-bottom:4px;
+  }
+  .mock .panes{display:grid;grid-template-columns:1fr 1fr;gap:6%;min-height:0}
+  .pane{position:relative;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+  .pane.before{
+    background:
+      radial-gradient(circle at 78% 24%, #ffe066 0 9%, transparent 10%),
+      linear-gradient(#8ecae6 0 58%, #74b85a 58% 100%);
+    box-shadow:0 6px 16px rgba(0,0,0,.22);
+  }
+  .pane svg{height:82%;width:auto;display:block}
+  .pane svg *{fill:#12275C}
+  .ptag{
+    position:absolute;top:-8px;left:8px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:clamp(8px,1.5vw,11px);letter-spacing:.16em;
+    background:#fff;color:#12275C;border-radius:999px;padding:3px 9px;
+  }
+  .mock-cap{font-size:15px;color:var(--muted);text-align:center;margin:12px auto 0;max-width:56ch}
+
+  /* ---------- Template site cards ---------- */
+  .card .site{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--teal)}
+
+
+  .deliverables{margin:12px 0 24px 24px;padding:0}
+  .deliverables li{padding:6px 0 8px 4px;font-size:17px;line-height:1.55}
+  .deliverables li::marker{color:var(--teal)}
+
+  /* ---------- Layers project elements ---------- */
+  .quick-nav{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px;justify-content:center}
+  .quick-nav a{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:8px 13px;border:1.5px solid var(--line);border-radius:999px;
+    background:var(--surface);color:var(--navy);text-decoration:none;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:.04em;
+    transition:transform .15s,border-color .15s;
+  }
+  .quick-nav a:hover{transform:translateY(-2px);border-color:var(--gold)}
+  .metric{
+    font-family:'Fredoka',sans-serif;font-size:40px;font-weight:700;color:var(--teal);
+    line-height:1.04;margin-bottom:8px;
+  }
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+  .note{padding:16px 19px;border-left:4px solid var(--teal);background:var(--surface);border-radius:0 10px 10px 0;margin:18px 0}
+  .note p{margin:0}
+  .wide{max-width:none}
+  .folder-tree{
+    border:1.5px solid rgba(243,183,0,.44);border-radius:12px;
+    background:var(--panel);padding:18px 22px;margin:17px 0 10px;
+    color:#fff;overflow-x:auto;
+  }
+  .folder-tree .heading{color:var(--gold-soft);font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.17em;margin-bottom:10px}
+  .folder-tree pre{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;white-space:pre;}
+  .folder-tree .helper{font-size:14px;color:rgba(255,255,255,.76);margin-top:12px;margin-bottom:0}
+  .layer-showcase{
+    display:grid;grid-template-columns:minmax(210px,.9fr) minmax(230px,1.1fr);gap:18px;margin:16px 0 24px;
+  }
+  .layer-panel{
+    overflow:hidden;border:1.5px solid var(--line);border-radius:12px;
+    background:var(--surface);box-shadow:0 8px 24px rgba(11,23,64,.05)
+  }
+  .layer-panel .head{background:var(--panel);padding:12px 16px;font-family:'JetBrains Mono',monospace;color:#fff;letter-spacing:.08em;font-size:12px}
+  .layer-line{display:flex;align-items:center;gap:10px;padding:12px 13px;border-bottom:1px solid var(--line);font-size:14px}
+  .layer-line:last-child{border-bottom:none}
+  .layer-line .eye{width:22px;color:var(--teal);font-size:15px;text-align:center}
+  .layer-line .thumb{display:inline-block;height:30px;width:34px;border:1px solid rgba(18,39,92,.2);border-radius:4px;flex:none;
+    background:conic-gradient(#e7eaf4 25%,#ffffff 0 50%,#e7eaf4 0 75%,#fff 0) 0/12px 12px;position:relative}
+  .layer-line .thumb:after{content:'';position:absolute;inset:6px 10px;border-radius:40% 40% 45% 45%;background:var(--teal)}
+  .layer-line .thumb.bg{background:linear-gradient(#7bbed2 0 55%,#77a982 55%);}
+  .layer-line .thumb.bg:after{background:rgba(255,255,255,.85);height:7px;inset:4px 10px auto;border-radius:50%}
+  .layer-line .layer-title{flex:1;min-width:0;line-height:1.3}
+  .layer-line .layer-title small{display:block;color:var(--muted);font-size:12px}
+  .layer-line.first{background:rgba(243,183,0,.10)}
+  .layer-help{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:20px 22px}
+  .layer-help h4{font-family:'Fredoka',sans-serif;font-size:23px;font-weight:600;margin:0 0 9px}
+  .layer-help p{font-size:16px}
+  .layer-help ul{padding-left:22px;margin-bottom:10px}
+  .layer-help li{padding-bottom:7px}
+  .flow-steps{display:grid;gap:16px;margin:16px 0 24px}
+  .flow-step{background:var(--surface);border:1.5px solid var(--line);border-left:6px solid var(--gold);border-radius:12px;padding:19px 21px 20px}
+  .flow-step .step-top{display:flex;gap:14px;align-items:center;margin-bottom:10px}
+  .flow-step .step-number{font-family:'JetBrains Mono',monospace;background:var(--panel);color:var(--gold-soft);border-radius:8px;font-weight:700;font-size:15px;padding:8px 11px;flex:none}
+  .flow-step h3{margin:0;font-size:23px}
+  .flow-step p{margin-bottom:9px}
+  .flow-step ol,.flow-step ul{padding-left:22px;margin:8px 0 2px}
+  .flow-step li{margin:7px 0;padding-left:4px}
+  .flow-step .tip{font-size:14.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin:14px 0 0}
+  .slide-block{display:grid;grid-template-columns:68px 1fr;gap:14px;align-items:start;border-bottom:1px solid var(--line);padding:16px 0}
+  .slide-block:last-child{border-bottom:none}
+  .slide-num{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:22px;font-weight:700;line-height:1.3}
+  .slide-body h3{margin:0 0 4px;font-size:20px}
+  .slide-body p{margin:0;font-size:16px;max-width:none}
+  .slide-body .evidence{margin-top:7px;color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em}
+  .pills{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+  .pill{border:1px solid var(--line);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.03em;padding:6px 11px;background:var(--surface)}
+  .rule-list{background:var(--surface);border:1.5px solid var(--line);border-left:4px solid var(--stamp-red);border-radius:12px;padding:18px 22px;margin:16px 0 24px}
+  .rule-list ul{padding-left:20px}
+  .rule-list li{margin-bottom:11px;font-size:16px}
+  .rule-list li:last-child{margin-bottom:0}
+  .do-dont{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0 24px}
+  .do-dont>div{background:var(--surface);border:1.5px solid var(--line);border-top:4px solid var(--teal);padding:18px 19px 12px;border-radius:12px}
+  .do-dont .dont{border-top-color:var(--stamp-red)}
+  .do-dont h4{font-family:'Fredoka',sans-serif;font-size:22px;font-weight:600;margin-bottom:8px}
+  .do-dont ul{padding-left:19px}
+  .do-dont li{margin-bottom:9px;font-size:15.5px}
+  .checklist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 22px}
+  .checkitem{display:flex;align-items:flex-start;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:13px 14px;font-size:15.5px;line-height:1.45}
+  .checkitem .boxy{height:19px;width:19px;display:block;flex:none;border:2px solid var(--teal);border-radius:4px;margin-top:2px}
+  .link-banner{background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:19px 20px;margin:15px 0 20px;color:#fff;display:flex;align-items:center;gap:18px;justify-content:space-between;flex-wrap:wrap}
+  .link-banner h4{font-family:'Fredoka',sans-serif;font-size:22px;color:#fff;font-weight:600;margin-bottom:5px}
+  .link-banner p{font-size:15px;margin:0;color:rgba(255,255,255,.82);max-width:50ch}
+  .link-banner a{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;border:1px solid var(--gold-soft);background:var(--gold);color:#0b1740;text-decoration:none;border-radius:7px;padding:12px 14px;display:inline-flex;align-items:center;white-space:nowrap;transition:transform .15s}
+  .link-banner a:hover{transform:translateY(-2px)}
+  @media(max-width:650px){
+    .layer-showcase,.do-dont,.checklist{grid-template-columns:1fr}
+    .slide-block{grid-template-columns:48px 1fr;gap:10px}
+    .flow-step{padding:17px 16px}
+    .link-banner a{width:100%;justify-content:center}
+  }
+  @media print{
+    :root{--paper:#fff;--surface:#fff;--ink:#111827;--muted:#43516b;--line:#c5cbd6;--navy:#12275C;--teal:#0E7C8B}
+    body{font-size:14px}
+    .cover{padding:24px 15px 27px}
+    .cover h1{font-size:44px}
+    .cover-frame{padding:25px}
+    .approved,.quick-nav{display:none}
+    main{max-width:100%;padding:0 18px}
+    section{padding:21px 0 6px;break-inside:avoid-page}
+    .flow-step,.card,.layer-showcase,.slide-block,.pass{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Unit 4 · Image Editing</p>
+    <h1>Layers <span class="pop">in Action</span></h1>
+    <p class="subtitle">One scene. Five images. Multiple layers.</p>
+    <div class="chips">
+      <span>5+ Original Images</span><span>4+ Cutouts</span><span>GIMP Layers</span><span>Process Slides</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">Layer by layer</div>
+  </div>
+</header>
+
+<main>
+  <nav class="quick-nav" aria-label="Jump to a section">
+    <a href="#mission">Mission</a>
+    <a href="#setup">Get ready</a>
+    <a href="#toolkit">Layers</a>
+    <a href="#slides">Presentation</a>
+    <a href="#submit">Submit</a>
+  </nav>
+
+  <section id="mission">
+    <span class="stamp">Your Mission</span>
+    <p class="lead">Create an original <strong>layered scene in GIMP</strong> on a topic of your choice. Find at least <strong>five original images on the Internet</strong>: one for your background and at least four more to add to your scene. You must <strong>remove the background from each of those four images yourself in GIMP</strong> and combine everything using <strong>separate layers</strong>.</p>
+    <p>While you work, take real screenshots of your editing process. At the end, create a <strong>Google Slides presentation</strong> explaining your editing process, and submit your finished GIMP files.</p>
+    <div class="cards">
+      <div class="card">
+        <p class="label">Part 01 · Background</p>
+        <div class="metric">1</div>
+        <h4>Main scene</h4>
+        <p>Choose a photograph to serve as the background for your entire composition.</p>
+      </div>
+      <div class="card">
+        <p class="label">Part 02 · Foreground</p>
+        <div class="metric">4+</div>
+        <h4>Images to cut out</h4>
+        <p>Download four or more images that still have their original backgrounds. Remove those backgrounds using GIMP.</p>
+      </div>
+      <div class="card">
+        <p class="label">Part 03 · Final proof</p>
+        <div class="metric">9</div>
+        <h4>Slides minimum</h4>
+        <p>Explain your process in at least nine slides, with screenshots showing your work in GIMP.</p>
+      </div>
+    </div>
+    <div class="note">
+      <p><strong>Your idea, your design.</strong> It can be funny, realistic, imaginary, mysterious, futuristic or anything else appropriate for school. The important part is how you combine the images into <strong>one intentional composition</strong>.</p>
+    </div>
+  </section>
+
+  <section id="setup">
+    <span class="stamp">Check-In · Getting Ready</span>
+    <p>Before opening GIMP, organize your project and collect the images you want to use.</p>
+    <ol class="steps">
+      <li>Decide what kind of scene you want to create. Think about <strong>where it takes place</strong> and which four or more objects, people or animals you want to add.</li>
+      <li>On your computer's <strong>Desktop</strong>, open your <span class="code">GIMP</span> folder. Inside it, create a new folder called <span class="code">LayersInAction</span>.</li>
+      <li>Search the Internet and download <strong>at least 5 original images</strong> into this folder: one background and four or more foreground images. Keep the images as they were downloaded.</li>
+      <li>Give each image a clear name (for example, <span class="code">background.jpg</span>, <span class="code">person.jpg</span> or <span class="code">dog.jpg</span>).</li>
+      <li>Open <strong>GIMP</strong>. Remember to take <strong>screenshots as you work</strong>: you will need them for your presentation.</li>
+    </ol>
+    <div class="folder-tree" role="note" aria-label="Example folder structure">
+      <div class="heading">Example · Your project folder</div>
+<pre>Desktop
+└── GIMP
+    ├── Crop, Resize and Rotate
+    ├── Transparency
+    └── LayersInAction
+        ├── background.jpg        ← original
+        ├── image_01.jpg          ← original
+        ├── image_02.jpg          ← original
+        ├── image_03.jpg          ← original
+        ├── image_04.jpg          ← original
+        ├── LayersInAction.xcf      ← editable GIMP file
+        └── LayersInAction.png      ← final exported image</pre>
+      <p class="helper">Your original images may have different filenames or extensions. If you use more than five images, keep all of the originals.</p>
+    </div>
+  </section>
+
+  <section id="toolkit">
+    <span class="stamp">Your Toolkit · Layers</span>
+    <p>Think of <strong>layers</strong> as clear sheets stacked on top of one another. Each object sits on its own sheet, so you can move or resize it without changing the other images.</p>
+    <div class="layer-showcase">
+      <div class="layer-panel" aria-label="Example of a GIMP Layers Panel with four cutout layers above a background">
+        <div class="head">LAYERS PANEL · EXAMPLE</div>
+        <div class="layer-line first"><span class="eye" aria-hidden="true">◉</span><span class="thumb" aria-hidden="true"></span><span class="layer-title"><strong>Image 04</strong><small>Transparent cutout</small></span></div>
+        <div class="layer-line"><span class="eye" aria-hidden="true">◉</span><span class="thumb" aria-hidden="true"></span><span class="layer-title"><strong>Image 03</strong><small>Transparent cutout</small></span></div>
+        <div class="layer-line"><span class="eye" aria-hidden="true">◉</span><span class="thumb" aria-hidden="true"></span><span class="layer-title"><strong>Image 02</strong><small>Transparent cutout</small></span></div>
+        <div class="layer-line"><span class="eye" aria-hidden="true">◉</span><span class="thumb" aria-hidden="true"></span><span class="layer-title"><strong>Image 01</strong><small>Transparent cutout</small></span></div>
+        <div class="layer-line"><span class="eye" aria-hidden="true">◉</span><span class="thumb bg" aria-hidden="true"></span><span class="layer-title"><strong>Background</strong><small>Bottom layer · Full image</small></span></div>
+      </div>
+      <div class="layer-help">
+        <h4>Why separate layers?</h4>
+        <ul>
+          <li>You can <strong>select one object</strong> without changing the others.</li>
+          <li>You can <strong>scale, move and flip</strong> individual elements.</li>
+          <li>You can <strong>change their order</strong> to put one object in front of or behind another.</li>
+          <li>You can show or hide a layer using the <strong>eye icon</strong>.</li>
+        </ul>
+        <p><strong>Remember:</strong> The background stays at the bottom. Your four or more cutouts go above it.</p>
+      </div>
+    </div>
+    <div class="cards quad">
+      <div class="card">
+        <p class="label">Important menu</p>
+        <h4>Open as Layers</h4>
+        <p><span class="menu">File › Open as Layers</span> adds another image to the same GIMP project instead of opening it in a different document.</p>
+      </div>
+      <div class="card">
+        <p class="label">Important menu</p>
+        <h4>Add Alpha Channel</h4>
+        <p><span class="menu">Layer › Transparency › Add Alpha Channel</span> allows the background of a layer to become <strong>transparent</strong>.</p>
+      </div>
+      <div class="card">
+        <p class="label">Selection tools</p>
+        <h4>Free Select or Fuzzy Select</h4>
+        <p>Use <strong>Free Select (Lasso)</strong> for detailed shapes, or <strong>Fuzzy Select</strong> for a simple, solid-color background.</p>
+      </div>
+      <div class="card">
+        <p class="label">Transformation tools</p>
+        <h4>Move, Scale &amp; Order</h4>
+        <p>Select the correct layer in the <strong>Layers Panel</strong> before you move it, change its size or place it above or below another layer.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section id="rules">
+    <span class="stamp red">Project Rules</span>
+    <div class="rule-list">
+      <ul>
+        <li>Downloading images with their backgrounds <strong>already removed</strong> (transparent cutouts, stickers or isolated PNGs).</li>
+        <li>Using online background removers, AI tools or another editor to do the cutting for you.</li>
+        <li>Turning in only a flattened final picture without the editable layers.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="slides">
+    <span class="stamp gold">Your Presentation</span>
+    <p>Create a <strong>Google Slides presentation with at least nine slides</strong>. Include the following on each slide:</p>
+    <p><a class="example-link" href="https://docs.google.com/presentation/d/1GdxUJSpzeEOyuMa43QkCZectlq2WzF7fPF5aSRYuLr4/edit?slide=id.g242cfef40ae_1_0#slide=id.g242cfef40ae_1_0" target="_blank" rel="noopener noreferrer">View example presentation ↗</a></p>
+
+    <div class="slide-block">
+      <span class="slide-num">01</span>
+      <div class="slide-body"><h3>Title Slide</h3><p>Your project title, full name, class and date.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">02</span>
+      <div class="slide-body"><h3>My Scene Idea</h3><p>A brief description of the scene you chose to create.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">03</span>
+      <div class="slide-body"><h3>Images I Used</h3><p>Your five or more original images, labeled as background or foreground, with source links.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">04</span>
+      <div class="slide-body"><h3>Opening the Background</h3><p>A screenshot of your background open in GIMP and a short explanation of how you started.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">05</span>
+      <div class="slide-body"><h3>Adding Layers</h3><p>A GIMP screenshot showing the Layers Panel and an explanation of how you added your images as layers.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">06</span>
+      <div class="slide-body"><h3>Removing Backgrounds</h3><p>A GIMP screenshot of the background removal process, a Before &amp; After example and an explanation of the tools you used.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">07</span>
+      <div class="slide-body"><h3>Moving, Scaling &amp; Ordering</h3><p>A GIMP screenshot and an explanation of how you changed the size, position and order of your layers.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">08</span>
+      <div class="slide-body"><h3>Final Adjustments</h3><p>A GIMP screenshot showing your last adjustments and a short explanation of what you changed.</p></div>
+    </div>
+    <div class="slide-block">
+      <span class="slide-num">09</span>
+      <div class="slide-body"><h3>Final Result &amp; Reflection</h3><p>Your finished image and 1–2 sentences about a challenge you faced or something you learned.</p></div>
+    </div>
+  </section>
+
+  <section id="submit">
+    <span class="stamp">Turning It In</span>
+    <p>Submit these <strong>two links in Google Classroom</strong>:</p>
+    <ul class="deliverables">
+      <li>The link to your <strong>Google Slides presentation</strong> with at least nine slides.</li>
+      <li>The link to your <strong>LayersInAction</strong> folder in Google Drive, containing all five or more original images, your editable <span class="code">LayersInAction.xcf</span> file and your final <span class="code">LayersInAction.png</span> image.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+</body>
+</html>
