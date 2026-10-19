@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Makerspace Fusion 360 introduction, student education access, interface video, and Google Docs worksheet.">
+<title>Meet Fusion 360 | Makerspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Structure cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .card ul{list-style:none;margin-top:4px}
+  .card ul li{font-size:15.5px;padding:5px 0 5px 22px;position:relative;line-height:1.45}
+  .card ul li::before{content:"→";position:absolute;left:0;color:var(--teal);font-weight:700}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered setup steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+
+  /* ---------- Prompt box ---------- */
+  .prompt-box{
+    background:var(--panel);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:16px 0 18px;
+  }
+  .prompt-box .plabel{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:10px;
+  }
+  .prompt-box .ptext{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;line-height:1.7;
+    color:#fff;margin:0;max-width:none;
+  }
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Prompts ---------- */
+  .prompts{list-style:none;margin:14px 0 24px}
+  .prompts li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .prompts li:last-child{border-bottom:none}
+  .prompts .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  /* ---------- Usability test ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Rubric table ---------- */
+  table{width:100%;border-collapse:collapse;margin:14px 0 26px;font-size:16px}
+  th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:left;color:var(--navy);
+    padding:10px 12px;border-bottom:2px solid var(--navy);
+  }
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;white-space:normal}
+
+  /* ---------- Boarding passes (schedule) ---------- */
+  .passes{display:grid;gap:14px;margin:14px 0 26px}
+  .pass{
+    display:grid;grid-template-columns:110px 1fr;
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .pass .side{
+    background:var(--panel);
+    color:var(--gold-soft);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+    padding:14px 8px;
+    border-right:2px dashed var(--paper);
+  }
+  .pass .body{padding:14px 18px}
+  .pass .body p{margin-bottom:0;font-size:16px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .pass{grid-template-columns:1fr}
+    .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
+  }
+  .card ol{margin:6px 0 0 18px}
+  .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
+  .file{
+    display:inline-block;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:3px 10px;
+  }
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  td .code{white-space:normal}
+
+  /* ---------- Comparison tables ---------- */
+  .compare{table-layout:fixed}
+  .compare th:first-child{width:24%}
+  .compare td:not(:first-child){font-size:15.5px}
+  @media (max-width:560px){
+    table{font-size:14.5px}
+    th,td{padding:9px 7px}
+    .compare{table-layout:auto}
+    .compare th:first-child{width:auto}
+    .compare td:not(:first-child){font-size:14px}
+    td{overflow-wrap:anywhere}
+    .code{white-space:normal}
+  }
+  .cards.quad{grid-template-columns:repeat(2,1fr)}
+  .cards.four{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  @media (max-width:560px){.cards.quad{grid-template-columns:1fr}}
+  .tool-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .tool-head h4{margin-bottom:0}
+  .tool-icon{width:44px;height:44px;border-radius:8px;flex:none;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Before & After slide mockup (fixed colors, it's a slide) ---------- */
+  .mock-wrap{margin:20px 0 10px}
+  .mock{
+    max-width:560px;margin:0 auto;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    padding:4.5% 5% 5%;
+    display:grid;grid-template-rows:auto 1fr;gap:4%;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(255,255,255,.35), transparent 30%),
+      linear-gradient(135deg,#7b2ff7 0%,#f107a3 55%,#ff9a3c 100%);
+    box-shadow:0 14px 34px rgba(11,23,64,.28);
+    color:#fff;
+  }
+  .mock .mtitle{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(15px,3.6vw,26px);line-height:1.1;
+    text-shadow:0 2px 0 rgba(0,0,0,.18);
+  }
+  .mock .mtitle small{
+    display:block;font-family:'JetBrains Mono',monospace;font-weight:500;
+    font-size:clamp(9px,1.6vw,11.5px);letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-bottom:4px;
+  }
+  .mock .panes{display:grid;grid-template-columns:1fr 1fr;gap:6%;min-height:0}
+  .pane{position:relative;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+  .pane.before{
+    background:
+      radial-gradient(circle at 78% 24%, #ffe066 0 9%, transparent 10%),
+      linear-gradient(#8ecae6 0 58%, #74b85a 58% 100%);
+    box-shadow:0 6px 16px rgba(0,0,0,.22);
+  }
+  .pane svg{height:82%;width:auto;display:block}
+  .pane svg *{fill:#12275C}
+  .ptag{
+    position:absolute;top:-8px;left:8px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:clamp(8px,1.5vw,11px);letter-spacing:.16em;
+    background:#fff;color:#12275C;border-radius:999px;padding:3px 9px;
+  }
+  .mock-cap{font-size:15px;color:var(--muted);text-align:center;margin:12px auto 0;max-width:56ch}
+
+  /* ---------- Template site cards ---------- */
+  .card .site{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--teal)}
+
+
+  .deliverables{margin:12px 0 24px 24px;padding:0}
+  .deliverables li{padding:6px 0 8px 4px;font-size:17px;line-height:1.55}
+  .deliverables li::marker{color:var(--teal)}
+
+  /* ---------- Fusion 360 worksheet task ---------- */
+  .quick-nav{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px;justify-content:center}
+  .quick-nav a{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--navy);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:.04em;transition:transform .15s,border-color .15s}
+  .quick-nav a:hover{transform:translateY(-2px);border-color:var(--gold)}
+  .metric{font-family:'Fredoka',sans-serif;font-size:37px;font-weight:700;color:var(--teal);line-height:1.05;margin-bottom:8px}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+  .deliverables{margin:12px 0 24px 24px;padding:0}
+  .deliverables li{padding:6px 0 8px 4px;font-size:17px;line-height:1.55}
+  .deliverables li::marker{color:var(--teal)}
+  .note{padding:16px 19px;border-left:4px solid var(--gold);background:var(--surface);border-radius:0 10px 10px 0;margin:18px 0}
+  .note p{margin:0}
+  .link-banner{background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:21px 22px;margin:16px 0 22px;color:#fff;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+  .link-banner h4{font-family:'Fredoka',sans-serif;font-size:23px;color:#fff;font-weight:600;margin-bottom:4px}
+  .link-banner p{font-size:15.5px;margin:0;color:rgba(255,255,255,.86);max-width:47ch}
+  .link-banner a{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;border:1px solid var(--gold-soft);background:var(--gold);color:#0b1740;text-decoration:none;border-radius:8px;padding:12px 15px;display:inline-flex;align-items:center;white-space:nowrap;transition:transform .15s}
+  .link-banner a:hover{transform:translateY(-2px)}
+  .video-block{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;overflow:hidden;margin:17px 0 18px}
+  .video-area{aspect-ratio:16/9;width:100%;max-height:440px;background:#0b1740}
+  .video-area iframe{width:100%;height:100%;border:0}
+  .video-caption{padding:15px 18px 17px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .video-caption p{margin:0;font-size:15px}
+  .text-link{color:var(--teal);font-weight:800;text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:3px}
+  .text-link:hover{text-decoration-color:currentColor}
+  .ui-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:17px 0 24px}
+  .ui-item{display:flex;align-items:center;gap:15px;min-height:66px;border:1.5px solid var(--line);border-radius:10px;padding:12px 16px;background:var(--surface)}
+  .ui-number{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--teal);min-width:27px}
+  .ui-item strong{font-family:'Nunito',sans-serif;font-size:16px;line-height:1.4;font-weight:800}
+  .callout{border-left:6px solid var(--gold);padding:21px 24px;background:var(--panel);color:#fff;border-radius:12px;margin:20px 0}
+  .callout .clabel{font-family:'JetBrains Mono',monospace;color:var(--gold-soft);font-size:11px;letter-spacing:.17em;text-transform:uppercase}
+  .callout h3{font-family:'Fredoka',sans-serif;margin:4px 0 6px;color:#fff}
+  .callout p{margin:0;color:rgba(255,255,255,.92);max-width:65ch}
+  .setup-card{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:19px 21px;margin:15px 0 21px}
+  .setup-card ol{margin-left:22px}
+  .setup-card li{padding:8px 3px;border-bottom:1px solid var(--line)}
+  .setup-card li:last-child{border:0}
+  .small{font-size:15px;color:var(--muted)}
+  .template-preview{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:13px 0 5px}
+  .template-preview div{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:14px 17px}
+  .template-preview .hint{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;margin:0 0 4px}
+  .template-preview p{font-size:14.5px;margin:0}
+  @media(max-width:620px){.ui-grid,.template-preview{grid-template-columns:1fr}.link-banner a{width:100%;justify-content:center}.video-caption{display:block}.video-caption a{display:inline-block;margin-top:6px}}
+  @media print{.cover{padding:30px 15px}.cover h1{font-size:50px}.quick-nav,.video-area{display:none}main{max-width:none}.ui-item,.link-banner,.setup-card{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-frame">
+   <p class="eyebrow">Makerspace · 3D Design · Getting Started</p>
+   <h1>Meet <span class="pop">Fusion 360</span></h1>
+   <p class="subtitle">Explore the tools. Get ready to design.</p>
+   <div class="chips"><span>Student Access</span><span>Interface Tutorial</span><span>10 Elements</span><span>Google Docs</span></div>
+   <p class="meta">SCHOOL YEAR 2026–2027 · MAKERSPACE</p>
+   <div class="approved">First look</div>
+  </div>
+</header>
+<main>
+ <nav class="quick-nav" aria-label="Jump to a section">
+  <a href="#mission">Your Mission</a>
+  <a href="#account">Get Fusion</a>
+  <a href="#tutorial">Video Tutorial</a>
+  <a href="#worksheet">Worksheet</a>
+  <a href="#submit">Turning It In</a>
+ </nav>
+
+ <section id="mission">
+  <span class="stamp">Your Mission</span>
+  <p class="lead">In this assignment, you will get started with <strong>Autodesk Fusion 360</strong>, a 3D design program, and learn to recognize <strong>10 important parts of its user interface</strong>.</p>
+  <p>Register for educational access using your <strong>ATS school account</strong>, install Fusion 360, watch the tutorial, and complete a <strong>Google Docs worksheet</strong> describing the main function of each interface element. <strong>At the end, add one full interface image labeled with numbers 1–10.</strong></p>
+  <div class="cards">
+   <div class="card"><p class="label">Part 01</p><div class="metric">01</div><h4>Get Access</h4><p>Use your ATS email to request Autodesk educational access and download Fusion 360.</p></div>
+   <div class="card"><p class="label">Part 02</p><div class="metric">02</div><h4>Watch &amp; Explore</h4><p>Watch the Fusion 360 User Interface Tutorial and identify the main interface elements.</p></div>
+   <div class="card"><p class="label">Part 03</p><div class="metric">03</div><h4>Complete the Worksheet</h4><p>Explain the function of all 10 elements and identify them on one numbered interface image.</p></div>
+  </div>
+ </section>
+
+ <section id="account">
+  <span class="stamp">Get Fusion 360</span>
+  <p class="lead">To use Fusion 360 for school, register for <strong>Autodesk Education access</strong> using your <strong>ATS account</strong>.</p>
+  <div class="setup-card">
+   <ol>
+    <li>Open the <a class="text-link" href="https://www.autodesk.com/education/students" target="_blank" rel="noopener noreferrer">Autodesk Education – Students website ↗</a>.</li>
+    <li>Create an Autodesk account with your <strong>ATS school email</strong>, or sign in if you already have one. Select the <strong>Student</strong> education option and complete any eligibility verification Autodesk requests.</li>
+    <li>Once your educational access is approved, find <strong>Fusion</strong>, download the application, install it, and sign in with your Autodesk account.</li>
+   </ol>
+  </div>
+  <div class="note"><p><strong>Important:</strong> Autodesk offers free educational access to eligible students. Your school email helps with registration, but Autodesk may ask you to verify your student status. If Fusion is already installed, you can sign in instead of installing it again.</p></div>
+ </section>
+
+ <section id="tutorial">
+  <span class="stamp">Watch the Tutorial</span>
+  <p class="lead">Watch <strong>Fusion 360 User Interface Tutorial</strong>. Pay attention to the name, location, and purpose of each element.</p>
+  <div class="link-banner">
+   <div><h4>Fusion 360 User Interface Tutorial</h4><p>Open the video on YouTube. Pause or replay it to identify the tools and their functions.</p></div>
+   <a href="https://www.youtube.com/watch?v=WKb3mRkgTwg" target="_blank" rel="noopener noreferrer">Watch the Video ↗</a>
+  </div>
+ </section>
+
+ <section id="worksheet">
+  <span class="stamp gold">Your Worksheet</span>
+  <p class="lead">Make a copy of the Google Docs template. Write the <strong>main function of all 10 elements</strong> in your own words. At the end, insert <strong>one complete image of the Fusion 360 interface</strong> and label its parts with numbers <strong>1–10</strong> to match the list.</p>
+  <div class="link-banner">
+   <div><h4>Fusion 360 User Interface Worksheet</h4><p>Student template with space for each function and one numbered image of the full interface at the end.</p></div>
+   <a href="https://docs.google.com/document/d/18fqHGp0CcwyhQ0jUm8XrfZ0Vtvw4zd6_O35Q4W52NGE/copy" target="_blank" rel="noopener noreferrer">Make a Copy ↗</a>
+  </div>
+  <p class="small">If the copy link does not open, <a class="text-link" href="https://docs.google.com/document/d/18fqHGp0CcwyhQ0jUm8XrfZ0Vtvw4zd6_O35Q4W52NGE/edit" target="_blank" rel="noopener noreferrer">open the template here</a> and select <strong>File › Make a copy</strong>. Rename your document with your name.</p>
+  <h3>Elements to Identify</h3>
+  <div class="ui-grid" aria-label="Ten Fusion 360 user interface elements">
+    <div class="ui-item"><span class="ui-number">01</span><strong>Data Panel</strong></div>
+    <div class="ui-item"><span class="ui-number">02</span><strong>Application Bar</strong></div>
+    <div class="ui-item"><span class="ui-number">03</span><strong>Tabs in the Application Bar</strong></div>
+    <div class="ui-item"><span class="ui-number">04</span><strong>Toolbar</strong></div>
+    <div class="ui-item"><span class="ui-number">05</span><strong>Canvas</strong></div>
+    <div class="ui-item"><span class="ui-number">06</span><strong>Browser</strong></div>
+    <div class="ui-item"><span class="ui-number">07</span><strong>ViewCube</strong></div>
+    <div class="ui-item"><span class="ui-number">08</span><strong>Marking Menu</strong></div>
+    <div class="ui-item"><span class="ui-number">09</span><strong>Navigation Bar</strong></div>
+    <div class="ui-item"><span class="ui-number">10</span><strong>Timeline</strong></div>
+  </div>
+  <div class="template-preview">
+   <div><p class="hint">For Every Element</p><p><strong>Main function:</strong> Explain what the tool or area does in 1–3 sentences.</p></div>
+   <div><p class="hint">At the End</p><p><strong>Complete interface image:</strong> Add one screenshot labeled 1–10 to match your descriptions.</p></div>
+  </div>
+ </section>
+
+ <section id="submit">
+  <span class="stamp">Turning It In</span>
+  <p>Submit the following in <strong>Google Classroom</strong>:</p>
+  <ul class="deliverables">
+   <li>The link to your <strong>completed Google Docs worksheet</strong>, with <strong>all 10 main functions and one full interface image labeled 1–10</strong>.</li>
+  </ul>
+  <div class="note"><p>Before you submit, check that <strong>your teacher can open your document</strong>.</p></div>
+ </section>
+</main>
+<footer>// Makerspace · The American School of Tampico · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+</body>
+</html>
