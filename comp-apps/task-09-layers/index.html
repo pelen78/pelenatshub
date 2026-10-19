@@ -1076,6 +1076,36 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     try { vid.currentTime = +b.dataset.t; vid.play().catch(() => {}); } catch (err) {}
   });
 
+  // Make the whole video seekable. Some servers send the full file instead of the
+  // part the browser asks for, so the bar can't jump back. Load it once as a blob.
+  let videoLoaded = false;
+  async function loadVideoBlob() {
+    if (videoLoaded) return;
+    videoLoaded = true;
+    try {
+      const ext = vid.canPlayType('video/mp4') ? 'mp4' : 'webm';
+      const res = await fetch('burger-layers-review.' + ext, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const url = URL.createObjectURL(await res.blob());
+      const t = vid.currentTime || 0, wasPlaying = !vid.paused && !vid.ended;
+      vid.addEventListener('loadedmetadata', () => {
+        if (t) vid.currentTime = t;
+        if (wasPlaying) vid.play().catch(() => {});
+      }, { once: true });
+      vid.src = url;
+    } catch (err) { videoLoaded = false; }
+  }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(en => en.isIntersecting)) { io.disconnect(); loadVideoBlob(); }
+    }, { rootMargin: '900px 0px' });
+    io.observe(vid);
+  } else {
+    loadVideoBlob();
+  }
+  ['play', 'pointerdown', 'focus'].forEach(ev => vid.addEventListener(ev, loadVideoBlob, { once: true }));
+  $('chapters').addEventListener('click', loadVideoBlob, { once: true });
+
 })();
 </script>
 
