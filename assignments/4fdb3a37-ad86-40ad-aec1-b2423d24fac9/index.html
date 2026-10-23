@@ -518,7 +518,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       </div></li>
       <li class="ti"><span class="ti-n">3</span><div>
         <h3>Turn it in on Google Classroom</h3>
-        <p>Your code and your answer for Sofi are ready below. Copy them, then in Google Classroom:</p>
+        <p>Your code, exercise answers and answer for Sofi are ready below. Copy them, then in Google Classroom:</p>
         <ol>
           <li>Open this assignment and paste your submission in a <b>private comment</b>.</li>
           <li>Attach your <b>screenshot</b> from your real Fusion.</li>
@@ -689,7 +689,8 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
 
   // ---------- state + challenges ----------
   const TASKS = ['ui', 'explore', 'sort', 'fix', 'prefs', 'write'];
-  const sim = { email: '', done: new Set(), seen: new Set(['part']) };
+  const savedEmail = store.get('email', '');
+  const sim = { email: savedEmail, done: new Set(store.get('tasks:' + savedEmail, [])), seen: new Set(store.get('seen:' + savedEmail, ['part'])) };
 
   function complete(key) {
     if (sim.done.has(key)) return true;
@@ -698,6 +699,11 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     store.set('tasks:' + sim.email, [...sim.done]);
     renderTasks();
     return true;
+  }
+  function uncomplete(key) {
+    if (!sim.done.delete(key)) return;
+    if (sim.email) store.set('tasks:' + sim.email, [...sim.done]);
+    renderTasks();
   }
   function showFlash() {
     const f = $('flash'); f.hidden = false;
@@ -759,19 +765,32 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     note.classList.remove('err');
     sim.email = v; store.set('email', v);
     sim.done = new Set(store.get('tasks:' + v, []));
+    sim.seen = new Set(store.get('seen:' + v, ['part']));
+    ui.ok = new Set(store.get('uiOk:' + v, []));
+    ui.placed = {}; ui.ok.forEach(l => { ui.placed[l] = UI[l].name; });
+    ui.sel = null; ui.active = null;
+    Object.keys(picks).forEach(k => { delete picks[k]; });
+    Object.assign(picks, store.get('sortPicks:' + v, {}));
+    ans.value = store.get('answer:' + v, '');
+    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + v, 'part'), usedType: store.get('fixType:' + v, '') });
+    expType = 'part';
+    reconcileProgress();
     $('flash').hidden = true;
-    renderWho(); renderTasks();
-    if (sim.seen.size === 3) complete('explore');
-    if (ui.ok.size === 10) complete('ui');
+    renderWho(); renderUI(); renderExplore(); renderSort(false); renderFix(); renderChecks(); renderTasks();
   }
   $('emailSave').addEventListener('click', saveEmail);
   $('email').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveEmail(); } });
   $('emailChange').addEventListener('click', () => {
     $('email').value = sim.email;
-    sim.email = ''; sim.done = new Set();
+    sim.email = ''; sim.done = new Set(); sim.seen = new Set(['part']);
+    ui.ok = new Set(); ui.placed = {}; ui.sel = null; ui.active = null;
+    Object.keys(picks).forEach(k => { delete picks[k]; });
+    ans.value = '';
+    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part', usedType: '' });
+    expType = 'part';
     store.set('email', '');
     $('whoNote').textContent = 'Changing the email starts the challenges again for that email.';
-    renderWho(); renderTasks(); $('email').focus();
+    renderWho(); renderUI(); renderExplore(); renderSort(false); renderFix(); renderChecks(); renderTasks(); $('email').focus();
   });
   $('copyCode').addEventListener('click', () => copyText($('codeText').value, $('copyCode')));
   function copyText(text, btn) {
@@ -810,7 +829,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   };
   const LETTERS = Object.keys(UI);
   const NAMES_UI = ['Data Panel', 'Application Bar', 'Tabs in the Application Bar', 'Toolbar', 'Canvas', 'Browser', 'ViewCube', 'Marking Menu', 'Navigation Bar', 'Timeline'];
-  const ui = { placed: {}, ok: new Set(store.get('uiOk', [])), sel: null, active: null };
+  const ui = { placed: {}, ok: new Set(store.get('uiOk:' + sim.email, [])), sel: null, active: null };
   ui.ok.forEach(l => { ui.placed[l] = UI[l].name; });
   const bankOrder = NAMES_UI.slice().sort((a, b) => (a.length * 7 + a.charCodeAt(0)) % 11 - (b.length * 7 + b.charCodeAt(0)) % 11);
 
@@ -969,7 +988,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       if (!v || ui.ok.has(l)) return;
       if (v === UI[l].name) ui.ok.add(l); else { wrong.push(l); delete ui.placed[l]; }
     });
-    store.set('uiOk', [...ui.ok]);
+    if (sim.email) store.set('uiOk:' + sim.email, [...ui.ok]);
     ui.active = null; renderUI();
     wrong.forEach(l => { const s = document.querySelector(`.slot[data-slot="${l}"]`); if (s) s.classList.add('no'); });
     const n = ui.ok.size;
@@ -1019,7 +1038,9 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   }
   $('expSeg').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
-    expType = b.dataset.v; sim.seen.add(expType); renderExplore();
+    expType = b.dataset.v; sim.seen.add(expType);
+    if (sim.email) store.set('seen:' + sim.email, [...sim.seen]);
+    renderExplore();
     if (sim.seen.size === 3) complete('explore');
   });
   $('fxExplore').addEventListener('click', e => {
@@ -1036,7 +1057,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     { q: 'You are following a Fusion tutorial from 2024, step by step, and it uses New Component.', a: 'hybrid', why: 'Hybrid works like the classic Fusion that older tutorials use.' },
     { q: 'A toy car with a body, 4 wheels and 2 axles. The wheels need to spin.', a: 'assembly', why: 'Many pieces that move need components and joints, so Assembly fits best.' }
   ];
-  const picks = store.get('sortPicks', {});
+  const picks = store.get('sortPicks:' + sim.email, {});
   function renderSort(showFb) {
     $('sortList').innerHTML = SORT.map((s, i) => {
       const p = picks[i] || '';
@@ -1050,7 +1071,9 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   $('sortList').addEventListener('click', e => {
     const b = e.target.closest('.pick button'); if (!b) return;
     const i = +b.closest('.sort-item').dataset.i;
-    picks[i] = b.dataset.v; store.set('sortPicks', picks); renderSort(false); $('sortSum').textContent = '';
+    picks[i] = b.dataset.v;
+    if (sim.email) store.set('sortPicks:' + sim.email, picks);
+    uncomplete('sort'); renderSort(false); renderSubmission(); $('sortSum').textContent = '';
   });
   $('sortCheck').addEventListener('click', () => {
     renderSort(true);
@@ -1064,7 +1087,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   });
 
   // ---------- Part 3: fix Sofi's design ----------
-  const fix = { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part', flashNew: false };
+  const fix = { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + sim.email, 'part'), usedType: store.get('fixType:' + sim.email, ''), flashNew: false };
   function renderFix() {
     const host = $('fxFix');
     host.innerHTML = fxShell(fix.type, {
@@ -1097,12 +1120,14 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   }
   function savePrefs(close) {
     fix.saved = fix.pending;
+    if (sim.email) store.set('defaultType:' + sim.email, fix.saved);
     if (close) { fix.prefs = false; }
     renderFix();
     if (fix.saved === 'hybrid') {
       toast($('fxFix'), 'Saved. New designs will now start as Hybrid.');
       complete('prefs');
     } else {
+      uncomplete('prefs');
       toast($('fxFix'), 'Saved as ' + NAMES[fix.saved] + '. Your teacher asked for Hybrid as the default.');
     }
   }
@@ -1114,6 +1139,8 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     if (t.dataset.tool) {
       if (t.dataset.tool === 'newcomp') {
         fix.added.push('Component' + (fix.added.length + 1) + ':1');
+        fix.usedType = fix.type;
+        if (sim.email) store.set('fixType:' + sim.email, fix.usedType);
         renderFix();
         toast($('fxFix'), 'New Component works. Look at the Browser.');
         complete('fix');
@@ -1163,7 +1190,10 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     $('wc').textContent = n + (n === 1 ? ' word' : ' words');
   }
   ans.addEventListener('input', () => {
-    renderChecks(); renderSubmission();
+    renderChecks();
+    const c = checks(ans.value);
+    if (!c.words || !c.part || !c.fix) uncomplete('write');
+    renderSubmission();
     if (sim.email) store.set('answer:' + sim.email, ans.value);
     else store.set('answer:', ans.value);
   });
@@ -1180,13 +1210,34 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   $('ansCopy').addEventListener('click', () => { if (ans.value.trim()) copyText(ans.value.trim(), $('ansCopy')); });
 
   // ---------- submission for Classroom ----------
+  function reconcileProgress() {
+    const valid = {
+      ui: ui.ok.size === LETTERS.length,
+      explore: sim.seen.size === 3,
+      sort: SORT.every((s, i) => picks[i] === s.a),
+      fix: fix.usedType === 'assembly' || fix.usedType === 'hybrid',
+      prefs: fix.saved === 'hybrid',
+      write: Object.values(checks(ans.value)).every(Boolean)
+    };
+    let changed = false;
+    TASKS.forEach(key => { if (sim.done.has(key) && !valid[key]) { sim.done.delete(key); changed = true; } });
+    if (changed && sim.email) store.set('tasks:' + sim.email, [...sim.done]);
+  }
   function renderSubmission() {
     const c = TASKS.filter(t => sim.done.has(t)).length;
     const code = c === TASKS.length && sim.email ? labCode(sim.email) : '';
     const answer = ans.value.trim();
     const ready = !!code && sim.done.has('write') && !!answer;
+    const matches = LETTERS.map(l => `${l}. ${ui.ok.has(l) ? UI[l].name : 'Response not saved'}`).join('\n');
+    const projects = SORT.map((s, i) => `${i + 1}. ${s.q}\n   My answer: ${picks[i] ? NAMES[picks[i]] : 'Response not saved'}`).join('\n');
     $('subText').textContent = ready
-      ? 'Design Types Lab\nEmail: ' + sim.email + '\nCode: ' + code + '\n\nMy answer for Sofi:\n' + answer
+      ? 'Design Types Lab\nEmail: ' + sim.email + '\nCode: ' + code +
+        '\n\nChallenge 1 — Fusion window matches:\n' + matches +
+        '\n\nChallenge 2 — Design types explored: ' + ['part', 'assembly', 'hybrid'].filter(v => sim.seen.has(v)).map(v => NAMES[v]).join(', ') +
+        '\n\nChallenge 3 — Project choices:\n' + projects +
+        '\n\nChallenge 4 — New Component worked in: ' + (NAMES[fix.usedType] || 'Response not saved') +
+        '\nChallenge 5 — Default design type: ' + (sim.done.has('prefs') ? NAMES[fix.saved] : 'Response not saved') +
+        '\n\nChallenge 6 — My answer for Sofi:\n' + answer
       : 'Finish the 6 challenges to see your submission here.';
     $('subCopy').disabled = !ready;
     $('subNote').textContent = ready ? 'Then paste it in Classroom.' : '';
@@ -1194,9 +1245,8 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   $('subCopy').addEventListener('click', () => copyText($('subText').textContent, $('subCopy')));
 
   // ---------- start ----------
-  sim.email = store.get('email', '');
-  if (sim.email) sim.done = new Set(store.get('tasks:' + sim.email, []));
   ans.value = store.get('answer:' + (sim.email || ''), '');
+  reconcileProgress();
   renderUI(); renderWho(); renderTasks(); renderExplore(); renderSort(false); renderFix(); renderChecks(); renderSubmission();
 })();
 </script>
