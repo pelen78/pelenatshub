@@ -170,6 +170,16 @@ section { padding-block: 40px; border-top: 1px solid var(--line); }
 .fx-dlg-f button.ok { background: var(--fx-blue); border-color: var(--fx-blue); color: #fff; }
 .fx-toast { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); background: #2d3238; color: #fff; padding: 7px 14px; border-radius: 6px; font-size: 12.5px; z-index: 7; max-width: 90%; text-align: center; }
 .fx-note { font-size: .82rem; color: var(--muted); margin-top: 8px; }
+.fx-tree .pencil { all: unset; cursor: pointer; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 3px; color: var(--fx-muted); margin-left: 2px; flex: none; }
+.fx-tree .pencil svg { width: 13px; height: 13px; }
+.fx-tree li.dt:hover .pencil, .fx-tree .pencil:hover { background: var(--fx-blue-soft); color: var(--fx-blue); }
+.fx-tree .pencil:focus-visible { outline: 2px solid var(--fx-blue); }
+.fx-dlg.sm { width: min(360px, 100%); }
+.fx-conv { padding: 14px; display: grid; gap: 10px; align-content: start; font-size: 12.5px; }
+.fx-conv label { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.fx-conv select { font-size: 12.5px; padding: 3px 6px; border: 1px solid #b9bec5; border-radius: 3px; background: #fff; color: var(--fx-text); }
+.fx-conv .muted { color: var(--fx-muted); margin: 0; }
+.fx-conv .err { color: #b3261e; margin: 0; font-weight: 700; }
 
 /* info panel */
 .info h3 { color: var(--c); }
@@ -180,7 +190,7 @@ section { padding-block: 40px; border-top: 1px solid var(--line); }
 .chip { font-size: .82rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); }
 .chip.no { text-decoration: line-through; color: var(--muted); opacity: .8; }
 
-/* tasks + email + code (same as Burger Layers Lab) */
+/* tasks + name + code */
 .tasks-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
 .tasks-head span { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); }
 .tasks ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -231,6 +241,10 @@ section { padding-block: 40px; border-top: 1px solid var(--line); }
 .story .bubble { background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px 14px 14px 14px; padding: 12px 14px; }
 .story .bubble b { font-family: var(--f-display); }
 .steps-mini { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: .95rem; }
+.steps-mini li.done::marker { color: var(--good); font-weight: 700; }
+.step-ok { display: block; margin-top: 6px; padding: 6px 10px; border-radius: 8px; background: var(--good-soft); color: var(--good); font-weight: 700; font-size: .9rem; }
+.step-ok::before { content: "\2713  "; }
+.step-warn { margin: 0; padding: 8px 10px; border-radius: 8px; background: var(--bad-soft); border-left: 3px solid var(--bad); font-size: .9rem; }
 .write { max-width: 860px; margin-top: 26px; display: grid; gap: 10px; }
 .write textarea { width: 100%; min-height: 130px; resize: vertical; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 1rem; line-height: 1.5; }
 .write .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -358,12 +372,12 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
         <div class="card tasks">
           <div class="tasks-head"><h3>Challenges</h3><span id="taskCount">0 of 6</span></div>
           <div class="who" id="whoBox">
-            <label for="email">Your school email</label>
-            <div class="who-row"><input id="email" type="email" autocomplete="email" placeholder="Same one you use for Classroom"><button class="btn" type="button" id="emailSave">Start</button></div>
-            <p class="who-note" id="whoNote">Type it first. Your challenges only count after that, and your code only works with this email.</p>
+            <label for="email">Your full name</label>
+            <div class="who-row"><input id="email" type="text" autocomplete="name" placeholder="First name and last name"><button class="btn" type="button" id="emailSave">Start</button></div>
+            <p class="who-note" id="whoNote">Type it first. Your challenges only count after that, and your code only works with this name.</p>
           </div>
           <p class="who-set" id="whoSet" hidden><span>Counting for <b id="whoEmail"></b></span><button class="linkbtn" type="button" id="emailChange">Change</button></p>
-          <p class="flash" id="flash" hidden>Type your school email above first, then try again.</p>
+          <p class="flash" id="flash" hidden>Type your full name above first, then try again.</p>
           <ol id="taskList">
             <li data-t="ui"><span class="tick">1</span><span class="task-text">Match all 10 parts of the Fusion window on the left.</span></li>
             <li data-t="explore"><span class="tick">2</span><span class="task-text">Open all three design types: <b>Part</b>, <b>Assembly</b> and <b>Hybrid</b>. <a href="#explore">Go to Part 3</a></span></li>
@@ -466,9 +480,12 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
         <div class="card">
           <h3>Help Sofi</h3>
           <ol class="steps-mini">
-            <li><b>Challenge 4.</b> Change the design type of Sofi's design so <b>New Component</b> appears. Then click <b>New Component</b>.</li>
-            <li><b>Challenge 5.</b> Open <b>Preferences</b> and make <b>Hybrid</b> the default, so every new design starts the classic way.</li>
+            <li id="stepFix"><b>Challenge 4.</b> Sofi’s design is already open. Change the design type of this design so <b>New Component</b> appears. Then click <b>New Component</b>.
+              <span class="step-ok" id="fixOk" hidden>Done. New Component is back, so Sofi can follow her tutorial.</span></li>
+            <li id="stepPrefs"><b>Challenge 5.</b> Open <b>Preferences</b> and make <b>Hybrid</b> the default, so every new design starts the classic way.
+              <span class="step-ok" id="prefsOk" hidden>Done. New designs will now start as Hybrid.</span></li>
           </ol>
+          <p class="step-warn" id="prefsWarn" role="status" hidden>Preferences only changes new designs. Sofi’s design is already open, so it is still a Part design. Look in the Browser to change this design.</p>
           <p class="hint">Stuck? Rewatch the part of the video about switching the design type and setting the default.</p>
           <button class="linkbtn" type="button" id="fixReset" style="justify-self:start">Reset Sofi's screen</button>
         </div>
@@ -499,29 +516,19 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     <div class="sec-head">
       <p class="eyebrow">Part 5</p>
       <h2 id="turnin-h">Turn it in</h2>
-      <p>Three things count for this task. Check each one before you click Turn in.</p>
+      <p>Two steps. Check each one before you click Turn in.</p>
     </div>
     <ol class="turnin">
       <li class="ti"><span class="ti-n">1</span><div>
         <h3>Your Lab code</h3>
-        <p>Finish the 6 challenges after typing your school email in Part 1. Your personal code appears when you finish.</p>
+        <p>Finish the 6 challenges after typing your full name in Part 1. Your personal code appears when you finish.</p>
         <div class="code-mini empty" id="tiCode">No code yet. Finish the 6 challenges.</div>
       </div></li>
       <li class="ti"><span class="ti-n">2</span><div>
-        <h3>A screenshot from your real Fusion</h3>
-        <p>Now do it for real on your own computer:</p>
-        <ol>
-          <li>Open Fusion and go to <b>Preferences</b>.</li>
-          <li>Set the default design type to <b>Hybrid</b> and click <b>OK</b>.</li>
-          <li>Open Preferences again and take a screenshot that shows <b>Hybrid</b> selected.</li>
-        </ol>
-      </div></li>
-      <li class="ti"><span class="ti-n">3</span><div>
         <h3>Turn it in on Google Classroom</h3>
         <p>Your code, exercise answers and answer for Sofi are ready below. Copy them, then in Google Classroom:</p>
         <ol>
           <li>Open this assignment and paste your submission in a <b>private comment</b>.</li>
-          <li>Attach your <b>screenshot</b> from your real Fusion.</li>
           <li>Click <b>Turn in</b>.</li>
         </ol>
         <div class="submit-card">
@@ -615,6 +622,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     newcomp: '<svg viewBox="0 0 24 24" fill="none" stroke="#3a3d42" stroke-width="1.4"><path d="M4 9l7-4 7 4-7 4z" fill="#ffd36b"/><path d="M4 9v7l7 4 7-4V9"/><path d="M11 13v7"/><circle cx="19" cy="5" r="4" fill="#23a55a" stroke="none"/><path d="M19 3v4M17 5h4" stroke="#fff" stroke-width="1.6"/></svg>',
     joint: '<svg viewBox="0 0 24 24" fill="none" stroke="#3a3d42" stroke-width="1.4"><rect x="3" y="12" width="9" height="7" fill="#cfd8e0"/><rect x="12" y="5" width="9" height="7" fill="#9fc6e6"/><circle cx="12" cy="12" r="2.4" fill="#0696d7" stroke="none"/></svg>',
     insert: '<svg viewBox="0 0 24 24" fill="none" stroke="#3a3d42" stroke-width="1.4"><path d="M6 12l6-3 6 3-6 3z" fill="#9fc6e6"/><path d="M6 12v5l6 3 6-3v-5"/><path d="M12 2v6M9.5 5.5L12 8l2.5-2.5" stroke="#0696d7" stroke-width="1.8"/></svg>',
+    pencil: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2.5l3 3L6 13H3v-3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 4l3 3" stroke="currentColor" stroke-width="1.5"/></svg>',
     gear: '<svg class="ti-ico" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="#9aa3ad"/><circle cx="8" cy="8" r="2" fill="#fbfbfb"/></svg>',
     folder: '<svg class="ti-ico" viewBox="0 0 16 16"><path d="M1 4h5l1.5 1.5H15v8H1z" fill="#c9cfd6"/></svg>',
     body: '<svg class="ti-ico" viewBox="0 0 16 16"><path d="M2 5l6-3 6 3-6 3z" fill="#c9d3dd" stroke="#6b7580"/><path d="M2 5v6l6 3V8z" fill="#aab6c2" stroke="#6b7580"/><path d="M14 5v6l-6 3V8z" fill="#8e9aa6" stroke="#6b7580"/></svg>',
@@ -640,11 +648,10 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const rows = [];
     rows.push(`<li><span class="tw">▼</span>${type === 'part' ? I.body : I.comp('#7a8794')}<span>${esc(o.docName || 'Untitled')}</span></li>`);
     if (o.docSettings) {
-      rows.push(`<li class="l1"><span class="tw">${o.dsOpen ? '▼' : '▶'}</span><button class="row" type="button" data-act="ds" aria-expanded="${o.dsOpen ? 'true' : 'false'}">${I.gear}<span>Document Settings</span></button></li>`);
+      rows.push(`<li class="l1"><button class="row" type="button" data-act="ds" aria-expanded="${o.dsOpen ? 'true' : 'false'}"><span class="tw">${o.dsOpen ? '▼' : '▶'}</span>${I.gear}<span>Document Settings</span></button></li>`);
       if (o.dsOpen) {
         rows.push(`<li class="l2">${I.gear}<span>Units: Millimeter</span></li>`);
-        rows.push(`<li class="l2">${I.gear}<label style="display:flex;gap:6px;align-items:center">Design type: <select data-act="intent" aria-label="Design type">` +
-          ['part', 'assembly', 'hybrid'].map(v => `<option value="${v}"${v === type ? ' selected' : ''}>${NAMES[v]}</option>`).join('') + `</select></label></li>`);
+        rows.push(`<li class="l2 dt">${I.gear}<span>Design Type: ${NAMES[type]}</span><button class="pencil" type="button" data-act="convert" aria-label="Convert Design Type" title="Convert Design Type">${I.pencil}</button></li>`);
       }
     } else {
       rows.push(`<li class="l1"><span class="tw">▶</span>${I.gear}<span>Document Settings</span></li>`);
@@ -689,25 +696,25 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
 
   // ---------- state + challenges ----------
   const TASKS = ['ui', 'explore', 'sort', 'fix', 'prefs', 'write'];
-  const savedEmail = store.get('email', '');
-  const sim = { email: savedEmail, done: new Set(store.get('tasks:' + savedEmail, [])), seen: new Set(store.get('seen:' + savedEmail, ['part'])) };
+  const savedEmail = store.get('name', '');
+  const sim = { email: savedEmail, done: new Set(store.get('tasks:' + normName(savedEmail), [])), seen: new Set(store.get('seen:' + normName(savedEmail), ['part'])) };
 
   function complete(key) {
     if (sim.done.has(key)) return true;
     if (!sim.email) { showFlash(); return false; }
     sim.done.add(key);
-    store.set('tasks:' + sim.email, [...sim.done]);
+    store.set('tasks:' + normName(sim.email), [...sim.done]);
     renderTasks();
     return true;
   }
   function uncomplete(key) {
     if (!sim.done.delete(key)) return;
-    if (sim.email) store.set('tasks:' + sim.email, [...sim.done]);
+    if (sim.email) store.set('tasks:' + normName(sim.email), [...sim.done]);
     renderTasks();
   }
   function showFlash() {
     const f = $('flash'); f.hidden = false;
-    pageToast('Type your school email in Part 1 first. Then do this challenge again to save it.');
+    pageToast('Type your full name in Part 1 first. Then do this challenge again to save it.');
     clearTimeout(showFlash.t); showFlash.t = setTimeout(() => { f.hidden = true; }, 6000);
   }
   function renderTasks() {
@@ -723,6 +730,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     ti.textContent = code || 'No code yet. Finish the 6 challenges.';
     ti.classList.toggle('empty', !code);
     if (typeof renderSubmission === 'function') renderSubmission();
+    renderSofi();
   }
 
   // personal code (same formula as Burger Layers Lab, with its own salt and prefix)
@@ -739,8 +747,12 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
     return 4294967296 * (2097151 & h2) + (h1 >>> 0);
   }
-  function labCode(email) {
-    const e = String(email || '').trim().toLowerCase();
+  // names: no accents, lowercase, single spaces ("María  López" = "maria lopez")
+  function normName(n) {
+    return String(n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+  function labCode(name) {
+    const e = normName(name);
     let n = cyrb53(e + '|design-types-lab|v1', 7319);
     const A = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
     let s = '';
@@ -748,31 +760,31 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     return 'DSN-' + s.slice(0, 4) + '-' + s.slice(4);
   }
 
-  // ---------- email ----------
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // ---------- student name ----------
+  const validName = v => { const w = v.split(' '); return w.length >= 2 && w.every(x => /\p{L}/u.test(x)) && !/[@\d]/.test(v); };
   function renderWho() {
     $('whoBox').hidden = !!sim.email;
     $('whoSet').hidden = !sim.email;
     $('whoEmail').textContent = sim.email;
   }
   function saveEmail() {
-    const v = $('email').value.trim().toLowerCase();
+    const v = $('email').value.replace(/\s+/g, ' ').trim();
     const note = $('whoNote');
-    if (!EMAIL_RE.test(v)) {
-      note.textContent = 'Type your full school email, the same one you use for Google Classroom.';
+    if (!validName(v)) {
+      note.textContent = 'Type your first name and last name, the way they appear in Google Classroom.';
       note.classList.add('err'); $('email').focus(); return;
     }
     note.classList.remove('err');
-    sim.email = v; store.set('email', v);
-    sim.done = new Set(store.get('tasks:' + v, []));
-    sim.seen = new Set(store.get('seen:' + v, ['part']));
-    ui.ok = new Set(store.get('uiOk:' + v, []));
+    sim.email = v; store.set('name', v);
+    sim.done = new Set(store.get('tasks:' + normName(v), []));
+    sim.seen = new Set(store.get('seen:' + normName(v), ['part']));
+    ui.ok = new Set(store.get('uiOk:' + normName(v), []));
     ui.placed = {}; ui.ok.forEach(l => { ui.placed[l] = UI[l].name; });
     ui.sel = null; ui.active = null;
     Object.keys(picks).forEach(k => { delete picks[k]; });
-    Object.assign(picks, store.get('sortPicks:' + v, {}));
-    ans.value = store.get('answer:' + v, '');
-    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + v, 'part'), usedType: store.get('fixType:' + v, '') });
+    Object.assign(picks, store.get('sortPicks:' + normName(v), {}));
+    ans.value = store.get('answer:' + normName(v), '');
+    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + normName(v), 'part'), usedType: store.get('fixType:' + normName(v), ''), conv: false, convErr: false, prefsTried: false });
     expType = 'part';
     reconcileProgress();
     $('flash').hidden = true;
@@ -786,10 +798,10 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     ui.ok = new Set(); ui.placed = {}; ui.sel = null; ui.active = null;
     Object.keys(picks).forEach(k => { delete picks[k]; });
     ans.value = '';
-    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part', usedType: '' });
+    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part', usedType: '', conv: false, convErr: false, prefsTried: false });
     expType = 'part';
-    store.set('email', '');
-    $('whoNote').textContent = 'Changing the email starts the challenges again for that email.';
+    store.set('name', '');
+    $('whoNote').textContent = 'Changing the name starts the challenges again for that name.';
     renderWho(); renderUI(); renderExplore(); renderSort(false); renderFix(); renderChecks(); renderTasks(); $('email').focus();
   });
   $('copyCode').addEventListener('click', () => copyText($('codeText').value, $('copyCode')));
@@ -829,7 +841,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   };
   const LETTERS = Object.keys(UI);
   const NAMES_UI = ['Data Panel', 'Application Bar', 'Tabs in the Application Bar', 'Toolbar', 'Canvas', 'Browser', 'ViewCube', 'Marking Menu', 'Navigation Bar', 'Timeline'];
-  const ui = { placed: {}, ok: new Set(store.get('uiOk:' + sim.email, [])), sel: null, active: null };
+  const ui = { placed: {}, ok: new Set(store.get('uiOk:' + normName(sim.email), [])), sel: null, active: null };
   ui.ok.forEach(l => { ui.placed[l] = UI[l].name; });
   const bankOrder = NAMES_UI.slice().sort((a, b) => (a.length * 7 + a.charCodeAt(0)) % 11 - (b.length * 7 + b.charCodeAt(0)) % 11);
 
@@ -988,13 +1000,13 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       if (!v || ui.ok.has(l)) return;
       if (v === UI[l].name) ui.ok.add(l); else { wrong.push(l); delete ui.placed[l]; }
     });
-    if (sim.email) store.set('uiOk:' + sim.email, [...ui.ok]);
+    if (sim.email) store.set('uiOk:' + normName(sim.email), [...ui.ok]);
     ui.active = null; renderUI();
     wrong.forEach(l => { const s = document.querySelector(`.slot[data-slot="${l}"]`); if (s) s.classList.add('no'); });
     const n = ui.ok.size;
     if (n === 10) {
       $('uiSum').textContent = 'All 10 correct!';
-      if (!complete('ui')) $('uiSum').textContent = 'All 10 correct. Type your email on the right, then click Check again to save it.';
+      if (!complete('ui')) $('uiSum').textContent = 'All 10 correct. Type your name on the right, then click Check again to save it.';
     } else {
       $('uiSum').textContent = n + ' of 10 correct.' + (wrong.length ? ' The wrong names went back to the list. Try again.' : ' Place the rest of the names.');
     }
@@ -1039,7 +1051,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   $('expSeg').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     expType = b.dataset.v; sim.seen.add(expType);
-    if (sim.email) store.set('seen:' + sim.email, [...sim.seen]);
+    if (sim.email) store.set('seen:' + normName(sim.email), [...sim.seen]);
     renderExplore();
     if (sim.seen.size === 3) complete('explore');
   });
@@ -1057,7 +1069,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     { q: 'You are following a Fusion tutorial from 2024, step by step, and it uses New Component.', a: 'hybrid', why: 'Hybrid works like the classic Fusion that older tutorials use.' },
     { q: 'A toy car with a body, 4 wheels and 2 axles. The wheels need to spin.', a: 'assembly', why: 'Many pieces that move need components and joints, so Assembly fits best.' }
   ];
-  const picks = store.get('sortPicks:' + sim.email, {});
+  const picks = store.get('sortPicks:' + normName(sim.email), {});
   function renderSort(showFb) {
     $('sortList').innerHTML = SORT.map((s, i) => {
       const p = picks[i] || '';
@@ -1072,7 +1084,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const b = e.target.closest('.pick button'); if (!b) return;
     const i = +b.closest('.sort-item').dataset.i;
     picks[i] = b.dataset.v;
-    if (sim.email) store.set('sortPicks:' + sim.email, picks);
+    if (sim.email) store.set('sortPicks:' + normName(sim.email), picks);
     uncomplete('sort'); renderSort(false); renderSubmission(); $('sortSum').textContent = '';
   });
   $('sortCheck').addEventListener('click', () => {
@@ -1080,14 +1092,14 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const right = SORT.filter((s, i) => picks[i] === s.a).length;
     if (right === SORT.length) {
       $('sortSum').textContent = 'All 5 correct.';
-      if (!complete('sort')) $('sortSum').textContent = 'All 5 correct. Type your email in Part 1, then check again to save it.';
+      if (!complete('sort')) $('sortSum').textContent = 'All 5 correct. Type your name in Part 1, then check again to save it.';
     } else {
       $('sortSum').textContent = right + ' of 5 correct. Change the red ones and check again.';
     }
   });
 
   // ---------- Part 3: fix Sofi's design ----------
-  const fix = { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + sim.email, 'part'), usedType: store.get('fixType:' + sim.email, ''), flashNew: false };
+  const fix = { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: store.get('defaultType:' + normName(sim.email), 'part'), usedType: store.get('fixType:' + normName(sim.email), ''), flashNew: false, conv: false, convPending: 'part', convErr: false, prefsTried: false };
   function renderFix() {
     const host = $('fxFix');
     host.innerHTML = fxShell(fix.type, {
@@ -1099,6 +1111,26 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       host.insertAdjacentHTML('beforeend', `<div class="fx-menu" role="menu"><button type="button" role="menuitem" data-act="myprofile">My Profile</button><button type="button" role="menuitem" data-act="prefs">Preferences</button><hr><button type="button" role="menuitem" data-act="signout">Sign Out</button></div>`);
     }
     if (fix.prefs) host.insertAdjacentHTML('beforeend', prefsDialog());
+    if (fix.conv) host.insertAdjacentHTML('beforeend', convertDialog());
+    $('prefsWarn').hidden = !(fix.prefsTried && fix.type === 'part');
+  }
+  const CONV_DESC = {
+    part: 'One single component to make or to use in an assembly.',
+    assembly: 'Puts together components that are saved as their own designs.',
+    hybrid: 'Part and assembly tools together, like classic Fusion.'
+  };
+  function convertDialog() {
+    return `<div class="fx-dlg-back"><div class="fx-dlg sm" role="dialog" aria-modal="true" aria-label="Convert Design Type">` +
+      `<div class="fx-dlg-h"><span>Convert Design Type</span><button type="button" data-act="cclose" aria-label="Close">✕</button></div>` +
+      `<div class="fx-conv"><label>Design type <select data-act="convType" aria-label="Design type">${['part', 'assembly', 'hybrid'].map(v => `<option value="${v}"${v === fix.convPending ? ' selected' : ''}>${NAMES[v]}</option>`).join('')}</select></label>` +
+      `<p class="muted" id="convDesc">${CONV_DESC[fix.convPending]}</p>` +
+      (fix.convErr ? `<p class="err" role="alert">This design has components, so it can’t go back to Part.</p>` : '') + `</div>` +
+      `<div class="fx-dlg-f"><button type="button" data-act="cclose">Cancel</button><button type="button" class="ok" data-act="cok">OK</button></div></div></div>`;
+  }
+  function renderSofi() {
+    const f = sim.done.has('fix'), p = sim.done.has('prefs');
+    $('stepFix').classList.toggle('done', f); $('fixOk').hidden = !f;
+    $('stepPrefs').classList.toggle('done', p); $('prefsOk').hidden = !p;
   }
   function prefsDialog() {
     const cats = [['general', 'General', ''], ['design', 'Design', 'sub'], ['manufacture', 'Manufacture', 'sub'], ['api', 'API', ''], ['units', 'Default Units', ''], ['network', 'Network', '']];
@@ -1120,7 +1152,8 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   }
   function savePrefs(close) {
     fix.saved = fix.pending;
-    if (sim.email) store.set('defaultType:' + sim.email, fix.saved);
+    fix.prefsTried = true;
+    if (sim.email) store.set('defaultType:' + normName(sim.email), fix.saved);
     if (close) { fix.prefs = false; }
     renderFix();
     if (fix.saved === 'hybrid') {
@@ -1140,7 +1173,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       if (t.dataset.tool === 'newcomp') {
         fix.added.push('Component' + (fix.added.length + 1) + ':1');
         fix.usedType = fix.type;
-        if (sim.email) store.set('fixType:' + sim.email, fix.usedType);
+        if (sim.email) store.set('fixType:' + normName(sim.email), fix.usedType);
         renderFix();
         toast($('fxFix'), 'New Component works. Look at the Browser.');
         complete('fix');
@@ -1150,6 +1183,18 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
       return;
     }
     if (act === 'ds') { fix.dsOpen = !fix.dsOpen; renderFix(); return; }
+    if (act === 'convert') { fix.conv = true; fix.convPending = fix.type; fix.convErr = false; renderFix(); const sel = $('fxFix').querySelector('[data-act="convType"]'); if (sel) sel.focus(); return; }
+    if (act === 'cclose') { fix.conv = false; renderFix(); return; }
+    if (act === 'cok') {
+      const v = fix.convPending;
+      if (v === 'part' && fix.added.length) { fix.convErr = true; renderFix(); return; }
+      fix.conv = false;
+      if (v === fix.type) { renderFix(); return; }
+      fix.type = v; fix.flashNew = v !== 'part';
+      renderFix();
+      toast($('fxFix'), v === 'part' ? 'Back to Part. New Component is gone again.' : 'Design type changed to ' + NAMES[v] + '. Check the toolbar.');
+      return;
+    }
     if (act === 'user') { fix.menu = !fix.menu; renderFix(); return; }
     if (act === 'prefs') { fix.menu = false; fix.prefs = true; fix.cat = 'general'; fix.pending = fix.saved; renderFix(); return; }
     if (act === 'myprofile' || act === 'signout') { fix.menu = false; renderFix(); toast($('fxFix'), 'Not this one. Look for Preferences.'); return; }
@@ -1159,20 +1204,18 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   });
   $('fxFix').addEventListener('change', e => {
     const s = e.target;
-    if (s.dataset.act === 'intent') {
-      const v = s.value;
-      if (v === fix.type) return;
-      fix.type = v; fix.flashNew = v !== 'part';
-      renderFix();
-      toast($('fxFix'), v === 'part' ? 'Back to Part. New Component is gone again.' : 'Design type changed to ' + NAMES[v] + '. Check the toolbar.');
+    if (s.dataset.act === 'convType') {
+      fix.convPending = s.value;
+      const d = $('convDesc'); if (d) d.textContent = CONV_DESC[s.value];
+      const er = $('fxFix').querySelector('.fx-conv .err'); if (er) { er.remove(); fix.convErr = false; }
     }
     if (s.dataset.act === 'defIntent') { fix.pending = s.value; }
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && (fix.prefs || fix.menu)) { fix.prefs = false; fix.menu = false; renderFix(); }
+    if (e.key === 'Escape' && (fix.prefs || fix.menu || fix.conv)) { fix.prefs = false; fix.menu = false; fix.conv = false; renderFix(); }
   });
   $('fixReset').addEventListener('click', () => {
-    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part' });
+    Object.assign(fix, { type: 'part', dsOpen: false, added: [], menu: false, prefs: false, cat: 'general', pending: 'part', saved: 'part', conv: false, convPending: 'part', convErr: false, prefsTried: false });
     renderFix();
   });
 
@@ -1194,7 +1237,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const c = checks(ans.value);
     if (!c.words || !c.part || !c.fix) uncomplete('write');
     renderSubmission();
-    if (sim.email) store.set('answer:' + sim.email, ans.value);
+    if (sim.email) store.set('answer:' + normName(sim.email), ans.value);
     else store.set('answer:', ans.value);
   });
   $('ansSave').addEventListener('click', () => {
@@ -1202,7 +1245,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const msg = $('ansMsg');
     if (c.words && c.part && c.fix) {
       if (complete('write')) msg.textContent = 'Great. Your answer is now in your submission in Part 5.';
-      else msg.textContent = 'Your answer is ready. Type your email in Part 1, then click Check again.';
+      else msg.textContent = 'Your answer is ready. Type your name in Part 1, then click Check again.';
     } else {
       msg.textContent = 'Almost. Your answer needs everything in the list above.';
     }
@@ -1221,7 +1264,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     };
     let changed = false;
     TASKS.forEach(key => { if (sim.done.has(key) && !valid[key]) { sim.done.delete(key); changed = true; } });
-    if (changed && sim.email) store.set('tasks:' + sim.email, [...sim.done]);
+    if (changed && sim.email) store.set('tasks:' + normName(sim.email), [...sim.done]);
   }
   function renderSubmission() {
     const c = TASKS.filter(t => sim.done.has(t)).length;
@@ -1231,13 +1274,13 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
     const matches = LETTERS.map(l => `${l}. ${ui.ok.has(l) ? UI[l].name : 'Response not saved'}`).join('\n');
     const projects = SORT.map((s, i) => `${i + 1}. ${s.q}\n   My answer: ${picks[i] ? NAMES[picks[i]] : 'Response not saved'}`).join('\n');
     $('subText').textContent = ready
-      ? 'Design Types Lab\nEmail: ' + sim.email + '\nCode: ' + code +
-        '\n\nChallenge 1 — Fusion window matches:\n' + matches +
-        '\n\nChallenge 2 — Design types explored: ' + ['part', 'assembly', 'hybrid'].filter(v => sim.seen.has(v)).map(v => NAMES[v]).join(', ') +
-        '\n\nChallenge 3 — Project choices:\n' + projects +
-        '\n\nChallenge 4 — New Component worked in: ' + (NAMES[fix.usedType] || 'Response not saved') +
-        '\nChallenge 5 — Default design type: ' + (sim.done.has('prefs') ? NAMES[fix.saved] : 'Response not saved') +
-        '\n\nChallenge 6 — My answer for Sofi:\n' + answer
+      ? 'Design Types Lab\nName: ' + sim.email + '\nCode: ' + code +
+        '\n\nChallenge 1: Fusion window matches\n' + matches +
+        '\n\nChallenge 2: Design types explored\n' + ['part', 'assembly', 'hybrid'].filter(v => sim.seen.has(v)).map(v => NAMES[v]).join(', ') +
+        '\n\nChallenge 3: Project choices\n' + projects +
+        '\n\nChallenge 4: New Component worked in\n' + (NAMES[fix.usedType] || 'Response not saved') +
+        '\n\nChallenge 5: Default design type\n' + (sim.done.has('prefs') ? NAMES[fix.saved] : 'Response not saved') +
+        '\n\nChallenge 6: My answer for Sofi\n' + answer
       : 'Finish the 6 challenges to see your submission here.';
     $('subCopy').disabled = !ready;
     $('subNote').textContent = ready ? 'Then paste it in Classroom.' : '';
@@ -1245,7 +1288,7 @@ footer { padding-block: 28px 48px; border-top: 1px solid var(--line); color: var
   $('subCopy').addEventListener('click', () => copyText($('subText').textContent, $('subCopy')));
 
   // ---------- start ----------
-  ans.value = store.get('answer:' + (sim.email || ''), '');
+  ans.value = store.get('answer:' + normName(sim.email), '');
   reconcileProgress();
   renderUI(); renderWho(); renderTasks(); renderExplore(); renderSort(false); renderFix(); renderChecks(); renderSubmission();
 })();
