@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Name Keychain · Fusion 360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+    --kc-edge:rgba(20,32,58,.45);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+      --kc-edge:rgba(233,238,255,.55);
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin:2px 0 6px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Font check ---------- */
+  .card.good{border-top-color:var(--green)}
+  .card.bad{border-top-color:var(--stamp-red)}
+  .card .font-sample{font-size:clamp(44px,8vw,60px);line-height:1.15;margin:4px 0 6px;color:var(--ink);max-width:none}
+  .font-sample.thick{font-family:"Arial Black","Arial Bold",Gadget,"Segoe UI Black",sans-serif;font-weight:900;letter-spacing:-.01em}
+  .font-sample.thin{font-family:'Great Vibes',cursive;font-weight:400}
+
+  /* ---------- Video ---------- */
+  .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 14px 34px rgba(11,23,64,.28);margin:16px 0 4px;background:#000}
+  .video video{position:absolute;inset:0;width:100%;height:100%;display:block;background:#000}
+  .vctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 6px}
+  .vctrls button,.kc-copy{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;border:1.5px solid var(--navy);color:var(--navy);background:transparent;border-radius:8px;padding:9px 16px;cursor:pointer}
+  .vctrls button.main,.kc-copy{background:var(--navy);color:var(--paper);min-width:112px}
+  .vctrls button:hover,.kc-copy:hover{transform:translateY(-1px)}
+  .vtime{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-left:auto}
+
+  /* ---------- Keychain preview ---------- */
+  .kc-box{background:var(--surface);border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:18px 20px 20px;margin:16px 0 18px}
+  .kc{width:100%;height:auto;display:block;max-height:230px;margin:6px auto 14px}
+  .kc-font{font-family:"Arial Black","Arial Bold",Gadget,"Segoe UI Black",sans-serif;font-weight:900}
+  .kc .edge{fill:var(--kc-edge);stroke:var(--kc-edge)}
+  .kc .bg{fill:var(--surface)}
+  .kc-controls{display:grid;grid-template-columns:minmax(150px,200px) 1fr;gap:16px 22px;align-items:start}
+  .kc-field .flabel{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--navy);margin-bottom:8px;
+  }
+  .kc-name{
+    width:100%;font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;letter-spacing:.02em;
+    color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;
+  }
+  .kc-name::placeholder{color:var(--muted);opacity:.7}
+  .kc-hint{font-size:14px;color:var(--muted);margin:6px 0 0}
+  .swatches{display:flex;flex-wrap:wrap;gap:9px}
+  .sw{width:32px;height:32px;border-radius:50%;border:2px solid var(--kc-edge);cursor:pointer;padding:0}
+  .sw[aria-pressed="true"]{outline:3px solid var(--gold);outline-offset:3px}
+  .sw:hover{transform:scale(1.08)}
+  .kc-colors{display:grid;gap:14px}
+  .kc-out{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+  .kc-out p{margin:0;font-weight:700;flex:1 1 260px}
+  .kc-out p.warn{color:var(--stamp-red)}
+  .kc-note{font-size:14.5px;color:var(--muted)}
+  .examples{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:14px 0 18px}
+  .examples figure{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px 14px 10px}
+  .examples .kc{max-height:150px;margin:0 auto 8px}
+  .examples figcaption{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);text-align:center}
+  @media (max-width:560px){
+    .kc-controls{grid-template-columns:1fr}
+    .examples{grid-template-columns:1fr}
+    .code{white-space:normal}
+  }
+
+  /* ---------- Insert SVG animation (fixed colors: it is a picture of the app) ---------- */
+  .fx{margin:18px 0 10px}
+  .fx-app{position:relative;width:100%;aspect-ratio:16/10;border-radius:12px;overflow:hidden;box-shadow:0 16px 40px rgba(11,23,64,.28);border:1px solid #c9ccd2;display:flex;flex-direction:column;font-family:Arial,Helvetica,sans-serif;user-select:none;background:#fff;color:#2b2f36}
+  .fx-bar{height:38px;flex:none;background:#f4f5f7;border-bottom:1px solid #d5d8dd;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:11px;color:#3c3f45}
+  .fx-bar span{white-space:nowrap}
+  .fx-ws{font-weight:700;border:1px solid #c5c9d0;border-radius:4px;padding:4px 8px;background:#fff}
+  .fx-tools{display:flex;gap:4px;color:#5d636c}
+  .fx-tools span{padding:4px 7px;border-radius:4px;transition:background .2s}
+  .fx-tools span.on{background:#d6e6fb;color:#1d4fa8}
+  .fx-finish{margin-left:auto;display:none;align-items:center;gap:6px;background:#1f8a3b;color:#fff;font-weight:700;border-radius:4px;padding:6px 10px;font-size:11px;letter-spacing:.04em}
+  .fx-app.sketch .fx-finish{display:flex}
+  .fx-view{position:relative;flex:1;min-height:0;background:linear-gradient(#fdfdfe,#dfe3ea)}
+  .fx-view svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .fx-mode{position:absolute;top:10px;left:12px;font-size:11px;font-weight:700;color:#1f6fd1;background:#fff;border:1px solid #c8d6ec;border-radius:4px;padding:3px 8px;opacity:0;transition:opacity .4s}
+  .fx-app.sketch .fx-mode{opacity:1}
+  .fx-tl{height:44px;flex:none;background:#eceef1;border-top:1px solid #d5d8dd;display:flex;align-items:center;gap:6px;padding:0 10px}
+  .fx-tlb{display:flex;gap:6px;color:#7a7f87;font-size:11px;margin-right:6px}
+  .fx-feat{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+  .fx-feat svg{width:20px;height:20px}
+  .fx-feat.new{background:#d6e6fb;box-shadow:0 0 0 1.5px #3b82f6}
+  .fx-marker{width:4px;height:28px;background:#4b5563;border-radius:2px;margin-left:4px}
+  .fx-menu{position:absolute;background:#fff;border:1px solid #c9cdd4;border-radius:5px;box-shadow:0 8px 22px rgba(0,0,0,.18);font-size:12px;color:#2b2f36;padding:4px 0;min-width:170px;display:none;z-index:5}
+  .fx-menu div{padding:6px 14px}
+  .fx-menu div.on{background:#2f6fd6;color:#fff}
+  .fx-dlg{position:absolute;right:14px;top:50px;width:240px;background:#fff;border:1px solid #c9cdd4;border-radius:6px;box-shadow:0 10px 26px rgba(0,0,0,.2);font-size:12px;color:#2b2f36;display:none;z-index:5}
+  .fx-dlg .hd{background:#f1f3f6;border-bottom:1px solid #dde0e5;padding:8px 10px;font-weight:700;font-size:11px;letter-spacing:.04em}
+  .fx-dlg .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px}
+  .fx-fld{min-width:84px;border:1px solid #c5cad2;border-radius:3px;padding:3px 6px;text-align:right;background:#fff;white-space:nowrap}
+  .fx-fld.focus{border-color:#2f6fd6;box-shadow:0 0 0 2px rgba(47,111,214,.25)}
+  .fx-fld i{color:#6b7078}
+  .fx-pick{border-radius:3px;padding:3px 8px;font-weight:700;font-size:11px}
+  .fx-pick.on{background:#2f6fd6;color:#fff}
+  .fx-pick.done{background:#e6eefb;color:#1d4fa8}
+  .fx-folder{display:inline-flex;border:1px solid #c5cad2;border-radius:3px;padding:2px 6px;background:#fff}
+  .fx-folder svg{width:18px;height:16px}
+  .fx-dlg .ft{display:flex;justify-content:flex-end;gap:8px;padding:8px 10px;border-top:1px solid #e3e5e9}
+  .fx-btn{border:1px solid #c5cad2;border-radius:4px;padding:4px 14px;background:#fff}
+  .fx-btn.ok{background:#2f6fd6;border-color:#2f6fd6;color:#fff}
+  .fx-open{position:absolute;left:8%;top:22%;width:300px;max-width:70%;background:#fff;border:1px solid #b9bec7;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.25);font-size:12px;display:none;z-index:6;overflow:hidden}
+  .fx-open .hd{background:#f6f7f9;border-bottom:1px solid #dde0e5;padding:7px 10px;font-weight:700}
+  .fx-open .bd{display:flex;min-height:92px}
+  .fx-open .side{width:92px;border-right:1px solid #e3e5e9;padding:8px;color:#5d636c;background:#fafbfc}
+  .fx-open .side b{display:block;color:#1d4fa8;background:#e6eefb;border-radius:3px;padding:3px 6px;font-weight:700}
+  .fx-open .files{flex:1;padding:8px}
+  .fx-file{display:flex;align-items:center;gap:7px;padding:4px 6px;border-radius:3px}
+  .fx-file svg{width:16px;height:16px}
+  .fx-file.on{background:#2f6fd6;color:#fff}
+  .fx-open .ft{display:flex;justify-content:flex-end;gap:8px;padding:8px 10px;border-top:1px solid #e3e5e9}
+  .fx-tip{position:absolute;background:#30343b;color:#fff;font-size:11px;padding:4px 7px;border-radius:4px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;transform:translate(-50%,-100%);z-index:7}
+  .fx-key{position:absolute;display:none;min-width:30px;height:30px;padding:0 8px;align-items:center;justify-content:center;background:#fff;border:1.5px solid #9aa1ab;border-bottom-width:4px;border-radius:6px;font:700 15px Arial,sans-serif;color:#1d2229;z-index:8;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+  .fx-tag{position:absolute;display:none;white-space:nowrap;padding:4px 8px;color:#fff;font-size:11px;font-weight:700;border-radius:4px;transform:translate(-50%,-100%);z-index:4}
+  .fx-tag.bad{background:#c0392b}
+  .fx-tag.good{background:#1f8a3b}
+  .fx-cur{position:absolute;left:0;top:0;width:22px;height:22px;z-index:10;pointer-events:none;transition:transform .7s cubic-bezier(.45,.05,.3,1)}
+  .fx-ripple{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2px solid #2f6fd6;z-index:9;pointer-events:none;animation:fxrip .5s ease-out forwards}
+  @keyframes fxrip{from{transform:scale(.3);opacity:1}to{transform:scale(1.4);opacity:0}}
+  .fx-cap{background:var(--surface);border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:16px 18px;margin-top:16px;display:flex;gap:14px;align-items:flex-start;min-height:84px}
+  .fx-num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:15px;padding-top:2px;min-width:30px}
+  .fx-cap p{font-size:17px;line-height:1.5;margin:0}
+  .fx-ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+  .fx-ctrls button{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;border:1.5px solid var(--navy);color:var(--navy);background:transparent;border-radius:8px;padding:8px 14px;cursor:pointer}
+  .fx-ctrls button.main{background:var(--navy);color:var(--paper)}
+  .fx-dots{display:flex;gap:7px;margin-left:auto}
+  .fx-dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+  .fx-dots i.on{background:var(--gold)}
+  @media (max-width:600px){
+    .fx-app{aspect-ratio:4/5}
+    .fx-bar{gap:6px;padding:0 8px;font-size:10px}
+    .fx-finish{padding:5px 7px;font-size:10px}
+    .fx-tools .opt{display:none}
+    .fx-cap p{font-size:15.5px}
+    .fx-dlg{width:200px;right:6px;top:44px;font-size:11px;transform:scale(.85);transform-origin:top right}
+    .fx-fld{min-width:64px}
+    .fx-open{left:4%;width:240px;max-width:88%}
+    .fx-open .side{width:76px}
+  }
+  @media (prefers-reduced-motion:reduce){.fx-cur{transition:none}.fx-ripple{animation:none}}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:40px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">MakerSpace · Task 08 · Fusion 360</p>
+    <h1>Name <span class="pop">Keychain</span></h1>
+    <p class="subtitle">Put your name on it, then print it in 2 colors.</p>
+    <div class="chips">
+      <span>1 video</span>
+      <span>5 letters max</span>
+      <span>2 colors</span>
+      <span>.F3D + .STL</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">Print Ready</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="mission">
+    <span class="stamp">Your Mission</span>
+    <p class="lead">Design a keychain with your name in Fusion 360. Follow the video to build it, then choose <strong>2 colors</strong> so it can be 3D printed.</p>
+    <div class="cards">
+      <div class="card">
+        <p class="label">You will learn · 01</p>
+        <h4>Text &amp; Extrude</h4>
+        <p>Write your name with the Text tool and turn it into 3D letters.</p>
+      </div>
+      <div class="card">
+        <p class="label">You will learn · 02</p>
+        <h4>Offset</h4>
+        <p>Draw a base around your letters so they hold together as one piece.</p>
+      </div>
+      <div class="card">
+        <p class="label">You will learn · 03</p>
+        <h4>Ring &amp; Fillet</h4>
+        <p>Add a ring for your keys and smooth the corners where it joins the base.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <span class="stamp red">Before You Start</span>
+    <ul class="rules">
+      <li class="ok">Your name or nickname, <strong>5 letters max</strong>.</li>
+      <li class="ok">A <strong>thick font</strong>, like Arial Black or Impact, so your name is easy to see.</li>
+      <li>Thin or handwriting fonts. Thin parts break or don't print.</li>
+      <li class="ok">One piece: every letter touches the base.</li>
+    </ul>
+    <div class="cards">
+      <div class="card good">
+        <p class="label"><span class="yes">✓</span> Thick font</p>
+        <p class="font-sample thick">PELEN</p>
+        <p>Strong letters that print well.</p>
+      </div>
+      <div class="card bad">
+        <p class="label"><span class="no">✕</span> Thin font</p>
+        <p class="font-sample thin">Pelen</p>
+        <p>Too thin to print or read.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="video">
+    <span class="stamp">Part 01 · Build the Keychain</span>
+    <p>Watch the video and build your keychain in Fusion 360 at the same time. Pause it whenever you need to.</p>
+    <div class="video"><video id="vid" controls preload="metadata" playsinline poster="data:image/jpeg;base64,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" src="keychain_fusion.mp4">Your browser can't play this video.</video></div>
+    <div class="vctrls">
+      <button type="button" id="vBack" aria-label="Go back 10 seconds">⟲ 10s</button>
+      <button type="button" id="vPlay" class="main">▶ Play</button>
+      <button type="button" id="vFwd" aria-label="Go forward 10 seconds">10s ⟳</button>
+      <span class="vtime" id="vTime">0:00 / 0:00</span>
+    </div>
+    <ol class="steps">
+      <li>Set your units to <strong>millimeters</strong>, like the video shows.</li>
+      <li>Follow the video, but type <strong>your name</strong> instead of "Hello".</li>
+      <li>Choose a <strong>thick font</strong> from the Font list.</li>
+      <li>Check that every letter sits on the base. The end of the video shows how to connect a letter that doesn't touch.</li>
+      <li>Save your design as <span class="code">Lastname_Keychain</span>.</li>
+    </ol>
+  </section>
+
+  <section id="colors">
+    <span class="stamp">Part 02 · Pick 2 Colors</span>
+    <p>Your keychain prints in 2 colors: one for the <strong>base and ring</strong>, one for your <strong>letters</strong>. Pick colors that stand out from each other.</p>
+    <div class="kc-box">
+      <svg class="kc" id="kcMain" role="img" aria-label="Preview of your keychain"></svg>
+      <div class="kc-controls">
+        <div class="kc-field">
+          <label class="flabel" for="kcName">Your name</label>
+          <input class="kc-name" id="kcName" type="text" maxlength="5" placeholder="PELEN" autocomplete="off" spellcheck="false">
+          <p class="kc-hint">5 letters max.</p>
+        </div>
+        <div class="kc-colors">
+          <div class="kc-field">
+            <span class="flabel" id="lblBase">Color 1 · Base and ring</span>
+            <div class="swatches" id="swBase" role="group" aria-labelledby="lblBase"></div>
+          </div>
+          <div class="kc-field">
+            <span class="flabel" id="lblLet">Color 2 · Letters</span>
+            <div class="swatches" id="swLet" role="group" aria-labelledby="lblLet"></div>
+          </div>
+        </div>
+      </div>
+      <div class="kc-out">
+        <p id="kcOut" aria-live="polite"></p>
+        <button type="button" class="kc-copy" id="kcCopy">Copy my colors</button>
+      </div>
+    </div>
+    <p class="kc-note">Paste your colors in a private comment when you turn in. Final colors depend on the filament we have in LB6.</p>
+  </section>
+
+  <section id="challenge">
+    <span class="stamp gold">Part 03 · Challenge</span>
+    <p>Add an <strong>image</strong> at the start or at the end of your keychain.</p>
+    <div class="examples">
+      <figure><svg class="kc" id="kcStart" role="img" aria-label="Example: image at the start"></svg><figcaption>Image at the start</figcaption></figure>
+      <figure><svg class="kc" id="kcEnd" role="img" aria-label="Example: image at the end"></svg><figcaption>Image at the end</figcaption></figure>
+    </div>
+    <p><strong>First, get your image.</strong> Pick a simple icon on Google Fonts. Turn on <strong>Fill</strong> so the shape is solid, then download it as <span class="code">SVG</span>.</p>
+    <a class="example-link" href="https://fonts.google.com/icons" target="_blank" rel="noopener">Find an icon on Google Fonts →</a>
+    <p style="margin-top:22px"><strong>Then add it in Fusion.</strong> Watch the animation and do the same on your keychain.</p>
+    <div class="fx" id="fx">
+      <div class="fx-app" id="fxApp">
+        <div class="fx-bar">
+          <span class="fx-ws">DESIGN ▾</span>
+          <div class="fx-tools"><span>CREATE ▾</span><span class="opt">MODIFY ▾</span><span class="opt">CONSTRUCT ▾</span><span class="opt">INSPECT ▾</span><span id="fxInsert">INSERT ▾</span></div>
+          <span class="fx-finish" id="fxFinish">✔ FINISH SKETCH</span>
+        </div>
+        <div class="fx-view" id="fxView">
+          <svg id="fxScene" preserveAspectRatio="xMinYMax meet" aria-hidden="true"></svg>
+          <span class="fx-mode">SKETCH · Sketch8</span>
+        </div>
+        <div class="fx-tl" id="fxTl"><div class="fx-tlb">⏮ ◀ ▶ ⏭</div></div>
+        <div class="fx-menu" id="fxMenu"></div>
+        <div class="fx-dlg" id="fxDlg"></div>
+        <div class="fx-open" id="fxOpen">
+          <div class="hd">Open</div>
+          <div class="bd">
+            <div class="side"><b>Downloads</b></div>
+            <div class="files"><div class="fx-file" id="fxFile"><svg viewBox="0 0 16 16"><path d="M3 1h7l3 3v11H3z" fill="#fff" stroke="#6b7078"/><path d="M8 6l1 2.2 2.3.2-1.8 1.5.6 2.3L8 11l-2.1 1.2.6-2.3-1.8-1.5L7 8.2z" fill="#e8a500"/></svg>star.svg</div></div>
+          </div>
+          <div class="ft"><span class="fx-btn ok" id="fxOpenBtn">Open</span><span class="fx-btn">Cancel</span></div>
+        </div>
+        <div class="fx-tip" id="fxTip"></div>
+        <div class="fx-key" id="fxKey"></div>
+        <div class="fx-tag" id="fxTag"></div>
+        <svg class="fx-cur" id="fxCur" viewBox="0 0 22 22"><path d="M3 2l14 9-6.5 1.3L7 19z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="fx-cap" aria-live="polite"><span class="fx-num" id="fxNum">01</span><p id="fxTxt"></p></div>
+      <div class="fx-ctrls">
+        <button type="button" id="fxBack">◀ Back</button>
+        <button type="button" id="fxPlay" class="main">▶ Play</button>
+        <button type="button" id="fxNext">Next ▶</button>
+        <button type="button" id="fxRestart">↺ Restart</button>
+        <div class="fx-dots" id="fxDots"></div>
+      </div>
+    </div>
+    <div class="exception">
+      <p><strong>Keep it simple.</strong> One solid shape with no thin lines works best. Keep the ring so it still works as a keychain.</p>
+    </div>
+  </section>
+
+  <section id="submit">
+    <span class="stamp">Turning it in</span>
+    <p>Export your keychain from Fusion with <span class="menu">File › Export</span>, once as <span class="code">.f3d</span> and once as <span class="code">.stl</span>. Then turn in these in Google Classroom:</p>
+    <ol class="steps">
+      <li>Your <strong>keychain</strong>: <span class="code">.f3d</span> and <span class="code">.stl</span> (with the image, if you did the challenge)</li>
+      <li>Your <strong>2 colors</strong> in a private comment</li>
+    </ol>
+    <div class="exception">
+      <p><strong>Check your files before you turn in.</strong> A file I can't open counts as not turned in.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>// MakerSpace · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+(function(){
+  var v=document.getElementById('vid'),pb=document.getElementById('vPlay'),tm=document.getElementById('vTime');
+  if(!v)return;
+  function f(t){t=Math.max(0,Math.floor(t||0));var m=Math.floor(t/60),x=t%60;return m+':'+(x<10?'0':'')+x;}
+  function ui(){pb.textContent=v.paused?'▶ Play':'❚❚ Pause';tm.textContent=f(v.currentTime)+' / '+f(v.duration);}
+  function jump(d){v.currentTime=Math.min(Math.max(0,v.currentTime+d),v.duration||v.currentTime+d);ui();}
+  pb.onclick=function(){v.paused?v.play():v.pause();};
+  document.getElementById('vBack').onclick=function(){jump(-10);};
+  document.getElementById('vFwd').onclick=function(){jump(10);};
+  ['play','pause','timeupdate','loadedmetadata','ended'].forEach(function(e){v.addEventListener(e,ui);});
+  ui();
+})();
+
+/* ---------- Keychain preview ---------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var COLORS=[['White','#F2F2EE'],['Black','#262626'],['Red','#D4302F'],['Orange','#F07A1A'],
+              ['Yellow','#F6C400'],['Green','#2E9C4F'],['Blue','#1F5BC6'],['Purple','#7A3FB4'],['Pink','#EE6FAE']];
+  var ICONS={
+    heart:'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
+    star:'M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'
+  };
+  var state={name:'',base:6,letters:4};
+  var uid=0;
+
+  function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+  function shade(hex,k){var n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;
+    function c(x){return Math.round(x*(1-k)).toString(16).padStart(2,'0');}return '#'+c(r)+c(g)+c(b);}
+
+  function draw(svg,name,base,letters,icon,pos){
+    var FS=100,SW=28,R=34,HOLE=14,DEPTH=9,LIFT=6;
+    svg.innerHTML='';
+    var root=el('g',{},svg);
+    var probe=el('text',{x:0,y:0,'font-size':FS,'class':'kc-font'},root);probe.textContent=name;
+    var bb=probe.getBBox();root.removeChild(probe);
+    var cy=-0.36*FS, s=0.74*FS/19, iw=20*s, ix=null, cx;
+    if(icon&&pos==='end'){ix=bb.x+bb.width+6;cx=bb.x-R-4;}
+    else if(icon&&pos==='start'){ix=bb.x-6-iw;cx=ix-R-6;}
+    else{cx=bb.x-R-4;}
+    var iconT=icon?'translate('+(ix-2*s)+' '+(cy-11.6*s)+') scale('+s+')':'';
+
+    function textEl(parent,fill,sw,cls){
+      var t=el('text',{x:0,y:0,'font-size':FS,'class':'kc-font'+(cls?' '+cls:''),'stroke-linejoin':'round','stroke-linecap':'round'},parent);
+      t.textContent=name;
+      if(!cls){t.setAttribute('fill',fill);t.setAttribute('stroke',fill);}
+      t.setAttribute('stroke-width',sw);return t;}
+    function iconEl(parent,fill,sw,cls){
+      if(!icon)return;
+      var p=el('path',{d:ICONS[icon],transform:iconT,'stroke-linejoin':'round'},parent);
+      if(cls)p.setAttribute('class',cls);else{p.setAttribute('fill',fill);p.setAttribute('stroke',fill);}
+      p.setAttribute('stroke-width',sw/s);}
+    function baseShape(fill,extra,dy,cls){
+      var g=el('g',{transform:'translate(0 '+dy+')'},root);
+      textEl(g,fill,SW+extra,cls);
+      var c=el('circle',{cx:cx,cy:cy,r:R+extra/2},g);
+      if(cls)c.setAttribute('class',cls);else c.setAttribute('fill',fill);
+      iconEl(g,fill,SW+extra,cls);
+    }
+    function letterShape(fill,dy,edge){
+      var g=el('g',{transform:'translate(0 '+dy+')'},root);
+      if(edge){textEl(g,null,4,'edge');iconEl(g,null,4,'edge');}
+      textEl(g,fill,1.5);iconEl(g,fill,1.5);
+    }
+    var bSide=shade(base,.38), lSide=shade(letters,.38);
+    // base: side, then edge, then top
+    baseShape(null,3,DEPTH,'edge');
+    baseShape(bSide,0,DEPTH);
+    baseShape(null,3,0,'edge');
+    baseShape(base,0,0);
+    // ring hole
+    var id='h'+(++uid);
+    var cp=el('clipPath',{id:id},root);el('circle',{cx:cx,cy:cy,r:HOLE},cp);
+    el('circle',{cx:cx,cy:cy,r:HOLE+1.5,'class':'edge'},root);
+    el('circle',{cx:cx,cy:cy,r:HOLE,fill:bSide},root);
+    el('circle',{cx:cx,cy:cy+DEPTH,r:HOLE,'class':'bg','clip-path':'url(#'+id+')'},root);
+    // raised letters (and icon)
+    letterShape(lSide,0,true);
+    letterShape(letters,-LIFT,true);
+    var b=root.getBBox(),pad=8;
+    svg.setAttribute('viewBox',(b.x-pad)+' '+(b.y-pad)+' '+(b.width+pad*2)+' '+(b.height+pad*2));
+  }
+
+  var nameIn=document.getElementById('kcName'),out=document.getElementById('kcOut');
+  function current(){return state.name||'PELEN';}
+  function render(){
+    var bc=COLORS[state.base][1],lc=COLORS[state.letters][1],n=current();
+    draw(document.getElementById('kcMain'),n,bc,lc,null);
+    draw(document.getElementById('kcStart'),n,bc,lc,'heart','start');
+    draw(document.getElementById('kcEnd'),n,bc,lc,'star','end');
+    if(state.base===state.letters){
+      out.textContent='Pick 2 different colors so your name stands out.';out.className='warn';
+    }else{
+      out.textContent='Base: '+COLORS[state.base][0]+' · Letters: '+COLORS[state.letters][0];out.className='';
+    }
+  }
+  function swatches(boxId,key){
+    var box=document.getElementById(boxId);
+    COLORS.forEach(function(c,i){
+      var b=document.createElement('button');b.type='button';b.className='sw';b.style.background=c[1];
+      b.title=c[0];b.setAttribute('aria-label',c[0]);b.setAttribute('aria-pressed',i===state[key]);
+      b.onclick=function(){state[key]=i;[].forEach.call(box.children,function(x,j){x.setAttribute('aria-pressed',j===i);});render();};
+      box.appendChild(b);
+    });
+  }
+  swatches('swBase','base');swatches('swLet','letters');
+  nameIn.addEventListener('input',function(){
+    var clean=nameIn.value.replace(/[^\p{L}]/gu,'').slice(0,5);
+    if(clean!==nameIn.value)nameIn.value=clean;
+    state.name=clean;render();
+  });
+  document.getElementById('kcCopy').onclick=function(){
+    var btn=this,txt=current()+' keychain. Base: '+COLORS[state.base][0]+'. Letters: '+COLORS[state.letters][0]+'.';
+    function done(){btn.textContent='Copied ✓';setTimeout(function(){btn.textContent='Copy my colors';},1600);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fallback);}else fallback();
+    function fallback(){var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
+      try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(t);}
+  };
+  render();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(render);
+})();
+
+/* ---------- Insert SVG animation ---------- */
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var app=$('fxApp'),svg=$('fxScene'),cur=$('fxCur'),menu=$('fxMenu'),dlg=$('fxDlg'),openBox=$('fxOpen'),
+      tip=$('fxTip'),keyEl=$('fxKey'),tagEl=$('fxTag'),tl=$('fxTl'),ins=$('fxInsert'),fin=$('fxFinish');
+  if(!app)return;
+  var NS='http://www.w3.org/2000/svg',NAME='PELEN',FS=100,SW=28,R=34,HOLE=14,DEPTH=9,LIFT=6;
+  var STAR='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z';
+  var C={bTop:'#c6cbd3',bSide:'#8a919b',lTop:'#dadde2',lSide:'#9aa1ab',edge:'#353a42',sk:'#1f6fd1',
+         prof:'rgba(110,165,240,.30)',profOn:'rgba(60,125,230,.55)',hole:'#eceef2'};
+  var G={},S={};
+  var MM=0.21; // scene units to mm (for the dialog numbers)
+
+  function el(tag,a,p){var e=document.createElementNS(NS,tag);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+  function starT(x,y,s){return 'translate('+(x-2*s)+' '+(y-11.6*s)+') scale('+s+')';}
+
+  function measure(){
+    var p=el('text',{x:0,y:0,'font-size':FS,'class':'kc-font'},svg);p.textContent=NAME;
+    var bb=p.getBBox();svg.removeChild(p);
+    G.bb=bb;G.cy=-0.36*FS;G.cx=bb.x-R-4;G.sF=0.74*FS/19;G.xF=bb.x+bb.width+6;G.x0=bb.x+8;G.s0=0.9;
+  }
+  function blank(){return {hover:false,star:null,manip:false,offset:0};}
+
+  function draw(st){
+    svg.innerHTML='';
+    var root=el('g',{},svg),star=st.star;
+    function txt(p,fill,sw){var t=el('text',{x:0,y:0,'font-size':FS,'class':'kc-font',fill:fill,stroke:fill,'stroke-width':sw,'stroke-linejoin':'round','stroke-linecap':'round'},p);t.textContent=NAME;}
+    function sp(p,fill,sw,stroke){return el('path',{d:STAR,transform:starT(star.x,star.y,star.s),fill:fill,stroke:stroke||fill,'stroke-width':sw/star.s,'stroke-linejoin':'round'},p);}
+    function baseLayer(fill,extra,dy){
+      var g=el('g',{transform:'translate(0 '+dy+')'},root);
+      txt(g,fill,SW+extra);el('circle',{cx:G.cx,cy:G.cy,r:R+extra/2,fill:fill},g);
+      if(star&&star.base)sp(g,fill,SW+extra);
+      return g;}
+    baseLayer(C.edge,3,DEPTH);baseLayer(C.bSide,0,DEPTH);baseLayer(C.edge,3,0);baseLayer(C.bTop,0,0);
+    if(st.hover){var h=baseLayer('#3c7de6',0,0);h.setAttribute('opacity','.35');}
+    // ring hole
+    var cp=el('clipPath',{id:'fxHoleClip'},root);el('circle',{cx:G.cx,cy:G.cy,r:HOLE},cp);
+    el('circle',{cx:G.cx,cy:G.cy,r:HOLE+1.5,fill:C.edge},root);
+    el('circle',{cx:G.cx,cy:G.cy,r:HOLE,fill:C.bSide},root);
+    el('circle',{cx:G.cx,cy:G.cy+DEPTH,r:HOLE,fill:C.hole,'clip-path':'url(#fxHoleClip)'},root);
+    // offset preview
+    if(star&&st.offset>0){
+      var w=SW*st.offset;
+      sp(root,'none',w+3,C.sk).setAttribute('opacity','.9');
+      sp(root,'none',w,'#dbe7fa');
+    }
+    // letters (and the star once it is solid)
+    var solid=star&&star.mode==='solid';
+    function letters(fill,dy){
+      var g=el('g',{transform:'translate(0 '+dy+')'},root);
+      txt(g,C.edge,4);txt(g,fill,1.5);
+      return g;}
+    function starSolid(fill,dy){
+      var g=el('g',{transform:'translate(0 '+dy+')'},root);
+      sp(g,C.edge,4);sp(g,fill,1.5);}
+    letters(C.lSide,0);
+    if(solid)starSolid(C.lSide,0);
+    letters(C.lTop,-LIFT);
+    if(solid)starSolid(C.lTop,-LIFT*star.raise);
+    // star as a sketch
+    if(star&&star.mode==='sketch'){
+      var p=sp(root,star.sel?C.profOn:C.prof,1.8,C.sk);
+    }
+    // move + scale manipulator
+    if(star&&st.manip){
+      var m=manip(star),g=el('g',{},root);
+      el('line',{x1:m.cx,y1:m.cy,x2:m.rx-8,y2:m.cy,stroke:'#d33',"stroke-width":3},g);
+      el('polygon',{points:m.rx+','+m.cy+' '+(m.rx-12)+','+(m.cy-7)+' '+(m.rx-12)+','+(m.cy+7),fill:'#d33'},g);
+      el('line',{x1:m.cx,y1:m.cy,x2:m.cx,y2:m.gy+8,stroke:'#2a9d3a',"stroke-width":3},g);
+      el('polygon',{points:m.cx+','+m.gy+' '+(m.cx-7)+','+(m.gy+12)+' '+(m.cx+7)+','+(m.gy+12),fill:'#2a9d3a'},g);
+      el('circle',{cx:m.cx,cy:m.cy,r:4.5,fill:'#fff',stroke:'#1f6fd1','stroke-width':2},g);
+      el('rect',{x:m.sx-6,y:m.sy-6,width:12,height:12,rx:2,fill:'#fff',stroke:'#1f6fd1','stroke-width':2.5},g);
+    }
+  }
+  function manip(star){
+    var cx=star.x+10*star.s,cy=star.y,top=cy-9.5*star.s;
+    return {cx:cx,cy:cy,rx:cx+64,gy:cy-64,sx:star.x+20*star.s+10,sy:top-10};
+  }
+  function setView(){
+    // keep the keychain in the lower left, so the dialogs on the right don't cover the image
+    draw({star:{x:G.xF,y:G.cy,s:G.sF,mode:'solid',raise:1,base:1}});
+    var b=svg.firstChild.getBBox(),view=svg.parentNode,vw=view.clientWidth||800,vh=view.clientHeight||420,
+        small=vw<600,frac=small?.9:.62,top=Math.min(b.y,G.cy-80);
+    var W=b.width/frac,H=W*vh/vw,x0=b.x-W*(small?.05:.04),bottom=b.y+b.height+W*.05,y0=bottom-H;
+    if(y0>top-10){y0=top-10;H=bottom-y0;W=H*vw/vh;}
+    svg.setAttribute('viewBox',x0+' '+y0+' '+W+' '+H);
+    draw(S.star!==undefined?S:blank());
+  }
+
+  // ---------- Timeline ----------
+  var ICON={
+    sk:'<svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="10" fill="none" stroke="#2f6fd6" stroke-width="1.8"/><circle cx="3" cy="15" r="1.6" fill="#2f6fd6"/></svg>',
+    ex:'<svg viewBox="0 0 20 20"><path d="M4 8l6-3 6 3v7l-6 3-6-3z" fill="#f2b45a" stroke="#9a5f12" stroke-width="1"/><path d="M4 8l6 3 6-3M10 11v7" fill="none" stroke="#9a5f12" stroke-width="1"/></svg>',
+    fi:'<svg viewBox="0 0 20 20"><path d="M4 16V9a5 5 0 0 1 5-5h7v12z" fill="#f2b45a" stroke="#9a5f12"/></svg>'};
+  var FEATS=['sk','ex','sk','ex','fi','sk','ex','sk','ex'];
+  function setTL(n,fresh){
+    [].slice.call(tl.querySelectorAll('.fx-feat,.fx-marker')).forEach(function(x){x.remove();});
+    for(var i=0;i<n;i++){var d=document.createElement('div');d.className='fx-feat'+(fresh&&i>=n-fresh?' new':'');d.innerHTML=ICON[FEATS[i]];tl.appendChild(d);}
+    var m=document.createElement('div');m.className='fx-marker';tl.appendChild(m);
+  }
+
+  // ---------- Dialogs ----------
+  var FOLDER='<svg viewBox="0 0 18 16"><path d="M1 3h6l2 2h8v9H1z" fill="#f2c14e" stroke="#a87b10"/></svg>';
+  function f2(v){return v.toFixed(2)+' mm';}
+  function showSvgDlg(o){
+    var h='<div class="hd">INSERT SVG</div>'+
+      '<div class="row"><span>Plane/Sketch</span>'+(o.plane?'<span class="fx-pick done">1 selected</span>':'<span class="fx-pick on">Select</span>')+'</div>'+
+      '<div class="row"><span>SVG File</span><span class="fx-folder" id="fxFolder">'+FOLDER+'</span></div>';
+    if(o.file){
+      h+='<div class="row"><span>X Distance</span><span class="fx-fld" id="fxX">'+f2(o.x||0)+'</span></div>'+
+         '<div class="row"><span>Y Distance</span><span class="fx-fld">0.00 mm</span></div>'+
+         '<div class="row"><span>Scale Plane XY</span><span class="fx-fld" id="fxS">'+(o.sc||1).toFixed(2)+'</span></div>';
+    }
+    h+='<div class="ft"><span class="fx-btn ok" id="fxOk">OK</span><span class="fx-btn">Cancel</span></div>';
+    dlg.innerHTML=h;dlg.style.display='block';
+  }
+  function showExtrudeDlg(){
+    dlg.innerHTML='<div class="hd">EXTRUDE</div>'+
+      '<div class="row"><span>Profiles</span><span class="fx-pick done">1 selected</span></div>'+
+      '<div class="row"><span>Direction</span><span class="fx-fld">One Side</span></div>'+
+      '<div class="row"><span>Distance</span><span class="fx-fld" id="fxDist"><i>same as letters</i></span></div>'+
+      '<div class="row"><span>Operation</span><span class="fx-fld">Join</span></div>'+
+      '<div class="ft"><span class="fx-btn ok" id="fxOk">OK</span><span class="fx-btn">Cancel</span></div>';
+    dlg.style.display='block';
+  }
+
+  // ---------- Helpers ----------
+  var token=0,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function sleep(ms,tk){return new Promise(function(res,rej){setTimeout(function(){tk===token?res():rej('stop');},reduce?Math.min(ms,250):ms);});}
+  function rel(e,fx,fy){var a=app.getBoundingClientRect(),r=e.getBoundingClientRect();return [r.left-a.left+r.width*(fx==null?.5:fx),r.top-a.top+r.height*(fy==null?.5:fy)];}
+  function toApp(x,y){var pt=svg.createSVGPoint();pt.x=x;pt.y=y;var p=pt.matrixTransform(svg.getScreenCTM()),a=app.getBoundingClientRect();return [p.x-a.left,p.y-a.top];}
+  var cx=0,cy=0;
+  function place(x,y){cx=x;cy=y;cur.style.transform='translate('+(x-3)+'px,'+(y-2)+'px)';}
+  function moveTo(x,y,tk){place(x,y);return sleep(800,tk);}
+  function moveEl(e,tk,fx,fy){var p=rel(e,fx,fy);return moveTo(p[0],p[1],tk);}
+  function moveScene(x,y,tk){var p=toApp(x,y);return moveTo(p[0],p[1],tk);}
+  function click(tk){var r=document.createElement('div');r.className='fx-ripple';r.style.left=cx+'px';r.style.top=cy+'px';app.appendChild(r);setTimeout(function(){r.remove();},600);return sleep(380,tk);}
+  function showTip(x,y,t){tip.textContent=t;tip.style.left=x+'px';tip.style.top=(y-14)+'px';tip.style.opacity=1;}
+  function showKey(k){keyEl.textContent=k;keyEl.style.left=Math.min(cx+18,app.clientWidth-44)+'px';keyEl.style.top=(cy-40)+'px';keyEl.style.display='flex';}
+  function showTag(x,y,t,cls){var p=toApp(x,y);tagEl.textContent=t;tagEl.className='fx-tag '+cls;tagEl.style.top=p[1]+'px';tagEl.style.display='block';var hw=tagEl.offsetWidth/2+4;tagEl.style.left=Math.max(hw,Math.min(p[0],app.clientWidth-hw))+'px';}
+  function hideAll(){menu.style.display='none';dlg.style.display='none';openBox.style.display='none';tip.style.opacity=0;keyEl.style.display='none';tagEl.style.display='none';
+    ins.classList.remove('on');document.getElementById('fxFile').classList.remove('on');cur.style.transition='';}
+  async function openMenu(anchor,items,pick,tk){
+    var p=rel(anchor,0,1);menu.innerHTML=items.map(function(i){return '<div>'+i+'</div>';}).join('');
+    menu.style.display='block';menu.style.left=Math.min(p[0],app.clientWidth-190)+'px';menu.style.top=(p[1]+4)+'px';
+    await sleep(500,tk);var it=[].slice.call(menu.children).filter(function(d){return d.textContent===pick;})[0];
+    await moveEl(it,tk,.3,.5);it.classList.add('on');await sleep(250,tk);await click(tk);menu.style.display='none';}
+  async function drag(frames,tk,fn){
+    cur.style.transition='none';
+    for(var k=1;k<=frames;k++){var p=fn(k/frames);place(p[0],p[1]);await sleep(30,tk);}
+    cur.style.transition='';}
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+  function smallStar(x){return {x:x,y:G.cy,s:G.s0,mode:'sketch'};}
+  function fullStar(mode){return {x:G.xF,y:G.cy,s:G.sF,mode:mode,raise:mode==='solid'?1:0,base:0};}
+
+  // ---------- Steps ----------
+  var STEPS=[
+   {t:'Your keychain is done. Now let\'s add an image at the end of your name.',
+    start:function(){S=blank();draw(S);setTL(5);app.classList.remove('sketch');},
+    run:async function(tk){place(app.clientWidth*.5,app.clientHeight*.62);await sleep(2600,tk);}},
+   {t:'Click <strong>INSERT</strong> in the toolbar and choose <span class="menu">Insert SVG</span>.',
+    start:function(){S=blank();draw(S);setTL(5);app.classList.remove('sketch');},
+    run:async function(tk){await moveEl(ins,tk);ins.classList.add('on');await click(tk);
+      await openMenu(ins,['Insert Derive','Decal','Canvas','Insert Mesh','Insert SVG','Insert DXF'],'Insert SVG',tk);
+      ins.classList.remove('on');showSvgDlg({});await sleep(1200,tk);}},
+   {t:'Click the <strong>top of the base</strong>, where your letters sit. Your image goes on that face.',
+    start:function(){S=blank();draw(S);setTL(5);app.classList.remove('sketch');showSvgDlg({});},
+    run:async function(tk){var x=G.bb.x+G.bb.width*.46,y=8;await moveScene(x,y,tk);
+      S.hover=true;draw(S);var p=toApp(x,y);showTip(p[0],p[1],'Face');await sleep(700,tk);await click(tk);
+      tip.style.opacity=0;showSvgDlg({plane:true});await sleep(500,tk);S.hover=false;draw(S);app.classList.add('sketch');await sleep(1000,tk);}},
+   {t:'Click the <strong>folder</strong> and open the SVG file you downloaded.',
+    start:function(){S=blank();draw(S);setTL(5);app.classList.add('sketch');showSvgDlg({plane:true});},
+    run:async function(tk){await moveEl($('fxFolder'),tk);await click(tk);openBox.style.display='block';await sleep(500,tk);
+      var f=$('fxFile');await moveEl(f,tk,.3,.5);f.classList.add('on');await click(tk);
+      await moveEl($('fxOpenBtn'),tk);await click(tk);openBox.style.display='none';f.classList.remove('on');
+      S.star=smallStar(G.x0);S.manip=true;draw(S);showSvgDlg({plane:true,file:true});await sleep(1400,tk);}},
+   {t:'Your image shows up small. Drag the <strong>red arrow</strong> to move it to the end of your name (or the start).',
+    start:function(){S=blank();S.star=smallStar(G.x0);S.manip=true;draw(S);setTL(5);app.classList.add('sketch');showSvgDlg({plane:true,file:true});},
+    run:async function(tk){var m=manip(S.star);await moveScene(m.rx-4,m.cy,tk);await click(tk);
+      await drag(40,tk,function(t){S.star.x=G.x0+(G.xF-G.x0)*ease(t);draw(S);$('fxX').textContent=f2((S.star.x-G.x0)*MM);var mm=manip(S.star);return toApp(mm.rx-4,mm.cy);});
+      await sleep(1000,tk);}},
+   {t:'Drag the <strong>square handle</strong> until it is about as tall as your letters. Click <strong>OK</strong>, then <span class="menu">Finish Sketch</span>.',
+    start:function(){S=blank();S.star=smallStar(G.xF);S.manip=true;draw(S);setTL(5);app.classList.add('sketch');showSvgDlg({plane:true,file:true,x:(G.xF-G.x0)*MM});},
+    run:async function(tk){var m=manip(S.star);await moveScene(m.sx,m.sy,tk);await click(tk);
+      await drag(40,tk,function(t){S.star.s=G.s0+(G.sF-G.s0)*ease(t);draw(S);$('fxS').textContent=(S.star.s/G.s0).toFixed(2);var mm=manip(S.star);return toApp(mm.sx,mm.sy);});
+      await sleep(500,tk);await moveEl($('fxOk'),tk);await click(tk);dlg.style.display='none';S.manip=false;draw(S);await sleep(400,tk);
+      await moveEl(fin,tk);await click(tk);app.classList.remove('sketch');setTL(6,1);await sleep(1100,tk);}},
+   {t:'Click the star and press <strong>E</strong> for Extrude. Use the <strong>same distance as your letters</strong>.',
+    start:function(){S=blank();S.star=fullStar('sketch');draw(S);setTL(6);app.classList.remove('sketch');},
+    run:async function(tk){await moveScene(G.xF+10*G.sF,G.cy+4,tk);await click(tk);S.star.sel=true;draw(S);await sleep(400,tk);
+      showKey('E');await sleep(800,tk);keyEl.style.display='none';showExtrudeDlg();await sleep(400,tk);
+      var d=$('fxDist');await moveEl(d,tk);await click(tk);d.classList.add('focus');await sleep(500,tk);
+      S.star.mode='solid';S.star.raise=0;
+      for(var k=1;k<=20;k++){S.star.raise=k/20;draw(S);await sleep(35,tk);}
+      await sleep(500,tk);await moveEl($('fxOk'),tk);await click(tk);dlg.style.display='none';setTL(7,1);await sleep(1000,tk);}},
+   {t:'Part of the star is floating! Use <strong>Offset</strong> around it and extrude it like your base. Now it is one piece.',
+    start:function(){S=blank();S.star=fullStar('solid');draw(S);setTL(7);app.classList.remove('sketch');
+      showTag(G.xF+20*G.sF,G.cy+10*G.sF+18,'Floating','bad');},
+    run:async function(tk){await sleep(1400,tk);await moveScene(G.xF+10*G.sF,G.cy+12*G.sF,tk);tagEl.style.display='none';
+      showKey('O');for(var k=1;k<=20;k++){S.offset=k/20;draw(S);await sleep(40,tk);}
+      await sleep(400,tk);keyEl.style.display='none';await sleep(200,tk);showKey('E');await sleep(800,tk);keyEl.style.display='none';
+      S.offset=0;S.star.base=1;draw(S);setTL(9,2);
+      showTag(G.xF+20*G.sF,G.cy+10*G.sF+22,'One piece ✓','good');await sleep(3000,tk);}}
+  ];
+
+  // ---------- Player ----------
+  var txt=$('fxTxt'),num=$('fxNum'),playB=$('fxPlay'),dots=$('fxDots');
+  STEPS.forEach(function(){dots.appendChild(document.createElement('i'));});
+  var step=0,playing=false;
+  function setPlay(p){playing=p;playB.textContent=p?'❚❚ Pause':'▶ Play';}
+  async function go(s){
+    var tk=++token;step=s;hideAll();
+    STEPS[s].start();txt.innerHTML=STEPS[s].t;num.textContent=String(s+1).padStart(2,'0');
+    [].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i<=s);});
+    if(!playing){place(app.clientWidth*.5,app.clientHeight*.62);return;}
+    try{await STEPS[s].run(tk);await sleep(700,tk);
+      if(playing){if(s<STEPS.length-1)go(s+1);else{setPlay(false);playB.textContent='↺ Replay';}}}
+    catch(e){}
+  }
+  $('fxNext').onclick=function(){go(Math.min(step+1,STEPS.length-1));};
+  $('fxBack').onclick=function(){go(Math.max(step-1,0));};
+  $('fxRestart').onclick=function(){setPlay(true);go(0);};
+  playB.onclick=function(){if(playB.textContent.indexOf('Replay')>-1){setPlay(true);go(0);return;}
+    if(playing){setPlay(false);token++;}else{setPlay(true);go(step);}};
+
+  function init(){
+    measure();setView();go(0);
+    if('ResizeObserver' in window)new ResizeObserver(function(){setView();}).observe(svg.parentNode);
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();if(!reduce){setPlay(true);go(0);}}},{threshold:.5});
+      io.observe(app);
+    }
+  }
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(init);else init();
+})();
+</script>
+</body>
+</html>
