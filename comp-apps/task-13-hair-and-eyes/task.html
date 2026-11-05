@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hair &amp; Eyes · GIMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  h3{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:23px;letter-spacing:-.01em;
+    margin:26px 0 8px;
+  }
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Today card ---------- */
+  .today{
+    background:var(--panel);
+    color:#fff;
+    border-radius:12px;
+    padding:26px 26px 20px;
+    margin:34px 0 10px;
+  }
+  .today .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+  .today h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:29px;letter-spacing:-.01em;
+    margin:8px 0 12px;
+  }
+  .today ol{margin:0 0 8px 20px}
+  .today li{margin-bottom:6px}
+
+  /* ---------- Structure cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .card ul{list-style:none;margin-top:4px}
+  .card ul li{font-size:15.5px;padding:5px 0 5px 22px;position:relative;line-height:1.45}
+  .card ul li::before{content:"→";position:absolute;left:0;color:var(--teal);font-weight:700}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered setup steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+
+  /* ---------- Prompt box ---------- */
+  .prompt-box{
+    background:var(--panel);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:16px 0 18px;
+  }
+  .prompt-box .plabel{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:10px;
+  }
+  .prompt-box .ptext{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;line-height:1.7;
+    color:#fff;margin:0;max-width:none;
+  }
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Prompts ---------- */
+  .prompts{list-style:none;margin:14px 0 24px}
+  .prompts li{
+    display:flex;gap:14px;align-items:baseline;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:18px;
+  }
+  .prompts li:last-child{border-bottom:none}
+  .prompts .num{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--gold);
+    min-width:38px;
+    font-size:15px;
+  }
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+
+  /* ---------- Usability test ---------- */
+  .quest{
+    background:var(--surface);
+    border:1.5px dashed var(--navy);
+    border-radius:12px;
+    padding:20px 22px 12px;
+    margin:12px 0 22px;
+  }
+  .quest p{margin-bottom:10px}
+  .quest .q{font-weight:600;color:var(--teal)}
+
+  /* ---------- Rubric table ---------- */
+  table{width:100%;border-collapse:collapse;margin:14px 0 26px;font-size:16px}
+  th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:left;color:var(--navy);
+    padding:10px 12px;border-bottom:2px solid var(--navy);
+  }
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;white-space:normal}
+
+  /* ---------- Boarding passes (schedule) ---------- */
+  .passes{display:grid;gap:14px;margin:14px 0 26px}
+  .pass{
+    display:grid;grid-template-columns:110px 1fr;
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .pass .side{
+    background:var(--panel);
+    color:var(--gold-soft);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+    padding:14px 8px;
+    border-right:2px dashed var(--paper);
+  }
+  .pass .body{padding:14px 18px}
+  .pass .body p{margin-bottom:0;font-size:16px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+
+  @media (max-width:560px){
+    .pass{grid-template-columns:1fr}
+    .pass .side{border-right:none;border-bottom:2px dashed var(--paper);padding:10px}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .stamp{transition:transform .2s ease}
+    .stamp:hover{transform:rotate(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .stamp{transform:none}
+  }
+  .card ol{margin:6px 0 0 18px}
+  .card ol li{font-size:15.5px;padding:3px 0;line-height:1.45}
+  .file{
+    display:inline-block;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:3px 10px;
+  }
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  td .code{white-space:normal}
+
+  /* ---------- Comparison tables ---------- */
+  .compare{table-layout:fixed}
+  .compare th:first-child{width:24%}
+  .compare td:not(:first-child){font-size:15.5px}
+  @media (max-width:560px){
+    table{font-size:14.5px}
+    th,td{padding:9px 7px}
+    .compare{table-layout:auto}
+    .compare th:first-child{width:auto}
+    .compare td:not(:first-child){font-size:14px}
+    td{overflow-wrap:anywhere}
+    .code{white-space:normal}
+  }
+  .cards.quad{grid-template-columns:repeat(2,1fr)}
+  .cards.four{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  @media (max-width:560px){.cards.quad{grid-template-columns:1fr}}
+  .tool-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .tool-head h4{margin-bottom:0}
+  .tool-icon{width:44px;height:44px;border-radius:8px;flex:none;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Before & After slide mockup (fixed colors, it's a slide) ---------- */
+  .mock-wrap{margin:20px 0 10px}
+  .mock{
+    max-width:560px;margin:0 auto;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    padding:4.5% 5% 5%;
+    display:grid;grid-template-rows:auto 1fr;gap:4%;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(255,255,255,.35), transparent 30%),
+      linear-gradient(135deg,#7b2ff7 0%,#f107a3 55%,#ff9a3c 100%);
+    box-shadow:0 14px 34px rgba(11,23,64,.28);
+    color:#fff;
+  }
+  .mock .mtitle{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(15px,3.6vw,26px);line-height:1.1;
+    text-shadow:0 2px 0 rgba(0,0,0,.18);
+  }
+  .mock .mtitle small{
+    display:block;font-family:'JetBrains Mono',monospace;font-weight:500;
+    font-size:clamp(9px,1.6vw,11.5px);letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-bottom:4px;
+  }
+  .mock .panes{display:grid;grid-template-columns:1fr 1fr;gap:6%;min-height:0}
+  .pane{position:relative;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+  .pane.before{
+    background:
+      radial-gradient(circle at 78% 24%, #ffe066 0 9%, transparent 10%),
+      linear-gradient(#8ecae6 0 58%, #74b85a 58% 100%);
+    box-shadow:0 6px 16px rgba(0,0,0,.22);
+  }
+  .pane svg{height:82%;width:auto;display:block}
+  .pane svg *{fill:#12275C}
+  .ptag{
+    position:absolute;top:-8px;left:8px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:clamp(8px,1.5vw,11px);letter-spacing:.16em;
+    background:#fff;color:#12275C;border-radius:999px;padding:3px 9px;
+  }
+  .mock-cap{font-size:15px;color:var(--muted);text-align:center;margin:12px auto 0;max-width:56ch}
+
+  /* ---------- Template site cards ---------- */
+  .card .site{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--teal)}
+
+  /* ---------- Tool icons (drawn, GIMP dark theme look) ---------- */
+  svg.tool-icon{display:block}
+
+  /* ---------- Example slides ---------- */
+  .examples{display:grid;gap:22px;margin:16px 0 10px}
+  .ex{margin:0}
+  .ex a{display:block;border-radius:12px;overflow:hidden;box-shadow:0 14px 34px rgba(11,23,64,.22);border:1.5px solid var(--line);background:var(--surface)}
+  .ex img{display:block;width:100%;height:auto}
+  .ex figcaption{font-size:15px;color:var(--muted);margin-top:10px}
+  .ex figcaption b{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--navy);margin-right:8px;font-weight:700;
+  }
+  .compare td:first-child{color:var(--navy)}
+  @media (max-width:560px){.compare td:first-child{overflow-wrap:normal;min-width:78px}}
+  .key{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;
+    background:var(--surface);border:1.5px solid var(--line);border-bottom-width:3px;border-radius:6px;
+    padding:1px 8px;white-space:nowrap;color:var(--ink);
+  }
+
+  /* ---------- Hair & Eyes additions ---------- */
+  .chip-note{font-size:15px;color:var(--muted)}
+  /* video */
+  .vplayer{margin:16px 0 8px}
+  .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 14px 34px rgba(11,23,64,.28);background:#000}
+  .video video{position:absolute;inset:0;width:100%;height:100%;display:block;background:#000}
+  .vctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 6px}
+  .vctrls button{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;border:1.5px solid var(--navy);color:var(--navy);background:transparent;border-radius:8px;padding:9px 16px;cursor:pointer}
+  .vctrls button.main{background:var(--navy);color:var(--paper);min-width:112px}
+  .vtime{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-left:auto}
+
+  /* layer lab */
+  .lab{background:var(--surface);border:1.5px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:18px 20px 20px;margin:16px 0 18px}
+  .lab-models{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .lab-models button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 18px;cursor:pointer}
+  .lab-models button:hover{border-color:var(--gold)}
+  .lab-models button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#1d1608}
+  .lab-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .lab-tabs button{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;border:1.5px solid var(--navy);color:var(--navy);background:transparent;border-radius:8px;padding:8px 13px;cursor:pointer}
+  .lab-tabs button b{color:var(--gold);margin-right:6px}
+  .lab-tabs button[aria-pressed="true"]{background:var(--navy);color:var(--paper)}
+  .lab-tabs button[aria-pressed="true"] b{color:inherit;opacity:.7}
+  .lab-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:stretch}
+  .lab-img{position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;isolation:isolate;background:#222;box-shadow:0 10px 26px rgba(11,23,64,.22)}
+  .lab-img svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .lab-img .paint{transition:opacity .35s}
+  .lab-img .tag{position:absolute;left:10px;top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.6);color:#fff;border-radius:999px;padding:4px 10px;z-index:3}
+  /* GIMP-like layers panel (fixed dark colors: it is a picture of the app) */
+  .gp{background:#454545;color:#dedede;border-radius:10px;font-family:Arial,Helvetica,sans-serif;font-size:13px;padding:10px 12px 12px;display:flex;flex-direction:column;gap:9px;box-shadow:0 10px 26px rgba(11,23,64,.22)}
+  .gp .hd{font-weight:700;font-size:11px;letter-spacing:.12em;color:#a9a9a9;border-bottom:1px solid #5a5a5a;padding-bottom:6px}
+  .gp .row{display:flex;align-items:center;gap:8px}
+  .gp .row > span:first-child{width:58px;flex:none;color:#bdbdbd}
+  .gp select{flex:1;min-width:0;background:#2f2f2f;color:#eee;border:1px solid #666;border-radius:4px;padding:5px 6px;font:inherit}
+  .gp input[type=range]{flex:1;min-width:0;accent-color:#f3b700}
+  .gp .val{width:40px;text-align:right;font-variant-numeric:tabular-nums;color:#eee}
+  .gp .layers{display:flex;flex-direction:column;gap:2px;background:#383838;border-radius:6px;padding:4px}
+  .gp .ly{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:4px;transition:background .3s}
+  .gp .ly.on{background:#4f6b8f;color:#fff}
+  .gp .ly.new{animation:lyin .5s ease-out}
+  @keyframes lyin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .gp .eye{width:14px;height:10px;border:1.5px solid #cfcfcf;border-radius:50%/60%;position:relative;flex:none}
+  .gp .eye::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;background:#cfcfcf;border-radius:50%}
+  .gp .th{width:34px;height:26px;border-radius:3px;flex:none;border:1px solid #2a2a2a;background-size:cover}
+  .gp .th.chk{background-color:#fff;background-image:linear-gradient(45deg,#bbb 25%,transparent 25%,transparent 75%,#bbb 75%),linear-gradient(45deg,#bbb 25%,transparent 25%,transparent 75%,#bbb 75%);background-size:8px 8px;background-position:0 0,4px 4px;position:relative}
+  .gp .th.chk i{position:absolute;inset:6px 9px;border-radius:50%;filter:blur(1px)}
+  .gp .sw{display:flex;gap:8px;flex-wrap:wrap}
+  .gp .sw button{width:24px;height:24px;border-radius:50%;border:2px solid #2a2a2a;cursor:pointer;padding:0}
+  .gp .sw button[aria-pressed="true"]{outline:2px solid #f3b700;outline-offset:2px}
+  .gp.off select,.gp.off input,.gp.off .sw{opacity:.35;pointer-events:none}
+  .lab-cap{border-left:5px solid var(--gold);background:var(--paper);border-radius:0 12px 12px 0;padding:14px 18px;margin-top:14px;display:flex;gap:14px;align-items:flex-start}
+  .lab-cap .n{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:15px;padding-top:2px;min-width:26px}
+  .lab-cap p{margin:0;font-size:17px;line-height:1.5}
+  @media (max-width:640px){
+    .lab{padding:14px 14px 16px}
+    .lab-grid{grid-template-columns:1fr}
+    .lab-cap p{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">Computer Applications · Unit 4 · Image Editing</p>
+    <h1>Hair <span class="pop">&amp; Eyes</span></h1>
+    <p class="subtitle">Change hair and eye color with layers in GIMP.</p>
+    <div class="chips">
+      <span>New Layer</span>
+      <span>Blend Modes</span>
+      <span>Opacity</span>
+      <span>Same presentation</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">New Look</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="mission">
+    <span class="stamp">Your Mission</span>
+    <p class="lead">In this assignment, you will keep practicing <strong>layers</strong> and <strong>selection tools</strong>. You will also learn new tools: <strong>Blend Modes</strong> and <strong>Layer Opacity</strong> (transparency). You will change the hair color and the eye color of 7 pictures, then add them to the presentation you made for Healing &amp; Clone.</p>
+
+    <div class="cards">
+      <div class="card">
+        <p class="label">You will learn · 01</p>
+        <h4>Paint on a new layer</h4>
+        <p>Add a transparent layer and paint the new color there, never on the photo.</p>
+      </div>
+      <div class="card">
+        <p class="label">You will learn · 02</p>
+        <h4>Blend Modes</h4>
+        <p>Change how your paint mixes with the picture, so the color looks real.</p>
+      </div>
+      <div class="card">
+        <p class="label">You will learn · 03</p>
+        <h4>Layer Opacity</h4>
+        <p>Make your color more see-through until it looks natural.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="toolkit">
+    <span class="stamp">Your Toolkit</span>
+    <p>You only need four things, and three of them live in the <strong>Layers</strong> panel.</p>
+    <div class="cards quad">
+      <div class="card">
+        <p class="label">Layers panel · Right-click</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="New Layer icon: a page with a plus"><rect width="44" height="44" rx="8" fill="#3a3d42"/><path d="M12 9h14l7 7v19H12z" fill="#e6e8eb"/><path d="M26 9v7h7" fill="#b9bec6"/><circle cx="31" cy="31" r="7.5" fill="#f3b700"/><path d="M31 27.2v7.6M27.2 31h7.6" stroke="#3a3d42" stroke-width="2.2" stroke-linecap="round"/></svg><h4>New Layer</h4></div>
+        <p>Right-click the <strong>Background</strong> layer › <span class="menu">New Layer</span>. Fill it with <strong>Transparency</strong>. You paint here, never on the photo.</p>
+      </div>
+      <div class="card">
+        <p class="label">Tool · Shortcut P</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Paintbrush icon"><rect width="44" height="44" rx="8" fill="#3a3d42"/><path d="M30 8l6 6-12 12-6-6z" fill="#e6e8eb"/><path d="M17 21l6 6-3 3c-2 2-5 2-7 5-1-4-1-8 4-14z" fill="#2e9e4f"/><path d="M27 11l6 6" stroke="#b9bec6" stroke-width="2"/></svg><h4>Paintbrush</h4></div>
+        <p>Paints the new color on your layer. Fix the edges with the <strong>Eraser</strong> <span class="key">Shift</span> + <span class="key">E</span>.</p>
+      </div>
+      <div class="card">
+        <p class="label">Layers panel · Mode</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Blend mode icon: two overlapping circles"><rect width="44" height="44" rx="8" fill="#3a3d42"/><circle cx="17" cy="22" r="10" fill="#2a7de1"/><circle cx="27" cy="22" r="10" fill="#f3b700" style="mix-blend-mode:screen"/></svg><h4>Blend Mode</h4></div>
+        <p>Decides how your paint <strong>mixes</strong> with the picture below. <strong>Overlay</strong> keeps the details of the eye and the hair.</p>
+      </div>
+      <div class="card">
+        <p class="label">Layers panel · Opacity</p>
+        <div class="tool-head"><svg class="tool-icon" viewBox="0 0 44 44" role="img" aria-label="Opacity icon: a square fading to transparent"><defs><pattern id="chk" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#e6e8eb"/><rect width="4" height="4" fill="#9aa0a8"/><rect x="4" y="4" width="4" height="4" fill="#9aa0a8"/></pattern><linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#8e44c9"/><stop offset="1" stop-color="#8e44c9" stop-opacity="0"/></linearGradient></defs><rect width="44" height="44" rx="8" fill="#3a3d42"/><rect x="9" y="9" width="26" height="26" rx="3" fill="url(#chk)"/><rect x="9" y="9" width="26" height="26" rx="3" fill="url(#fade)"/></svg><h4>Opacity</h4></div>
+        <p>This is <strong>layer transparency</strong>. Lower it to make the new color softer and more natural.</p>
+      </div>
+    </div>
+
+    <h3>Which Mode should I use?</h3>
+    <table class="compare">
+      <thead>
+        <tr><th></th><th>Normal</th><th>Overlay</th><th>Color</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>What it does</td><td>Covers the picture with flat paint.</td><td>Mixes your color with the light and dark parts of the picture.</td><td>Changes only the color. Keeps the light and dark.</td></tr>
+        <tr><td>Result</td><td>Looks fake, like a sticker.</td><td>Natural. You keep the texture.</td><td>A stronger color change.</td></tr>
+        <tr><td>Best for</td><td>Not for this task.</td><td>Eyes and light hair.</td><td>Dark hair.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="lab">
+    <span class="stamp">How it works · Try it</span>
+    <p>Pick the eye or the hair and click each step. Then play with the <strong>Mode</strong>, the <strong>Opacity</strong> and the colors in the Layers panel.</p>
+    <div class="lab">
+      <div class="lab-models" id="labModels" role="group" aria-label="Picture"></div>
+      <div class="lab-tabs" id="labTabs" role="group" aria-label="Steps"></div>
+      <div class="lab-grid">
+        <div class="lab-img" id="labImg">
+          <span class="tag" id="labTag">Background</span>
+          <svg id="labBase" viewBox="0 0 400 300" aria-hidden="true"></svg>
+          <svg id="labPaint" class="paint" viewBox="0 0 400 300" aria-hidden="true"></svg>
+        </div>
+        <div class="gp" id="labPanel">
+          <div class="hd">LAYERS</div>
+          <div class="row"><span>Mode</span>
+            <select id="labMode" aria-label="Layer mode">
+              <option value="normal">Normal</option>
+              <option value="overlay">Overlay</option>
+              <option value="soft-light">Soft light</option>
+              <option value="color">Color</option>
+              <option value="multiply">Multiply</option>
+              <option value="screen">Screen</option>
+            </select>
+          </div>
+          <div class="row"><span>Opacity</span><input type="range" id="labOp" min="0" max="100" value="100" aria-label="Layer opacity"><span class="val" id="labOpV">100.0</span></div>
+          <div class="layers" id="labLayers"></div>
+          <div class="row"><span>Color</span><div class="sw" id="labSw"></div></div>
+        </div>
+      </div>
+      <div class="lab-cap" aria-live="polite"><span class="n" id="labNum">01</span><p id="labTxt"></p></div>
+    </div>
+  </section>
+
+  <section id="video">
+    <span class="stamp">Watch the Video</span>
+    <p>Watch the <strong>whole video</strong> before you start. It shows the full process to change the eye color. You use the same steps for the hair.</p>
+    <div class="vplayer">
+      <div class="video"><video controls preload="metadata" playsinline poster="../../comp-apps/task-13-hair-and-eyes/eye_color_poster.jpg" src="../../comp-apps/task-13-hair-and-eyes/eye_color.mp4">Your browser can't play this video.</video></div>
+      <div class="vctrls">
+        <button type="button" class="vBack" aria-label="Go back 10 seconds">⟲ 10s</button>
+        <button type="button" class="vPlay main">▶ Play</button>
+        <button type="button" class="vFwd" aria-label="Go forward 10 seconds">10s ⟳</button>
+        <span class="vtime">0:00 / 0:00</span>
+      </div>
+    </div>
+    <div class="exception">
+      <p><strong>The video uses an older GIMP.</strong> Your screen looks a little different, but the steps are the same.</p>
+    </div>
+  </section>
+
+  <section id="setup">
+    <span class="stamp">Step 1 · Get your 7 pictures</span>
+    <p>Organize your files before you open GIMP. All your pictures go in one folder.</p>
+    <ol class="steps">
+      <li><strong>Download</strong> the 5 pictures attached to this assignment in Google Classroom.</li>
+      <li>Open <strong>File Explorer</strong>. On your Desktop, open your <span class="code">GIMP</span> folder. Inside it, create a folder called <span class="code">HairEyes</span>. Write it exactly like that: no spaces.</li>
+      <li>Move the 5 pictures into your <span class="code">HairEyes</span> folder.</li>
+      <li><strong>Find 2 more pictures online</strong> and save them in the same folder.</li>
+    </ol>
+    <div class="cards">
+      <div class="card">
+        <p class="label">From Classroom · 5 pictures</p>
+        <h4>Pictures I give you</h4>
+        <ul>
+          <li>1 picture: change <strong>only the eyes</strong>.</li>
+          <li>1 picture: change <strong>only the hair</strong>.</li>
+          <li>3 pictures: change <strong>the hair and the eyes</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="label">From the Internet · 2 pictures</p>
+        <h4>Pictures you find</h4>
+        <ul>
+          <li>1 picture to change <strong>the eyes</strong>.</li>
+          <li>1 picture to change <strong>the hair</strong>.</li>
+          <li>Pick big, clear pictures where the eyes or the hair look sharp.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="edit">
+    <span class="stamp">Step 2 · Change the color</span>
+    <p>Do this for every picture. <strong>Take screenshots as you go:</strong> you need them for your presentation.</p>
+    <ol class="steps">
+      <li>Open the picture with <span class="menu">File › Open</span> and zoom in on the eyes.</li>
+      <li>In the Layers panel, right-click <strong>Background</strong> › <span class="menu">New Layer</span>. Fill with <strong>Transparency</strong>, name it <span class="code">Eyes</span> and click OK.</li>
+      <li>Pick the <strong>Paintbrush</strong> <span class="key">P</span> and click the foreground color to choose your new color.</li>
+      <li>Paint over the colored part of the eye. <strong>Don't paint the black center.</strong> Clean the edges with the <strong>Eraser</strong> <span class="key">Shift</span> + <span class="key">E</span>.</li>
+      <li>In the Layers panel, change <strong>Mode</strong> from Normal to <strong>Overlay</strong>. Try <strong>Color</strong> or <strong>Soft light</strong> too.</li>
+      <li>Lower the <strong>Opacity</strong> until the color looks natural.</li>
+      <li>For the <strong>hair</strong>, add a new layer called <span class="code">Hair</span> and repeat steps 3 to 6 with a bigger brush. You can also use a selection tool, like <strong>Free Select</strong> <span class="key">F</span>, so the paint stays inside the hair.</li>
+      <li>Save your work with <span class="menu">File › Export As</span> in your <span class="code">HairEyes</span> folder. Keep the original picture too: you need both for the Before &amp; After.</li>
+    </ol>
+    <div class="exception">
+      <p><strong>Bonus: make the eyes shine.</strong> Use the <strong>Dodge / Burn</strong> tool <span class="key">Shift</span> + <span class="key">D</span>. Set Type to <strong>Dodge</strong>, Range to <strong>Highlights</strong> and Exposure to <strong>50</strong>, then click once on the light spot of the eye.</p>
+    </div>
+  </section>
+
+  <section id="slides">
+    <span class="stamp gold">Step 3 · Your Presentation</span>
+    <p class="lead"><strong>Don't make a new presentation.</strong> Open the presentation you made for <strong>Healing &amp; Clone</strong> and add the new slides at the end.</p>
+
+    <ul class="rules">
+      <li><strong>A new presentation.</strong> Use the same one from Healing &amp; Clone.</li>
+      <li class="ok">Keep the same design you used before.</li>
+      <li class="ok">Put the Before and After pictures side by side, the same size.</li>
+    </ul>
+
+    <h3>Add these slides</h3>
+    <ol class="prompts">
+      <li><span class="num">01</span><span><strong>How to change the hair and eye color:</strong> simple steps with your screenshots, like your Healing Tool slide</span></li>
+      <li><span class="num">02+</span><span><strong>Before &amp; After:</strong> one slide for each of your 7 pictures, the original next to your edit</span></li>
+    </ol>
+  </section>
+
+  <section id="submit">
+    <span class="stamp">Turning it in</span>
+    <p>Submit <strong>the link to your presentation</strong> in Google Classroom. It is the same link as Healing &amp; Clone, now with your new slides.</p>
+    <div class="exception">
+      <p><strong>Check your link before you turn in.</strong> A link I can't open counts as not turned in.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>// Computer Applications · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+/* ---------- Video ---------- */
+(function(){
+  function f(t){t=Math.max(0,Math.floor(t||0));var m=Math.floor(t/60),x=t%60;return m+':'+(x<10?'0':'')+x;}
+  [].forEach.call(document.querySelectorAll('.vplayer'),function(w){
+    var v=w.querySelector('video'),pb=w.querySelector('.vPlay'),tm=w.querySelector('.vtime');
+    if(!v)return;
+    function ui(){pb.textContent=v.paused?'▶ Play':'❚❚ Pause';tm.textContent=f(v.currentTime)+' / '+f(v.duration);}
+    function jump(d){v.currentTime=Math.min(Math.max(0,v.currentTime+d),v.duration||v.currentTime+d);ui();}
+    pb.onclick=function(){v.paused?v.play():v.pause();};
+    w.querySelector('.vBack').onclick=function(){jump(-10);};
+    w.querySelector('.vFwd').onclick=function(){jump(10);};
+    ['play','pause','timeupdate','loadedmetadata','ended','seeked'].forEach(function(e){v.addEventListener(e,ui);});
+    ui();
+  });
+})();
+
+/* ---------- Layer lab ---------- */
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var base=$('labBase'),paint=$('labPaint'),models=$('labModels'),tabs=$('labTabs'),num=$('labNum'),txt=$('labTxt'),
+      tag=$('labTag'),panel=$('labPanel'),modeSel=$('labMode'),op=$('labOp'),opV=$('labOpV'),layers=$('labLayers'),swBox=$('labSw');
+  if(!base)return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // deterministic random so the drawing is the same every time
+  var seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+
+  var EYE_ALMOND='M70,155 C120,85 280,85 330,155 C280,215 120,215 70,155 Z';
+  var HAIR='M-10,-10 L310,-10 C338,52 318,112 262,166 C222,206 206,252 218,310 L-10,310 Z';
+
+  function eyeSVG(){
+    seed=7;var s='<defs>'+
+      '<radialGradient id="eSk" cx="50%" cy="55%" r="75%"><stop offset="0" stop-color="#f2cbab"/><stop offset=".6" stop-color="#dca383"/><stop offset="1" stop-color="#b8785a"/></radialGradient>'+
+      '<radialGradient id="eScl" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#fbf8f4"/><stop offset=".75" stop-color="#ece2d8"/><stop offset="1" stop-color="#cdb7a6"/></radialGradient>'+
+      '<radialGradient id="eIr" cx="200" cy="150" r="64" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d2a866"/><stop offset=".42" stop-color="#93663a"/><stop offset=".8" stop-color="#5e3c20"/><stop offset="1" stop-color="#2a180c"/></radialGradient>'+
+      '<linearGradient id="eLid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+      '<clipPath id="eClip"><path d="'+EYE_ALMOND+'"/></clipPath></defs>';
+    s+='<rect width="400" height="300" fill="url(#eSk)"/>';
+    s+='<path d="M78,74 C150,34 262,32 334,60 C262,50 160,54 86,88 Z" fill="#4a2f1e" opacity=".9"/>';
+    for(var i=0;i<70;i++){var t=i/69,x=86+t*240,y=80-Math.sin(t*Math.PI)*30+rnd()*6;
+      s+='<path d="M'+x.toFixed(1)+','+y.toFixed(1)+' q'+(8+rnd()*6).toFixed(1)+','+(-6-rnd()*5).toFixed(1)+' '+(16+rnd()*6).toFixed(1)+','+(-4-rnd()*4).toFixed(1)+'" stroke="#2e1c10" stroke-width="1.2" fill="none" opacity=".7"/>';}
+    s+='<path d="M76,128 C140,72 268,70 326,124" stroke="#9e6a52" stroke-width="3" fill="none" opacity=".55"/>';
+    s+='<path d="'+EYE_ALMOND+'" fill="url(#eScl)"/>';
+    s+='<g clip-path="url(#eClip)"><circle cx="200" cy="150" r="64" fill="url(#eIr)"/>';
+    for(i=0;i<110;i++){var a=rnd()*Math.PI*2,r0=24+rnd()*6,r1=44+rnd()*18,lt=rnd()<.5;
+      s+='<line x1="'+(200+Math.cos(a)*r0).toFixed(1)+'" y1="'+(150+Math.sin(a)*r0).toFixed(1)+'" x2="'+(200+Math.cos(a)*r1).toFixed(1)+'" y2="'+(150+Math.sin(a)*r1).toFixed(1)+'" stroke="'+(lt?'#f3d39a':'#2a160a')+'" stroke-width="'+(.7+rnd()*1.3).toFixed(2)+'" opacity="'+(lt?.45:.4)+'"/>';}
+    for(i=0;i<14;i++){var a2=rnd()*Math.PI*2,r2=34+rnd()*20;
+      s+='<ellipse cx="'+(200+Math.cos(a2)*r2).toFixed(1)+'" cy="'+(150+Math.sin(a2)*r2).toFixed(1)+'" rx="'+(2+rnd()*3).toFixed(1)+'" ry="'+(1+rnd()*2).toFixed(1)+'" fill="#24130a" opacity=".35" transform="rotate('+(a2*57.3).toFixed(0)+' '+(200+Math.cos(a2)*r2).toFixed(1)+' '+(150+Math.sin(a2)*r2).toFixed(1)+')"/>';}
+    s+='<circle cx="200" cy="150" r="62.5" fill="none" stroke="#1e1108" stroke-width="3.5" opacity=".75"/>';
+    s+='<circle cx="200" cy="150" r="23" fill="#0c0806"/>';
+    s+='<rect x="60" y="88" width="280" height="46" fill="url(#eLid)"/></g>';
+    s+='<circle cx="221" cy="129" r="8.5" fill="#fff" opacity=".93"/><circle cx="186" cy="168" r="3" fill="#fff" opacity=".5"/>';
+    s+='<path d="M70,155 C120,85 280,85 330,155" stroke="#2e1a0f" stroke-width="5" fill="none" stroke-linecap="round"/>';
+    s+='<path d="M76,159 C122,211 280,211 326,159" stroke="#a46a52" stroke-width="2.2" fill="none" opacity=".7"/>';
+    // lashes along the upper lid
+    function bz(t,a,b,c,d){var m=1-t;return m*m*m*a+3*m*m*t*b+3*m*t*t*c+t*t*t*d;}
+    for(i=0;i<46;i++){var u=.05+i*.02,px=bz(u,70,120,280,330),py=bz(u,155,85,85,155),
+        dx=bz(u+.01,70,120,280,330)-px,dy=bz(u+.01,155,85,85,155)-py,L=Math.hypot(dx,dy),nx=dy/L,ny=-dx/L,len=14+rnd()*10+Math.sin(u*Math.PI)*6,
+        side=(u-.5)*1.4;
+      var ex=px+(nx+side*.6)*len,ey=py+ny*len;
+      s+='<path d="M'+px.toFixed(1)+','+py.toFixed(1)+' Q'+(px+nx*len*.6).toFixed(1)+','+(py+ny*len*.7).toFixed(1)+' '+ex.toFixed(1)+','+ey.toFixed(1)+'" stroke="#1b0f08" stroke-width="'+(1.1+rnd()*.6).toFixed(2)+'" fill="none" stroke-linecap="round"/>';}
+    return s;
+  }
+  function eyePaint(c){
+    return '<defs><clipPath id="pClip"><path d="'+EYE_ALMOND+'"/></clipPath><filter id="pBl" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.4"/></filter></defs>'+
+      '<g clip-path="url(#pClip)"><path d="M200,88 a62,62 0 1,0 .1,0 Z M200,125 a25,25 0 1,1 -.1,0 Z" fill-rule="evenodd" fill="'+c+'" filter="url(#pBl)"/></g>';
+  }
+  function hairSVG(){
+    seed=11;var s='<defs>'+
+      '<linearGradient id="hBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d3dbe6"/><stop offset="1" stop-color="#94a6bd"/></linearGradient>'+
+      '<linearGradient id="hSk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0c6a4"/><stop offset="1" stop-color="#c88a68"/></linearGradient>'+
+      '<clipPath id="hClip"><path d="'+HAIR+'"/></clipPath>'+
+      '<filter id="hBl"><feGaussianBlur stdDeviation="6"/></filter></defs>';
+    s+='<rect width="400" height="300" fill="url(#hBg)"/>';
+    s+='<path d="M236,310 C238,250 268,214 318,196 C352,184 386,186 410,192 L410,310 Z" fill="url(#hSk)"/>';
+    s+='<path d="'+HAIR+'" fill="#8a5631"/>';
+    s+='<g clip-path="url(#hClip)">';
+    s+='<path d="M60,-10 C140,70 40,160 120,310" stroke="#d9a46a" stroke-width="46" fill="none" opacity=".35" filter="url(#hBl)"/>';
+    s+='<path d="M200,-10 C270,80 170,170 220,310" stroke="#3a200e" stroke-width="40" fill="none" opacity=".35" filter="url(#hBl)"/>';
+    for(var i=0;i<120;i++){var x=-30+rnd()*360,w=(rnd()*2.4+.6).toFixed(2),k=rnd(),col=k<.33?'#c48c56':k<.7?'#6e4222':'#3a200e',
+        b1=(rnd()*70-20),b2=(rnd()*70-50);
+      s+='<path d="M'+x.toFixed(1)+',-10 C'+(x+b1+30).toFixed(1)+',80 '+(x+b2-20).toFixed(1)+',180 '+(x+b1*.5+10).toFixed(1)+',310" stroke="'+col+'" stroke-width="'+w+'" fill="none" opacity="'+(.45+rnd()*.4).toFixed(2)+'"/>';}
+    s+='</g>';
+    for(i=0;i<9;i++){var y=40+i*14+rnd()*8,x0=300-i*5;
+      s+='<path d="M'+(x0-12).toFixed(1)+','+y.toFixed(1)+' q'+(14+rnd()*10).toFixed(1)+','+(4+rnd()*8).toFixed(1)+' '+(22+rnd()*12).toFixed(1)+','+(18+rnd()*10).toFixed(1)+'" stroke="#6e4222" stroke-width="1" fill="none" opacity=".6"/>';}
+    return s;
+  }
+  function hairPaint(c){
+    return '<defs><filter id="pBl2" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="2"/></filter></defs>'+
+      '<path d="'+HAIR+'" fill="'+c+'" filter="url(#pBl2)"/>';
+  }
+
+  var COLORS=[['Green','#2e9e4f'],['Blue','#2a7de1'],['Violet','#8e44c9'],['Red','#d62f3a'],['Pink','#e84f9a'],['Gold','#e0a21b']];
+  var MODES={normal:'Normal',overlay:'Overlay','soft-light':'Soft light',color:'Color',multiply:'Multiply',screen:'Screen'};
+  var M={
+    eye:{name:'Eye',layer:'Eyes',color:'#2e9e4f',opac:70,svg:eyeSVG,paint:eyePaint,
+      thumb:'radial-gradient(circle at 50% 50%,#111 0 13%,#7a5130 14% 32%,#f3eee8 33% 50%,#dca383 51%)',
+      steps:[
+        ['Original','This is the <strong>Background</strong> layer: the original picture. You never paint on it.'],
+        ['New layer','Right-click Background › <strong>New Layer</strong>, fill with <strong>Transparency</strong> and name it <strong>Eyes</strong>. It is empty, so nothing changes yet.'],
+        ['Paint','Pick the <strong>Paintbrush</strong> and a color. Paint over the colored part of the eye, not the black center. In <strong>Normal</strong> mode it looks fake: the paint covers all the details.'],
+        ['Blend mode','Change the layer <strong>Mode</strong> to <strong>Overlay</strong>. Now the color mixes with the eye, and you keep the details.'],
+        ['Opacity','Lower the <strong>Opacity</strong> to about <strong>70</strong> so it looks natural. Now try other modes and colors in the Layers panel.']]},
+    hair:{name:'Hair',layer:'Hair',color:'#d62f3a',opac:80,svg:hairSVG,paint:hairPaint,
+      thumb:'linear-gradient(135deg,#8a5631 0 58%,#c3cfdd 59%)',
+      steps:[
+        ['Original','This is the <strong>Background</strong> layer: the original picture. You never paint on it.'],
+        ['New layer','Right-click Background › <strong>New Layer</strong>, fill with <strong>Transparency</strong> and name it <strong>Hair</strong>. It is empty, so nothing changes yet.'],
+        ['Paint','Paint over the hair with a <strong>big brush</strong>. Erase any paint on the skin or the background. In <strong>Normal</strong> mode it looks like a helmet.'],
+        ['Blend mode','Change the layer <strong>Mode</strong> to <strong>Overlay</strong>. The color takes the shine and the strands of the hair. For dark hair, try <strong>Color</strong>.'],
+        ['Opacity','Lower the <strong>Opacity</strong> to about <strong>80</strong> so it looks natural. Now try other modes and colors in the Layers panel.']]}
+  };
+  var model='eye',step=0,S={mode:'normal',op:100,color:'#2e9e4f'},anim=0;
+
+  function renderLayers(fresh){
+    var m=M[model],h='';
+    if(step>=1)h+='<div class="ly on'+(fresh?' new':'')+'"><span class="eye"></span><span class="th chk">'+(step>=2?'<i style="background:'+S.color+'"></i>':'')+'</span><span>'+m.layer+'</span></div>';
+    h+='<div class="ly'+(step>=1?'':' on')+'"><span class="eye"></span><span class="th" style="background:'+m.thumb+'"></span><span>Background</span></div>';
+    layers.innerHTML=h;
+  }
+  function apply(){
+    paint.style.mixBlendMode=S.mode;
+    paint.style.opacity=step>=2?(S.op/100):0;
+    modeSel.value=S.mode;op.value=S.op;opV.textContent=(+S.op).toFixed(1);
+    panel.classList.toggle('off',step<2);
+    tag.textContent=step===0?'Original':step===1?'Empty layer':MODES[S.mode]+' · '+Math.round(S.op)+'%';
+    [].forEach.call(swBox.children,function(b){b.setAttribute('aria-pressed',b.dataset.c===S.color);});
+    var th=layers.querySelector('.th.chk i');if(th)th.style.background=S.color;
+  }
+  function setPaint(){paint.innerHTML=M[model].paint(S.color);}
+  function show(i){
+    var m=M[model],prev=step;step=i;cancelAnimationFrame(anim);
+    [].forEach.call(tabs.children,function(b,j){b.setAttribute('aria-pressed',j===i);});
+    num.textContent='0'+(i+1);txt.innerHTML=m.steps[i][1];
+    S.mode=i>=3?'overlay':'normal';
+    renderLayers(i===1&&prev!==1);
+    if(i===4&&!reduce){
+      S.op=100;apply();var t0=performance.now();
+      (function fr(now){var k=Math.min(1,(now-t0)/900),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+        S.op=Math.round(100-(100-m.opac)*e);apply();if(k<1&&step===4)anim=requestAnimationFrame(fr);})(t0);
+    }else{S.op=i===4?m.opac:100;apply();}
+  }
+  function setModel(k){
+    model=k;var m=M[k];S.color=m.color;
+    base.innerHTML=m.svg();setPaint();
+    [].forEach.call(models.children,function(b){b.setAttribute('aria-pressed',b.dataset.m===k);});
+    tabs.innerHTML='';
+    m.steps.forEach(function(s,i){var b=document.createElement('button');b.type='button';
+      b.innerHTML='<b>0'+(i+1)+'</b>'+s[0];b.onclick=function(){show(i);};tabs.appendChild(b);});
+    step=-1;show(0);
+  }
+  Object.keys(M).forEach(function(k){var b=document.createElement('button');b.type='button';b.dataset.m=k;b.textContent=M[k].name;
+    b.onclick=function(){if(model!==k)setModel(k);};models.appendChild(b);});
+  COLORS.forEach(function(c){var b=document.createElement('button');b.type='button';b.dataset.c=c[1];b.style.background=c[1];
+    b.setAttribute('aria-label',c[0]);b.onclick=function(){S.color=c[1];setPaint();apply();};swBox.appendChild(b);});
+  modeSel.onchange=function(){S.mode=modeSel.value;apply();};
+  op.oninput=function(){cancelAnimationFrame(anim);S.op=+op.value;apply();};
+  setModel('eye');
+})();
+</script>
+</body>
+</html>
