@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box &amp; Case · Fusion 360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#12275C;        /* ATS ink navy */
+    --navy-deep:#0b1740;
+    --gold:#F3B700;        /* ATS signal gold */
+    --gold-soft:#FFD23D;
+    --teal:#0E7C8B;        /* Gulf accent */
+    --green:#0F6E56;
+    --paper:#EDF1FA;       /* cool paper */
+    --surface:#ffffff;
+    --surface-2:#f4f6fb;
+    --ink:#14203A;
+    --muted:#5C6B88;
+    --line:rgba(18,39,92,.16);
+    --stamp-red:#9F1239;
+    --panel:#12275C;       /* fixed dark navy panels (same in both themes) */
+    --panel-2:#0b1740;
+    /* bottle diagram */
+    --bt-sk:#1f6fd1;
+    --bt-prof:rgba(31,111,209,.13);
+    --bt-hi:#f3f5f8;
+    --bt-mid:#c3c8d0;
+    --bt-lo:#7e8692;
+    --bt-edge:#4b5563;
+    --bt-cav:#eef2f8;
+    --bt-wall:#5f6875;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --navy:#7fa0ff;
+      --navy-deep:#05091c;
+      --gold:#FFD23D;
+      --gold-soft:#FFE07A;
+      --teal:#3ac6d6;
+      --green:#4bd6ab;
+      --paper:#080d1e;
+      --surface:#111a33;
+      --surface-2:#0c1429;
+      --ink:#e9eeff;
+      --muted:#9aabcf;
+      --line:rgba(130,160,230,.22);
+      --stamp-red:#f2778f;
+      --panel:#0f2350;
+      --panel-2:#070f26;
+      --bt-sk:#7fb0ff;
+      --bt-prof:rgba(127,176,255,.16);
+      --bt-hi:#e4e8ef;
+      --bt-mid:#a2aab6;
+      --bt-lo:#5d6572;
+      --bt-edge:#d4dbe7;
+      --bt-cav:#0a1226;
+      --bt-wall:#97a1b0;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--navy-deep)}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:3px}
+  strong{font-weight:700}
+
+  /* ---------- Passport cover (hero) ---------- */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 16% 20%, rgba(243,183,0,.20), transparent 44%),
+      radial-gradient(circle at 84% 80%, rgba(14,124,139,.32), transparent 48%),
+      linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%);
+    color:#fff;
+    padding:58px 20px 78px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.15) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+    opacity:.55;pointer-events:none;
+  }
+  @keyframes slam{0%{transform:rotate(-11deg) scale(2.4);opacity:0}
+                  60%{transform:rotate(-11deg) scale(.94);opacity:1}
+                  100%{transform:rotate(-11deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:no-preference){
+    .approved{animation:slam .55s cubic-bezier(.2,1.4,.5,1) .35s both}
+  }
+  .cover-frame{
+    position:relative;
+    max-width:660px;
+    margin:0 auto;
+    border:3px solid var(--gold);
+    border-radius:22px;
+    padding:44px 26px 36px;
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.30);
+  }
+  .cover-frame::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:2px dashed rgba(243,183,0,.45);
+    border-radius:15px;
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(44px,9vw,78px);
+    font-weight:600;
+    letter-spacing:-.02em;
+    line-height:.98;
+    text-shadow:0 4px 0 rgba(0,0,0,.22);
+  }
+  .cover h1 .pop{display:inline-block;color:var(--gold);transform:rotate(-2.5deg)}
+  .cover .subtitle{
+    font-family:'Fredoka',sans-serif;
+    font-weight:400;
+    font-size:clamp(17px,3vw,24px);
+    color:#fff;opacity:.92;
+    margin-top:10px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:20px}
+  .chips span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(243,183,0,.55);
+    border-radius:999px;
+    padding:6px 13px;
+  }
+  .cover .meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;
+    margin-top:20px;
+    color:rgba(255,255,255,.65);
+  }
+  .approved{
+    position:absolute;right:-4px;bottom:-22px;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-soft);
+    border:3px double var(--gold-soft);
+    border-radius:10px;
+    padding:8px 14px;
+    background:rgba(11,23,64,.9);
+    transform:rotate(-11deg);
+  }
+  @media (max-width:560px){
+    .approved{position:static;display:inline-block;margin-top:20px;transform:rotate(-3deg)}
+  }
+
+  /* ---------- Layout ---------- */
+  main{max-width:860px;margin:0 auto;padding:24px 24px 0}
+  section{padding:44px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  /* stamp-style section headers */
+  .stamp{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    border:2px dashed var(--navy);
+    border-radius:8px;
+    padding:8px 16px;
+    transform:rotate(-1.6deg);
+    margin-bottom:22px;
+  }
+  .stamp.red{color:var(--stamp-red);border-color:var(--stamp-red);transform:rotate(1.4deg)}
+  .stamp.gold{color:var(--gold);border-color:var(--gold);transform:rotate(-1deg)}
+
+  p{margin-bottom:14px;max-width:68ch}
+  .lead{font-size:19.5px}
+
+  /* ---------- Cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:10px 0 24px}
+  .card{
+    background:var(--surface);
+    border:1.5px solid var(--line);
+    border-top:4px solid var(--gold);
+    border-radius:12px;
+    padding:20px 18px 16px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .card h4{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0}
+  .card.good{border-top-color:var(--green)}
+  .card.bad{border-top-color:var(--stamp-red)}
+  .example-link{
+    display:inline-flex;align-items:center;gap:8px;margin:2px 0 6px;
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.02em;
+    color:var(--navy);text-decoration:none;
+    border-bottom:2px solid var(--gold);padding-bottom:2px;
+    transition:gap .18s;
+  }
+  .example-link:hover{gap:13px}
+
+  /* ---------- Numbered steps ---------- */
+  .steps{margin:16px 0 22px;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:12px 0 12px 46px;
+    border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+    color:var(--gold);
+  }
+  .code{
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:2px 8px;color:var(--teal);white-space:nowrap;
+  }
+  .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--teal);white-space:nowrap}
+  .menu{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);font-weight:500}
+  .exception{
+    border-left:4px solid var(--gold);
+    background:var(--surface);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:18px 0;
+  }
+  .exception p{margin-bottom:0}
+
+  /* ---------- Rules ---------- */
+  .rules{list-style:none;margin:12px 0 24px}
+  .rules li{
+    padding:10px 0 10px 30px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rules li:last-child{border-bottom:none}
+  .rules li::before{
+    content:"✕";
+    position:absolute;left:2px;top:10px;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .rules li.ok::before{content:"✓";color:var(--green)}
+  .rules .example-link{margin-top:6px}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--stamp-red);font-weight:700}
+
+  /* ---------- Key caps (Enter vs Esc) ---------- */
+  .keycap{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:96px;height:58px;padding:0 18px;margin:6px 0 12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;
+    color:var(--ink);background:var(--surface-2);
+    border:1.5px solid var(--line);border-bottom-width:6px;border-radius:12px;
+  }
+  .card.good .keycap{border-color:var(--green)}
+  .card.bad .keycap{border-color:var(--stamp-red)}
+
+  /* ---------- Video ---------- */
+  .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 14px 34px rgba(11,23,64,.28);margin:16px 0 4px;background:#000}
+  .video video{position:absolute;inset:0;width:100%;height:100%;display:block;background:#000}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .vctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 6px}
+  .vctrls button{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;border:1.5px solid var(--navy);color:var(--navy);background:transparent;border-radius:8px;padding:9px 16px;cursor:pointer}
+  .vctrls button.main{background:var(--navy);color:var(--paper);min-width:112px}
+  .vctrls button:hover{transform:translateY(-1px)}
+  .vtime{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-left:auto}
+  .chap-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin:16px 0 8px}
+  .chapters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .chapters button{
+    display:inline-flex;align-items:baseline;gap:7px;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:14.5px;
+    color:var(--ink);background:var(--surface);
+    border:1.5px solid var(--line);border-radius:999px;padding:5px 13px;cursor:pointer;
+  }
+  .chapters button i{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+  .chapters button:hover{border-color:var(--gold)}
+  .chapters button.on{background:var(--gold);border-color:var(--gold);color:#1d1608}
+  .chapters button.on i{color:#4a3a06}
+  .yt-link{margin-top:10px}
+
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.8);text-align:center;padding:25px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:40px}
+  footer .who{display:block;margin-top:6px;color:rgba(255,255,255,.6)}
+  .dl{display:block;text-decoration:none;color:#fff;background:var(--panel);border-radius:12px;padding:20px 22px;margin:18px 0 10px;border:2px solid transparent;transition:border-color .18s}
+  .dl:hover{border-color:var(--gold)}
+  .dl .tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}
+  .dl .t{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;margin:4px 0 2px}
+  .dl .u{display:block;font-size:15.5px;color:rgba(255,255,255,.8)}
+  .dl .btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:var(--gold);color:#0b1740;font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;padding:10px 20px;border-radius:999px;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .15s,box-shadow .15s}
+  .dl:hover .btn{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.25)}
+  .vplayer{margin:16px 0 8px}
+  .vplayer .video{margin-top:0}
+  .vlabel{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin:26px 0 8px;font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-frame">
+    <p class="eyebrow">MakerSpace · Task 11 · Fusion 360</p>
+    <h1>Box <span class="pop">&amp;</span> Case</h1>
+    <p class="subtitle">Design two boxes you can 3D print: a box with a sliding lid and a case for an Arduino Uno.</p>
+    <div class="chips">
+      <span>2 boxes</span>
+      <span>User Parameters</span>
+      <span>Dovetail</span>
+      <span>Enclosure</span>
+      <span>Joints</span>
+    </div>
+    <p class="meta">SCHOOL YEAR 2026–2027 · ROOM LB6</p>
+    <div class="approved">It fits!</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="mission">
+    <span class="stamp">Your Mission</span>
+    <p class="lead">Model two boxes in Fusion 360. Start with a box that has a <strong>sliding lid</strong>. Then level up with a <strong>case for an Arduino Uno</strong>.</p>
+    <div class="cards">
+      <div class="card">
+        <p class="label">Box 01</p>
+        <h4>Sliding Lid Box</h4>
+        <p>A box with a lid that slides in on a dovetail, like a pencil case.</p>
+      </div>
+      <div class="card">
+        <p class="label">Box 02 · Harder</p>
+        <h4>Arduino Case</h4>
+        <p>A case for an Arduino Uno, with holes for its ports and vents on top.</p>
+      </div>
+    </div>
+    <div class="exception">
+      <p><strong>Watch every video in full</strong> and build in Fusion 360 at the same time. Pause whenever you need to.</p>
+    </div>
+  </section>
+
+  <section id="box1">
+    <span class="stamp">Box 01 · Sliding Lid Box</span>
+    <p>Build the box and its sliding lid following the video.</p>
+    <div class="vplayer">
+      <div class="video"><video controls preload="metadata" playsinline poster="../../makerspace/task-11-SlideSnap/box_poster.jpg" src="../../makerspace/task-11-SlideSnap/box_fusion.mp4">Your browser can't play this video.</video></div>
+      <div class="vctrls">
+        <button type="button" class="vBack" aria-label="Go back 10 seconds">⟲ 10s</button>
+        <button type="button" class="vPlay main">▶ Play</button>
+        <button type="button" class="vFwd" aria-label="Go forward 10 seconds">10s ⟳</button>
+        <span class="vtime">0:00 / 0:00</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="box2">
+    <span class="stamp gold">Box 02 · Arduino Case</span>
+    <p>Build a case for an Arduino Uno following the video. It comes in two parts. Finish Part A before you start Part B.</p>
+    <a class="dl" href="../../makerspace/task-11-SlideSnap/ARDUINO-UNO.stp" download="ARDUINO-UNO.stp">
+      <span class="tag">Before you start · STEP file</span>
+      <span class="t">Arduino Uno</span>
+      <span class="u">Download it and open it in Fusion. You will design the case around it.</span>
+      <span class="btn">↓ Download the Arduino Uno model</span>
+    </a>
+
+    <p class="vlabel">Part A</p>
+    <div class="vplayer">
+      <div class="video"><video controls preload="metadata" playsinline poster="../../makerspace/task-11-SlideSnap/arduino_poster.jpg" src="../../makerspace/task-11-SlideSnap/arduino_part1.mp4">Your browser can't play this video.</video></div>
+      <div class="vctrls">
+        <button type="button" class="vBack" aria-label="Go back 10 seconds">⟲ 10s</button>
+        <button type="button" class="vPlay main">▶ Play</button>
+        <button type="button" class="vFwd" aria-label="Go forward 10 seconds">10s ⟳</button>
+        <span class="vtime">0:00 / 0:00</span>
+      </div>
+    </div>
+
+    <p class="vlabel">Part B</p>
+    <div class="vplayer">
+      <div class="video"><video controls preload="metadata" playsinline poster="../../makerspace/task-11-SlideSnap/arduino2_poster.jpg" src="../../makerspace/task-11-SlideSnap/arduino_part2.mp4">Your browser can't play this video.</video></div>
+      <div class="vctrls">
+        <button type="button" class="vBack" aria-label="Go back 10 seconds">⟲ 10s</button>
+        <button type="button" class="vPlay main">▶ Play</button>
+        <button type="button" class="vFwd" aria-label="Go forward 10 seconds">10s ⟳</button>
+        <span class="vtime">0:00 / 0:00</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="submit">
+    <span class="stamp">Turning it in</span>
+    <p>Export each design from Fusion with <span class="menu">File › Export</span> as <span class="code">.f3d</span>. Then right-click the top of the Browser › <span class="menu">Save As Mesh</span> and choose STL.</p>
+    <p>Turn in these 4 files in Google Classroom:</p>
+    <ol class="steps">
+      <li>Your <strong>Sliding Lid Box</strong>: <span class="code">Lastname_SlideBox.f3d</span></li>
+      <li>The <strong>Sliding Lid Box</strong> as a mesh: <span class="code">Lastname_SlideBox.stl</span></li>
+      <li>Your <strong>Arduino Case</strong>: <span class="code">Lastname_ArduinoCase.f3d</span></li>
+      <li>The <strong>Arduino Case</strong> as a mesh: <span class="code">Lastname_ArduinoCase.stl</span></li>
+    </ol>
+    <div class="exception">
+      <p><strong>Check your files before you turn in.</strong> A file I can't open counts as not turned in.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>// MakerSpace · The American School of Tampico · ROOM LB6 · 2026–2027<span class="who">Ms. Ma. Elena Montes (Ms. Pelen)</span></footer>
+
+<script>
+/* ---------- Videos ---------- */
+(function(){
+  function f(t){t=Math.max(0,Math.floor(t||0));var m=Math.floor(t/60),x=t%60;return m+':'+(x<10?'0':'')+x;}
+  [].forEach.call(document.querySelectorAll('.vplayer'),function(w){
+    var v=w.querySelector('video'),pb=w.querySelector('.vPlay'),tm=w.querySelector('.vtime'),
+        ch=[].slice.call(w.querySelectorAll('.chapters button'));
+    if(!v)return;
+    function ui(){
+      pb.textContent=v.paused?'▶ Play':'❚❚ Pause';
+      tm.textContent=f(v.currentTime)+' / '+f(v.duration);
+      var on=-1;ch.forEach(function(b,i){if(v.currentTime>=+b.dataset.t-.5)on=i;});
+      ch.forEach(function(b,i){b.classList.toggle('on',i===on);});
+    }
+    function jump(d){v.currentTime=Math.min(Math.max(0,v.currentTime+d),v.duration||v.currentTime+d);ui();}
+    pb.onclick=function(){v.paused?v.play():v.pause();};
+    w.querySelector('.vBack').onclick=function(){jump(-10);};
+    w.querySelector('.vFwd').onclick=function(){jump(10);};
+    ch.forEach(function(b){b.onclick=function(){v.currentTime=+b.dataset.t;ui();v.play();};});
+    ['play','pause','timeupdate','loadedmetadata','ended','seeked'].forEach(function(e){v.addEventListener(e,ui);});
+    ui();
+  });
+})();
+
+</script>
+</body>
+</html>
