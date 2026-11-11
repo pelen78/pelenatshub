@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap");
+@import url("./palette.css");
+
+/* Shared presentation for standalone assignments. Interactive examples retain their own styles. */
+body:has(> header.cover), body:has(> .wrap > header.top) {
+  background: var(--hub-bg);
+  color: var(--ink, var(--hub-ink));
+  font-family: var(--hub-body);
+}
+
+body > header.cover {
+  margin: clamp(12px, 2.3vw, 30px) auto 0;
+  width: min(1050px, calc(100% - 2 * clamp(12px, 2.3vw, 30px)));
+  padding: clamp(28px, 5vw, 55px) clamp(13px, 4vw, 55px);
+  background: linear-gradient(115deg, var(--ats-deep), var(--ats-navy) 70%, #214c83);
+  border-radius: 19px;
+  border-bottom: 3px solid var(--ats-gold);
+}
+body > header.cover::before { opacity: .22; }
+body > header.cover .cover-frame {
+  max-width: 790px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0 0 12px;
+}
+body > header.cover .cover-frame::before { display: none; }
+body > header.cover h1 {
+  font-family: var(--hub-display);
+  font-size: clamp(2.35rem, 6.8vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -.045em;
+  overflow-wrap: anywhere;
+}
+body > header.cover :is(h1, .subtitle) { text-shadow: none; }
+body > header.cover h1 :is(.pop, .float) { animation: none; transform: none; text-shadow: none; }
+body > header.cover .subtitle { font-family: var(--hub-body); }
+body > header.cover .approved { position: static; display: inline-block; margin-top: 16px; transform: none; animation: none; }
+
+body:has(> header.cover) > main {
+  width: min(100%, 1050px);
+  max-width: none;
+  margin-inline: auto;
+  padding: clamp(12px, 2.3vw, 30px) clamp(12px, 2.3vw, 30px) 0;
+}
+body:has(> header.cover) > main > section,
+body > .wrap:has(> header.top) > section {
+  min-width: 0;
+  margin: 0 0 17px;
+  padding: clamp(14px, 3vw, 32px);
+  background: var(--surface, var(--hub-surface));
+  border: 1px solid var(--hub-border);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px #10254d0a;
+}
+body:has(> header.cover) > main > section:last-of-type { border-bottom: 1px solid var(--hub-border); }
+body:has(> header.cover) > main :is(h2, h3, h4),
+body > .wrap:has(> header.top) :is(h1, h2, h3) { font-family: var(--hub-display); }
+body:has(> header.cover) > main .stamp {
+  transform: none;
+  border: 1px solid var(--hub-border);
+  border-left: 3px solid var(--ats-gold);
+  background: var(--hub-tint);
+  color: var(--hub-ink);
+  border-radius: 7px;
+  padding: 7px 11px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  margin-bottom: 15px;
+  font-family: var(--hub-body);
+  letter-spacing: .04em;
+}
+body:has(> header.cover) > main :is(.ex .frame, .video, .video-wrap) {
+  border-radius: 12px;
+  box-shadow: 0 3px 9px #10254d24;
+}
+body:has(> header.cover) > main :is(video, iframe, img) { max-width: 100%; }
+body:has(> header.cover) > main :is(.table-scroll, .table-wrap) { max-width: 100%; overflow-x: auto; }
+body:has(> header.cover) > footer { font-family: var(--hub-body); }
+body > .wrap > header.top h1 { color: var(--ink, var(--hub-ink)); }
+@media (max-width: 450px) {
+  body:has(> header.cover) > main :is(.examples.two, .checklist, .cards) { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 450px) {
+  body:has(> header.cover) > main :is(.inline, .code) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  body:has(> header.cover) > main .question {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-wrap: anywhere;
+  }
+  body:has(> header.cover) > main .question > * { min-width: 0; }
+  body > .wrap:has(> header.top) :is(.top, .lab, .play, .build) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body > .wrap:has(> header.top) :is(.tasks, .side, .gpanel, .fx, .who, .task-text) { min-width: 0; }
+  body > .wrap:has(> header.top) :is(.tasks-head, .who-row, .code-row) { flex-wrap: wrap; }
+  body > .wrap:has(> header.top) :is(.task-text, .who-note) { overflow-wrap: anywhere; }
+}

@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap");
+@import url("./palette.css");
+
+@media screen {
+  body { font-family: var(--hub-body); }
+  .hub-header { background: linear-gradient(105deg, var(--ats-deep), var(--ats-navy)); border-bottom: 2px solid var(--ats-gold); }
+  .masthead h1, .board-head h2, .section-label { font-family: var(--hub-display); }
+  .board-head { background: linear-gradient(105deg, var(--ats-deep), var(--ats-navy)); }
+  .classboard, .selection-bar { border-radius: 15px; }
+}

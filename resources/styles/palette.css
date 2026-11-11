@@ -1,0 +1,23 @@
+:root {
+  --ats-navy: #12275c;
+  --ats-deep: #0b1740;
+  --ats-gold: #f3b700;
+  --hub-bg: #f3f6fc;
+  --hub-surface: #fff;
+  --hub-ink: #14203a;
+  --hub-muted: #4c5f7d;
+  --hub-border: #dbe3f1;
+  --hub-tint: #eaf0fa;
+  --hub-body: "DM Sans", system-ui, sans-serif;
+  --hub-display: "Instrument Sans", "DM Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hub-bg: #0a1226;
+    --hub-surface: #111d36;
+    --hub-ink: #ecf2ff;
+    --hub-muted: #b1c0db;
+    --hub-border: #2b3b59;
+    --hub-tint: #1c2a48;
+  }
+}
