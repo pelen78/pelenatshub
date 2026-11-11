@@ -270,25 +270,6 @@
   .exception p{margin-bottom:0}
   .exception p + p{margin-top:8px}
 
-  .gimp-update{
-    background:#fff8da;color:#14203A;
-    border:1.5px solid #e5d38f;border-left:4px solid #F3B700;
-    border-radius:12px;padding:16px clamp(14px,3vw,22px);margin:0 0 24px;
-  }
-  .gimp-update h3{
-    display:flex;align-items:flex-start;gap:10px;margin:0 0 8px;
-    font-size:clamp(19px,3vw,23px);line-height:1.25;
-  }
-  .gimp-update-icon{
-    display:inline-grid;place-items:center;flex:none;width:22px;height:22px;
-    margin-top:2px;border:1.5px solid currentColor;border-radius:50%;
-    font:700 14px 'JetBrains Mono',monospace;color:#695013;
-  }
-  .gimp-update p{margin-bottom:8px}
-  .gimp-update ol{padding-inline-start:1.5em;margin:0 0 10px}
-  .gimp-update li + li{margin-top:4px}
-  .gimp-update p:last-child{margin-bottom:0}
-
   /* ---------- Rules ---------- */
   .rules{list-style:none;margin:12px 0 24px}
   .rules li{padding:10px 0 10px 30px;position:relative;border-bottom:1px solid var(--line)}
@@ -414,22 +395,6 @@
       <span class="u">PDF on Google Drive</span>
       <span class="btn">↓ Download the tutorial</span>
     </a>
-
-    <aside class="gimp-update" aria-labelledby="gimp-update-title">
-      <h3 id="gimp-update-title"><span class="gimp-update-icon" aria-hidden="true">i</span>GIMP 3 Update – Important!</h3>
-      <p>GIMP 3 uses non-destructive filters, which means some effects must be merged with the layer before using <strong>Bump Map</strong>.</p>
-      <p><strong>Before applying Bump Map:</strong></p>
-      <ol>
-        <li>In the <strong>Layers</strong> panel, locate the colorful <strong>Plasma</strong> layer (usually named "<strong>Layer</strong>").</li>
-        <li>Click the <strong>fx</strong> icon next to that layer.</li>
-        <li>Select <strong>Merge all active filters down</strong>.</li>
-        <li>Select the <strong>Plasma</strong> layer and go to <strong>Filters → Map → Bump Map</strong>.</li>
-        <li>Set <strong>Height Map</strong> to the layer named <strong>Visible</strong>.</li>
-        <li>Change <strong>Depth</strong> to <strong>6</strong>.</li>
-      </ol>
-      <p>Your letters should now appear raised above the colorful background, as shown in the tutorial.</p>
-    </aside>
-
     <p>When you finish, export <strong>two versions</strong> of your logo: a <strong>JPG</strong> with your solid-color background, and a <strong>transparent PNG</strong> with only your letters and shadow.</p>
     <div class="examples two">
       <figure class="ex">
