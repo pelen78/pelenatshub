@@ -3,8 +3,14 @@
 
 @media screen {
   body { font-family: var(--hub-body); }
-  .hub-header { background: linear-gradient(105deg, var(--ats-deep), var(--ats-navy)); border-bottom: 2px solid var(--ats-gold); }
+  .hub-header, .board-head {
+    color: #fff;
+    background: linear-gradient(105deg, var(--ats-deep), var(--ats-navy));
+  }
+  .hub-header { border-bottom: 2px solid var(--ats-gold); }
+  .hub-header a { color: #fff; }
+  .hub-header small, .board-head .class-name, .board-head .task-tag { color: #dce7ff; }
+  .board-head .status:not(.current) { border-color: #a9bce4; }
   .masthead h1, .board-head h2, .section-label { font-family: var(--hub-display); }
-  .board-head { background: linear-gradient(105deg, var(--ats-deep), var(--ats-navy)); }
   .classboard, .selection-bar { border-radius: 15px; }
 }
