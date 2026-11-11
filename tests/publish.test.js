@@ -44,6 +44,26 @@ test('new HTML, metadata and publication marker are written together; existing e
   assert.deepEqual(groups.MakerSpace, initial.groups.MakerSpace);
   assert.deepEqual(groups['Comp Apps'].activities.slice(1), initial.groups['Comp Apps'].activities);
 });
+test('publication date is set on creation and retained on edits', () => {
+  const initial = state();
+  const created = preparePublication(initial, { ...input(), html: null });
+  const marker = JSON.parse(created.files.find(file => file.path === 'publication.json').content);
+  assert.equal(created.entry.publishedAt, marker.publishedAt);
+  assert.ok(Number.isFinite(Date.parse(marker.publishedAt)));
+
+  const firstPublication = '2026-08-26T18:30:00.000Z';
+  created.entry.publishedAt = firstPublication;
+  const updated = preparePublication({ ...initial, groups: created.groups }, {
+    ...input(), id: created.entry.id, html: null, entry: { ...created.entry, title: 'Updated assignment' }
+  });
+  assert.equal(updated.entry.publishedAt, firstPublication);
+
+  const older = initial.groups['Comp Apps'].activities[0];
+  const editedOlder = preparePublication(initial, {
+    ...input(), id: older.id, html: null, entry: { ...older, title: 'Updated older assignment' }
+  });
+  assert.equal(editedOlder.entry.publishedAt, older.publishedAt);
+});
 test('HTML replacement keeps original link, pinned state, position, and other activities', () => {
   const initial = state(), previous = initial.groups.Resources.activities.find(a => a.pinned) || initial.groups.Resources.activities[0];
   const value = input(); value.group = 'Resources'; value.id = previous.id; value.entry = { ...previous, pinned: true, title: 'Updated' };

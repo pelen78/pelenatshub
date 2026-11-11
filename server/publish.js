@@ -33,6 +33,7 @@ export function preparePublication(state, input) {
     }
     if (!previous) throw new HubError('This assignment no longer exists. Refresh the list.', 409);
   }
+  const publishedAt = new Date().toISOString();
   const files = [];
   let entry, groupName = originalGroup;
   if (input.action === 'remove') {
@@ -51,6 +52,7 @@ export function preparePublication(state, input) {
       link: safeLink(input.entry.link),
       pinned: Boolean(input.entry.pinned)
     };
+    if (!previous) entry.publishedAt = publishedAt;
     if (input.entry.plc !== undefined) {
       if (!input.entry.plc || typeof input.entry.plc !== 'object' || Array.isArray(input.entry.plc)) throw new HubError('Invalid PLC project information.');
       entry.plc = Object.fromEntries(['unit', 'learningTarget', 'successCriteria', 'requirements'].map(key => [key, text(input.entry.plc[key] ?? '', 'PLC ' + key, 12000)]));
@@ -86,7 +88,7 @@ export function preparePublication(state, input) {
     groups[groupName].activities.splice(position, 0, entry);
   }
   files.push({ path: 'index.html', content: writeGroups(state.source, groups) });
-  files.push({ path: 'publication.json', content: JSON.stringify({ requestId: input.requestId, publishedAt: new Date().toISOString(), link: entry.link, title: entry.title, action: input.action }) + '\n' });
+  files.push({ path: 'publication.json', content: JSON.stringify({ requestId: input.requestId, publishedAt, link: entry.link, title: entry.title, action: input.action }) + '\n' });
   return { files, entry, groups, message: `${input.action === 'remove' ? 'Retire' : previous ? 'Update' : 'Add'} assignment: ${entry.title}` };
 }
 
