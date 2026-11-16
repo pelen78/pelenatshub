@@ -1,0 +1,358 @@
+{
+  "communities": {
+    "0": [
+      "functions_api_admin_publish",
+      "functions_api_admin_publish_onrequestpost",
+      "functions_api_admin_state",
+      "functions_api_admin_state_onrequestget",
+      "server_back_link",
+      "server_back_link_addbacklink",
+      "server_back_link_hubhref",
+      "server_back_link_removebacklink",
+      "server_back_link_slug",
+      "server_back_link_studentgroups",
+      "server_publish",
+      "server_publish_preparepublication",
+      "server_publish_readinput",
+      "server_publish_roots",
+      "server_publish_safelink",
+      "server_publish_text",
+      "server_publish_uploadpath",
+      "server_repository",
+      "server_repository_github",
+      "server_repository_github_call",
+      "server_repository_github_commitfiles",
+      "server_repository_github_snapshot",
+      "server_repository_groups_pattern",
+      "server_repository_huberror",
+      "server_repository_huberror_constructor",
+      "server_repository_parsegroups",
+      "server_repository_writegroups",
+      "tests_publish_test",
+      "tests_publish_test_revision",
+      "tests_publish_test_source",
+      "tests_publish_test_state"
+    ],
+    "1": [
+      "admin_plc_extract",
+      "admin_plc_extract_extractprojectfields",
+      "admin_plc_extract_plaintext",
+      "admin_publisher",
+      "admin_publisher_api",
+      "admin_publisher_assetselection",
+      "admin_publisher_bloburls",
+      "admin_publisher_canleave",
+      "admin_publisher_checkpublication",
+      "admin_publisher_choosehtml",
+      "admin_publisher_drop",
+      "admin_publisher_formpayload",
+      "admin_publisher_loadstate",
+      "admin_publisher_lock",
+      "admin_publisher_notice",
+      "admin_publisher_plcids",
+      "admin_publisher_preview",
+      "admin_publisher_renderlist",
+      "admin_publisher_resetfiles",
+      "admin_publisher_resetform",
+      "admin_publisher_selectactivity",
+      "admin_publisher_startpolling",
+      "admin_publisher_statusnames",
+      "admin_publisher_submit",
+      "admin_publisher_tobase64",
+      "admin_publisher_validatelink"
+    ],
+    "2": [
+      "functions_middleware",
+      "functions_middleware_base64url",
+      "functions_middleware_code",
+      "functions_middleware_cookie",
+      "functions_middleware_decode",
+      "functions_middleware_encoder",
+      "functions_middleware_escape",
+      "functions_middleware_gate",
+      "functions_middleware_isteacherpath",
+      "functions_middleware_onrequest",
+      "functions_middleware_privateresponse",
+      "functions_middleware_safedestination",
+      "functions_middleware_signature",
+      "functions_middleware_signingkey",
+      "functions_middleware_validcookie",
+      "ref_node_assert",
+      "tests_class_access_test",
+      "tests_class_access_test_cookiefrom",
+      "tests_class_access_test_env",
+      "tests_class_access_test_login",
+      "tests_class_access_test_visit"
+    ],
+    "3": [
+      "admin_plc_model_catalogue",
+      "admin_plc_model_newentry",
+      "functions_api_admin_plc_entries",
+      "functions_api_admin_plc_entries_failure",
+      "functions_api_admin_plc_entries_onrequestget",
+      "functions_api_admin_plc_entries_onrequestput",
+      "functions_api_admin_plc_projects",
+      "functions_api_admin_plc_projects_onrequestget",
+      "ref_node_sqlite",
+      "server_auth_json",
+      "server_plc",
+      "server_plc_max_plc_bytes",
+      "server_plc_plcstore",
+      "server_plc_readplcinput",
+      "tests_plc_test",
+      "tests_plc_test_database",
+      "tests_plc_test_entry",
+      "tests_publish_test_input"
+    ],
+    "4": [
+      "package",
+      "package_dependencies",
+      "package_dependencies_jose",
+      "package_devdependencies",
+      "package_devdependencies_wrangler",
+      "package_engines",
+      "package_engines_node",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_postinstall",
+      "package_scripts_test",
+      "package_type",
+      "package_version",
+      "ref_wrangler"
+    ],
+    "5": [
+      "functions_admin_middleware",
+      "functions_admin_middleware_onrequest",
+      "functions_admin_middleware_secureresponse",
+      "functions_api_admin_middleware",
+      "functions_api_admin_middleware_onrequest",
+      "ref_jose",
+      "ref_node_test",
+      "server_auth",
+      "server_auth_authenticate",
+      "server_auth_keysets",
+      "tests_admin_response_test",
+      "tests_auth_test",
+      "tests_auth_test_env",
+      "tests_auth_test_request",
+      "tests_auth_test_token",
+      "tests_auth_test_verify"
+    ],
+    "6": [
+      "ref_node_fs",
+      "scripts_build",
+      "scripts_build_folders",
+      "scripts_build_groups",
+      "scripts_learning_catalog",
+      "scripts_learning_catalog_classrooms",
+      "scripts_learning_catalog_learningcatalogue",
+      "scripts_learning_catalog_rendertodayclass",
+      "scripts_learning_catalog_safepath",
+      "scripts_learning_catalog_text",
+      "tests_learning_catalog_test",
+      "tests_learning_catalog_test_embedded",
+      "tests_learning_catalog_test_groups",
+      "tests_learning_catalog_test_revision",
+      "tests_learning_catalog_test_source",
+      "tests_learning_catalog_test_template"
+    ],
+    "7": [
+      "admin_plc_app",
+      "admin_plc_app_colors",
+      "admin_plc_app_conflicts",
+      "admin_plc_app_courses",
+      "admin_plc_app_names",
+      "admin_plc_app_opennew",
+      "admin_plc_app_pending",
+      "admin_plc_app_records",
+      "admin_plc_app_renderchoices",
+      "admin_plc_app_revisions",
+      "admin_plc_app_sorted",
+      "admin_plc_app_statusnames",
+      "admin_plc_model_isodate",
+      "admin_plc_model_monday",
+      "admin_plc_model_projectplc"
+    ],
+    "8": [
+      "admin_plc_fields",
+      "admin_plc_fields_classroom_fields",
+      "admin_plc_fields_classroomlist",
+      "admin_plc_fields_commitment_fields",
+      "admin_plc_fields_stages",
+      "admin_plc_model",
+      "admin_plc_model_courses",
+      "admin_plc_model_fields",
+      "admin_plc_model_normalizeentry",
+      "admin_plc_model_project_fields",
+      "admin_plc_model_projectsnapshot",
+      "admin_plc_model_safeurl",
+      "admin_plc_model_set",
+      "admin_plc_model_text"
+    ],
+    "9": [
+      "admin_plc_app_api",
+      "admin_plc_app_cache",
+      "admin_plc_app_changed",
+      "admin_plc_app_download",
+      "admin_plc_app_finishconflict",
+      "admin_plc_app_flush",
+      "admin_plc_app_journals",
+      "admin_plc_app_loadcatalogue",
+      "admin_plc_app_notice",
+      "admin_plc_app_savestatus",
+      "admin_plc_app_select",
+      "admin_plc_app_start"
+    ],
+    "10": [
+      "admin_plc_app_coursename",
+      "admin_plc_app_datelabel",
+      "admin_plc_app_esc",
+      "admin_plc_app_field",
+      "admin_plc_app_previousentries",
+      "admin_plc_app_printentry",
+      "admin_plc_app_projecttitle",
+      "admin_plc_app_render",
+      "admin_plc_app_rendercontent",
+      "admin_plc_app_renderweeks",
+      "admin_plc_app_shared"
+    ],
+    "11": [
+      "admin_plc_app_current",
+      "admin_plc_app_resolveconflict",
+      "admin_plc_app_updateprogress",
+      "admin_plc_model_completion",
+      "admin_plc_model_get",
+      "admin_plc_model_stagefields"
+    ]
+  },
+  "cohesion": {
+    "0": 0.15483870967741936,
+    "1": 0.15692307692307692,
+    "2": 0.18095238095238095,
+    "3": 0.23529411764705882,
+    "4": 0.125,
+    "5": 0.225,
+    "6": 0.19166666666666668,
+    "7": 0.18095238095238095,
+    "8": 0.23076923076923078,
+    "9": 0.3333333333333333,
+    "10": 0.2909090909090909,
+    "11": 0.5333333333333333
+  },
+  "gods": [
+    {
+      "id": "admin_plc_app_rendercontent",
+      "label": "renderContent()",
+      "degree": 16
+    },
+    {
+      "id": "admin_plc_model_normalizeentry",
+      "label": "normalizeEntry()",
+      "degree": 14
+    },
+    {
+      "id": "server_repository_huberror",
+      "label": "HubError",
+      "degree": 14
+    },
+    {
+      "id": "server_auth_json",
+      "label": "json()",
+      "degree": 13
+    },
+    {
+      "id": "server_publish_preparepublication",
+      "label": "preparePublication()",
+      "degree": 12
+    },
+    {
+      "id": "server_repository_github",
+      "label": "github()",
+      "degree": 12
+    },
+    {
+      "id": "functions_middleware_onrequest",
+      "label": "onRequest()",
+      "degree": 11
+    },
+    {
+      "id": "admin_plc_app_start",
+      "label": "start()",
+      "degree": 10
+    },
+    {
+      "id": "admin_plc_app_renderweeks",
+      "label": "renderWeeks()",
+      "degree": 10
+    },
+    {
+      "id": "admin_plc_app_flush",
+      "label": "flush()",
+      "degree": 9
+    }
+  ],
+  "surprises": [
+    {
+      "source": "plcStore()",
+      "target": "normalizeEntry()",
+      "source_files": [
+        "server/plc.js",
+        "admin/plc/model.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "entry()",
+      "target": "newEntry()",
+      "source_files": [
+        "tests/plc.test.js",
+        "admin/plc/model.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `entry()` unexpectedly reaches hub `newEntry()`"
+    },
+    {
+      "source": "onRequest()",
+      "target": "json()",
+      "source_files": [
+        "functions/api/admin/_middleware.js",
+        "server/auth.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "onRequestGet()",
+      "target": "github()",
+      "source_files": [
+        "functions/api/admin/plc/projects.js",
+        "server/repository.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "onRequestPost()",
+      "target": "json()",
+      "source_files": [
+        "functions/api/admin/publish.js",
+        "server/auth.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

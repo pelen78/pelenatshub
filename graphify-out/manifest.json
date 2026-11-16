@@ -1,0 +1,256 @@
+{
+  "_routes.json": {
+    "mtime": 1791479867.8662658,
+    "seen": 1794537761.74053,
+    "ast_hash": "df741a4f1be22613ceac212fad8037b3",
+    "semantic_hash": "df741a4f1be22613ceac212fad8037b3",
+    "ast_empty": true
+  },
+  "admin/plc/app.js": {
+    "mtime": 1791318485.6902294,
+    "seen": 1794537761.740532,
+    "ast_hash": "4366f7f0af1293c85800673b1342edcf",
+    "semantic_hash": "4366f7f0af1293c85800673b1342edcf"
+  },
+  "admin/plc/extract.js": {
+    "mtime": 1790217148.2486486,
+    "seen": 1794537761.740614,
+    "ast_hash": "35c25b9d373d6f03b21864efa1906bb8",
+    "semantic_hash": "35c25b9d373d6f03b21864efa1906bb8"
+  },
+  "admin/plc/fields.js": {
+    "mtime": 1790216526.034256,
+    "seen": 1794537761.740635,
+    "ast_hash": "464227a02d16993e8c8b602037e67a10",
+    "semantic_hash": "464227a02d16993e8c8b602037e67a10"
+  },
+  "admin/plc/model.js": {
+    "mtime": 1790363759.300355,
+    "seen": 1794537761.7406578,
+    "ast_hash": "bc7cac12c767bb457c4132159ddb5d3e",
+    "semantic_hash": "bc7cac12c767bb457c4132159ddb5d3e"
+  },
+  "admin/publisher.js": {
+    "mtime": 1790216653.5788658,
+    "seen": 1794537761.74068,
+    "ast_hash": "5fb06d9ac25eea1f1022567fb90d7ce9",
+    "semantic_hash": "5fb06d9ac25eea1f1022567fb90d7ce9"
+  },
+  "functions/_middleware.js": {
+    "mtime": 1791479867.867104,
+    "seen": 1794537761.740698,
+    "ast_hash": "8b40f057560189f9c6f247dc66767d5d",
+    "semantic_hash": "8b40f057560189f9c6f247dc66767d5d"
+  },
+  "functions/admin/_middleware.js": {
+    "mtime": 1790191429.152392,
+    "seen": 1794537761.7407172,
+    "ast_hash": "92e546cd17303dd03e740df80aeb1402",
+    "semantic_hash": "92e546cd17303dd03e740df80aeb1402"
+  },
+  "functions/api/admin/_middleware.js": {
+    "mtime": 1790191430.098521,
+    "seen": 1794537761.740737,
+    "ast_hash": "f61d4f3360489c139a876ddf3b51eb87",
+    "semantic_hash": "f61d4f3360489c139a876ddf3b51eb87"
+  },
+  "functions/api/admin/plc/entries.js": {
+    "mtime": 1790216599.366631,
+    "seen": 1794537761.7407591,
+    "ast_hash": "81753611719e16d4d9adc723e8b6701e",
+    "semantic_hash": "81753611719e16d4d9adc723e8b6701e"
+  },
+  "functions/api/admin/plc/projects.js": {
+    "mtime": 1790216599.2519815,
+    "seen": 1794537761.7407832,
+    "ast_hash": "b58b239f85f24a80fb402be014948db4",
+    "semantic_hash": "b58b239f85f24a80fb402be014948db4"
+  },
+  "functions/api/admin/publish.js": {
+    "mtime": 1790191431.3482194,
+    "seen": 1794537761.7408068,
+    "ast_hash": "219e2711b3778beea352c2cd8f9b0be2",
+    "semantic_hash": "219e2711b3778beea352c2cd8f9b0be2"
+  },
+  "functions/api/admin/state.js": {
+    "mtime": 1790191432.3869894,
+    "seen": 1794537761.7408268,
+    "ast_hash": "5d56abe4abc9bde5c349f87377850e3c",
+    "semantic_hash": "5d56abe4abc9bde5c349f87377850e3c"
+  },
+  "package.json": {
+    "mtime": 1790191432.391532,
+    "seen": 1794537761.7408462,
+    "ast_hash": "186b9f752e23a2688b37ce670ba2c68a",
+    "semantic_hash": "186b9f752e23a2688b37ce670ba2c68a"
+  },
+  "publication.json": {
+    "mtime": 1794437403.2643914,
+    "seen": 1794537761.740862,
+    "ast_hash": "7a0d153f210bcbcc410b390a2d4d314a",
+    "semantic_hash": "7a0d153f210bcbcc410b390a2d4d314a",
+    "ast_empty": true
+  },
+  "scripts/build.mjs": {
+    "mtime": 1790218118.592894,
+    "seen": 1794537761.740863,
+    "ast_hash": "9005fef8f0c2dd944c97b6e1b48f8591",
+    "semantic_hash": "9005fef8f0c2dd944c97b6e1b48f8591"
+  },
+  "scripts/learning-catalog.mjs": {
+    "mtime": 1790225108.6664884,
+    "seen": 1794537761.740881,
+    "ast_hash": "cbdcad8c06b4713bb95fe054aa900356",
+    "semantic_hash": "cbdcad8c06b4713bb95fe054aa900356"
+  },
+  "server/auth.js": {
+    "mtime": 1790191433.9738114,
+    "seen": 1794537761.7408981,
+    "ast_hash": "93a00bca3c7aefbac9bf614d52c14c90",
+    "semantic_hash": "93a00bca3c7aefbac9bf614d52c14c90"
+  },
+  "server/back-link.js": {
+    "mtime": 1790293111.887081,
+    "seen": 1794537761.74092,
+    "ast_hash": "518658fb4dd14fe3eb25d8ed8b4db74d",
+    "semantic_hash": "518658fb4dd14fe3eb25d8ed8b4db74d"
+  },
+  "server/plc.js": {
+    "mtime": 1790216599.140642,
+    "seen": 1794537761.740939,
+    "ast_hash": "d894f160e0bf1cacea709dd29a2bd166",
+    "semantic_hash": "d894f160e0bf1cacea709dd29a2bd166"
+  },
+  "server/publish.js": {
+    "mtime": 1794437200.673326,
+    "seen": 1794537761.7409558,
+    "ast_hash": "7d4d25f8d28f24bbc797058da028a336",
+    "semantic_hash": "7d4d25f8d28f24bbc797058da028a336"
+  },
+  "server/repository.js": {
+    "mtime": 1790191437.7816172,
+    "seen": 1794537761.7409768,
+    "ast_hash": "cd1d9019d5f0ff20593f3fe8cda65be4",
+    "semantic_hash": "cd1d9019d5f0ff20593f3fe8cda65be4"
+  },
+  "tests/admin-response.test.js": {
+    "mtime": 1790191439.3090293,
+    "seen": 1794537761.740994,
+    "ast_hash": "ab0efa0a254098a69866a48ae9948ef3",
+    "semantic_hash": "ab0efa0a254098a69866a48ae9948ef3"
+  },
+  "tests/auth.test.js": {
+    "mtime": 1790191439.3111455,
+    "seen": 1794537761.741013,
+    "ast_hash": "808a211c7a547d156afbbe43f38aa610",
+    "semantic_hash": "808a211c7a547d156afbbe43f38aa610"
+  },
+  "tests/class-access.test.js": {
+    "mtime": 1791479867.868364,
+    "seen": 1794537761.741031,
+    "ast_hash": "e6dfb9bb14acb410ec36109d0c21c759",
+    "semantic_hash": "e6dfb9bb14acb410ec36109d0c21c759"
+  },
+  "tests/learning-catalog.test.js": {
+    "mtime": 1790218147.5562656,
+    "seen": 1794537761.741048,
+    "ast_hash": "c07de9dffebb7a700297e2be4d5b9006",
+    "semantic_hash": "c07de9dffebb7a700297e2be4d5b9006"
+  },
+  "tests/plc.test.js": {
+    "mtime": 1790363808.2868366,
+    "seen": 1794537761.7410681,
+    "ast_hash": "585f58a2860aa5706e5832c65148bc9f",
+    "semantic_hash": "585f58a2860aa5706e5832c65148bc9f"
+  },
+  "tests/publish.test.js": {
+    "mtime": 1794437217.0948067,
+    "seen": 1794537761.741086,
+    "ast_hash": "8940e159348148586746b2e525e28e81",
+    "semantic_hash": "8940e159348148586746b2e525e28e81"
+  },
+  "assignments/1c1d055b-37da-4283-9a94-faa1f1d82779/keychain_fusion.mp4": {
+    "mtime": 1793253718.7747266,
+    "seen": 1794537761.74111,
+    "ast_hash": "9fc278b0e561b4440b8e39ea53bb64ac",
+    "semantic_hash": "9fc278b0e561b4440b8e39ea53bb64ac"
+  },
+  "comp-apps/task-03-file-management/Unit2_Files_Day1/God_is_not_dead.avi": {
+    "mtime": 1789275556.0,
+    "seen": 1794537761.741132,
+    "ast_hash": "1851512aa4615b16eb461e67bf0b57e8",
+    "semantic_hash": "1851512aa4615b16eb461e67bf0b57e8"
+  },
+  "comp-apps/task-03-file-management/Unit2_Files_Day1/Love_like_this.mp3": {
+    "mtime": 1789275554.0,
+    "seen": 1794537761.741156,
+    "ast_hash": "aba467dad3eb1dcd64eba5733b2053c9",
+    "semantic_hash": "aba467dad3eb1dcd64eba5733b2053c9"
+  },
+  "comp-apps/task-03-file-management/Unit2_Files_Day1/Turn_your_eyes.mp4": {
+    "mtime": 1789275556.0,
+    "seen": 1794537761.741177,
+    "ast_hash": "e89ddc79bee9ab34613df6bcc76ecff1",
+    "semantic_hash": "e89ddc79bee9ab34613df6bcc76ecff1"
+  },
+  "comp-apps/task-09-layers/burger-layers-review.mp4": {
+    "mtime": 1792356870.7826347,
+    "seen": 1794537761.741197,
+    "ast_hash": "16c4fddd43d25040f6f061e3c7061d9d",
+    "semantic_hash": "16c4fddd43d25040f6f061e3c7061d9d"
+  },
+  "comp-apps/task-09-layers/burger-layers-review.webm": {
+    "mtime": 1792356872.0049577,
+    "seen": 1794537761.74122,
+    "ast_hash": "a214cef12acc0468200142bbcba89de7",
+    "semantic_hash": "a214cef12acc0468200142bbcba89de7"
+  },
+  "comp-apps/task-13-hair-and-eyes/eye_color.mp4": {
+    "mtime": 1793892778.9966555,
+    "seen": 1794537761.74124,
+    "ast_hash": "76ff34bb9ec3b5ebf1917e3df2fc1a06",
+    "semantic_hash": "76ff34bb9ec3b5ebf1917e3df2fc1a06"
+  },
+  "makerspace/task-07-Lego/day 1 fusion - lego.mp4": {
+    "mtime": 1792984664.221699,
+    "seen": 1794537761.741266,
+    "ast_hash": "369f41974d7c6f01639663aff4467ef3",
+    "semantic_hash": "369f41974d7c6f01639663aff4467ef3"
+  },
+  "makerspace/task-09-Bottle/bottle_fusion.mp4": {
+    "mtime": 1793561196.6373072,
+    "seen": 1794537761.7412858,
+    "ast_hash": "230bc71621465d205fd10e47582ecf86",
+    "semantic_hash": "230bc71621465d205fd10e47582ecf86"
+  },
+  "makerspace/task-10-TrayGrip/grip_fusion.mp4": {
+    "mtime": 1793890086.0032594,
+    "seen": 1794537761.741311,
+    "ast_hash": "45a1428c73b04f9f32fd81a309201354",
+    "semantic_hash": "45a1428c73b04f9f32fd81a309201354"
+  },
+  "makerspace/task-10-TrayGrip/tray_fusion.mp4": {
+    "mtime": 1793887559.0,
+    "seen": 1794537761.741336,
+    "ast_hash": "fa0c45215ac4a5c2c1847601fc8700f8",
+    "semantic_hash": "fa0c45215ac4a5c2c1847601fc8700f8"
+  },
+  "makerspace/task-11-SlideSnap/arduino_part1.mp4": {
+    "mtime": 1794179355.2343683,
+    "seen": 1794537761.741357,
+    "ast_hash": "c37c6932f358e676d1ad1d8176efa8c2",
+    "semantic_hash": "c37c6932f358e676d1ad1d8176efa8c2"
+  },
+  "makerspace/task-11-SlideSnap/arduino_part2.mp4": {
+    "mtime": 1794179361.1809182,
+    "seen": 1794537761.741384,
+    "ast_hash": "7a24558e1768571a8f86aadf22e76524",
+    "semantic_hash": "7a24558e1768571a8f86aadf22e76524"
+  },
+  "makerspace/task-11-SlideSnap/box_fusion.mp4": {
+    "mtime": 1794173813.4446518,
+    "seen": 1794537761.741407,
+    "ast_hash": "7b1569a6b9fea48d7acef0c04d2f0cc0",
+    "semantic_hash": "7b1569a6b9fea48d7acef0c04d2f0cc0"
+  }
+}
